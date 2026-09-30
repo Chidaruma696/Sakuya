@@ -9,7 +9,7 @@
     <%= f.hidden_field :codigo, value: params[:codigo] %>
     <p class="mb-2 text-sm"><%= t("caja.ticket") %> <strong class="font-mono"><%= @venta.folio %></strong> · <%= l @venta.created_at, format: :short %> · <%= pesos(@venta.total_centavos) %> · <%= t("estados.#{@venta.estado}") %></p>
     <table class="w-full text-sm">
-      <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.producto") %></th><th class="px-3 py-2 text-right"><%= t("caja.vendido") %></th><th class="px-3 py-2 text-right"><%= t("caja.ya_devuelto") %></th><th class="px-3 py-2 text-right"><%= t("comun.precio") %></th><th class="px-3 py-2"><%= t("caja.devolver") %></th></tr></thead>
+      <thead><tr><th class="px-3 py-2"><%= t("comun.producto") %></th><th class="px-3 py-2 text-right"><%= t("caja.vendido") %></th><th class="px-3 py-2 text-right"><%= t("caja.ya_devuelto") %></th><th class="px-3 py-2 text-right"><%= t("comun.precio") %></th><th class="px-3 py-2"><%= t("caja.devolver") %></th></tr></thead>
       <tbody>
         <% @venta.lineas.includes(:producto, :devolucion_lineas).each do |l| %>
           <tr class="border-t border-stone-100">

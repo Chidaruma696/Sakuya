@@ -3,7 +3,7 @@
   <%= render "selector_sucursal" %>
 </div>
 <table class="tabla">
-  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.clave") %></th><th class="px-3 py-2"><%= t("comun.producto") %></th><th class="px-3 py-2 text-right"><%= t("comun.cantidad") %></th><th class="px-3 py-2"><%= t("comun.unidad") %></th><th class="px-3 py-2"></th></tr></thead>
+  <thead><tr><th class="px-3 py-2"><%= t("comun.clave") %></th><th class="px-3 py-2"><%= t("comun.producto") %></th><th class="px-3 py-2 text-right"><%= t("comun.cantidad") %></th><th class="px-3 py-2"><%= t("comun.unidad") %></th><th class="px-3 py-2"></th></tr></thead>
   <tbody>
     <% @existencias.each do |e| %>
       <tr class="border-t border-stone-100">

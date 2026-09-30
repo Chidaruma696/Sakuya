@@ -6,8 +6,8 @@
 <p class="mb-4 text-sm text-stone-600"><%= [ p.contacto, p.telefono, p.rfc ].compact_blank.join(" · ") %><%= " · #{t("compras.dias_credito").downcase}: #{p.dias_credito}" %> · <%= link_to t("comun.editar").downcase, edit_proveedor_path(p), class: "enlace" if puede?("compras.facturar") %></p>
 <div class="mb-4 grid gap-4 md:grid-cols-3">
   <div class="card">
-    <div class="text-xs uppercase text-stone-500"><%= t("compras.debemos") %></div>
-    <div class="font-mono text-3xl"><%= pesos(p.saldo_centavos) %></div>
+    <div class="etiqueta-dato"><%= t("compras.debemos") %></div>
+    <div class="valor-dato text-3xl"><%= pesos(p.saldo_centavos) %></div>
 
     <div class="mt-2 flex flex-wrap gap-2">
       <%= link_to icono("file-earmark-plus", t("compras.nueva_factura")), new_factura_path(proveedor_id: p), class: "btn btn-secondary btn-xs" if puede?("compras.facturar") %>

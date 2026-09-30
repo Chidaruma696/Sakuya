@@ -1,6 +1,6 @@
 <% if @por_revisar.to_i.positive? %>
   <div class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded border border-amber-300 bg-amber-50 px-4 py-3 text-sm">
     <span><%= t("inicio.por_revisar_html", count: @por_revisar, n: content_tag(:strong, @por_revisar)) %></span>
-    <%= link_to t("inicio.revisar"), revisiones_path(sucursal_id: sucursal_actual.matriz? ? "todas" : nil), class: "rounded bg-amber-600 px-3 py-1 font-semibold text-white hover:bg-amber-500" %>
+    <%= link_to t("inicio.revisar"), revisiones_path(sucursal_id: sucursal_actual.matriz? ? "todas" : nil), class: "rounded bg-amber-600 px-3 py-1 font-semibold text-claro hover:bg-amber-500" %>
   </div>
 <% end %>

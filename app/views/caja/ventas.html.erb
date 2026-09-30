@@ -1,6 +1,6 @@
 <h1 class="mb-4 text-2xl font-bold"><%= t("caja.ventas") %> · <%= sucursal_actual %></h1>
 <table class="tabla">
-  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.folio") %></th><th class="px-3 py-2"><%= t("caja.hora") %></th><th class="px-3 py-2"><%= t("caja.cajero") %></th><th class="px-3 py-2"><%= t("caja.lineas") %></th><th class="px-3 py-2 text-right"><%= t("comun.total") %></th><th class="px-3 py-2"><%= t("caja.pago") %></th><th class="px-3 py-2"><%= t("comun.estado") %></th><th></th></tr></thead>
+  <thead><tr><th class="px-3 py-2"><%= t("comun.folio") %></th><th class="px-3 py-2"><%= t("caja.hora") %></th><th class="px-3 py-2"><%= t("caja.cajero") %></th><th class="px-3 py-2"><%= t("caja.lineas") %></th><th class="px-3 py-2 text-right"><%= t("comun.total") %></th><th class="px-3 py-2"><%= t("caja.pago") %></th><th class="px-3 py-2"><%= t("comun.estado") %></th><th></th></tr></thead>
   <tbody>
     <% @ventas.each do |v| %>
       <tr class="border-t border-stone-100">

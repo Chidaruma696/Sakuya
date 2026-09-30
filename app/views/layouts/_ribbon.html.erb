@@ -3,20 +3,20 @@
     rayita bajo la activa y una sola fila de comandos, icono y texto en línea. El grupo de cada
     comando va en su title. En pantalla angosta todo vive en la barra lateral. %>
 <div class="sticky top-0 z-30 shadow-sm" id="cinta">
-  <header class="bg-marca-700 text-white">
+  <header class="bg-marca-700 text-claro">
     <div class="flex h-11 w-full items-center gap-3 px-4 text-sm">
       <%# El logo: en pantalla ancha abre el "Acerca de"; en angosta abre la barra lateral %>
-      <button type="button" data-action="lateral#abrir" title="<%= t("cinta.menu") %>" class="flex shrink-0 items-center rounded-md p-0.5 transition hover:bg-white/15 focus:bg-white/20 focus:outline-none md:hidden">
+      <button type="button" data-action="lateral#abrir" title="<%= t("cinta.menu") %>" class="flex shrink-0 items-center rounded-md p-0.5 transition hover:bg-claro/15 focus:bg-claro/20 focus:outline-none md:hidden">
         <%= image_tag "logo-w.png", alt: t("cinta.menu"), class: "h-7 w-7" %>
       </button>
-      <button type="button" data-action="dialogo#abrir" title="<%= t("acerca.titulo") %>" class="hidden shrink-0 items-center gap-2 rounded-md py-0.5 pl-0.5 pr-2 transition hover:bg-white/15 focus:bg-white/20 focus:outline-none md:flex">
+      <button type="button" data-action="dialogo#abrir" title="<%= t("acerca.titulo") %>" class="hidden shrink-0 items-center gap-2 rounded-md py-0.5 pl-0.5 pr-2 transition hover:bg-claro/15 focus:bg-claro/20 focus:outline-none md:flex">
         <%= image_tag "logo-w.png", alt: "Sakuya", class: "h-7 w-7" %>
         <span class="font-semibold tracking-wide">Sakuya</span>
       </button>
       <span class="font-semibold md:hidden"><%= t("cinta.pestanas.#{activa[:id]}") %></span>
-      <span class="ml-auto hidden truncate text-white/80 lg:inline" title="<%= sucursal_actual %> · <%= usuario_actual %>"><%= sucursal_actual %> · <%= usuario_actual %></span>
+      <span class="ml-auto hidden truncate text-claro/80 lg:inline" title="<%= sucursal_actual %> · <%= usuario_actual %>"><%= sucursal_actual %> · <%= usuario_actual %></span>
       <%# En angosto, Salir vive solo en la barra lateral %>
-      <%= button_to salir_path, method: :delete, class: "btn btn-sm shrink-0 border-white/30 bg-white/10 text-white shadow-none hover:bg-white/20", title: "#{sucursal_actual} · #{usuario_actual}", form: { class: "ml-auto hidden md:block lg:ml-0" } do %>
+      <%= button_to salir_path, method: :delete, class: "btn btn-sm shrink-0 border-claro/30 bg-claro/10 text-claro shadow-none hover:bg-claro/20", title: "#{sucursal_actual} · #{usuario_actual}", form: { class: "ml-auto hidden md:block lg:ml-0" } do %>
         <i class="bi bi-box-arrow-right"></i> <%= t("cinta.salir") %>
       <% end %>
     </div>
@@ -54,13 +54,13 @@
 <%# Barra lateral (solo en pantalla angosta): todas las pestañas con sus botones, en vertical %>
 <div class="fixed inset-0 z-40 hidden bg-stone-900/50 md:hidden" data-lateral-target="fondo" data-action="click->lateral#cerrar"></div>
 <aside class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] -translate-x-full flex-col bg-fondo shadow-2xl transition-transform duration-200 md:hidden" data-lateral-target="panel" aria-label="<%= t("cinta.menu") %>">
-  <div class="flex items-center gap-3 bg-marca-700 px-4 py-3 text-white">
+  <div class="flex items-center gap-3 bg-marca-700 px-4 py-3 text-claro">
     <%= image_tag "logo-w.png", alt: "", class: "h-8 w-8" %>
     <div class="min-w-0 flex-1">
       <div class="font-bold leading-tight">Sakuya</div>
-      <div class="truncate text-xs text-white/80"><%= sucursal_actual %> · <%= usuario_actual %></div>
+      <div class="truncate text-xs text-claro/80"><%= sucursal_actual %> · <%= usuario_actual %></div>
     </div>
-    <button type="button" class="btn btn-sm border-transparent bg-white/15 text-white shadow-none hover:bg-white/25" data-action="lateral#cerrar" title="<%= t("comun.cerrar") %>"><i class="bi bi-x-lg"></i></button>
+    <button type="button" class="btn btn-sm border-transparent bg-claro/15 text-claro shadow-none hover:bg-claro/25" data-action="lateral#cerrar" title="<%= t("comun.cerrar") %>"><i class="bi bi-x-lg"></i></button>
   </div>
   <nav class="flex-1 overflow-y-auto px-2 py-2 text-sm">
     <% pestanas_visibles.each do |p| %>

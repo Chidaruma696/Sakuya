@@ -5,9 +5,9 @@
 </div>
 <p class="mb-4 text-sm text-stone-600"><%= link_to x.proveedor.nombre, cuenta_path(x.proveedor), class: "enlace" %> · <%= l x.fecha %><%= " · #{t("compras.vence").downcase} #{l x.vence}" if x.vence %> · <%= x.usuario %><%= " · #{x.concepto}" if x.concepto.present? %><%= " · #{x.motivo_cancelacion}" if x.cancelada? %></p>
 <div class="mb-4 grid gap-4 md:grid-cols-3">
-  <div class="card"><div class="text-xs uppercase text-stone-500"><%= t("caja.monto") %></div><div class="font-mono text-3xl"><%= pesos(x.monto_centavos) %></div></div>
-  <div class="card"><div class="text-xs uppercase text-stone-500"><%= t("compras.pagado") %></div><div class="font-mono text-3xl"><%= pesos(x.pagado_centavos) %></div></div>
-  <div class="card"><div class="text-xs uppercase text-stone-500"><%= t("compras.resta") %></div><div class="font-mono text-3xl <%= 'text-red-700' if x.vencida? %>"><%= pesos(x.resta_centavos) %></div>
+  <div class="card"><div class="etiqueta-dato"><%= t("caja.monto") %></div><div class="valor-dato text-3xl"><%= pesos(x.monto_centavos) %></div></div>
+  <div class="card"><div class="etiqueta-dato"><%= t("compras.pagado") %></div><div class="valor-dato text-3xl"><%= pesos(x.pagado_centavos) %></div></div>
+  <div class="card"><div class="etiqueta-dato"><%= t("compras.resta") %></div><div class="valor-dato text-3xl <%= 'text-red-700' if x.vencida? %>"><%= pesos(x.resta_centavos) %></div>
     <% if x.abierta? && !x.pagada? && puede?("compras.pagar") %><%= link_to icono("cash-coin", t("compras.pagar")), cuenta_path(x.proveedor, factura: x.id), class: "btn btn-success btn-sm mt-2" %><% end %></div>
 </div>
 <div class="grid gap-4 lg:grid-cols-2">

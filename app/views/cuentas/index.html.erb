@@ -1,9 +1,9 @@
 <h1 class="mb-1 text-2xl font-bold"><%= t("compras.cuentas_por_pagar") %></h1>
 <p class="mb-4 text-sm text-stone-600"><%= t("compras.cuentas_ayuda") %></p>
 <div class="mb-4 grid gap-4 md:grid-cols-3">
-  <div class="card"><div class="text-xs uppercase text-stone-500"><%= t("compras.debemos") %></div><div class="font-mono text-3xl"><%= pesos(@total) %></div></div>
-  <div class="card"><div class="text-xs uppercase text-stone-500"><%= t("compras.vencidas") %></div><div class="font-mono text-3xl <%= 'text-red-700' if @vencidas.any? %>"><%= pesos(@vencidas.sum(&:resta_centavos)) %></div><div class="text-xs text-stone-500"><%= t("compras.n_facturas", count: @vencidas.size) %></div></div>
-  <div class="card"><div class="text-xs uppercase text-stone-500"><%= t("compras.vencen_esta_semana") %></div><div class="font-mono text-3xl"><%= pesos(@por_vencer.sum(&:resta_centavos)) %></div><div class="text-xs text-stone-500"><%= t("compras.n_facturas", count: @por_vencer.size) %></div></div>
+  <div class="card"><div class="etiqueta-dato"><%= t("compras.debemos") %></div><div class="valor-dato text-3xl"><%= pesos(@total) %></div></div>
+  <div class="card"><div class="etiqueta-dato"><%= t("compras.vencidas") %></div><div class="valor-dato text-3xl <%= 'text-red-700' if @vencidas.any? %>"><%= pesos(@vencidas.sum(&:resta_centavos)) %></div><div class="text-xs text-stone-500"><%= t("compras.n_facturas", count: @vencidas.size) %></div></div>
+  <div class="card"><div class="etiqueta-dato"><%= t("compras.vencen_esta_semana") %></div><div class="valor-dato text-3xl"><%= pesos(@por_vencer.sum(&:resta_centavos)) %></div><div class="text-xs text-stone-500"><%= t("compras.n_facturas", count: @por_vencer.size) %></div></div>
 </div>
 <div class="grid gap-4 lg:grid-cols-2">
   <div>

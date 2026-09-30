@@ -1,6 +1,6 @@
 <h1 class="mb-4 text-2xl font-bold"><%= t("cargos.cargos") %> · <%= sucursal_actual %></h1>
 <table class="tabla">
-  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.fecha") %></th><th class="px-3 py-2"><%= t("conteos.responsable") %></th><th class="px-3 py-2"><%= t("comun.origen") %></th><th class="px-3 py-2 text-right"><%= t("caja.monto") %></th><th class="px-3 py-2"><%= t("comun.detalle") %></th><th class="px-3 py-2"><%= t("comun.estado") %></th><th></th></tr></thead>
+  <thead><tr><th class="px-3 py-2"><%= t("comun.fecha") %></th><th class="px-3 py-2"><%= t("conteos.responsable") %></th><th class="px-3 py-2"><%= t("comun.origen") %></th><th class="px-3 py-2 text-right"><%= t("caja.monto") %></th><th class="px-3 py-2"><%= t("comun.detalle") %></th><th class="px-3 py-2"><%= t("comun.estado") %></th><th></th></tr></thead>
   <tbody>
     <% @cargos.each do |g| %>
       <tr class="border-t border-stone-100 align-top">

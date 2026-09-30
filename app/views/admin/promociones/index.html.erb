@@ -3,7 +3,7 @@
   <%= link_to t("admin.nueva_promocion"), new_admin_promocion_path, class: "btn btn-primary btn-sm" %>
 </div>
 <table class="tabla">
-  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.nombre") %></th><th class="px-3 py-2"><%= t("comun.producto") %></th><th class="px-3 py-2"><%= t("comun.sucursal") %></th><th class="px-3 py-2"><%= t("admin.regla") %></th><th class="px-3 py-2"><%= t("admin.vigencia") %></th><th class="px-3 py-2"><%= t("admin.activa") %></th><th></th></tr></thead>
+  <thead><tr><th class="px-3 py-2"><%= t("comun.nombre") %></th><th class="px-3 py-2"><%= t("comun.producto") %></th><th class="px-3 py-2"><%= t("comun.sucursal") %></th><th class="px-3 py-2"><%= t("admin.regla") %></th><th class="px-3 py-2"><%= t("admin.vigencia") %></th><th class="px-3 py-2"><%= t("admin.activa") %></th><th></th></tr></thead>
   <tbody>
     <% @promociones.each do |p| %>
       <tr class="border-t border-stone-100 <%= 'text-stone-400' unless p.vigente? %>">

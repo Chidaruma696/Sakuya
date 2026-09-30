@@ -1,7 +1,7 @@
 <h1 class="mb-4 text-2xl font-bold"><%= t("conteos.conteos") %> · <%= sucursal_actual %></h1>
 <% if @vencido %><p class="mb-4 rounded bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-800"><%= t("conteos.toca_contar", cada: sucursal_actual.dias_conteo) %> <%= link_to t("conteos.abrir"), new_conteo_path, class: "enlace" %></p><% end %>
 <table class="tabla">
-  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.folio") %></th><th class="px-3 py-2"><%= t("comun.fecha") %></th><th class="px-3 py-2"><%= t("conteos.supervisor") %></th><th class="px-3 py-2"><%= t("conteos.responsable") %></th><th class="px-3 py-2"><%= t("comun.estado") %></th><th class="px-3 py-2 text-right"><%= t("conteos.faltante") %></th><th class="px-3 py-2 text-right"><%= t("conteos.sobrante") %></th><th></th></tr></thead>
+  <thead><tr><th class="px-3 py-2"><%= t("comun.folio") %></th><th class="px-3 py-2"><%= t("comun.fecha") %></th><th class="px-3 py-2"><%= t("conteos.supervisor") %></th><th class="px-3 py-2"><%= t("conteos.responsable") %></th><th class="px-3 py-2"><%= t("comun.estado") %></th><th class="px-3 py-2 text-right"><%= t("conteos.faltante") %></th><th class="px-3 py-2 text-right"><%= t("conteos.sobrante") %></th><th></th></tr></thead>
   <tbody>
     <% @conteos.each do |c| %>
       <tr class="border-t border-stone-100">

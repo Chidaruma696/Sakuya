@@ -3,7 +3,7 @@
   <%= link_to t("admin.nuevo_rol"), new_admin_rol_path, class: "btn btn-primary btn-sm" %>
 </div>
 <table class="tabla">
-  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("admin.rol") %></th><th class="px-3 py-2"><%= t("admin.permisos") %></th><th class="px-3 py-2"><%= t("admin.usuarios") %></th><th></th></tr></thead>
+  <thead><tr><th class="px-3 py-2"><%= t("admin.rol") %></th><th class="px-3 py-2"><%= t("admin.permisos") %></th><th class="px-3 py-2"><%= t("admin.usuarios") %></th><th></th></tr></thead>
   <tbody>
     <% @roles.each do |r| %>
       <tr class="border-t border-stone-100 align-top">

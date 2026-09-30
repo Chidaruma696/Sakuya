@@ -3,6 +3,9 @@
 /* La paleta sale de Sakuya Izayoi: el azul de su vestido de sirvienta (marca), el plateado del
    pelo en los neutros y el delantal blanco (fondo). corbata queda para el rojo de peligro. */
 @theme {
+  /* Las cifras van en la letra de siempre con dígitos de ancho fijo: alinean en columna sin la
+     monoespaciada de máquina de escribir. */
+  --font-mono: ui-sans-serif, system-ui, sans-serif;
   --color-marca-50: #f2f5fc;
   --color-marca-100: #e3e9f8;
   --color-marca-200: #c8d3f0;
@@ -18,6 +21,9 @@
   --color-corbata-700: #8a2830;
   --color-corbata-800: #6e1f26;
   --color-piel: #fce4d0;
+  /* Blanco de verdad para texto sobre azul: el tema oscuro redefine white (las superficies) y
+     esto no lo toca. */
+  --color-claro: #ffffff;
   --color-fondo: #f4f5f8;
   --color-pared: #e6e9ef;
 }
@@ -27,6 +33,7 @@
     @apply rounded-md border border-stone-300 bg-white text-stone-900 outline-none transition placeholder:text-stone-400 focus:border-marca-500 focus:ring-2 focus:ring-marca-200 disabled:bg-stone-100;
   }
   summary { @apply select-none; }
+  .font-mono, table { font-variant-numeric: tabular-nums; }
   dialog::backdrop { @apply bg-stone-900/40; }
 }
 
@@ -38,10 +45,10 @@
   .btn-xs { @apply px-2 py-0.5 text-xs shadow-none; }
   .btn-sm { @apply px-2.5 py-1 text-xs; }
   .btn-lg { @apply px-5 py-3 text-lg; }
-  .btn-primary { @apply bg-marca-600 text-white hover:bg-marca-500 active:bg-marca-700; }
+  .btn-primary { @apply bg-marca-600 text-claro hover:bg-marca-500 active:bg-marca-700; }
   .btn-secondary { @apply border-stone-300 bg-white text-stone-800 hover:bg-stone-50 active:bg-stone-100; }
-  .btn-success { @apply bg-emerald-700 text-white hover:bg-emerald-600 active:bg-emerald-800; }
-  .btn-danger { @apply bg-corbata-700 text-white hover:bg-corbata-600 active:bg-corbata-800; }
+  .btn-success { @apply bg-emerald-700 text-claro hover:bg-emerald-600 active:bg-emerald-800; }
+  .btn-danger { @apply bg-corbata-700 text-claro hover:bg-corbata-600 active:bg-corbata-800; }
   .btn-outline-danger { @apply border-corbata-700 bg-white text-corbata-700 hover:bg-red-50; }
   .btn-outline-success { @apply border-emerald-700 bg-white text-emerald-800 hover:bg-emerald-50; }
   .btn-warning { @apply border-amber-400 bg-amber-50 text-amber-900 hover:bg-amber-100; }
@@ -53,8 +60,15 @@
   .enlace { @apply inline-flex items-center gap-1 rounded-md bg-marca-50 px-1.5 py-0.5 font-medium text-marca-800 transition-colors hover:bg-marca-100 hover:text-marca-900; }
   .chip-folio { @apply inline-flex items-center gap-1 rounded-md bg-marca-50 px-1.5 py-0.5 font-mono font-medium text-marca-800 transition-colors hover:bg-marca-100 hover:text-marca-900; }
 
-  .card { @apply rounded-lg bg-white p-4 shadow-sm ring-1 ring-stone-200; }
-  .badge { @apply inline-block rounded-md bg-stone-200 px-2 py-0.5 text-xs font-semibold text-stone-700; }
+  /* Tarjetas: blancas, borde fino y sombra apenas; el título lleva una rayita azul, la firma de Sakuya. */
+  .card { @apply rounded-xl bg-white p-5 shadow-[0_1px_2px_rgb(28_33_57/0.05)] ring-1 ring-stone-200/80; }
+  .card > h2:first-child { @apply mb-3 flex items-center gap-2 text-sm font-semibold text-stone-800 before:h-4 before:w-1 before:shrink-0 before:rounded-full before:bg-marca-500; }
+  .card table tr { @apply border-stone-100; }
+  .card table td { @apply py-1.5; }
+  /* Un dato suelto: etiqueta chica arriba y la cifra grande abajo. */
+  .etiqueta-dato { @apply text-[0.8125rem] font-medium text-stone-500; }
+  .valor-dato { @apply mt-1 font-semibold tracking-tight text-stone-900; font-variant-numeric: tabular-nums; }
+  .badge { @apply inline-flex items-center gap-1 rounded-full bg-stone-100 px-2 py-0.5 text-xs font-medium text-stone-700 ring-1 ring-stone-200 ring-inset; }
 
   /* Formularios: a todo lo ancho, campos en rejilla (1 col en móvil, 2 en tableta, 3 en escritorio). */
   .formulario { @apply w-full space-y-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-stone-200 xl:p-8; }
@@ -69,10 +83,14 @@
   .opcion-check { @apply ml-auto text-marca-600 invisible; }
   .opcion:has(:checked) .opcion-check { @apply visible; }
 
-  .tabla { @apply w-full border-collapse overflow-hidden rounded-lg bg-white text-sm shadow-sm ring-1 ring-stone-200; }
-  .tabla thead th { @apply bg-stone-100 px-3 py-2 text-left text-xs font-semibold tracking-wide text-stone-600 uppercase; }
-  .tabla tbody tr { @apply border-t border-stone-100; }
-  .tabla tbody tr:hover { @apply bg-marca-50/40; }
+  /* Tablas: contenedor redondeado, encabezado discreto, filas separadas por una línea fina. */
+  .tabla { @apply w-full border-separate border-spacing-0 overflow-hidden rounded-xl bg-white text-sm shadow-[0_1px_2px_rgb(28_33_57/0.05)] ring-1 ring-stone-200/80; }
+  .tabla thead th { @apply border-b border-stone-200 bg-stone-50 px-3 py-2.5 text-left text-[0.6875rem] font-semibold tracking-wider text-stone-500 uppercase; }
+  .tabla tbody td { @apply border-t border-stone-100; }
+  .tabla tbody tr:first-child td { @apply border-t-0; }
+  .tabla tbody tr { @apply transition-colors; }
+  .tabla tbody tr:hover { @apply bg-marca-50/50; }
+  .tabla tfoot td { @apply border-t border-stone-200 bg-stone-50 font-semibold; }
 }
 
 /* Tema oscuro: los mismos tokens, volteados. Se elige por usuario (data-theme) o sigue al sistema. */

@@ -4,7 +4,7 @@
 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
   <% [ [ t("inicio.ventas"), pesos(@total) ], [ t("inicio.tickets"), @tickets ], [ t("inicio.ticket_promedio"), pesos(@promedio) ], [ t("inicio.devoluciones"), pesos(@devoluciones) ],
        [ t("inicio.efectivo"), pesos((@por_forma["efectivo"] || 0) - @cambio) ], [ t("inicio.transferencias"), pesos(@por_forma["transferencia"] || 0) ], [ t("inicio.depositos"), pesos(@por_forma["deposito"] || 0) ], [ t("inicio.inventario_valorizado"), pesos(@valor_existencias) ] ].each do |nombre, valor| %>
-    <div class="card"><div class="text-xs uppercase text-stone-500"><%= nombre %></div><div class="font-mono text-2xl"><%= valor %></div></div>
+    <div class="card"><div class="etiqueta-dato"><%= nombre %></div><div class="valor-dato text-2xl"><%= valor %></div></div>
   <% end %>
 </div>
 <div class="mt-6 grid gap-6 lg:grid-cols-2">

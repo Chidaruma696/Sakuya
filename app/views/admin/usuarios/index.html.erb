@@ -3,7 +3,7 @@
   <%= link_to t("admin.nuevo_usuario"), new_admin_usuario_path, class: "btn btn-primary btn-sm" %>
 </div>
 <table class="tabla">
-  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.nombre") %></th><th class="px-3 py-2"><%= t("admin.usuario") %></th><th class="px-3 py-2"><%= t("admin.rol") %></th><th class="px-3 py-2"><%= t("comun.sucursal") %></th><th class="px-3 py-2"><%= t("comun.activo") %></th><th></th></tr></thead>
+  <thead><tr><th class="px-3 py-2"><%= t("comun.nombre") %></th><th class="px-3 py-2"><%= t("admin.usuario") %></th><th class="px-3 py-2"><%= t("admin.rol") %></th><th class="px-3 py-2"><%= t("comun.sucursal") %></th><th class="px-3 py-2"><%= t("comun.activo") %></th><th></th></tr></thead>
   <tbody>
     <% @usuarios.each do |u| %>
       <tr class="border-t border-stone-100 <%= 'text-stone-400' unless u.activo %>">

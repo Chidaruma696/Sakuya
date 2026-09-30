@@ -5,7 +5,7 @@
   <p class="mb-2 text-sm"><%= link_to t("caja.ver_resumen_abierto"), caja_resumen_path(@corte), target: "_blank", class: "enlace" %></p>
   <div class="grid gap-4 sm:grid-cols-4">
     <% [ [ t("caja.fondo"), @corte.fondo_centavos ], [ t("caja.ventas"), @corte.total_ventas_centavos ], [ t("caja.efectivo_de_ventas"), @corte.efectivo_ventas_centavos ], [ t("caja.devoluciones"), -@corte.devoluciones_centavos ], [ t("caja.retiros"), -@corte.retiros_centavos ], [ t("caja.en_gaveta"), @corte.efectivo_esperado_centavos ] ].each do |nombre, monto| %>
-      <div class="card"><div class="text-xs uppercase text-stone-500"><%= nombre %></div><div class="font-mono text-2xl"><%= pesos(monto) %></div></div>
+      <div class="card"><div class="etiqueta-dato"><%= nombre %></div><div class="valor-dato text-2xl"><%= pesos(monto) %></div></div>
     <% end %>
   </div>
   <p class="mt-2 text-sm text-stone-600"><%= t("caja.corte_abierto_por", folio: @corte.folio, quien: @corte.usuario, fecha: l(@corte.abierto_en, format: :short)) %> · <%= t("caja.n_ventas", count: @corte.ventas.count) %></p>
@@ -38,8 +38,8 @@
         </div>
         <div class="flex flex-wrap items-end gap-4 border-t border-stone-100 pt-3">
           <div><%= f.label :contado, t("caja.efectivo_contado"), class: "block" %><%= f.number_field :contado, step: "0.01", min: 0, required: true, class: "rounded border border-stone-300 px-3 py-2 font-mono", data: { gaveta_target: "contado", action: "input->gaveta#tecleado" } %></div>
-          <div><div class="text-xs uppercase text-stone-500"><%= t("caja.suma") %></div><div class="font-mono text-lg" data-gaveta-target="suma"><%= pesos(0) %></div></div>
-          <div><div class="text-xs uppercase text-stone-500"><%= t("caja.diferencia") %></div><div class="font-mono text-lg" data-gaveta-target="diferencia"><%= pesos(-@corte.efectivo_esperado_centavos) %></div></div>
+          <div><div class="etiqueta-dato"><%= t("caja.suma") %></div><div class="valor-dato text-lg" data-gaveta-target="suma"><%= pesos(0) %></div></div>
+          <div><div class="etiqueta-dato"><%= t("caja.diferencia") %></div><div class="valor-dato text-lg" data-gaveta-target="diferencia"><%= pesos(-@corte.efectivo_esperado_centavos) %></div></div>
         </div>
         <% if Corte.tope_diferencia_centavos.positive? %>
           <div class="hidden" data-gaveta-target="motivo">
@@ -55,7 +55,7 @@
 <% if @cortes.any? %>
   <h2 class="mb-2 mt-8 font-semibold"><%= t("caja.cortes_cerrados") %></h2>
   <table class="tabla">
-    <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.folio") %></th><th class="px-3 py-2"><%= t("caja.abierto") %></th><th class="px-3 py-2"><%= t("caja.cerrado") %></th><th class="px-3 py-2"><%= t("caja.cajero") %></th><th class="px-3 py-2 text-right"><%= t("caja.esperado") %></th><th class="px-3 py-2 text-right"><%= t("caja.contado") %></th><th class="px-3 py-2 text-right"><%= t("caja.diferencia") %></th><th></th></tr></thead>
+    <thead><tr><th class="px-3 py-2"><%= t("comun.folio") %></th><th class="px-3 py-2"><%= t("caja.abierto") %></th><th class="px-3 py-2"><%= t("caja.cerrado") %></th><th class="px-3 py-2"><%= t("caja.cajero") %></th><th class="px-3 py-2 text-right"><%= t("caja.esperado") %></th><th class="px-3 py-2 text-right"><%= t("caja.contado") %></th><th class="px-3 py-2 text-right"><%= t("caja.diferencia") %></th><th></th></tr></thead>
     <tbody>
       <% @cortes.each do |c| %>
         <tr class="border-t border-stone-100">

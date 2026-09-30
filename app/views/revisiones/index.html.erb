@@ -6,7 +6,7 @@
 </div>
 <p class="mb-4 text-sm text-stone-600"><%= t("revisiones.explicacion") %></p>
 <table class="tabla">
-  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("revisiones.cuando") %></th><th class="px-3 py-2"><%= t("revisiones.quien") %></th><th class="px-3 py-2"><%= t("revisiones.que") %></th><th class="px-3 py-2"><%= t("comun.motivo") %></th><th class="px-3 py-2 text-right"><%= t("revisiones.vale") %></th><th class="px-3 py-2"><%= t("revisiones.decidir") %></th></tr></thead>
+  <thead><tr><th class="px-3 py-2"><%= t("revisiones.cuando") %></th><th class="px-3 py-2"><%= t("revisiones.quien") %></th><th class="px-3 py-2"><%= t("revisiones.que") %></th><th class="px-3 py-2"><%= t("comun.motivo") %></th><th class="px-3 py-2 text-right"><%= t("revisiones.vale") %></th><th class="px-3 py-2"><%= t("revisiones.decidir") %></th></tr></thead>
   <tbody>
     <% @pendientes.each do |r| %>
       <tr class="border-t border-stone-100 align-top">
