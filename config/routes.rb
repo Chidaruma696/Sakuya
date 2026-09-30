@@ -12,7 +12,6 @@ Rails.application.routes.draw do
   # guardar, guardar y volver a una versión.
   scope "ajustes/avanzado/tablero", controller: "tablero", as: "tablero" do
     get "editar", action: :edit, as: :editar
-    post "probar", action: :probar, as: :probar
     post "/", action: :guardar, as: :guardar
     post "versiones/:id/restaurar", action: :restaurar, as: :restaurar
   end

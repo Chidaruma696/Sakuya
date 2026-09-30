@@ -12,7 +12,8 @@ class TableroController < ApplicationController
     vista_previa(@codigo)
   end
 
-  # Desde el editor llega por fetch y devuelve solo la vista previa, para el modal.
+  # «Probar» y «Guardar» van a la misma dirección (el token del formulario va atado a ella); probar
+  # solo lleva la marca probar=1. Desde el modal llega por fetch y devuelve solo la vista previa.
   def probar
     @codigo = params[:codigo].to_s
     vista_previa(@codigo)
@@ -22,6 +23,7 @@ class TableroController < ApplicationController
   end
 
   def guardar
+    return probar if params[:probar].present?
     @codigo = params[:codigo].to_s
     vista_previa(@codigo)
     return render(:edit, status: :unprocessable_entity) if @error_programa

@@ -13,7 +13,7 @@
       <p class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><i class="bi bi-exclamation-triangle-fill text-corbata-700"></i> <%= @error_programa %></p>
     <% end %>
     <div class="flex flex-wrap gap-2">
-      <%= f.button formaction: tablero_probar_path, class: "btn btn-secondary", data: { action: "vista-previa#probar" } do %><i class="bi bi-play"></i> <%= t("tablero.probar") %><% end %>
+      <%= f.button name: "probar", value: "1", class: "btn btn-secondary", data: { action: "vista-previa#probar" } do %><i class="bi bi-play"></i> <%= t("tablero.probar") %><% end %>
       <%= f.button class: "btn btn-primary" do %><i class="bi bi-check2"></i> <%= t("tablero.guardar") %><% end %>
     </div>
   <% end %>
@@ -58,7 +58,7 @@
   </aside>
 </div>
 
-<% if action_name == "probar" %>
+<% if params[:probar].present? %>
   <%# Sin JavaScript, «Probar» llega aquí como envío normal y la vista previa sale en la página. %>
   <section class="mt-8">
     <h2 class="mb-1 text-lg font-semibold"><%= t("tablero.vista_previa") %></h2>

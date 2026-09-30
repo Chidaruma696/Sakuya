@@ -12,7 +12,7 @@ class TableroControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_select "textarea#codigo", /\(tile :sales\)/
 
-    post tablero_probar_path, params: { codigo: %((dashboard (tile "Solo esta" 7))) }
+    post tablero_guardar_path, params: { probar: "1", codigo: %((dashboard (tile "Solo esta" 7))) }
     assert_response :ok
     assert_select ".etiqueta-dato", /Solo esta/
     assert_equal 0, Regla.count, "probar no guarda"
@@ -37,11 +37,11 @@ class TableroControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "probar desde el modal devuelve solo la vista previa, o el error" do
-    post tablero_probar_path, params: { codigo: %((dashboard (tile "En el modal" 3))) }, xhr: true
+    post tablero_guardar_path, params: { probar: "1", codigo: %((dashboard (tile "En el modal" 3))) }, xhr: true
     assert_response :ok
     assert_no_match "<html", response.body
     assert_select ".etiqueta-dato", /En el modal/
-    post tablero_probar_path, params: { codigo: "(dashboard (tile :sales" }, xhr: true
+    post tablero_guardar_path, params: { probar: "1", codigo: "(dashboard (tile :sales" }, xhr: true
     assert_response :unprocessable_entity
     assert_match "falta cerrar", response.body
     assert_select ".etiqueta-dato", 0
@@ -79,5 +79,26 @@ class TableroControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
     post tablero_guardar_path, params: { codigo: "(dashboard)" }
     assert_response :forbidden
+  end
+
+  # Los tests corren sin protección CSRF; esta la enciende para probar lo que hace el navegador:
+  # el formulario trae un token atado a su dirección y el modal manda además el de la página.
+  test "probar y guardar pasan la protección CSRF, desde el modal y sin JavaScript" do
+    ActionController::Base.allow_forgery_protection = true
+    get tablero_editar_path
+    token_formulario = css_select("form#form_tablero input[name=authenticity_token]").first["value"]
+    token_pagina = css_select("meta[name=csrf-token]").first["content"]
+
+    post tablero_guardar_path, params: { authenticity_token: token_formulario, probar: "1", codigo: "(dashboard (tile :tickets))" },
+                               headers: { "X-CSRF-Token" => token_pagina }, xhr: true
+    assert_response :ok
+    post tablero_guardar_path, params: { authenticity_token: token_formulario, probar: "1", codigo: "(dashboard (tile :tickets))" }
+    assert_response :ok
+    assert_equal 0, Regla.count
+    post tablero_guardar_path, params: { authenticity_token: token_formulario, codigo: "(dashboard (tile :tickets))" }
+    assert_redirected_to root_path
+    assert_equal 1, Regla.count
+  ensure
+    ActionController::Base.allow_forgery_protection = false
   end
 end

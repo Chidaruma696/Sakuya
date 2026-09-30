@@ -12,11 +12,15 @@ export default class extends Controller {
     boton.disabled = true
     this.cuerpoTarget.innerHTML = `<p class="py-10 text-center text-sm text-stone-500">${T.cargando}</p>`
     if (!this.dialogoTarget.open) this.dialogoTarget.showModal()
+    const datos = new FormData(formulario)
+    datos.set(boton.name, boton.value)
     try {
-      const r = await fetch(boton.formAction, {
+      // El token general de la página va en la cabecera, además del que trae el formulario.
+      const r = await fetch(formulario.action, {
         method: "POST",
-        body: new FormData(formulario),
-        headers: { Accept: "text/html", "X-Requested-With": "XMLHttpRequest" }
+        body: datos,
+        headers: { Accept: "text/html", "X-Requested-With": "XMLHttpRequest",
+                   "X-CSRF-Token": document.querySelector("meta[name=csrf-token]")?.content ?? "" }
       })
       this.cuerpoTarget.innerHTML = await r.text()
     } catch {
