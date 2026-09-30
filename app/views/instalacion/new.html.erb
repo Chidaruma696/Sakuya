@@ -1,9 +1,9 @@
 <% content_for :body_class, "items-stretch" %>
 <%# Primer arranque a pantalla completa y por pasos: apariencia, negocio, sucursal, administrador, resumen. %>
 <div class="grid min-h-screen w-full grid-rows-[auto_1fr] lg:grid-cols-[340px_1fr] lg:grid-rows-1" data-controller="pasos" data-pasos-inicial-value="<%= @paso || 1 %>">
-  <aside class="flex flex-col gap-5 bg-marca-400 px-6 py-6 text-marca-950 lg:px-8 lg:py-8">
+  <aside class="flex flex-col gap-5 bg-marca-700 px-6 py-6 text-white lg:px-8 lg:py-8">
     <div class="flex items-center gap-4 lg:flex-col lg:items-start">
-      <%= image_tag "logo-b.png", alt: "Sakuya", class: "h-24 w-24 shrink-0 lg:h-56 lg:w-56" %>
+      <%= image_tag "logo-w.png", alt: "Sakuya", class: "h-24 w-24 shrink-0 lg:h-56 lg:w-56" %>
       <div>
         <div class="text-3xl font-bold leading-tight">Sakuya</div>
         <div class="text-xs opacity-80">v<%= Sakuya::VERSION %> · <%= t("instalacion.titulo") %></div>
@@ -12,8 +12,8 @@
     <p class="text-sm opacity-90"><%= t("instalacion.intro") %></p>
     <ol class="flex flex-wrap gap-x-4 gap-y-1 text-sm lg:flex-col lg:gap-2">
       <% %w[idioma apariencia negocio sucursal folios administrador resumen].each_with_index do |paso, i| %>
-        <li class="flex items-center gap-2" data-pasos-target="indicador">
-          <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/60 font-mono text-xs"><%= i + 1 %></span>
+        <li class="flex items-center gap-2 underline-offset-4" data-pasos-target="indicador">
+          <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/20 font-mono text-xs"><%= i + 1 %></span>
           <span><%= t("instalacion.pasos.#{paso}") %></span>
         </li>
       <% end %>

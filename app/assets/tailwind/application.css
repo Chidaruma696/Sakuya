@@ -134,8 +134,5 @@
 :root[data-letra="chica"] { font-size: 14px; }
 :root[data-letra="grande"] { font-size: 18px; }
 
-/* En compacto la cinta se aplana: icono chico con el texto a la derecha, sin la etiqueta del grupo. */
-:root[data-densidad="compacta"] .cinta-boton { flex-direction: row; width: auto; gap: 0.375rem; padding: 0.25rem 0.5rem; text-align: left; }
-:root[data-densidad="compacta"] .cinta-boton i { font-size: 1rem; line-height: 1.25rem; }
-:root[data-densidad="compacta"] .cinta-grupo { display: none; }
-:root[data-densidad="compacta"] .cinta-botones { gap: 0.125rem; }
+/* En compacto los comandos de la cinta se encogen un punto. */
+:root[data-densidad="compacta"] .cinta-comando { padding: 0.25rem 0.5rem; font-size: 0.8125rem; }

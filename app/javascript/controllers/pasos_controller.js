@@ -38,7 +38,7 @@ export default class extends Controller {
   pintar() {
     this.pasoTargets.forEach((p, i) => p.classList.toggle("hidden", i !== this.actual - 1))
     this.indicadorTargets.forEach((ind, i) => {
-      ind.classList.toggle("text-marca-800", i === this.actual - 1)
+      ind.classList.toggle("underline", i === this.actual - 1)
       ind.classList.toggle("font-bold", i === this.actual - 1)
       ind.classList.toggle("opacity-50", i > this.actual - 1)
     })

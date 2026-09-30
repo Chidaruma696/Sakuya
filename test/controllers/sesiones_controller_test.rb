@@ -31,7 +31,7 @@ class SesionesControllerTest < ActionDispatch::IntegrationTest
     post entrar_path, params: { usuario: "Cajera", password: "secreto1" }
     assert_redirected_to root_path
     follow_redirect!
-    assert_select "nav", /Tienda 1/
+    assert_select "header", /Tienda 1/
     assert_select "li", /Vender en caja/
   end
 

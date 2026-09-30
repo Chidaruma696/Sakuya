@@ -21,6 +21,15 @@ module RibbonHelper
       ] },
       { id: :corte, botones: [ Boton.new(:corte, :caja_corte_path, "caja.abrir", "cash-stack") ] }
     ] },
+    { id: :inventario, grupos: [
+      { id: :consultar, botones: [
+        Boton.new(:existencias, :inventario_path, "inventario.ver", "list"),
+        Boton.new(:kardex, :kardex_inventario_path, "inventario.ver", "arrow-down-up")
+      ] },
+      { id: :capturar, botones: [
+        Boton.new(:entrada_ajuste, :nuevo_movimiento_inventario_path, "inventario.ajustar", "pencil")
+      ] }
+    ] },
     { id: :compras, grupos: [
       { id: :recibir, botones: [
         Boton.new(:recibir, :new_recepcion_path, "compras.recibir", "box-arrow-in-down"),
@@ -44,15 +53,6 @@ module RibbonHelper
         Boton.new(:conteos, :conteos_path, "conteos.hacer", "list-ul")
       ] },
       { id: :cargos, botones: [ Boton.new(:cargos, :cargos_path, "conteos.cargos", "cash-coin") ] }
-    ] },
-    { id: :inventario, grupos: [
-      { id: :consultar, botones: [
-        Boton.new(:existencias, :inventario_path, "inventario.ver", "list"),
-        Boton.new(:kardex, :kardex_inventario_path, "inventario.ver", "arrow-down-up")
-      ] },
-      { id: :capturar, botones: [
-        Boton.new(:entrada_ajuste, :nuevo_movimiento_inventario_path, "inventario.ajustar", "pencil")
-      ] }
     ] },
     { id: :admin, grupos: [
       { id: :catalogo, botones: [

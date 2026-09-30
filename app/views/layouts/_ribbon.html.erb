@@ -1,64 +1,66 @@
 <% activa = pestana_activa %>
-<%# La barra lleva el azul del vestido de Sakuya con letra oscura. En pantalla ancha, pestañas
-    clásicas pegadas a la cinta (con las esquinas de arriba redondeadas); en pantalla angosta la
-    cinta se esconde y las mismas pestañas y botones viven en una barra lateral. %>
-<%# Barra y cinta van fijas arriba, como en Office: el contenido se desplaza debajo %>
+<%# Cinta simplificada, como el Office de hoy: una barra delgada con el nombre, las pestañas con una
+    rayita bajo la activa y una sola fila de comandos, icono y texto en línea. El grupo de cada
+    comando va en su title. En pantalla angosta todo vive en la barra lateral. %>
 <div class="sticky top-0 z-30 shadow-sm" id="cinta">
-<div class="bg-marca-400 text-marca-950">
-  <nav class="flex w-full items-end gap-3 px-4 pt-1.5 text-sm">
-    <%# El logo: en pantalla ancha abre el "Acerca de"; en angosta abre la barra lateral %>
-    <button type="button" data-action="lateral#abrir" title="<%= t("cinta.menu") %>" class="mb-1.5 flex shrink-0 items-center rounded-md p-0.5 opacity-95 transition hover:opacity-100 hover:bg-white/15 focus:outline-none focus:bg-white/20 md:hidden">
-      <%= image_tag "logo-w.png", alt: t("cinta.menu"), class: "h-8 w-8" %>
-    </button>
-    <button type="button" data-action="dialogo#abrir" title="<%= t("acerca.titulo") %>" class="mb-1.5 hidden shrink-0 items-center rounded-md p-0.5 opacity-95 transition hover:opacity-100 hover:bg-white/15 focus:outline-none focus:bg-white/20 md:flex">
-      <%= image_tag "logo-w.png", alt: "Sakuya", class: "h-8 w-8" %>
-    </button>
-    <span class="mb-2 font-semibold md:hidden"><%= t("cinta.pestanas.#{activa[:id]}") %></span>
-    <div class="hidden min-w-0 flex-1 items-end gap-0.5 whitespace-nowrap md:flex">
-      <% pestanas_visibles.each do |p| %>
-        <%= link_to t("cinta.pestanas.#{p[:id]}"), ruta_de_pestana(p),
-              class: "shrink-0 rounded-t-md border border-b-0 px-4 py-2 font-medium transition-colors #{p[:id] == activa[:id] ? 'border-stone-300 bg-fondo font-semibold text-marca-900 -mb-px pb-2.5' : 'border-transparent text-marca-950/80 hover:border-marca-300 hover:bg-marca-300/60 hover:text-marca-950'}" %>
+  <header class="bg-marca-700 text-white">
+    <div class="flex h-11 w-full items-center gap-3 px-4 text-sm">
+      <%# El logo: en pantalla ancha abre el "Acerca de"; en angosta abre la barra lateral %>
+      <button type="button" data-action="lateral#abrir" title="<%= t("cinta.menu") %>" class="flex shrink-0 items-center rounded-md p-0.5 transition hover:bg-white/15 focus:bg-white/20 focus:outline-none md:hidden">
+        <%= image_tag "logo-w.png", alt: t("cinta.menu"), class: "h-7 w-7" %>
+      </button>
+      <button type="button" data-action="dialogo#abrir" title="<%= t("acerca.titulo") %>" class="hidden shrink-0 items-center gap-2 rounded-md py-0.5 pl-0.5 pr-2 transition hover:bg-white/15 focus:bg-white/20 focus:outline-none md:flex">
+        <%= image_tag "logo-w.png", alt: "Sakuya", class: "h-7 w-7" %>
+        <span class="font-semibold tracking-wide">Sakuya</span>
+      </button>
+      <span class="font-semibold md:hidden"><%= t("cinta.pestanas.#{activa[:id]}") %></span>
+      <span class="ml-auto hidden truncate text-white/80 lg:inline" title="<%= sucursal_actual %> · <%= usuario_actual %>"><%= sucursal_actual %> · <%= usuario_actual %></span>
+      <%# En angosto, Salir vive solo en la barra lateral %>
+      <%= button_to salir_path, method: :delete, class: "btn btn-sm shrink-0 border-white/30 bg-white/10 text-white shadow-none hover:bg-white/20", title: "#{sucursal_actual} · #{usuario_actual}", form: { class: "ml-auto hidden md:block lg:ml-0" } do %>
+        <i class="bi bi-box-arrow-right"></i> <%= t("cinta.salir") %>
       <% end %>
     </div>
-    <span class="ml-auto hidden shrink-0 pb-2 text-marca-950/80 lg:inline" title="<%= sucursal_actual %> · <%= usuario_actual %>"><%= sucursal_actual %> · <%= usuario_actual %></span>
-    <%# En angosto, Salir vive solo en la barra lateral %>
-    <%= button_to t("cinta.salir"), salir_path, method: :delete, class: "btn btn-sm mb-1.5 shrink-0 border-marca-700/40 bg-marca-800 text-white shadow-none hover:bg-marca-700", title: "#{sucursal_actual} · #{usuario_actual}", form: { class: "ml-auto hidden md:block lg:ml-0" } %>
-  </nav>
-</div>
+  </header>
 
-<%# La cinta de botones de la pestaña activa (solo en pantalla ancha) %>
-<div class="hidden border-b border-stone-300 bg-fondo md:block">
-  <div class="flex w-full flex-wrap gap-x-6 gap-y-2 px-4 py-2">
-    <% activa[:grupos].select { |g| grupo_visible?(g) }.each do |g| %>
-      <% botones = g[:botones].select { |b| boton_visible?(b) } %>
-      <% next if botones.empty? %>
-      <div class="flex flex-col items-center border-r border-stone-300 pr-6 last:border-0">
-        <div class="cinta-botones flex gap-1">
-          <% botones.each do |b| %>
-            <% ruta = send(b.ruta) %>
-            <%= link_to ruta, class: "cinta-boton flex w-20 flex-col items-center rounded-md px-1 py-1 text-center text-xs text-stone-700 transition-colors hover:bg-white hover:text-marca-900 #{'bg-white text-marca-900 shadow-sm ring-1 ring-marca-200' if current_page?(ruta)}" do %>
-              <i class="bi bi-<%= b.icono %> text-2xl leading-8"></i>
-              <span class="leading-tight"><%= t("cinta.botones.#{b.clave}") %></span>
-            <% end %>
+  <div class="hidden border-b border-stone-200 bg-white md:block">
+    <nav class="flex w-full items-end gap-1 overflow-x-auto px-3 text-sm" aria-label="<%= t("cinta.menu") %>">
+      <% pestanas_visibles.each do |p| %>
+        <% actual = p[:id] == activa[:id] %>
+        <%= link_to t("cinta.pestanas.#{p[:id]}"), ruta_de_pestana(p),
+              class: "relative shrink-0 px-3 pb-2 pt-2.5 font-medium transition-colors #{actual ? 'text-marca-800 after:absolute after:inset-x-2 after:bottom-0 after:h-[3px] after:rounded-full after:bg-marca-600' : 'text-stone-600 hover:text-stone-900'}",
+              "aria-current": (actual ? "page" : nil) %>
+      <% end %>
+    </nav>
+    <%# La fila de comandos de la pestaña activa: los grupos se separan con una rayita vertical %>
+    <div class="flex w-full flex-wrap items-center gap-1 px-3 pb-2 pt-1">
+      <% grupos = activa[:grupos].select { |g| grupo_visible?(g) } %>
+      <% grupos.each_with_index do |g, i| %>
+        <% botones = g[:botones].select { |b| boton_visible?(b) } %>
+        <% next if botones.empty? %>
+        <% if i.positive? %><span class="mx-1 h-5 w-px bg-stone-200" aria-hidden="true"></span><% end %>
+        <% botones.each do |b| %>
+          <% ruta = send(b.ruta) %>
+          <%= link_to ruta, title: t("cinta.grupos.#{g[:id]}"),
+                class: "cinta-comando inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors #{current_page?(ruta) ? 'bg-marca-100 font-medium text-marca-900' : 'text-stone-700 hover:bg-marca-50 hover:text-marca-800'}" do %>
+            <i class="bi bi-<%= b.icono %> text-base leading-none"></i>
+            <span><%= t("cinta.botones.#{b.clave}") %></span>
           <% end %>
-        </div>
-        <span class="cinta-grupo mt-1 text-[10px] uppercase tracking-wide text-stone-500"><%= t("cinta.grupos.#{g[:id]}") %></span>
-      </div>
-    <% end %>
+        <% end %>
+      <% end %>
+    </div>
   </div>
-</div>
 </div>
 
 <%# Barra lateral (solo en pantalla angosta): todas las pestañas con sus botones, en vertical %>
 <div class="fixed inset-0 z-40 hidden bg-stone-900/50 md:hidden" data-lateral-target="fondo" data-action="click->lateral#cerrar"></div>
 <aside class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] -translate-x-full flex-col bg-fondo shadow-2xl transition-transform duration-200 md:hidden" data-lateral-target="panel" aria-label="<%= t("cinta.menu") %>">
-  <div class="flex items-center gap-3 bg-marca-400 px-4 py-3 text-marca-950">
+  <div class="flex items-center gap-3 bg-marca-700 px-4 py-3 text-white">
     <%= image_tag "logo-w.png", alt: "", class: "h-8 w-8" %>
     <div class="min-w-0 flex-1">
       <div class="font-bold leading-tight">Sakuya</div>
-      <div class="truncate text-xs text-marca-950/80"><%= sucursal_actual %> · <%= usuario_actual %></div>
+      <div class="truncate text-xs text-white/80"><%= sucursal_actual %> · <%= usuario_actual %></div>
     </div>
-    <button type="button" class="btn btn-sm border-transparent bg-white/20 text-marca-950 shadow-none hover:bg-white/35" data-action="lateral#cerrar" title="<%= t("comun.cerrar") %>"><i class="bi bi-x-lg"></i></button>
+    <button type="button" class="btn btn-sm border-transparent bg-white/15 text-white shadow-none hover:bg-white/25" data-action="lateral#cerrar" title="<%= t("comun.cerrar") %>"><i class="bi bi-x-lg"></i></button>
   </div>
   <nav class="flex-1 overflow-y-auto px-2 py-2 text-sm">
     <% pestanas_visibles.each do |p| %>
