@@ -86,6 +86,7 @@ de:
       caja: Kasse
       folios: Nummerierung
       compras: Einkauf
+      tablero: Übersicht in Lisp
     secciones_ayuda:
       para_ti: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
       negocio: Die Betriebsdaten, wie sie auf dem Ticket stehen, mit dem Ticket daneben genau so, wie es gedruckt wird. Gilt für alle Filialen.
@@ -111,6 +112,7 @@ de:
         recepcion: Wareneingang
         traspaso: Umbuchung
       sucursal: Filialkürzel voranstellen
+    avanzadas: Erweitert
   comun:
     cerrar: Schließen
     guardar: Speichern
@@ -220,7 +222,6 @@ de:
       proveedores: Lieferanten
       traspaso_granel: Neue Umbuchung
       traspasos: Umlagerungen
-      tablero: Übersicht
   acerca:
     titulo: Über Sakuya
     lema: Kasse und Backoffice für die Zentrale und ihre Läden

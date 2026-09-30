@@ -1,12 +1,11 @@
-<div class="mb-4 flex flex-wrap items-end justify-between gap-3">
-  <div>
-    <h1 class="text-2xl font-bold"><%= t("tablero.titulo") %></h1>
-    <p class="mt-1 max-w-3xl text-sm text-stone-600"><%= t("tablero.ayuda") %></p>
-  </div>
-  <%= link_to t("comun.volver"), root_path, class: "btn btn-secondary" %>
-</div>
+<%# Vive dentro de Ajustes, en las opciones avanzadas. %>
+<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+<%= render "ajustes/menu", actual: "tablero" %>
+<section class="min-w-0">
+<h2 class="mb-1 text-xl font-bold"><%= t("tablero.titulo") %></h2>
+<p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("tablero.ayuda") %></p>
 
-<div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
+<div class="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_22rem]">
   <%= form_with url: tablero_guardar_path, id: "form_tablero", class: "formulario space-y-4" do |f| %>
     <label for="codigo" class="etiqueta-campo"><%= t("tablero.programa") %></label>
     <%= text_area_tag :codigo, @codigo, id: "codigo", rows: 20, spellcheck: false, autocomplete: "off", class: "codigo w-full px-3 py-2" %>
@@ -72,3 +71,5 @@
     </tbody>
   </table>
 </section>
+</section>
+</div>

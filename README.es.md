@@ -70,7 +70,7 @@ Cambia el orden, quita lo que no miras o calcula tus propias cifras:
   (panel :top-products 5))
 ```
 
-Se edita en Inicio › Tablero con vista previa; no se guarda nada hasta que corre, cada versión se conserva, y si alguna vez una guardada falla, sale el tablero de fábrica.
+Se edita en Ajustes › Opciones avanzadas › Tablero en Lisp, con vista previa; no se guarda nada hasta que corre, cada versión se conserva, y si alguna vez una guardada falla, sale el tablero de fábrica.
 
 <br/>
 

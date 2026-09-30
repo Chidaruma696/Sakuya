@@ -70,7 +70,7 @@ Change the order, drop what you don't look at, or compute your own figures:
   (panel :top-products 5))
 ```
 
-It's edited in Home › Dashboard with a live preview; nothing is saved until it runs, every version is kept, and if a saved one ever breaks, the default dashboard shows instead.
+It's edited in Settings › Advanced › Dashboard in Lisp, with a live preview; nothing is saved until it runs, every version is kept, and if a saved one ever breaks, the default dashboard shows instead.
 
 <br/>
 

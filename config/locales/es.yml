@@ -86,6 +86,7 @@ es:
       caja: Caja
       folios: Folios
       compras: Compras
+      tablero: Tablero en Lisp
     secciones_ayuda:
       para_ti: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
       negocio: Los datos del negocio como salen en el ticket, con el ticket al lado tal cual va a imprimirse. Vale para todas las sucursales.
@@ -111,6 +112,7 @@ es:
         recepcion: Recepción de compra
         traspaso: Traspaso
       sucursal: Anteponer el código de la sucursal
+    avanzadas: Opciones avanzadas
   comun:
     cerrar: Cerrar
     guardar: Guardar
@@ -220,7 +222,6 @@ es:
       proveedores: Proveedores
       traspaso_granel: Nuevo traspaso
       traspasos: Traspasos
-      tablero: Tablero
   acerca:
     titulo: Acerca de Sakuya
     lema: Punto de venta y trastienda para la matriz y sus tiendas

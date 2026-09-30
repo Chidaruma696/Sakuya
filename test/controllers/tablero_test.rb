@@ -44,11 +44,22 @@ class TableroControllerTest < ActionDispatch::IntegrationTest
     assert_select "div", /tiene un error/
   end
 
+  test "el editor vive en Ajustes, en las opciones avanzadas" do
+    get ajustes_path
+    assert_select "nav li", /Opciones avanzadas/
+    assert_select "nav a[href=?]", tablero_editar_path
+    get tablero_editar_path
+    assert_select "nav a[href=?][class*=font-semibold]", tablero_editar_path
+    assert_match %r{/ajustes/avanzado/tablero}, tablero_editar_path
+  end
+
   test "sin reglas.editar no se entra al editor ni se ve el botón" do
     delete salir_path
     post entrar_path, params: { usuario: "supervisora", password: "secreto1" }
     get root_path
     assert_select "a[href=?]", tablero_editar_path, count: 0
+    get ajustes_path
+    assert_select "nav li", { text: /Opciones avanzadas/, count: 0 }
     get tablero_editar_path
     assert_response :forbidden
     post tablero_guardar_path, params: { codigo: "(dashboard)" }

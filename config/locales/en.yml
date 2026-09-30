@@ -86,6 +86,7 @@ en:
       caja: Register
       folios: Numbering
       compras: Purchasing
+      tablero: Dashboard in Lisp
     secciones_ayuda:
       para_ti: Applied the moment you pick one; saved on your user, they follow you to any computer.
       negocio: The business details as they appear on the ticket, with the ticket next to it exactly as it will print. Applies to every branch.
@@ -111,6 +112,7 @@ en:
         recepcion: Goods receipt
         traspaso: Transfer
       sucursal: Put the branch code in front
+    avanzadas: Advanced
   comun:
     cerrar: Close
     guardar: Save
@@ -220,7 +222,6 @@ en:
       proveedores: Suppliers
       traspaso_granel: New transfer
       traspasos: Transfers
-      tablero: Dashboard
   acerca:
     titulo: About Sakuya
     lema: Point of sale and back office for the headquarters and its shops

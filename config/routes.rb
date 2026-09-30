@@ -8,8 +8,9 @@ Rails.application.routes.draw do
     patch "ticket", action: :guardar_ticket, as: :ticket
     get ":seccion", action: :index, as: :seccion, constraints: { seccion: /para_ti|negocio|folios|modulos|caja|compras|ticket/ }
   end
-  # El tablero de Inicio, escrito en Lisp: editar, probar sin guardar, guardar y volver a una versión.
-  scope "tablero", controller: "tablero", as: "tablero" do
+  # Opciones avanzadas de Ajustes. El tablero de Inicio, escrito en Lisp: editar, probar sin
+  # guardar, guardar y volver a una versión.
+  scope "ajustes/avanzado/tablero", controller: "tablero", as: "tablero" do
     get "editar", action: :edit, as: :editar
     post "probar", action: :probar, as: :probar
     post "/", action: :guardar, as: :guardar
