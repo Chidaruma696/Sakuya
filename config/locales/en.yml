@@ -456,6 +456,8 @@ en:
     pwa:
       version_nueva: A new version of Sakuya is ready.
       recargar: Reload
+    cargando: Loading…
+    no_se_pudo: Could not load. Check the connection.
   caja:
     nueva_venta: New sale
     corte_de_caja: Register session

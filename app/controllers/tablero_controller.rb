@@ -12,10 +12,13 @@ class TableroController < ApplicationController
     vista_previa(@codigo)
   end
 
+  # Desde el editor llega por fetch y devuelve solo la vista previa, para el modal.
   def probar
     @codigo = params[:codigo].to_s
     vista_previa(@codigo)
-    render :edit, status: (@error_programa ? :unprocessable_entity : :ok)
+    estado = @error_programa ? :unprocessable_entity : :ok
+    return render(partial: "tablero/vista_previa", status: estado) if request.xhr?
+    render :edit, status: estado
   end
 
   def guardar

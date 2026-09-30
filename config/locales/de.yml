@@ -456,6 +456,8 @@ de:
     pwa:
       version_nueva: Eine neue Version von Sakuya ist bereit.
       recargar: Neu laden
+    cargando: Lädt…
+    no_se_pudo: Konnte nicht laden. Prüfe die Verbindung.
   caja:
     nueva_venta: Neuer Verkauf
     corte_de_caja: Kassenabschnitt

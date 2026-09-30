@@ -456,6 +456,8 @@ es:
     pwa:
       version_nueva: Hay una versión nueva de Sakuya.
       recargar: Recargar
+    cargando: Cargando…
+    no_se_pudo: No se pudo cargar. Revisa la conexión.
   caja:
     nueva_venta: Nueva venta
     corte_de_caja: Corte de caja

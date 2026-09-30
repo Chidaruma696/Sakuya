@@ -1,0 +1,7 @@
+<%# Lo que devuelve «Probar»: el error del programa, o el tablero tal como quedaría. %>
+<% if @error_programa %>
+  <p class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><i class="bi bi-exclamation-triangle-fill text-corbata-700"></i> <%= @error_programa %></p>
+<% else %>
+  <p class="mb-3 text-sm text-stone-600"><%= t("tablero.vista_previa_ayuda") %></p>
+  <%= render "inicio/tablero" %>
+<% end %>

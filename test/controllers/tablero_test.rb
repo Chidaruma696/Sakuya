@@ -36,6 +36,21 @@ class TableroControllerTest < ActionDispatch::IntegrationTest
     assert_equal 3, Regla.count, "restaurar asienta otra versión, no borra"
   end
 
+  test "probar desde el modal devuelve solo la vista previa, o el error" do
+    post tablero_probar_path, params: { codigo: %((dashboard (tile "En el modal" 3))) }, xhr: true
+    assert_response :ok
+    assert_no_match "<html", response.body
+    assert_select ".etiqueta-dato", /En el modal/
+    post tablero_probar_path, params: { codigo: "(dashboard (tile :sales" }, xhr: true
+    assert_response :unprocessable_entity
+    assert_match "falta cerrar", response.body
+    assert_select ".etiqueta-dato", 0
+    assert_equal 0, Regla.count
+    get tablero_editar_path
+    assert_select "dialog[data-vista-previa-target=dialogo]"
+    assert_select "button[data-action='vista-previa#probar']"
+  end
+
   test "un programa que truena en Inicio no tumba la página: sale el de fábrica con aviso" do
     Regla.create!(gancho: "tablero", codigo: "(dashboard (tile :nada))", usuario: usuarios(:admin))
     get root_path

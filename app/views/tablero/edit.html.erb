@@ -5,7 +5,7 @@
 <h2 class="mb-1 text-xl font-bold"><%= t("tablero.titulo") %></h2>
 <p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("tablero.ayuda") %></p>
 
-<div class="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_22rem]">
+<div class="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_22rem]" data-controller="vista-previa">
   <%= form_with url: tablero_guardar_path, id: "form_tablero", class: "formulario space-y-4" do |f| %>
     <label for="codigo" class="etiqueta-campo"><%= t("tablero.programa") %></label>
     <%= text_area_tag :codigo, @codigo, id: "codigo", rows: 20, spellcheck: false, autocomplete: "off", class: "codigo w-full px-3 py-2" %>
@@ -13,10 +13,19 @@
       <p class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><i class="bi bi-exclamation-triangle-fill text-corbata-700"></i> <%= @error_programa %></p>
     <% end %>
     <div class="flex flex-wrap gap-2">
-      <%= f.button formaction: tablero_probar_path, class: "btn btn-secondary" do %><i class="bi bi-play"></i> <%= t("tablero.probar") %><% end %>
+      <%= f.button formaction: tablero_probar_path, class: "btn btn-secondary", data: { action: "vista-previa#probar" } do %><i class="bi bi-play"></i> <%= t("tablero.probar") %><% end %>
       <%= f.button class: "btn btn-primary" do %><i class="bi bi-check2"></i> <%= t("tablero.guardar") %><% end %>
     </div>
   <% end %>
+
+  <%# La vista previa de «Probar», encima del editor para no perder de vista el programa %>
+  <dialog class="m-auto w-[min(72rem,95vw)] rounded-xl bg-fondo p-0 shadow-2xl" data-vista-previa-target="dialogo" data-action="click->vista-previa#cerrarFuera">
+    <div class="flex items-center justify-between gap-4 border-b border-stone-200 bg-white px-6 py-4">
+      <h2 class="text-lg font-semibold"><%= t("tablero.vista_previa") %></h2>
+      <button type="button" class="btn btn-ghost btn-sm" data-action="vista-previa#cerrar" title="<%= t("comun.cerrar") %>"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="max-h-[75vh] overflow-y-auto px-6 py-5" data-vista-previa-target="cuerpo"></div>
+  </dialog>
 
   <aside class="card space-y-4 text-sm">
     <h2 class="font-semibold"><%= t("tablero.referencia.titulo") %></h2>
@@ -49,11 +58,13 @@
   </aside>
 </div>
 
-<section class="mt-8">
-  <h2 class="mb-1 text-lg font-semibold"><%= t("tablero.vista_previa") %></h2>
-  <p class="mb-3 text-sm text-stone-600"><%= t("tablero.vista_previa_ayuda") %></p>
-  <%= render "inicio/tablero" %>
-</section>
+<% if action_name == "probar" %>
+  <%# Sin JavaScript, «Probar» llega aquí como envío normal y la vista previa sale en la página. %>
+  <section class="mt-8">
+    <h2 class="mb-1 text-lg font-semibold"><%= t("tablero.vista_previa") %></h2>
+    <%= render "tablero/vista_previa" %>
+  </section>
+<% end %>
 
 <section class="mt-8">
   <h2 class="mb-2 text-lg font-semibold"><%= t("tablero.versiones") %></h2>
