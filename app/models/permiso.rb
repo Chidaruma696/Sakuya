@@ -20,7 +20,8 @@ module Permiso
     "compras.exceder" => "Facturar más de lo recibido sin que pase a revisión",
     "almacenes.traspasar" => "Traspasos a granel entre sucursales y almacenes",
     "admin.catalogo" => "Administrar productos y códigos",
-    "admin.usuarios" => "Administrar usuarios, roles y sucursales"
+    "admin.usuarios" => "Administrar usuarios, roles y sucursales",
+    "reglas.editar" => "Escribir los programas en Lisp del negocio (el tablero)"
   }.freeze
 
   MODULOS = CLAVES.keys.map { |c| c.split(".").first }.uniq.freeze

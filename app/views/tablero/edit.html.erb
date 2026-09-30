@@ -1,0 +1,74 @@
+<div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+  <div>
+    <h1 class="text-2xl font-bold"><%= t("tablero.titulo") %></h1>
+    <p class="mt-1 max-w-3xl text-sm text-stone-600"><%= t("tablero.ayuda") %></p>
+  </div>
+  <%= link_to t("comun.volver"), root_path, class: "btn btn-secondary" %>
+</div>
+
+<div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
+  <%= form_with url: tablero_guardar_path, id: "form_tablero", class: "formulario space-y-4" do |f| %>
+    <label for="codigo" class="etiqueta-campo"><%= t("tablero.programa") %></label>
+    <%= text_area_tag :codigo, @codigo, id: "codigo", rows: 20, spellcheck: false, autocomplete: "off", class: "codigo w-full px-3 py-2" %>
+    <% if @error_programa %>
+      <p class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><i class="bi bi-exclamation-triangle-fill text-corbata-700"></i> <%= @error_programa %></p>
+    <% end %>
+    <div class="flex flex-wrap gap-2">
+      <%= f.button formaction: tablero_probar_path, class: "btn btn-secondary" do %><i class="bi bi-play"></i> <%= t("tablero.probar") %><% end %>
+      <%= f.button class: "btn btn-primary" do %><i class="bi bi-check2"></i> <%= t("tablero.guardar") %><% end %>
+    </div>
+  <% end %>
+
+  <aside class="card space-y-4 text-sm">
+    <h2 class="font-semibold"><%= t("tablero.referencia.titulo") %></h2>
+    <div>
+      <h3 class="etiqueta-dato mb-1"><%= t("tablero.referencia.cifras") %></h3>
+      <ul class="space-y-0.5">
+        <% Tablero::CIFRAS.each do |clave, (nombre, _, _)| %>
+          <li><code class="codigo text-marca-800">(tile :<%= clave %>)</code> <span class="text-stone-500"><%= t(nombre) %></span></li>
+        <% end %>
+      </ul>
+    </div>
+    <div>
+      <h3 class="etiqueta-dato mb-1"><%= t("tablero.referencia.propias") %></h3>
+      <p class="text-stone-600"><%= t("tablero.referencia.propias_ayuda") %></p>
+      <pre class="codigo mt-1 overflow-x-auto rounded-lg bg-stone-50 p-2 text-xs ring-1 ring-stone-200">(tile "Margin" (- (sales) (returns)) :money)
+(tile "Per day" (/ (sales) (days)) :money)
+(tile "Ketchup sold" (sold "CATS"))</pre>
+    </div>
+    <div>
+      <h3 class="etiqueta-dato mb-1"><%= t("tablero.referencia.paneles") %></h3>
+      <ul class="space-y-0.5">
+        <% Tablero::PANELES.each do |panel| %><li><code class="codigo text-marca-800">(panel :<%= panel %>)</code></li><% end %>
+      </ul>
+      <p class="mt-1 text-stone-600"><%= t("tablero.referencia.paneles_ayuda") %></p>
+    </div>
+    <div>
+      <h3 class="etiqueta-dato mb-1"><%= t("tablero.referencia.lenguaje") %></h3>
+      <p class="text-stone-600"><%= t("tablero.referencia.lenguaje_ayuda") %></p>
+    </div>
+  </aside>
+</div>
+
+<section class="mt-8">
+  <h2 class="mb-1 text-lg font-semibold"><%= t("tablero.vista_previa") %></h2>
+  <p class="mb-3 text-sm text-stone-600"><%= t("tablero.vista_previa_ayuda") %></p>
+  <%= render "inicio/tablero" %>
+</section>
+
+<section class="mt-8">
+  <h2 class="mb-2 text-lg font-semibold"><%= t("tablero.versiones") %></h2>
+  <table class="tabla">
+    <thead><tr><th><%= t("comun.fecha") %></th><th><%= t("comun.quien") %></th><th></th></tr></thead>
+    <tbody>
+      <% @versiones.each_with_index do |v, i| %>
+        <tr>
+          <td class="px-3 py-2"><%= l v.created_at, format: :short %><% if i.zero? %> <span class="badge"><%= t("tablero.vigente") %></span><% end %></td>
+          <td class="px-3 py-2"><%= v.usuario %></td>
+          <td class="px-3 py-2 text-right"><% unless i.zero? %><%= button_to t("tablero.restaurar"), tablero_restaurar_path(v), class: "btn btn-secondary btn-xs" %><% end %></td>
+        </tr>
+      <% end %>
+      <% if @versiones.empty? %><tr><td colspan="3" class="px-3 py-6 text-center text-stone-500"><%= t("tablero.sin_versiones") %></td></tr><% end %>
+    </tbody>
+  </table>
+</section>

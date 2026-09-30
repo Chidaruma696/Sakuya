@@ -1,0 +1,17 @@
+<%# Las piezas que devolvió el programa del tablero, en su orden: las cifras en rejilla y las listas
+    debajo, de dos en dos. %>
+<% cifras, paneles = @piezas.partition { |p| p.tipo == :tile } %>
+<% if cifras.any? %>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <% cifras.each do |c| %>
+      <div class="card"><div class="etiqueta-dato"><%= c.titulo %></div><div class="valor-dato text-2xl"><%= cifra_tablero(c) %></div></div>
+    <% end %>
+  </div>
+<% end %>
+<% if paneles.any? %>
+  <div class="mt-6 grid gap-6 lg:grid-cols-2">
+    <% paneles.each do |pieza| %>
+      <%= render "inicio/paneles/#{pieza.panel.to_s.tr("-", "_")}", pieza: pieza %>
+    <% end %>
+  </div>
+<% end %>

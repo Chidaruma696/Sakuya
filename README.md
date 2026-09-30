@@ -47,9 +47,36 @@ The first time, with an empty database, Sakuya asks for the business name, the h
 
 <br/>
 
+## The dashboard, in Lisp
+
+The home dashboard is a program, and the first place where Sakuya bends. Out of the box it looks like this:
+
+```lisp
+(dashboard
+  (tile :sales)
+  (tile :tickets)
+  (tile :average-ticket)
+  (panel :top-products))
+```
+
+Change the order, drop what you don't look at, or compute your own figures:
+
+```lisp
+(define margin (- (sales) (returns)))
+(dashboard
+  (tile "Margin" margin :money)
+  (tile "Per day" (/ (sales) (days)) :money)
+  (when (> (returns) 0) (tile :returns))
+  (panel :top-products 5))
+```
+
+It's edited in Home › Dashboard with a live preview; nothing is saved until it runs, every version is kept, and if a saved one ever breaks, the default dashboard shows instead.
+
+<br/>
+
 ## What's coming
 
-- **The rules in Lisp.** A small Lisp interpreter inside the app. A rule reads what it needs through narrow functions and answers with a decision (`(allow)`, `(reject "reason")`, `(to-review "reason")`, a price); the core applies it through its usual paths, so no rule can skip the stock ledger or edit a book. Rules are versioned, tested dry against real data before they go live, and a rule that fails falls back to the default and lands in review. The hooks (closing a sale, the price of a line, the till difference, receiving goods) are a versioned contract.
+- **The rules in Lisp, at the till.** The same small Lisp. A rule reads what it needs through narrow functions and answers with a decision (`(allow)`, `(reject "reason")`, `(to-review "reason")`, a price); the core applies it through its usual paths, so no rule can skip the stock ledger or edit a book. Rules are versioned, tested dry against real data before they go live, and a rule that fails falls back to the default and lands in review. The hooks (closing a sale, the price of a line, the till difference, receiving goods) are a versioned contract.
 - **Stricter defaults, relaxed by rules.** Out of the box, what needs a supervisor waits for one. A business that wants it looser says so in a rule.
 - **Customers and credit, and orders**, as modules of their own.
 - **Plugins in Lisp**, including translations of the interface into other languages.

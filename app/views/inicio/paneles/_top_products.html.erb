@@ -1,0 +1,9 @@
+<div class="card">
+  <h2 class="mb-2 font-semibold"><%= t("inicio.lo_mas_vendido") %></h2>
+  <table class="w-full text-sm">
+    <% @top.first(pieza.limite).each do |nombre, unidad, cant, importe| %>
+      <tr class="border-t border-stone-100"><td class="py-1"><%= nombre %></td><td class="py-1 text-right font-mono"><%= number_with_precision(cant, precision: unidad == "pieza" ? 0 : 3) %> <%= Producto::UNIDADES_CORTAS.fetch(unidad, unidad) %></td><td class="py-1 text-right font-mono"><%= pesos(importe) %></td></tr>
+    <% end %>
+    <% if @top.empty? %><tr><td class="py-3 text-center text-stone-500"><%= t("inicio.sin_ventas") %></td></tr><% end %>
+  </table>
+</div>

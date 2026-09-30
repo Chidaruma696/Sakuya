@@ -68,6 +68,9 @@
   .card > h2:first-child { @apply mb-3 flex items-center gap-2 text-sm font-semibold text-stone-800 before:h-4 before:w-1 before:shrink-0 before:rounded-full before:bg-marca-500; }
   .card table tr { @apply border-stone-100; }
   .card table td { @apply py-1.5; }
+  /* Código en el Lisp de Sakuya: aquí sí monoespaciada de verdad, que las cifras usan la otra. */
+  .codigo { font-family: ui-monospace, "JetBrains Mono", "Cascadia Code", "DejaVu Sans Mono", monospace; font-size: 0.875rem; line-height: 1.6; tab-size: 2; font-variant-numeric: normal; }
+  textarea.codigo { @apply bg-stone-50 focus:bg-white; min-height: 22rem; }
   /* Un dato suelto: etiqueta chica arriba y la cifra grande abajo. */
   .etiqueta-dato { @apply text-[0.8125rem] font-medium text-stone-500; }
   .valor-dato { @apply mt-1 font-semibold tracking-tight text-stone-900; font-variant-numeric: tabular-nums; }

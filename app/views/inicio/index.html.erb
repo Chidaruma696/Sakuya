@@ -1,41 +1,13 @@
-<h1 class="mb-2 text-2xl font-bold"><%= t("inicio.titulo") %> · <%= @todas ? t("comun.todas_las_sucursales") : @sucursal %></h1>
+<div class="mb-2 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("inicio.titulo") %> · <%= @todas ? t("comun.todas_las_sucursales") : @sucursal %></h1>
+  <% if puede?("reglas.editar") %><%= link_to tablero_editar_path, class: "btn btn-secondary btn-sm" do %><i class="bi bi-braces"></i> <%= t("tablero.personalizar") %><% end %><% end %>
+</div>
 <%= render "filtro" %>
 <%= render "por_revisar" %>
-<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-  <% [ [ t("inicio.ventas"), pesos(@total) ], [ t("inicio.tickets"), @tickets ], [ t("inicio.ticket_promedio"), pesos(@promedio) ], [ t("inicio.devoluciones"), pesos(@devoluciones) ],
-       [ t("inicio.efectivo"), pesos((@por_forma["efectivo"] || 0) - @cambio) ], [ t("inicio.transferencias"), pesos(@por_forma["transferencia"] || 0) ], [ t("inicio.depositos"), pesos(@por_forma["deposito"] || 0) ], [ t("inicio.inventario_valorizado"), pesos(@valor_existencias) ] ].each do |nombre, valor| %>
-    <div class="card"><div class="etiqueta-dato"><%= nombre %></div><div class="valor-dato text-2xl"><%= valor %></div></div>
-  <% end %>
-</div>
-<div class="mt-6 grid gap-6 lg:grid-cols-2">
-  <div class="card">
-    <h2 class="mb-2 font-semibold"><%= t("inicio.lo_mas_vendido") %></h2>
-    <table class="w-full text-sm">
-      <% @top.each do |nombre, unidad, cant, importe| %>
-        <tr class="border-t border-stone-100"><td class="py-1"><%= nombre %></td><td class="py-1 text-right font-mono"><%= number_with_precision(cant, precision: unidad == "pieza" ? 0 : 3) %> <%= Producto::UNIDADES_CORTAS.fetch(unidad, unidad) %></td><td class="py-1 text-right font-mono"><%= pesos(importe) %></td></tr>
-      <% end %>
-      <% if @top.empty? %><tr><td class="py-3 text-center text-stone-500"><%= t("inicio.sin_ventas") %></td></tr><% end %>
-    </table>
+<% if @tablero_error && puede?("reglas.editar") %>
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">
+    <span><i class="bi bi-exclamation-triangle-fill text-corbata-700"></i> <%= t("tablero.error_html", error: content_tag(:code, @tablero_error)) %></span>
+    <%= link_to t("tablero.arreglar"), tablero_editar_path, class: "btn btn-secondary btn-sm" %>
   </div>
-  <div class="card">
-    <h2 class="mb-2 font-semibold"><%= t("inicio.cortes_cerrados") %></h2>
-    <table class="w-full text-sm">
-      <% @cortes.each do |c| %>
-        <tr class="border-t border-stone-100"><td class="py-1 font-mono"><%= c.folio %></td><td class="py-1"><%= c.sucursal %> · <%= c.usuario %></td><td class="py-1 text-right font-mono"><%= pesos(c.esperado_centavos) %></td><td class="py-1 text-right font-mono <%= c.diferencia_centavos.to_i.negative? ? 'text-red-700' : 'text-green-700' %>"><%= pesos(c.diferencia_centavos) %></td></tr>
-      <% end %>
-      <% if @cortes.empty? %><tr><td class="py-3 text-center text-stone-500"><%= t("inicio.sin_cortes") %></td></tr><% end %>
-    </table>
-  </div>
-  <% if Modulo.activo?("conteos") %>
-  <div class="card">
-    <h2 class="mb-2 font-semibold"><%= t("inicio.conteos") %></h2>
-    <% @toca_contar.each do |s| %><p class="mb-1 rounded bg-amber-50 px-2 py-1 text-sm font-semibold text-amber-800"><%= s.nombre %>: <%= t("conteos.toca_contar", cada: s.dias_conteo) %></p><% end %>
-    <table class="w-full text-sm">
-      <% @conteos.each do |c| %>
-        <tr class="border-t border-stone-100"><td class="py-1 font-mono"><%= c.folio %></td><td class="py-1"><%= c.sucursal %> · <%= c.responsable %></td><td class="py-1 text-right font-mono text-red-700"><%= pesos(c.faltante_centavos) %></td><td class="py-1 text-right font-mono text-green-700"><%= pesos(c.sobrante_centavos) %></td></tr>
-      <% end %>
-      <% if @conteos.empty? %><tr><td class="py-3 text-center text-stone-500"><%= t("inicio.sin_conteos") %></td></tr><% end %>
-    </table>
-  </div>
-  <% end %>
-</div>
+<% end %>
+<%= render "tablero" %>

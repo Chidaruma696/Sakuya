@@ -220,6 +220,7 @@ es:
       proveedores: Proveedores
       traspaso_granel: Nuevo traspaso
       traspasos: Traspasos
+      tablero: Tablero
   acerca:
     titulo: Acerca de Sakuya
     lema: Punto de venta y trastienda para la matriz y sus tiendas
@@ -439,6 +440,7 @@ es:
     compras.pagar: Pagar a proveedores desde la caja
     compras.exceder: Facturar más de lo recibido sin que pase a revisión
     almacenes.traspasar: Traspasos entre sucursales y almacenes
+    reglas.editar: Escribir los programas en Lisp del negocio (el tablero)
   js:
     pos:
       ticket_vacio: El ticket está vacío
@@ -606,6 +608,7 @@ es:
       inventario: inventario
       reportes: reportes
       revisiones: revisiones
+      reglas: reglas en Lisp
     avisos:
       creado: "%{que} creado"
       guardado: "%{que} guardado"
@@ -952,3 +955,41 @@ es:
       cancelado: Traspaso %{folio} cancelado
       motivo: 'Traspaso %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancelación de %{folio}: %{motivo}'
+  tablero:
+    titulo: Tablero en Lisp
+    ayuda: El tablero de Inicio es un programa. Cambia qué cifras salen y en qué orden, calcula las tuyas y elige las listas de abajo. Probar no guarda nada; al guardar, cada versión queda en la lista de abajo.
+    personalizar: Personalizar
+    arreglar: Arreglarlo
+    error_html: 'Tu tablero tiene un error y se muestra el de fábrica: %{error}'
+    programa: Programa
+    probar: Probar
+    guardar: Guardar
+    vista_previa: Así queda
+    vista_previa_ayuda: Con los datos de hoy de tu sucursal.
+    versiones: Versiones
+    vigente: vigente
+    restaurar: Volver a esta
+    sin_versiones: 'Todavía no hay versiones: se usa el tablero de fábrica.'
+    avisos:
+      guardado: Tablero guardado.
+      restaurado: Se volvió a la versión del %{fecha}.
+    referencia:
+      titulo: Qué se puede escribir
+      cifras: Cifras de fábrica
+      propias: Cifras propias
+      propias_ayuda: 'Cada cifra de fábrica también se lee como función: (sales), (tickets)… Además (days) y, por clave de producto, (sold "CLAVE") y (sales-of "CLAVE"). El formato va al final: :money, :number o :percent.'
+      paneles: Listas
+      paneles_ayuda: 'Un número después dice cuántos renglones: (panel :top-products 5).'
+      lenguaje: El lenguaje
+      lenguaje_ayuda: Hay let, if, cond, when, define, lambda, map, filter, reduce, +, -, *, /, round y comparaciones. (when (> (returns) 0) (tile :returns)) enseña una cifra solo si hace falta. El dinero va en pesos con decimales exactos.
+    errores:
+      sin_dashboard: el programa tiene que terminar en (dashboard …)
+      cifra_desconocida: no hay cifra :%{cifra}; las de fábrica son :%{cifras}
+      titulo: tile va con una cifra de fábrica (:sales) o con un título entre comillas
+      valor: a «%{titulo}» le falta un valor que sea número o texto
+      formato: el formato es uno de :%{formatos}
+      panel: no hay lista :%{panel}; hay :%{paneles}
+      limite: los renglones de una lista van de 1 a 50
+      pieza: dashboard solo lleva (tile …) y (panel …), y recibió %{valor}
+      clave: la clave del producto va entre comillas
+      producto: no hay producto con clave %{clave}

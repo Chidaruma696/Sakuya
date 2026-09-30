@@ -31,7 +31,7 @@ module Lisp
   # Lee y evalúa todo el texto; devuelve el valor de la última expresión.
   def self.ejecutar(texto, funciones: {}, pasos: 10_000, profundidad: 100)
     entorno = Entorno.new(Base.entorno)
-    funciones.each { |nombre, bloque| entorno.definir(nombre.to_s, Base.nativa(nombre.to_s, bloque)) }
+    funciones.each { |nombre, f| entorno.definir(nombre.to_s, f.is_a?(Nativa) ? f : Base.nativa(nombre.to_s, f)) }
     evaluador = Evaluador.new(pasos: pasos, profundidad: profundidad)
     Lector.leer(texto).reduce(nil) { |_, forma| evaluador.evaluar(forma, entorno) }
   end

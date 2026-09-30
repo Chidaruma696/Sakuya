@@ -220,6 +220,7 @@ de:
       proveedores: Lieferanten
       traspaso_granel: Neue Umbuchung
       traspasos: Umlagerungen
+      tablero: Übersicht
   acerca:
     titulo: Über Sakuya
     lema: Kasse und Backoffice für die Zentrale und ihre Läden
@@ -439,6 +440,7 @@ de:
     compras.pagar: Lieferanten aus der Kasse bezahlen
     compras.exceder: Mehr als erhalten abrechnen, ohne dass es zur Prüfung geht
     almacenes.traspasar: Umbuchungen zwischen Filialen und Lagern
+    reglas.editar: Die Lisp-Programme des Geschäfts schreiben (die Übersicht)
   js:
     pos:
       ticket_vacio: Das Ticket ist leer
@@ -606,6 +608,7 @@ de:
       inventario: Bestand
       reportes: Berichte
       revisiones: Prüfungen
+      reglas: Lisp-Regeln
     avisos:
       creado: "%{que} angelegt"
       guardado: "%{que} gespeichert"
@@ -952,3 +955,41 @@ de:
       cancelado: Umlagerung %{folio} storniert
       motivo: 'Umlagerung %{folio}: %{origen} → %{destino}'
       cancelacion: 'Storno von %{folio}: %{motivo}'
+  tablero:
+    titulo: Übersicht in Lisp
+    ayuda: Die Übersicht ist ein Programm. Ändere, welche Zahlen in welcher Reihenfolge erscheinen, berechne eigene und wähle die Listen darunter. Ausprobieren speichert nichts; jede gespeicherte Version bleibt unten in der Liste.
+    personalizar: Anpassen
+    arreglar: Beheben
+    error_html: 'Deine Übersicht hat einen Fehler, daher wird die Standardansicht gezeigt: %{error}'
+    programa: Programm
+    probar: Ausprobieren
+    guardar: Speichern
+    vista_previa: Vorschau
+    vista_previa_ayuda: Mit den heutigen Zahlen deiner Filiale.
+    versiones: Versionen
+    vigente: aktuell
+    restaurar: Wiederherstellen
+    sin_versiones: 'Noch keine Versionen: die Standardübersicht wird verwendet.'
+    avisos:
+      guardado: Übersicht gespeichert.
+      restaurado: Version vom %{fecha} wiederhergestellt.
+    referencia:
+      titulo: Was man schreiben kann
+      cifras: Eingebaute Zahlen
+      propias: Eigene Zahlen
+      propias_ayuda: 'Jede eingebaute Zahl lässt sich auch als Funktion lesen: (sales), (tickets)… Dazu (days) und, per Produktkürzel, (sold "KÜRZEL") und (sales-of "KÜRZEL"). Das Format kommt ans Ende: :money, :number oder :percent.'
+      paneles: Listen
+      paneles_ayuda: 'Eine Zahl danach legt die Zeilen fest: (panel :top-products 5).'
+      lenguaje: Die Sprache
+      lenguaje_ayuda: Es gibt let, if, cond, when, define, lambda, map, filter, reduce, +, -, *, /, round und Vergleiche. (when (> (returns) 0) (tile :returns)) zeigt eine Zahl nur, wenn sie zählt. Geld rechnet mit exakten Dezimalzahlen.
+    errores:
+      sin_dashboard: das Programm muss mit (dashboard …) enden
+      cifra_desconocida: es gibt keine Zahl :%{cifra}; eingebaut sind :%{cifras}
+      titulo: tile braucht eine eingebaute Zahl (:sales) oder einen Titel in Anführungszeichen
+      valor: "„%{titulo}“ braucht einen Wert, der Zahl oder Text ist"
+      formato: das Format ist eines von :%{formatos}
+      panel: es gibt keine Liste :%{panel}; es gibt :%{paneles}
+      limite: eine Liste zeigt 1 bis 50 Zeilen
+      pieza: dashboard nimmt nur (tile …) und (panel …), bekam aber %{valor}
+      clave: das Produktkürzel steht in Anführungszeichen
+      producto: kein Produkt mit dem Kürzel %{clave}

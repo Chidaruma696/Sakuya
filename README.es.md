@@ -47,9 +47,36 @@ La primera vez, con la base vacía, Sakuya pide el nombre del negocio, la matriz
 
 <br/>
 
+## El tablero, en Lisp
+
+El tablero de Inicio es un programa, y el primer lugar donde Sakuya se dobla. De fábrica se ve así:
+
+```lisp
+(dashboard
+  (tile :sales)
+  (tile :tickets)
+  (tile :average-ticket)
+  (panel :top-products))
+```
+
+Cambia el orden, quita lo que no miras o calcula tus propias cifras:
+
+```lisp
+(define margin (- (sales) (returns)))
+(dashboard
+  (tile "Margen" margin :money)
+  (tile "Por día" (/ (sales) (days)) :money)
+  (when (> (returns) 0) (tile :returns))
+  (panel :top-products 5))
+```
+
+Se edita en Inicio › Tablero con vista previa; no se guarda nada hasta que corre, cada versión se conserva, y si alguna vez una guardada falla, sale el tablero de fábrica.
+
+<br/>
+
 ## Lo que viene
 
-- **Las reglas en Lisp.** Un intérprete de Lisp pequeño dentro de la aplicación. Una regla lee lo que necesita por funciones estrechas y responde con una decisión (`(allow)`, `(reject "motivo")`, `(to-review "motivo")`, un precio); el núcleo la aplica por sus caminos de siempre, así que ninguna regla puede saltarse el kardex ni editar un libro. Las reglas llevan versión, se prueban en seco contra datos reales antes de entrar en vigor, y una regla que falla cae al comportamiento de fábrica y queda en revisión. Los ganchos (cerrar una venta, el precio de un renglón, la diferencia del corte, recibir mercancía) son un contrato con versión.
+- **Las reglas en Lisp, en la caja.** El mismo Lisp pequeño. Una regla lee lo que necesita por funciones estrechas y responde con una decisión (`(allow)`, `(reject "motivo")`, `(to-review "motivo")`, un precio); el núcleo la aplica por sus caminos de siempre, así que ninguna regla puede saltarse el kardex ni editar un libro. Las reglas llevan versión, se prueban en seco contra datos reales antes de entrar en vigor, y una regla que falla cae al comportamiento de fábrica y queda en revisión. Los ganchos (cerrar una venta, el precio de un renglón, la diferencia del corte, recibir mercancía) son un contrato con versión.
 - **Más estricto de fábrica, relajado con reglas.** Lo que necesita a un supervisor lo espera. El negocio que lo quiera más suelto lo dice en una regla.
 - **Clientes y crédito, y pedidos**, como módulos propios.
 - **Plugins en Lisp**, incluidas traducciones de la interfaz a otros idiomas.

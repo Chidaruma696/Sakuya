@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_30_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_30_000002) do
   create_table "ajustes", force: :cascade do |t|
     t.string "clave", null: false
     t.datetime "created_at", null: false
@@ -377,6 +377,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_000001) do
     t.check_constraint "estado IN ('registrada', 'cancelada')", name: "recepciones_estado"
   end
 
+  create_table "reglas", force: :cascade do |t|
+    t.text "codigo", null: false
+    t.datetime "created_at", null: false
+    t.string "gancho", null: false
+    t.integer "usuario_id", null: false
+    t.index ["gancho", "id"], name: "index_reglas_on_gancho_and_id"
+    t.index ["usuario_id"], name: "index_reglas_on_usuario_id"
+  end
+
   create_table "retiros", force: :cascade do |t|
     t.integer "autorizado_por_id"
     t.integer "corte_id", null: false
@@ -579,6 +588,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_000001) do
   add_foreign_key "recepciones", "proveedores"
   add_foreign_key "recepciones", "sucursales"
   add_foreign_key "recepciones", "usuarios"
+  add_foreign_key "reglas", "usuarios"
   add_foreign_key "retiros", "cortes"
   add_foreign_key "retiros", "usuarios"
   add_foreign_key "retiros", "usuarios", column: "autorizado_por_id"

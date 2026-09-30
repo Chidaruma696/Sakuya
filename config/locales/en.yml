@@ -220,6 +220,7 @@ en:
       proveedores: Suppliers
       traspaso_granel: New transfer
       traspasos: Transfers
+      tablero: Dashboard
   acerca:
     titulo: About Sakuya
     lema: Point of sale and back office for the headquarters and its shops
@@ -439,6 +440,7 @@ en:
     compras.pagar: Pay suppliers from the till
     compras.exceder: Invoice more than received without going to review
     almacenes.traspasar: Transfers between branches and warehouses
+    reglas.editar: Write the business's Lisp programs (the dashboard)
   js:
     pos:
       ticket_vacio: The ticket is empty
@@ -606,6 +608,7 @@ en:
       inventario: inventory
       reportes: reports
       revisiones: reviews
+      reglas: Lisp rules
     avisos:
       creado: "%{que} created"
       guardado: "%{que} saved"
@@ -952,3 +955,41 @@ en:
       cancelado: Transfer %{folio} cancelled
       motivo: 'Transfer %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancellation of %{folio}: %{motivo}'
+  tablero:
+    titulo: Dashboard in Lisp
+    ayuda: The home dashboard is a program. Change which figures show and in what order, compute your own and pick the lists below. Trying doesn't save anything; every saved version stays in the list below.
+    personalizar: Customize
+    arreglar: Fix it
+    error_html: 'Your dashboard has an error, so the default one is shown: %{error}'
+    programa: Program
+    probar: Try it
+    guardar: Save
+    vista_previa: Preview
+    vista_previa_ayuda: With today's figures for your branch.
+    versiones: Versions
+    vigente: current
+    restaurar: Restore
+    sin_versiones: 'No versions yet: the default dashboard is used.'
+    avisos:
+      guardado: Dashboard saved.
+      restaurado: Restored the version from %{fecha}.
+    referencia:
+      titulo: What you can write
+      cifras: Built-in figures
+      propias: Your own figures
+      propias_ayuda: 'Every built-in figure can also be read as a function: (sales), (tickets)… Plus (days) and, by product code, (sold "CODE") and (sales-of "CODE"). The format goes last: :money, :number or :percent.'
+      paneles: Lists
+      paneles_ayuda: 'A number after it sets how many rows: (panel :top-products 5).'
+      lenguaje: The language
+      lenguaje_ayuda: You have let, if, cond, when, define, lambda, map, filter, reduce, +, -, *, /, round and comparisons. (when (> (returns) 0) (tile :returns)) shows a figure only when it matters. Money is in exact decimals.
+    errores:
+      sin_dashboard: the program has to end with (dashboard …)
+      cifra_desconocida: there is no figure :%{cifra}; the built-in ones are :%{cifras}
+      titulo: tile takes a built-in figure (:sales) or a title in quotes
+      valor: "“%{titulo}” needs a value that is a number or text"
+      formato: the format is one of :%{formatos}
+      panel: there is no list :%{panel}; there are :%{paneles}
+      limite: a list shows from 1 to 50 rows
+      pieza: dashboard only takes (tile …) and (panel …), and got %{valor}
+      clave: the product code goes in quotes
+      producto: there is no product with code %{clave}
