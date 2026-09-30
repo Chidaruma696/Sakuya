@@ -1,0 +1,23 @@
+<h1 class="mb-4 text-2xl font-bold"><%= t("cargos.cargos") %> · <%= sucursal_actual %></h1>
+<table class="tabla">
+  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.fecha") %></th><th class="px-3 py-2"><%= t("conteos.responsable") %></th><th class="px-3 py-2"><%= t("comun.origen") %></th><th class="px-3 py-2 text-right"><%= t("caja.monto") %></th><th class="px-3 py-2"><%= t("comun.detalle") %></th><th class="px-3 py-2"><%= t("comun.estado") %></th><th></th></tr></thead>
+  <tbody>
+    <% @cargos.each do |g| %>
+      <tr class="border-t border-stone-100 align-top">
+        <td class="px-3 py-2 whitespace-nowrap"><%= l g.created_at, format: :short %></td>
+        <td class="px-3 py-2"><%= g.usuario %></td>
+        <td class="px-3 py-2"><% if g.conteo %><%= link_to g.conteo.folio, conteo_path(g.conteo), class: "chip-folio" %><% else %><%= link_to t("cargos.revision"), revisiones_path, class: "enlace" %><% end %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= pesos(g.monto_centavos) %></td>
+        <td class="px-3 py-2 whitespace-pre-line text-stone-600"><%= g.detalle %></td>
+        <td class="px-3 py-2"><%= t("estados.#{g.estado}") %><%= " · #{g.resuelto_por}" if g.resuelto_por %></td>
+        <td class="px-3 py-2 whitespace-nowrap">
+          <% if g.estado == "pendiente" %>
+            <%= button_to t("cargos.cobrado"), resolver_cargo_path(g, estado: "cobrado"), class: "btn btn-primary btn-xs" %>
+            <%= button_to t("cargos.perdonar"), resolver_cargo_path(g, estado: "perdonado"), class: "btn btn-secondary btn-xs mt-1" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    <% if @cargos.empty? %><tr><td colspan="7" class="px-3 py-6 text-center text-stone-500"><%= t("cargos.sin_cargos") %></td></tr><% end %>
+  </tbody>
+</table>

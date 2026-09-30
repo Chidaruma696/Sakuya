@@ -1,0 +1,14 @@
+pechuga:
+  clave: PECH
+  nombre: Pechuga de pollo
+  linea: Pollo
+  unidad: kg
+  precio_centavos: 12900
+  plu: 90001
+catsup:
+  clave: CATS
+  nombre: Cátsup 1 kg
+  linea: Abarrotes
+  unidad: pieza
+  precio_centavos: 4200
+  plu: 90002

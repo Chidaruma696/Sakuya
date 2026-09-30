@@ -1,0 +1,21 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("traspasos.titulo") %></h1>
+  <%= link_to icono("boxes", t("traspasos.nuevo")), new_traspaso_path, class: "btn btn-primary" %>
+</div>
+<p class="mb-4 text-sm text-stone-600"><%= t("traspasos.ayuda") %></p>
+<table class="tabla">
+  <thead><tr><th><%= t("comun.folio") %></th><th><%= t("comun.fecha") %></th><th><%= t("traspasos.de") %></th><th><%= t("traspasos.a") %></th><th class="text-right"><%= t("compras.renglones") %></th><th><%= t("comun.quien") %></th><th><%= t("comun.estado") %></th></tr></thead>
+  <tbody>
+    <% @traspasos.each do |x| %>
+      <tr class="<%= 'text-stone-400 line-through' if x.cancelado? %>">
+        <td class="px-3 py-2"><%= link_to x.folio, traspaso_path(x), class: "chip-folio" %></td>
+        <td class="px-3 py-2 whitespace-nowrap"><%= l x.fecha %></td>
+        <td class="px-3 py-2"><%= x.sucursal_origen %></td><td class="px-3 py-2"><%= x.sucursal_destino %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= x.lineas.size %></td>
+        <td class="px-3 py-2"><%= x.usuario %></td>
+        <td class="px-3 py-2"><%= t("traspasos.estados.#{x.estado}") %></td>
+      </tr>
+    <% end %>
+    <% if @traspasos.empty? %><tr><td colspan="7" class="px-3 py-6 text-center text-stone-500"><%= t("traspasos.ninguno") %></td></tr><% end %>
+  </tbody>
+</table>

@@ -1,0 +1,17 @@
+<%= form_with url: ajustes_sistema_path, method: :patch, class: "formulario", data: { controller: "modulos" } do |f| %>
+  <%= hidden_field_tag :volver, "modulos" %>
+  <%= hidden_field_tag "modulos[]", "" %>
+  <div class="grid gap-3 md:grid-cols-2">
+    <% Modulo::OPCIONALES.each do |m| %>
+      <% necesita = Modulo.necesita(m) %><% dependientes = Modulo.dependientes(m) %><% alguno = Modulo.alguno(m) %>
+      <label class="opcion items-start text-base">
+        <%= check_box_tag "modulos[]", m, Modulo.activo?(m), id: "modulo_#{m}", class: "mt-1.5", data: { modulos_target: "caja", modulo: m, necesita: necesita.join(" "), alguno: alguno.join(" "), dependientes: dependientes.join(" "), action: "modulos#cambiar" } %>
+        <span><%= t("modulos.#{m}.nombre") %><br><span class="text-sm font-normal text-stone-600"><%= t("modulos.#{m}.que") %></span>
+          <% avisos = [] %><% avisos << t("modulos.necesita", lista: necesita.map { |x| Modulo.nombre(x) }.join(", ")) if necesita.any? %><% avisos << t("modulos.necesita_alguno", lista: alguno.map { |x| Modulo.nombre(x) }.join(" / ")) if alguno.any? %><% avisos << t("modulos.lo_necesita", lista: dependientes.map { |x| Modulo.nombre(x) }.join(", ")) if dependientes.any? %>
+          <% if avisos.any? %><br><span class="text-xs font-normal text-stone-500"><%= avisos.join(" · ") %></span><% end %></span>
+        <i class="bi bi-check-circle-fill opcion-check"></i>
+      </label>
+    <% end %>
+  </div>
+  <%= f.submit t("ajustes.guardar"), class: "btn btn-primary btn-lg" %>
+<% end %>

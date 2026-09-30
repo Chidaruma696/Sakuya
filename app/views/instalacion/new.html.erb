@@ -1,0 +1,196 @@
+<% content_for :body_class, "items-stretch" %>
+<%# Primer arranque a pantalla completa y por pasos: apariencia, negocio, sucursal, administrador, resumen. %>
+<div class="grid min-h-screen w-full grid-rows-[auto_1fr] lg:grid-cols-[340px_1fr] lg:grid-rows-1" data-controller="pasos" data-pasos-inicial-value="<%= @paso || 1 %>">
+  <aside class="flex flex-col gap-5 bg-marca-400 px-6 py-6 text-marca-950 lg:px-8 lg:py-8">
+    <div class="flex items-center gap-4 lg:flex-col lg:items-start">
+      <%= image_tag "logo-b.png", alt: "Sakuya", class: "h-24 w-24 shrink-0 lg:h-56 lg:w-56" %>
+      <div>
+        <div class="text-3xl font-bold leading-tight">Sakuya</div>
+        <div class="text-xs opacity-80">v<%= Sakuya::VERSION %> · <%= t("instalacion.titulo") %></div>
+      </div>
+    </div>
+    <p class="text-sm opacity-90"><%= t("instalacion.intro") %></p>
+    <ol class="flex flex-wrap gap-x-4 gap-y-1 text-sm lg:flex-col lg:gap-2">
+      <% %w[idioma apariencia negocio sucursal folios administrador resumen].each_with_index do |paso, i| %>
+        <li class="flex items-center gap-2" data-pasos-target="indicador">
+          <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/60 font-mono text-xs"><%= i + 1 %></span>
+          <span><%= t("instalacion.pasos.#{paso}") %></span>
+        </li>
+      <% end %>
+    </ol>
+  </aside>
+
+  <main class="flex flex-col justify-center px-6 py-8 sm:px-12 lg:px-20">
+    <% if flash[:alert] %>
+      <p class="mb-6 rounded bg-red-50 px-3 py-2 text-sm text-red-700"><%= flash[:alert] %></p>
+    <% end %>
+    <%= form_with url: instalar_path, scope: :instalacion, class: "flex flex-col", data: { turbo: false } do |f| %>
+      <%= f.hidden_field :idioma, value: I18n.locale %>
+
+      <%# 1. Idioma (cambiarlo recarga la página: por eso va primero, antes de teclear nada) %>
+      <section class="max-w-2xl space-y-6" data-pasos-target="paso">
+        <h1 class="text-3xl font-bold"><%= t("instalacion.bienvenida") %></h1>
+        <p class="text-stone-600"><%= t("instalacion.idioma_ayuda") %></p>
+        <div class="grid gap-3 sm:grid-cols-3">
+          <% { "es" => "Español", "en" => "English", "de" => "Deutsch" }.each do |i, nombre| %>
+            <%= link_to instalar_path(idioma: i), class: "opcion #{'border-marca-600 bg-marca-50 text-marca-900' if I18n.locale.to_s == i}" do %>
+              <%= nombre %> <% if I18n.locale.to_s == i %><i class="bi bi-check-circle-fill ml-auto text-marca-600"></i><% end %>
+            <% end %>
+          <% end %>
+        </div>
+        <p class="text-xs text-stone-500"><%= t("instalacion.idioma_nota") %></p>
+      </section>
+
+      <%# 2. Apariencia %>
+      <section class="hidden max-w-2xl space-y-6" data-pasos-target="paso">
+        <h1 class="text-3xl font-bold"><%= t("instalacion.pasos.apariencia") %></h1>
+        <p class="text-stone-600"><%= t("instalacion.apariencia_ayuda") %></p>
+        <% iconos = { "sistema" => "circle-half", "claro" => "sun", "oscuro" => "moon-stars", "chica" => "zoom-out", "normal" => "fonts", "grande" => "zoom-in", "compacta" => "arrows-collapse" } %>
+        <% { tema: Usuario::TEMAS, letra: Usuario::LETRAS, densidad: Usuario::DENSIDADES }.each do |campo, valores| %>
+          <fieldset>
+            <legend class="mb-2 text-sm font-medium"><%= t("ajustes.#{campo}") %></legend>
+            <div class="grid gap-3 sm:grid-cols-3">
+              <% valores.each do |v| %>
+                <label class="opcion">
+                  <%= f.radio_button campo, v, checked: @datos[campo].to_s == v, class: "sr-only", data: { atributo: (campo == :tema ? "theme" : campo), action: "change->pasos#aplicar" } %>
+                  <i class="bi bi-<%= campo == :densidad && v == "normal" ? "arrows-expand" : iconos[v] %> text-2xl text-stone-500"></i>
+                  <%= t("ajustes.#{campo}_opciones.#{v}") %>
+                  <i class="bi bi-check-circle-fill opcion-check"></i>
+                </label>
+              <% end %>
+            </div>
+          </fieldset>
+        <% end %>
+      </section>
+
+      <%# 3. Negocio %>
+      <section class="hidden max-w-2xl space-y-6" data-pasos-target="paso">
+        <h1 class="text-3xl font-bold"><%= t("instalacion.pasos.negocio") %></h1>
+        <div>
+          <%= f.label :negocio, t("instalacion.nombre_negocio"), class: "block text-sm font-medium" %>
+          <%= f.text_field :negocio, value: @datos[:negocio], required: true, class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 text-lg" %>
+          <p class="mt-1 text-xs text-stone-500"><%= t("instalacion.nombre_negocio_ayuda") %></p>
+        </div>
+        <fieldset>
+          <legend class="mb-2 text-sm font-medium"><%= t("instalacion.giro") %></legend>
+          <div class="grid gap-2 sm:grid-cols-2">
+            <% Modulo::GIROS.each_key do |g| %>
+              <label class="opcion items-start text-base">
+                <%= f.radio_button :giro, g, checked: @datos[:giro].to_s == g, class: "mt-1" %>
+                <span class="flex-1">
+                  <strong><%= t("giros.#{g}.nombre") %></strong>
+                  <ul class="mt-2 space-y-1 text-xs">
+                    <li class="flex items-center gap-2 text-stone-700"><i class="bi bi-check-circle-fill text-emerald-600"></i> <%= t("instalacion.siempre_incluye") %></li>
+                    <% Modulo::OPCIONALES.each do |m| %>
+                      <% incluye = Modulo::GIROS[g].include?(m) %>
+                      <li class="flex items-center gap-2 <%= incluye ? 'text-stone-700' : 'text-stone-400 line-through' %>"><i class="bi <%= incluye ? 'bi-check-circle-fill text-emerald-600' : 'bi-x-circle text-stone-300' %>"></i> <%= t("modulos.#{m}.nombre") %></li>
+                    <% end %>
+                  </ul>
+                </span>
+              </label>
+            <% end %>
+          </div>
+          <p class="mt-2 text-xs text-stone-500"><%= t("instalacion.giro_ayuda") %></p>
+        </fieldset>
+      </section>
+
+      <%# 4. Sucursal principal %>
+      <section class="hidden max-w-2xl space-y-6" data-pasos-target="paso">
+        <h1 class="text-3xl font-bold"><%= t("instalacion.pasos.sucursal") %></h1>
+        <p class="text-stone-600"><%= t("instalacion.matriz_ayuda") %></p>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="col-span-2">
+            <%= f.label :sucursal, t("instalacion.matriz"), class: "block text-sm font-medium" %>
+            <%= f.text_field :sucursal, value: @datos[:sucursal], placeholder: t("instalacion.matriz_placeholder"), class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 text-lg" %>
+          </div>
+          <div>
+            <%= f.label :codigo, t("comun.codigo"), class: "block text-sm font-medium" %>
+            <%= f.text_field :codigo, value: @datos[:codigo], maxlength: 10, class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 font-mono text-lg uppercase" %>
+          </div>
+        </div>
+      </section>
+
+      <%# 5. Folios: cómo se numeran los documentos %>
+      <section class="hidden max-w-2xl space-y-6" data-pasos-target="paso" data-controller="folios-ejemplo">
+        <h1 class="text-3xl font-bold"><%= t("instalacion.pasos.folios") %></h1>
+        <p class="text-stone-600"><%= t("instalacion.folios.ayuda") %></p>
+        <fieldset>
+          <legend class="mb-2 text-sm font-medium"><%= t("instalacion.folios.modo") %></legend>
+          <div class="grid gap-3 sm:grid-cols-2">
+            <% Folio::MODOS.each do |m| %>
+              <label class="opcion items-start text-base">
+                <%= f.radio_button :folios_modo, m, checked: @datos[:folios_modo].to_s == m, class: "mt-1", data: { action: "folios-ejemplo#pintar" } %>
+                <span class="flex-1"><strong><%= t("ajustes.folios.modos.#{m}") %></strong><br><span class="text-sm font-normal text-stone-600"><%= t("ajustes.folios.modos.#{m}_ayuda") %></span></span>
+                <i class="bi bi-check-circle-fill opcion-check text-2xl"></i>
+              </label>
+            <% end %>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="mb-2 text-sm font-medium"><%= t("instalacion.folios.letra") %></legend>
+          <div class="grid gap-3 sm:grid-cols-3">
+            <% %w[sucursal propia ninguna].each do |l| %>
+              <label class="opcion items-start text-base">
+                <%= f.radio_button :folios_letra, l, checked: @datos[:folios_letra].to_s == l, class: "mt-1", data: { action: "folios-ejemplo#pintar" } %>
+                <span class="flex-1"><strong><%= t("instalacion.folios.letras.#{l}") %></strong><br><span class="text-sm font-normal text-stone-600"><%= t("instalacion.folios.letras.#{l}_ayuda") %></span></span>
+                <i class="bi bi-check-circle-fill opcion-check text-2xl"></i>
+              </label>
+            <% end %>
+          </div>
+        </fieldset>
+        <div class="grid grid-cols-3 gap-3 items-end">
+          <div data-folios-ejemplo-target="propia">
+            <%= f.label :folios_venta, t("instalacion.folios.venta"), class: "block text-sm font-medium" %>
+            <%= f.text_field :folios_venta, value: @datos[:folios_venta], maxlength: 4, pattern: "[A-Za-z0-9]{0,4}", class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 font-mono text-lg uppercase", data: { action: "input->folios-ejemplo#pintar" } %>
+          </div>
+          <p class="col-span-2 text-sm text-stone-600"><%= t("instalacion.folios.ejemplo") %> <strong class="font-mono text-lg" data-folios-ejemplo-target="ejemplo"></strong></p>
+        </div>
+        <p class="text-xs text-stone-500"><%= t("instalacion.folios.despues") %></p>
+      </section>
+
+      <%# 6. Administrador %>
+      <section class="hidden max-w-2xl space-y-6" data-pasos-target="paso">
+        <h1 class="text-3xl font-bold"><%= t("instalacion.pasos.administrador") %></h1>
+        <p class="text-stone-600"><%= t("instalacion.administrador_ayuda") %></p>
+        <div>
+          <%= f.label :nombre, t("comun.nombre"), class: "block text-sm font-medium" %>
+          <%= f.text_field :nombre, value: @datos[:nombre], required: true, autocomplete: "name", class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 text-lg" %>
+        </div>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <%= f.label :usuario, t("sesion.usuario"), class: "block text-sm font-medium" %>
+            <%= f.text_field :usuario, value: @datos[:usuario], required: true, autocomplete: "username", autocapitalize: "none", class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 text-lg" %>
+          </div>
+          <div>
+            <%= f.label :password, t("sesion.contrasena"), class: "block text-sm font-medium" %>
+            <%= f.password_field :password, required: true, minlength: 8, autocomplete: "new-password", class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 text-lg" %>
+            <p class="mt-1 text-xs text-stone-500"><%= t("instalacion.contrasena_ayuda") %></p>
+          </div>
+        </div>
+      </section>
+
+      <%# 7. Resumen %>
+      <section class="hidden max-w-2xl space-y-6" data-pasos-target="paso">
+        <h1 class="text-3xl font-bold"><%= t("instalacion.pasos.resumen") %></h1>
+        <p class="text-stone-600"><%= t("instalacion.resumen_ayuda") %></p>
+        <dl class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 rounded-lg border border-stone-200 bg-white p-4 text-sm" data-pasos-target="resumen">
+          <dt class="text-stone-500"><%= t("instalacion.nombre_negocio") %></dt><dd data-campo="negocio"></dd>
+          <dt class="text-stone-500"><%= t("instalacion.giro") %></dt><dd data-campo="giro"></dd>
+          <dt class="text-stone-500"><%= t("instalacion.matriz") %></dt><dd data-campo="sucursal" data-vacio="<%= t("instalacion.matriz_placeholder") %>"></dd>
+          <dt class="text-stone-500"><%= t("comun.codigo") %></dt><dd class="font-mono" data-campo="codigo" data-vacio="MTZ"></dd>
+          <dt class="text-stone-500"><%= t("instalacion.pasos.folios") %></dt><dd data-campo="folios_letra"></dd>
+          <dt class="text-stone-500"><%= t("instalacion.pasos.administrador") %></dt><dd data-campo="nombre"></dd>
+          <dt class="text-stone-500"><%= t("sesion.usuario") %></dt><dd class="font-mono" data-campo="usuario"></dd>
+          <dt class="text-stone-500"><%= t("sesion.contrasena") %></dt><dd data-campo="password"></dd>
+          <dt class="text-stone-500"><%= t("ajustes.idioma") %></dt><dd><%= t("ajustes.idiomas.#{I18n.locale}") %></dd>
+        </dl>
+      </section>
+
+      <div class="mt-10 flex items-center gap-3">
+        <button type="button" class="btn btn-secondary" data-pasos-target="anterior" data-action="pasos#anterior"><i class="bi bi-arrow-left"></i> <%= t("instalacion.anterior") %></button>
+        <button type="button" class="btn btn-primary btn-lg ml-auto" data-pasos-target="siguiente" data-action="pasos#siguiente"><%= t("instalacion.siguiente") %> <i class="bi bi-arrow-right"></i></button>
+        <%= f.submit t("instalacion.crear"), class: "btn btn-success btn-lg ml-auto hidden", data: { pasos_target: "enviar" } %>
+      </div>
+    <% end %>
+  </main>
+</div>

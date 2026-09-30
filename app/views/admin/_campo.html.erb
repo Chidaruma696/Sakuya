@@ -1,0 +1,4 @@
+<div>
+  <%= f.label campo, etiqueta, class: "block text-sm font-medium" %>
+  <%= f.send(tipo, campo, **{ class: "entrada" }.merge(local_assigns[:opciones] || {})) %>
+</div>

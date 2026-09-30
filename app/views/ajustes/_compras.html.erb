@@ -1,0 +1,11 @@
+<% if Modulo.activo?("compras") %>
+  <%= form_with url: ajustes_sistema_path, method: :patch, class: "formulario" do |f| %>
+    <%= hidden_field_tag :volver, "compras" %>
+    <%= hidden_field_tag "ajuste[compras.candado_recibido]", "0", id: nil %>
+    <label class="flex items-center gap-3 text-sm"><%= check_box_tag "ajuste[compras.candado_recibido]", "1", @ajustes["compras.candado_recibido"] == "1" %> <%= t("ajustes.claves.compras.candado_recibido") %></label>
+    <p class="text-xs text-stone-500"><%= t("ajustes.candado_recibido_ayuda") %></p>
+    <%= f.submit t("ajustes.guardar"), class: "btn btn-primary btn-lg" %>
+  <% end %>
+<% else %>
+  <p class="rounded bg-amber-50 p-4 text-sm"><%= t("ajustes.compras_apagado") %> <%= link_to t("ajustes.secciones.modulos"), ajustes_seccion_path("modulos"), class: "enlace" %></p>
+<% end %>

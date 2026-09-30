@@ -1,0 +1,19 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("inventario.existencias") %> · <%= @sucursal %></h1>
+  <%= render "selector_sucursal" %>
+</div>
+<table class="tabla">
+  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.clave") %></th><th class="px-3 py-2"><%= t("comun.producto") %></th><th class="px-3 py-2 text-right"><%= t("comun.cantidad") %></th><th class="px-3 py-2"><%= t("comun.unidad") %></th><th class="px-3 py-2"></th></tr></thead>
+  <tbody>
+    <% @existencias.each do |e| %>
+      <tr class="border-t border-stone-100">
+        <td class="px-3 py-2 font-mono"><%= e.producto.clave %></td>
+        <td class="px-3 py-2"><%= e.producto.nombre %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= number_with_precision(e.cantidad, precision: e.producto.decimales, delimiter: ",") %></td>
+        <td class="px-3 py-2"><%= e.producto.unidad %></td>
+        <td class="px-3 py-2 text-right"><%= link_to t("inventario.kardex"), kardex_inventario_path(producto_id: e.producto_id, sucursal_id: @sucursal.id), class: "btn btn-secondary btn-xs" %></td>
+      </tr>
+    <% end %>
+    <% if @existencias.empty? %><tr><td colspan="5" class="px-3 py-6 text-center text-stone-500"><%= t("inventario.sin_existencias") %></td></tr><% end %>
+  </tbody>
+</table>

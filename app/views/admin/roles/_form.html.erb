@@ -1,0 +1,18 @@
+<%= form_with model: [ :admin, @rol ], class: "formulario" do |f| %>
+  <%= render "admin/campo", f: f, campo: :nombre, etiqueta: t("comun.nombre"), tipo: :text_field %>
+  <%= hidden_field_tag "rol[permisos][]", "" %>
+  <label class="flex items-center gap-2 text-sm font-semibold"><%= check_box_tag "rol[permisos][]", "*", @rol.permisos.include?("*"), id: "permiso_todo" %> <%= t("admin.todo_administrador") %></label>
+  <div class="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
+  <% Permiso::CLAVES.keys.select { |c| Modulo.permiso_activo?(c) }.group_by { |clave| clave.split(".").first }.each do |modulo, claves| %>
+    <fieldset class="rounded-lg border border-stone-200 p-4">
+      <legend class="px-1 text-sm font-semibold"><%= t("admin.modulos.#{modulo}", default: modulo) %> <label class="ml-2 font-normal text-stone-500"><%= check_box_tag "rol[permisos][]", "#{modulo}.*", @rol.permisos.include?("#{modulo}.*"), id: "permiso_#{modulo}_todo" %> <%= t("admin.todo_el_modulo") %></label></legend>
+      <div class="grid gap-1">
+        <% claves.each do |clave| %>
+          <label class="flex items-center gap-2 text-sm"><%= check_box_tag "rol[permisos][]", clave, @rol.permisos.include?(clave), id: "permiso_#{clave.tr('.', '_')}" %> <%= Permiso.nombre(clave) %> <span class="font-mono text-xs text-stone-400"><%= clave %></span></label>
+        <% end %>
+      </div>
+    </fieldset>
+  <% end %>
+  </div>
+  <%= f.submit @rol.new_record? ? t("comun.crear") : t("comun.guardar"), class: "btn btn-primary btn-lg" %>
+<% end %>

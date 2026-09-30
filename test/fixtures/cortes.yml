@@ -1,0 +1,7 @@
+tienda_abierto:
+  folio: C-00900
+  sucursal: tienda
+  usuario: cajera
+  estado: abierto
+  fondo_centavos: 50000
+  abierto_en: <%= Time.current %>

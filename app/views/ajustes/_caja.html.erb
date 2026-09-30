@@ -1,0 +1,19 @@
+<%= form_with url: ajustes_sistema_path, method: :patch, class: "formulario" do |f| %>
+  <%= hidden_field_tag :volver, "caja" %>
+  <div class="campos-2">
+    <label class="block text-sm"><%= t("ajustes.claves.caja.piso_precio") %>
+      <%= f.number_field "ajuste[caja.piso_precio]", value: @ajustes["caja.piso_precio"], min: 0, max: 100, class: "entrada font-mono" %>
+    </label>
+    <label class="block text-sm"><%= t("ajustes.claves.caja.limite_gaveta") %>
+      <%= f.number_field "ajuste[caja.limite_gaveta]", value: @ajustes["caja.limite_gaveta"], min: 1, class: "entrada font-mono" %>
+    </label>
+    <label class="block text-sm"><%= t("ajustes.claves.caja.denominaciones") %>
+      <%= f.text_field "ajuste[caja.denominaciones]", value: @ajustes["caja.denominaciones"], class: "entrada font-mono" %>
+    </label>
+    <label class="block text-sm"><%= t("ajustes.claves.caja.tope_diferencia") %>
+      <%= f.number_field "ajuste[caja.tope_diferencia]", value: @ajustes["caja.tope_diferencia"], min: 0, class: "entrada font-mono" %>
+    </label>
+  </div>
+  <p class="text-xs text-stone-500"><%= t("ajustes.caja_ayuda") %> <%= link_to t("ajustes.ir_sucursales"), admin_sucursales_path, class: "enlace" %></p>
+  <%= f.submit t("ajustes.guardar"), class: "btn btn-primary btn-lg" %>
+<% end %>

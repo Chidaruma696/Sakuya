@@ -1,0 +1,16 @@
+<%= form_with model: @proveedor, class: "formulario" do |f| %>
+  <% if @proveedor.errors.any? %><div class="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-800"><%= @proveedor.errors.full_messages.join(". ") %></div><% end %>
+  <div class="campos">
+    <div><%= f.label :nombre, class: "block text-sm font-medium" %><%= f.text_field :nombre, required: true, autofocus: true, class: "entrada" %></div>
+    <div><%= f.label :rfc, class: "block text-sm font-medium" %><%= f.text_field :rfc, class: "entrada font-mono" %></div>
+    <div><%= f.label :dias_credito, class: "block text-sm font-medium" %><%= f.number_field :dias_credito, min: 0, class: "entrada font-mono" %><p class="mt-1 text-xs text-stone-500"><%= t("compras.dias_credito_ayuda") %></p></div>
+    <div><%= f.label :contacto, class: "block text-sm font-medium" %><%= f.text_field :contacto, class: "entrada" %></div>
+    <div><%= f.label :telefono, class: "block text-sm font-medium" %><%= f.telephone_field :telefono, class: "entrada" %></div>
+    <div><%= f.label :notas, class: "block text-sm font-medium" %><%= f.text_field :notas, class: "entrada" %></div>
+    <% if @proveedor.persisted? %><label class="flex items-center gap-2 text-sm"><%= f.check_box :activo, class: "h-4 w-4" %> <%= t("comun.activo") %></label><% end %>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <%= f.submit t("comun.guardar"), class: "btn btn-primary btn-lg" %>
+    <%= link_to t("comun.cancelar"), proveedores_path, class: "btn btn-ghost btn-lg" %>
+  </div>
+<% end %>

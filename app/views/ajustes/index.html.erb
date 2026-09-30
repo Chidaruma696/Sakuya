@@ -1,0 +1,23 @@
+<%# Ajustes con barra lateral: cada sección en su página, como en cualquier panel de preferencias. %>
+<% secciones = [ [ "para_ti", "person-gear" ] ] %>
+<% secciones += [ [ "negocio", "receipt" ], [ "folios", "123" ], [ "modulos", "grid-1x2" ], [ "caja", "cash-stack" ] ] if puede?("admin.usuarios") %>
+<% secciones << [ "compras", "truck" ] if puede?("admin.usuarios") && Modulo.activo?("compras") %>
+<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+  <nav class="lg:sticky lg:top-[calc(var(--cinta-alto,0px)+1rem)] lg:self-start" aria-label="<%= t("ajustes.titulo") %>">
+    <h1 class="mb-3 px-2 text-2xl font-bold"><%= t("ajustes.titulo") %></h1>
+    <ul class="flex gap-1 overflow-x-auto lg:flex-col">
+      <% secciones.each do |id, icono| %>
+        <li>
+          <%= link_to ajustes_seccion_path(id), class: "flex items-center gap-3 rounded-md px-3 py-2 text-sm whitespace-nowrap #{@seccion == id ? 'bg-white font-semibold text-marca-900 shadow-sm ring-1 ring-marca-200' : 'text-stone-700 hover:bg-white'}" do %>
+            <i class="bi bi-<%= icono %> w-5 text-center text-lg leading-none text-stone-500"></i><span><%= t("ajustes.secciones.#{id}") %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+  <section class="min-w-0">
+    <h2 class="mb-1 text-xl font-bold"><%= t("ajustes.secciones.#{@seccion}") %></h2>
+    <p class="mb-4 text-sm text-stone-600"><%= t("ajustes.secciones_ayuda.#{@seccion}") %></p>
+    <%= render "ajustes/#{@seccion}" %>
+  </section>
+</div>

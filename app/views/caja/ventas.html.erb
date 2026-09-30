@@ -1,0 +1,19 @@
+<h1 class="mb-4 text-2xl font-bold"><%= t("caja.ventas") %> · <%= sucursal_actual %></h1>
+<table class="tabla">
+  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.folio") %></th><th class="px-3 py-2"><%= t("caja.hora") %></th><th class="px-3 py-2"><%= t("caja.cajero") %></th><th class="px-3 py-2"><%= t("caja.lineas") %></th><th class="px-3 py-2 text-right"><%= t("comun.total") %></th><th class="px-3 py-2"><%= t("caja.pago") %></th><th class="px-3 py-2"><%= t("comun.estado") %></th><th></th></tr></thead>
+  <tbody>
+    <% @ventas.each do |v| %>
+      <tr class="border-t border-stone-100">
+        <td class="px-3 py-2 font-mono"><%= v.folio %></td>
+        <td class="px-3 py-2 whitespace-nowrap"><%= l v.created_at, format: :short %></td>
+        <td class="px-3 py-2"><%= v.usuario %></td>
+        <td class="px-3 py-2 text-stone-600"><%= v.lineas.map { |l| "#{l.producto.nombre} #{number_with_precision(l.cantidad, precision: l.producto.decimales)}" }.join(", ") %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= pesos(v.total_centavos) %></td>
+        <td class="px-3 py-2"><%= v.pagos.map { |p| t("formas_pago.#{p.forma}").downcase }.uniq.join("+") %></td>
+        <td class="px-3 py-2"><%= t("estados.#{v.estado}") %></td>
+        <td class="px-3 py-2 text-right whitespace-nowrap"><%= link_to t("caja.ticket").downcase, caja_ticket_path(v), target: "_blank", class: "enlace" %> · <%= link_to t("caja.devolver").downcase, caja_devolucion_path(codigo: v.folio), class: "enlace" %></td>
+      </tr>
+    <% end %>
+    <% if @ventas.empty? %><tr><td colspan="8" class="px-3 py-6 text-center text-stone-500"><%= t("caja.sin_ventas") %></td></tr><% end %>
+  </tbody>
+</table>

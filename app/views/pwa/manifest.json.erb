@@ -1,0 +1,22 @@
+{
+  "name": "Sakuya",
+  "short_name": "Sakuya",
+  "description": "<%= t("acerca.pwa_descripcion") %>",
+  "lang": "<%= I18n.locale %>",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#7a90d2",
+  "background_color": "#f4f5f8",
+  "shortcuts": [
+    { "name": "<%= t("cinta.botones.vender") %>", "url": "/caja", "icons": [ { "src": "/icon-192.png", "sizes": "192x192" } ] },
+    { "name": "<%= t("cinta.botones.recibir") %>", "url": "/recepciones/new", "icons": [ { "src": "/icon-192.png", "sizes": "192x192" } ] },
+    { "name": "<%= t("cinta.pestanas.inventario") %>", "url": "/inventario", "icons": [ { "src": "/icon-192.png", "sizes": "192x192" } ] }
+  ],
+  "icons": [
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/icon-512.png", "type": "image/png", "sizes": "512x512" },
+    { "src": "/icon-maskable-512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+  ]
+}

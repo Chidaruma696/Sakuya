@@ -1,0 +1,26 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("compras.facturas") %></h1>
+  <%= link_to icono("file-earmark-plus", t("compras.nueva_factura")), new_factura_path, class: "btn btn-primary" if puede?("compras.facturar") %>
+</div>
+<%= form_with url: facturas_path, method: :get, class: "mb-4 flex flex-wrap items-center gap-2 text-sm", data: { turbo_frame: "_top" } do |f| %>
+  <%= f.select :proveedor_id, @proveedores.map { |p| [ p.nombre, p.id ] }, { include_blank: t("compras.todos_los_proveedores"), selected: params[:proveedor_id] }, class: "entrada mt-0 max-w-xs", onchange: "this.form.requestSubmit()" %>
+<% end %>
+<table class="tabla">
+  <thead><tr><th><%= t("comun.folio") %></th><th><%= t("comun.fecha") %></th><th><%= t("compras.vence") %></th><th><%= t("compras.proveedor") %></th><th class="text-right"><%= t("caja.monto") %></th><th class="text-right"><%= t("compras.pagado") %></th><th class="text-right"><%= t("compras.resta") %></th><th><%= t("comun.estado") %></th><th><%= t("compras.recepcion") %></th></tr></thead>
+  <tbody>
+    <% @facturas.each do |x| %>
+      <tr class="<%= 'text-stone-400 line-through' if x.cancelada? %>">
+        <td class="px-3 py-2"><%= link_to x.folio, factura_path(x), class: "chip-folio" %></td>
+        <td class="px-3 py-2 whitespace-nowrap"><%= l x.fecha %></td>
+        <td class="px-3 py-2 whitespace-nowrap <%= 'font-semibold text-red-700' if x.vencida? %>"><%= l x.vence if x.vence %></td>
+        <td class="px-3 py-2"><%= x.proveedor %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= pesos(x.monto_centavos) %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= pesos(x.pagado_centavos) %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= pesos(x.resta_centavos) unless x.cancelada? %></td>
+        <td class="px-3 py-2"><%= x.cancelada? ? t("compras.estados.cancelada") : (x.pagada? ? t("compras.estados.pagada") : (x.vencida? ? t("compras.estados.vencida") : t("compras.estados.abierta"))) %></td>
+        <td class="px-3 py-2"><% unless x.cancelada? %><% er = x.estado_recepcion %><span class="rounded px-2 py-0.5 text-xs font-semibold <%= { 'completa' => 'bg-green-100 text-green-800', 'parcial' => 'bg-amber-100 text-amber-800', 'sin_recepcion' => 'bg-red-100 text-red-800' }[er] %>"><%= t("compras.recepcion_estado.#{er}") %></span><% end %></td>
+      </tr>
+    <% end %>
+    <% if @facturas.empty? %><tr><td colspan="9" class="px-3 py-6 text-center text-stone-500"><%= t("compras.sin_facturas") %></td></tr><% end %>
+  </tbody>
+</table>

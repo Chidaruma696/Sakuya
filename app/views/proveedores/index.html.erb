@@ -1,0 +1,23 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("compras.proveedores") %></h1>
+  <%= link_to icono("plus-lg", t("compras.nuevo_proveedor")), new_proveedor_path, class: "btn btn-primary" if puede?("compras.facturar") %>
+</div>
+<p class="mb-4 text-sm text-stone-600"><%= t("compras.proveedores_ayuda") %></p>
+<table class="tabla">
+  <thead><tr><th><%= t("comun.nombre") %></th><th><%= t("compras.contacto") %></th><th><%= t("compras.telefono") %></th><th><%= t("compras.rfc") %></th><th class="text-right"><%= t("compras.dias_credito") %></th><th class="text-right"><%= t("compras.saldo") %></th><th></th></tr></thead>
+  <tbody>
+    <% @proveedores.each do |p| %>
+      <tr class="<%= 'text-stone-400' unless p.activo %>">
+        <td class="px-3 py-2 font-medium"><%= p.nombre %><%= " (#{t("compras.inactivo")})" unless p.activo %></td>
+        <td class="px-3 py-2"><%= p.contacto %></td><td class="px-3 py-2"><%= p.telefono %></td><td class="px-3 py-2 font-mono text-xs"><%= p.rfc %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= p.dias_credito %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= pesos(@saldos[p.id] || 0) %></td>
+        <td class="px-3 py-2 text-right whitespace-nowrap">
+          <%= link_to icono("wallet2", t("compras.cuenta")), cuenta_path(p), class: "btn btn-secondary btn-xs" %>
+          <%= link_to icono("pencil", t("comun.editar")), edit_proveedor_path(p), class: "btn btn-ghost btn-xs" if puede?("compras.facturar") %>
+        </td>
+      </tr>
+    <% end %>
+    <% if @proveedores.empty? %><tr><td colspan="7" class="px-3 py-6 text-center text-stone-500"><%= t("compras.sin_proveedores") %></td></tr><% end %>
+  </tbody>
+</table>

@@ -1,0 +1,28 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("admin.productos") %></h1>
+  <div class="flex gap-3">
+    <%= form_with url: admin_productos_path, method: :get, class: "flex gap-2" do |f| %>
+      <%= f.text_field :q, value: params[:q], placeholder: t("comun.buscar").downcase, class: "btn btn-secondary btn-sm" %>
+      <%= f.submit t("comun.buscar"), class: "btn btn-secondary btn-sm" %>
+    <% end %>
+    <%= link_to t("admin.nuevo_producto"), new_admin_producto_path, class: "btn btn-primary btn-sm" %>
+  </div>
+</div>
+<table class="tabla">
+  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.clave") %></th><th class="px-3 py-2"><%= t("comun.nombre") %></th><th class="px-3 py-2"><%= t("admin.linea") %></th><th class="px-3 py-2"><%= t("comun.unidad") %></th><th class="px-3 py-2 text-right"><%= t("comun.precio") %></th><th class="px-3 py-2">PLU</th><th class="px-3 py-2"><%= t("admin.codigos") %></th><th class="px-3 py-2"><%= t("comun.activo") %></th><th></th></tr></thead>
+  <tbody>
+    <% @productos.each do |p| %>
+      <tr class="border-t border-stone-100 <%= 'text-stone-400' unless p.activo %>">
+        <td class="px-3 py-2 font-mono"><%= p.clave %></td>
+        <td class="px-3 py-2"><%= p.nombre %></td>
+        <td class="px-3 py-2"><%= p.linea %></td>
+        <td class="px-3 py-2"><%= p.unidad %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= pesos(p.precio_centavos) %></td>
+        <td class="px-3 py-2 font-mono"><%= p.plu %></td>
+        <td class="px-3 py-2"><%= p.codigos_barras.size %></td>
+        <td class="px-3 py-2"><%= p.activo ? t("comun.si") : t("comun.no") %></td>
+        <td class="px-3 py-2 text-right"><%= link_to t("comun.editar"), edit_admin_producto_path(p), class: "btn btn-secondary btn-xs" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

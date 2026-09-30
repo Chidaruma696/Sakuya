@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+/* La paleta sale de Sakuya Izayoi: el azul de su vestido de sirvienta (marca), el plateado del
+   pelo en los neutros y el delantal blanco (fondo). corbata queda para el rojo de peligro. */
+@theme {
+  --color-marca-50: #f2f5fc;
+  --color-marca-100: #e3e9f8;
+  --color-marca-200: #c8d3f0;
+  --color-marca-300: #a2b3e3;
+  --color-marca-400: #7a90d2;
+  --color-marca-500: #5b71c0;
+  --color-marca-600: #4659a8;
+  --color-marca-700: #3a498a;
+  --color-marca-800: #323e70;
+  --color-marca-900: #2c355b;
+  --color-marca-950: #1c2139;
+  --color-corbata-600: #a3323a;
+  --color-corbata-700: #8a2830;
+  --color-corbata-800: #6e1f26;
+  --color-piel: #fce4d0;
+  --color-fondo: #f4f5f8;
+  --color-pared: #e6e9ef;
+}
+
+@layer base {
+  input[type="text"], input[type="number"], input[type="password"], input[type="date"], input[type="search"], input[type="email"], select, textarea {
+    @apply rounded-md border border-stone-300 bg-white text-stone-900 outline-none transition placeholder:text-stone-400 focus:border-marca-500 focus:ring-2 focus:ring-marca-200 disabled:bg-stone-100;
+  }
+  summary { @apply select-none; }
+  dialog::backdrop { @apply bg-stone-900/40; }
+}
+
+@layer components {
+  /* Botones: siempre con forma de botón, nunca un enlace pelón. */
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-1 rounded-md border border-transparent px-3 py-1.5 text-sm font-semibold leading-5 whitespace-nowrap shadow-sm transition-colors select-none disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-xs { @apply px-2 py-0.5 text-xs shadow-none; }
+  .btn-sm { @apply px-2.5 py-1 text-xs; }
+  .btn-lg { @apply px-5 py-3 text-lg; }
+  .btn-primary { @apply bg-marca-600 text-white hover:bg-marca-500 active:bg-marca-700; }
+  .btn-secondary { @apply border-stone-300 bg-white text-stone-800 hover:bg-stone-50 active:bg-stone-100; }
+  .btn-success { @apply bg-emerald-700 text-white hover:bg-emerald-600 active:bg-emerald-800; }
+  .btn-danger { @apply bg-corbata-700 text-white hover:bg-corbata-600 active:bg-corbata-800; }
+  .btn-outline-danger { @apply border-corbata-700 bg-white text-corbata-700 hover:bg-red-50; }
+  .btn-outline-success { @apply border-emerald-700 bg-white text-emerald-800 hover:bg-emerald-50; }
+  .btn-warning { @apply border-amber-400 bg-amber-50 text-amber-900 hover:bg-amber-100; }
+  .btn-ghost { @apply border-transparent bg-transparent text-stone-600 shadow-none hover:bg-stone-100 hover:text-stone-900; }
+  .btn-ghost-danger { @apply border-transparent bg-transparent text-corbata-700 shadow-none hover:bg-red-50; }
+  .btn-light { @apply border-white/60 bg-white/90 text-stone-900 hover:bg-white; }
+
+  /* Referencias a otros documentos (folios, productos): chip con fondo, se ve que se puede tocar. */
+  .enlace { @apply inline-flex items-center gap-1 rounded-md bg-marca-50 px-1.5 py-0.5 font-medium text-marca-800 transition-colors hover:bg-marca-100 hover:text-marca-900; }
+  .chip-folio { @apply inline-flex items-center gap-1 rounded-md bg-marca-50 px-1.5 py-0.5 font-mono font-medium text-marca-800 transition-colors hover:bg-marca-100 hover:text-marca-900; }
+
+  .card { @apply rounded-lg bg-white p-4 shadow-sm ring-1 ring-stone-200; }
+  .badge { @apply inline-block rounded-md bg-stone-200 px-2 py-0.5 text-xs font-semibold text-stone-700; }
+
+  /* Formularios: a todo lo ancho, campos en rejilla (1 col en móvil, 2 en tableta, 3 en escritorio). */
+  .formulario { @apply w-full space-y-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-stone-200 xl:p-8; }
+  .campos { @apply grid gap-4 md:grid-cols-2 xl:grid-cols-3; }
+  .campos-2 { @apply grid gap-4 md:grid-cols-2; }
+  .campos-4 { @apply grid gap-4 md:grid-cols-2 xl:grid-cols-4; }
+  .entrada { @apply mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2.5 text-base; }
+
+  /* Opción grande y amigable (radio escondido dentro): arranque y ajustes. */
+  .opcion { @apply flex cursor-pointer items-center gap-3 rounded-lg border-2 border-stone-300 bg-white px-4 py-4 text-lg font-semibold transition-colors hover:border-marca-400; }
+  .opcion:has(:checked) { @apply border-marca-600 bg-marca-50 text-marca-900; }
+  .opcion-check { @apply ml-auto text-marca-600 invisible; }
+  .opcion:has(:checked) .opcion-check { @apply visible; }
+
+  .tabla { @apply w-full border-collapse overflow-hidden rounded-lg bg-white text-sm shadow-sm ring-1 ring-stone-200; }
+  .tabla thead th { @apply bg-stone-100 px-3 py-2 text-left text-xs font-semibold tracking-wide text-stone-600 uppercase; }
+  .tabla tbody tr { @apply border-t border-stone-100; }
+  .tabla tbody tr:hover { @apply bg-marca-50/40; }
+}
+
+/* Tema oscuro: los mismos tokens, volteados. Se elige por usuario (data-theme) o sigue al sistema. */
+:root[data-theme="oscuro"] { color-scheme: dark; }
+@media (prefers-color-scheme: dark) { :root[data-theme="sistema"] { color-scheme: dark; } }
+
+@layer theme {
+  :root[data-theme="oscuro"] {
+    --color-white: #1b1d23;
+    --color-fondo: #121318;
+    --color-pared: #17191e;
+    --color-stone-50: #22252c;
+    --color-stone-100: #262a31;
+    --color-stone-200: #343842;
+    --color-stone-300: #444955;
+    --color-stone-400: #767c89;
+    --color-stone-500: #9ca2ad;
+    --color-stone-600: #bec3cc;
+    --color-stone-700: #d4d8df;
+    --color-stone-800: #e4e7ec;
+    --color-stone-900: #f1f3f6;
+    --color-marca-50: #1f2540;
+    --color-marca-100: #262e50;
+    --color-marca-200: #34406e;
+    --color-marca-800: #b7c4f0;
+    --color-marca-900: #d0daf6;
+    --color-marca-950: #e6ecfb;
+    --color-green-50: #14261b; --color-green-100: #1b3524; --color-green-800: #a7e3b9;
+    --color-emerald-50: #10271d; --color-emerald-100: #143826; --color-emerald-800: #9de3bf;
+    --color-red-50: #2e1618; --color-red-100: #3f1d20; --color-red-800: #f0a8ac;
+    --color-amber-50: #2c2210; --color-amber-100: #3d2f12; --color-amber-800: #f3cf7a; --color-amber-900: #f7dc98;
+    --color-sky-50: #10222c; --color-sky-100: #143040; --color-sky-800: #9ed3f0;
+    --color-blue-50: #131f33; --color-blue-800: #a9c4f5;
+    --color-corbata-700: #f0a8ac;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  @layer theme {
+    :root[data-theme="sistema"] {
+      --color-white: #1b1d23; --color-fondo: #121318; --color-pared: #17191e;
+      --color-stone-50: #22252c; --color-stone-100: #262a31; --color-stone-200: #343842; --color-stone-300: #444955;
+      --color-stone-400: #767c89; --color-stone-500: #9ca2ad; --color-stone-600: #bec3cc; --color-stone-700: #d4d8df;
+      --color-stone-800: #e4e7ec; --color-stone-900: #f1f3f6;
+      --color-marca-50: #1f2540; --color-marca-100: #262e50; --color-marca-200: #34406e;
+      --color-marca-800: #b7c4f0; --color-marca-900: #d0daf6; --color-marca-950: #e6ecfb;
+      --color-green-50: #14261b; --color-green-100: #1b3524; --color-green-800: #a7e3b9;
+      --color-emerald-50: #10271d; --color-emerald-100: #143826; --color-emerald-800: #9de3bf;
+      --color-red-50: #2e1618; --color-red-100: #3f1d20; --color-red-800: #f0a8ac;
+      --color-amber-50: #2c2210; --color-amber-100: #3d2f12; --color-amber-800: #f3cf7a; --color-amber-900: #f7dc98;
+      --color-sky-50: #10222c; --color-sky-100: #143040; --color-sky-800: #9ed3f0;
+      --color-blue-50: #131f33; --color-blue-800: #a9c4f5;
+      --color-corbata-700: #f0a8ac;
+    }
+  }
+}
+
+/* Densidad y tamaño de letra, por usuario. Todo el espaciado de Tailwind sale de --spacing. */
+:root[data-densidad="compacta"] { --spacing: 0.2rem; }
+:root[data-letra="chica"] { font-size: 14px; }
+:root[data-letra="grande"] { font-size: 18px; }
+
+/* En compacto la cinta se aplana: icono chico con el texto a la derecha, sin la etiqueta del grupo. */
+:root[data-densidad="compacta"] .cinta-boton { flex-direction: row; width: auto; gap: 0.375rem; padding: 0.25rem 0.5rem; text-align: left; }
+:root[data-densidad="compacta"] .cinta-boton i { font-size: 1rem; line-height: 1.25rem; }
+:root[data-densidad="compacta"] .cinta-grupo { display: none; }
+:root[data-densidad="compacta"] .cinta-botones { gap: 0.125rem; }

@@ -1,0 +1,74 @@
+<div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(400px,520px)]" data-controller="ticket-diseno">
+  <%= form_with url: ajustes_ticket_path, method: :patch, class: "formulario", data: { turbo: false } do |f| %>
+    <div class="space-y-3">
+      <h3 class="text-xs font-bold uppercase tracking-wide text-stone-500"><%= t("ajustes.ticket.encabezado") %></h3>
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="flex h-20 w-28 items-center justify-center rounded border border-dashed border-stone-300 bg-white">
+          <img src="<%= @ajustes["ticket.logo"].presence || "data:," %>" alt="" class="max-h-16 max-w-24 <%= 'hidden' if @ajustes["ticket.logo"].blank? %>" data-ticket-diseno-target="logoMini">
+          <span class="text-xs text-stone-400 <%= 'hidden' if @ajustes["ticket.logo"].present? %>" data-ticket-diseno-target="logoNada"><%= t("ajustes.ticket.sin_logo") %></span>
+        </div>
+        <div class="space-y-1 text-sm">
+          <label class="btn btn-secondary btn-sm cursor-pointer"><i class="bi bi-upload"></i> <%= t("ajustes.ticket.subir_logo") %><input type="file" accept="image/png,image/jpeg,image/webp" class="sr-only" data-action="change->ticket-diseno#logo"></label>
+          <button type="button" class="btn btn-ghost btn-sm" data-action="ticket-diseno#quitarLogo"><i class="bi bi-x-lg"></i> <%= t("ajustes.ticket.quitar_logo") %></button>
+          <p class="text-xs text-stone-500"><%= t("ajustes.ticket.logo_ayuda") %></p>
+          <%= f.hidden_field "ajuste[ticket.logo]", value: @ajustes["ticket.logo"], data: { ticket_diseno_target: "logo" } %>
+        </div>
+      </div>
+      <div class="campos-2">
+        <% { "negocio.nombre" => sucursal_actual.nombre, "ticket.lema" => nil, "negocio.direccion" => nil, "negocio.telefono" => nil, "ticket.rfc" => nil }.each do |clave, ph| %>
+          <label class="block text-sm <%= 'md:col-span-2' if clave == 'negocio.direccion' %>"><%= t("ajustes.claves.#{clave}") %>
+            <%= f.text_field "ajuste[#{clave}]", value: @ajustes[clave], placeholder: ph, class: "entrada", data: { clave: clave, action: "input->ticket-diseno#texto" } %>
+          </label>
+        <% end %>
+      </div>
+    </div>
+    <div class="space-y-3">
+      <h3 class="text-xs font-bold uppercase tracking-wide text-stone-500"><%= t("ajustes.ticket.cuerpo") %></h3>
+      <div class="campos">
+        <label class="flex items-center gap-2 rounded-md border border-stone-200 px-3 py-2.5 text-sm"><%= hidden_field_tag "ajuste[ticket.mostrar_cajero]", "0", id: nil %><%= check_box_tag "ajuste[ticket.mostrar_cajero]", "1", @ajustes["ticket.mostrar_cajero"] == "1", data: { clave: "ticket.mostrar_cajero", action: "change->ticket-diseno#mostrar" } %> <%= t("ajustes.claves.ticket.mostrar_cajero") %></label>
+        <label class="flex items-center gap-2 rounded-md border border-stone-200 px-3 py-2.5 text-sm"><%= hidden_field_tag "ajuste[ticket.mostrar_codigo]", "0", id: nil %><%= check_box_tag "ajuste[ticket.mostrar_codigo]", "1", @ajustes["ticket.mostrar_codigo"] == "1", data: { clave: "ticket.mostrar_codigo", action: "change->ticket-diseno#mostrar" } %> <%= t("ajustes.claves.ticket.mostrar_codigo") %></label>
+        <label class="block text-sm"><%= t("ajustes.claves.ticket.ancho") %>
+          <%= f.select "ajuste[ticket.ancho]", [ [ "80 mm", "80" ], [ "58 mm", "58" ] ], { selected: @ajustes["ticket.ancho"] }, class: "entrada", data: { action: "change->ticket-diseno#ancho" } %>
+        </label>
+      </div>
+    </div>
+    <div class="space-y-3">
+      <h3 class="text-xs font-bold uppercase tracking-wide text-stone-500"><%= t("ajustes.ticket.pie") %></h3>
+      <div class="campos-2">
+        <label class="block text-sm"><%= t("ajustes.claves.ticket.leyenda_devoluciones") %>
+          <%= f.text_field "ajuste[ticket.leyenda_devoluciones]", value: @ajustes["ticket.leyenda_devoluciones"], placeholder: t("caja.devoluciones_solo_con_ticket"), class: "entrada", data: { clave: "ticket.leyenda_devoluciones", action: "input->ticket-diseno#texto" } %>
+        </label>
+        <label class="block text-sm"><%= t("ajustes.claves.negocio.pie_ticket") %>
+          <%= f.text_field "ajuste[negocio.pie_ticket]", value: @ajustes["negocio.pie_ticket"], class: "entrada", data: { clave: "negocio.pie_ticket", action: "input->ticket-diseno#texto" } %>
+        </label>
+      </div>
+    </div>
+    <div class="space-y-3">
+      <h3 class="text-xs font-bold uppercase tracking-wide text-stone-500"><%= t("ajustes.moneda") %></h3>
+      <div class="campos-2">
+        <label class="block text-sm"><%= t("ajustes.claves.negocio.moneda") %>
+          <%= f.text_field "ajuste[negocio.moneda]", value: @ajustes["negocio.moneda"], maxlength: 3, class: "entrada font-mono uppercase" %>
+        </label>
+        <label class="block text-sm"><%= t("ajustes.claves.negocio.simbolo") %>
+          <%= f.text_field "ajuste[negocio.simbolo]", value: @ajustes["negocio.simbolo"], maxlength: 4, class: "entrada font-mono" %>
+        </label>
+      </div>
+      <p class="text-xs text-stone-500"><%= t("ajustes.moneda_ayuda") %></p>
+    </div>
+    <%= f.submit t("ajustes.guardar"), class: "btn btn-primary btn-lg" %>
+  <% end %>
+
+  <div class="xl:sticky xl:top-[calc(var(--cinta-alto,0px)+1rem)] xl:self-start">
+    <div class="mb-2 flex items-center justify-between gap-2">
+      <span class="text-xs font-bold uppercase tracking-wide text-stone-500"><%= t("ajustes.ticket.vista_previa") %></span>
+      <span class="flex items-center gap-1">
+        <button type="button" class="btn btn-secondary btn-sm" data-action="ticket-diseno#zoomMenos" title="<%= t("ajustes.ticket.zoom_menos") %>"><i class="bi bi-zoom-out"></i></button>
+        <button type="button" class="btn btn-ghost btn-sm w-16 font-mono" data-action="ticket-diseno#zoomAjustar" data-ticket-diseno-target="zoom" title="<%= t("ajustes.ticket.zoom_ajustar") %>">100 %</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-action="ticket-diseno#zoomMas" title="<%= t("ajustes.ticket.zoom_mas") %>"><i class="bi bi-zoom-in"></i></button>
+        <button type="button" class="btn btn-primary btn-sm ml-2" data-action="ticket-diseno#imprimir" title="<%= t("ajustes.ticket.imprimir_prueba_ayuda") %>"><i class="bi bi-printer"></i> <%= t("ajustes.ticket.imprimir_prueba") %></button>
+      </span>
+    </div>
+    <%# La vista previa es el ticket de verdad, con su misma hoja de estilos, dentro de un iframe %>
+    <iframe title="<%= t("ajustes.ticket.vista_previa") %>" class="h-[75vh] min-h-[560px] w-full rounded border border-stone-300 bg-stone-200" data-action="load->ticket-diseno#zoomAjustar" srcdoc="<%= ERB::Util.html_escape(render(template: "ajustes/ticket_previa", layout: "layouts/ticket", formats: [ :html ]).to_str) %>" data-ticket-diseno-target="marco"></iframe>
+  </div>
+</div>

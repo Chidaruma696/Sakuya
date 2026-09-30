@@ -1,0 +1,15 @@
+<%= form_with model: [ :admin, @sucursal ], class: "formulario" do |f| %>
+  <div class="campos-4">
+    <%= render "admin/campo", f: f, campo: :codigo, etiqueta: t("comun.codigo"), tipo: :text_field %>
+    <div><%= f.label :tipo, t("comun.tipo"), class: "block text-sm font-medium" %><%= f.select :tipo, [ [ t("comun.matriz"), "matriz" ], [ t("admin.tienda"), "tienda" ] ] + (Modulo.activo?("almacenes") || @sucursal.almacen? ? [ [ t("admin.almacen"), "almacen" ] ] : []), {}, class: "entrada" %></div>
+    <%= render "admin/campo", f: f, campo: :nombre, etiqueta: t("comun.nombre"), tipo: :text_field %>
+    <%= render "admin/campo", f: f, campo: :limite_efectivo, etiqueta: t("admin.limite_efectivo"), tipo: :number_field, opciones: { step: "0.01", min: 1 } %>
+    <% if Modulo.activo?("conteos") %>
+      <%= render "admin/campo", f: f, campo: :dias_conteo, etiqueta: t("admin.dias_conteo"), tipo: :number_field, opciones: { step: "1", min: 1 } %>
+    <% end %>
+  </div>
+  <div class="flex flex-wrap items-center gap-4">
+    <%= f.submit @sucursal.new_record? ? t("comun.crear") : t("comun.guardar"), class: "btn btn-primary btn-lg" %>
+    <label class="flex items-center gap-2 text-sm"><%= f.check_box :activa %> <%= t("admin.activa") %></label>
+  </div>
+<% end %>

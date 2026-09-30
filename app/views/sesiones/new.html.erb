@@ -1,0 +1,28 @@
+<div class="w-full max-w-sm rounded-2xl bg-white p-8 shadow">
+  <div class="mb-6 flex items-center gap-3">
+    <%= image_tag "logo-b.png", alt: "Sakuya", class: "h-12 w-12" %>
+    <div>
+      <h1 class="text-2xl font-bold leading-tight">Sakuya</h1>
+      <div class="text-xs text-stone-500">v<%= Sakuya::VERSION %> · build <%= Sakuya::COMMIT %></div>
+    </div>
+  </div>
+  <% if flash[:alert] %>
+    <p class="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-700"><%= flash[:alert] %></p>
+  <% end %>
+  <% if flash[:notice] %>
+    <p class="mb-4 rounded bg-green-50 px-3 py-2 text-sm text-green-700"><%= flash[:notice] %></p>
+  <% end %>
+  <%= form_with url: entrar_path, class: "space-y-4" do |f| %>
+    <div>
+      <%= f.label :usuario, t("sesion.usuario"), class: "block text-sm font-medium" %>
+      <%= f.text_field :usuario, autofocus: true, autocomplete: "username", autocapitalize: "none",
+                       class: "mt-1 w-full rounded border border-stone-300 px-3 py-2" %>
+    </div>
+    <div>
+      <%= f.label :password, t("sesion.contrasena"), class: "block text-sm font-medium" %>
+      <%= f.password_field :password, autocomplete: "current-password",
+                           class: "mt-1 w-full rounded border border-stone-300 px-3 py-2" %>
+    </div>
+    <%= f.submit t("sesion.entrar"), class: "btn btn-primary w-full" %>
+  <% end %>
+</div>

@@ -1,0 +1,954 @@
+de:
+  ajustes:
+    titulo: Einstellungen
+    guardado: Einstellungen gespeichert
+    guardar: Speichern
+    para_ti: Für dich
+    para_ti_ayuda: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
+    idioma: Sprache
+    tema: Design
+    densidad: Dichte
+    letra: Schriftgröße
+    idiomas:
+      es: Español
+      en: English
+      de: Deutsch
+    tema_opciones:
+      sistema: Wie das System
+      claro: Hell
+      oscuro: Dunkel
+    densidad_opciones:
+      normal: Normal
+      compacta: Kompakt
+    letra_opciones:
+      normal: Normal
+      grande: Groß
+      chica: Klein
+    sistema: System
+    negocio: Geschäft
+    negocio_ayuda: Steht im Kopf und Fuß des Kassenbons. Bleibt der Name leer, wird der Name der Filiale verwendet.
+    caja: Kasse
+    caja_ayuda: Das Bargeldlimit der Kassenlade wird pro Filiale festgelegt.
+    candado_recibido_ayuda: Mit Sperre verlangt eine Rechnung mit mehr Menge als die verknüpften Wareneingänge einen Grund und geht mit dem bewerteten Überschuss zur Prüfung; wer die Berechtigung zum Überschreiten hat, erfasst sie ohne weiteres. Ohne Sperre wird nur die Differenz angezeigt.
+    compras_apagado: Das Einkaufsmodul ist aus; einschalten unter
+    ir_sucursales: Filialen ansehen
+    claves:
+      negocio:
+        nombre: Name des Geschäfts
+        direccion: Adresse
+        telefono: Telefon
+        pie_ticket: Fußzeile des Kassenbons
+        moneda: Währung (ISO-Code)
+        simbolo: Symbol
+      caja:
+        piso_precio: Preisuntergrenze (% des Listenpreises)
+        limite_gaveta: Ladenlimit für neue Filialen ($)
+        denominaciones: Scheine und Münzen zum Zählen der Lade (durch Komma getrennt)
+        tope_diferencia: Maximale Differenz beim Abschluss ($; 0 = ohne Grenze)
+      compras:
+        candado_recibido: Mehr als erhalten nicht ohne Grund abrechnen lassen
+      ticket:
+        lema: Slogan oder Zeile unter dem Namen
+        rfc: Steuernummer (RFC, USt-IdNr. …)
+        leyenda_devoluciones: Hinweis zu Rückgaben
+        mostrar_cajero: Bedienung anzeigen
+        mostrar_codigo: Barcode des Tickets drucken
+        ancho: Papierbreite
+    modulos: Module
+    modulos_ayuda: Was aus ist, verschwindet aus dem Menüband, den Rollen und seinen Seiten; die Daten bleiben. Ein Modul mit offener Arbeit lässt sich nicht ausschalten.
+    ticket:
+      titulo: Ticket-Design
+      intro: Was du links ausfüllst, erscheint sofort im Ticket rechts, genau so, wie es aus dem Drucker kommt. Gilt für alle Filialen.
+      ir: Ticket gestalten
+      ir_ayuda: 'Logo, Name, Adresse, Telefon, Steuernummer und Fußzeile: mit Live-Vorschau bearbeiten.'
+      encabezado: Kopf
+      cuerpo: Inhalt
+      pie: Fuß
+      vista_previa: So sieht es aus
+      sin_logo: Kein Logo
+      subir_logo: Logo hochladen
+      quitar_logo: Entfernen
+      logo_ayuda: PNG oder JPG, schwarz auf weiß, unter 300 KB; wird 30 mm breit gedruckt. Grautöne wirken auf Thermopapier schmutzig.
+      muestra:
+        producto_kg: Produkt nach Kilo
+        producto_pieza: Produkt nach Stück
+      zoom_mas: Vergrößern
+      zoom_menos: Verkleinern
+      zoom_ajustar: An Breite anpassen
+      imprimir_prueba: Testdruck
+      imprimir_prueba_ayuda: Schickt diese Vorschau so wie sie ist an den Drucker, um Papier und Breite zu prüfen
+    moneda_ayuda: 'Das Symbol steht im ganzen System und auf dem Ticket vor jedem Betrag ($, €, Q, S/…). Keine Umrechnung: eine Währung je Installation.'
+    moneda: Währung
+    secciones:
+      para_ti: Für dich
+      negocio: Betrieb und Ticket
+      modulos: Module
+      caja: Kasse
+      folios: Nummerierung
+      compras: Einkauf
+    secciones_ayuda:
+      para_ti: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
+      negocio: Die Betriebsdaten, wie sie auf dem Ticket stehen, mit dem Ticket daneben genau so, wie es gedruckt wird. Gilt für alle Filialen.
+      modulos: Was aus ist, verschwindet aus dem Menüband, den Rollen und seinen Seiten; die Daten bleiben. Ein Modul mit offener Arbeit lässt sich nicht ausschalten.
+      caja: Kassenregeln für alle Filialen.
+      folios: 'Wie Belege nummeriert werden: die Buchstaben vor der Nummer wählt der Betrieb, oder eine fortlaufende Nummer für alles. Die Buchstaben zu ändern setzt den Zähler nicht zurück; nummeriert wird je Filiale.'
+      compras: Einkaufsregeln für alle Filialen.
+    folios:
+      modos:
+        por_documento: Ein Zähler je Beleg
+        por_documento_ayuda: 'Jeder Beleg hat eigene Nummerierung und eigenes Präfix: B-00001 für Verkäufe, C-00001 für Kassenabschlüsse…'
+        unico: Eine fortlaufende Nummer
+        unico_ayuda: 'Alle Belege teilen eine Zählung und ein Präfix: F-00001 Verkauf, F-00002 Kassenabschluss, F-00003 Wareneingang…'
+      unico: Präfix der fortlaufenden Nummer
+      ejemplo: 'Beispiel: %{folio}'
+      por_documento: Präfix je Beleg
+      ayuda: Bis zu 4 Buchstaben oder Ziffern; leer = nur die Nummer. Gilt nur bei Nummerierung je Beleg.
+      documentos:
+        venta: Verkauf (Bon)
+        corte: Kassenabschluss
+        devolucion: Rückgabe
+        conteo: Zählung
+        recepcion: Wareneingang
+        traspaso: Umbuchung
+      sucursal: Filialkürzel voranstellen
+  comun:
+    cerrar: Schließen
+    guardar: Speichern
+    editar: Bearbeiten
+    ver: Ansehen
+    buscar: Suchen
+    si: ja
+    'no': nein
+    folio: Nummer
+    producto: Produkt
+    cantidad: Menge
+    estado: Status
+    notas: Notizen
+    nota: Notiz
+    motivo: Grund
+    importe: Betrag
+    clave: Kürzel
+    sucursal: Filiale
+    matriz: Zentrale
+    desde: Von
+    hasta: Bis
+    todas: Alle
+    todas_las_sucursales: alle Filialen
+    de: von
+    fecha: Datum
+    cancelar: Abbrechen
+    volver: Zurück
+    nombre: Name
+    unidad: Einheit
+    precio: Preis
+    total: Gesamt
+    acciones: Aktionen
+    kg: kg
+    pieza: Stück
+    piezas: Stück
+    abrir: Öffnen
+    imprimir: Drucken
+    nada: Nichts.
+    activo: Aktiv
+    quien: Wer
+    cuando: Wann
+    codigo: Code
+    kg_cada_una: kg je Stück
+    crear: Anlegen
+    tipo: Art
+    renglon: Zeile
+    autorizo: genehmigt von
+    por_revisar: zur Prüfung
+    origen: Herkunft
+    saldo: Saldo
+    detalle: Detail
+    concepto: Vorgang
+    agregar: Hinzufügen
+    quitar: Entfernen
+  cinta:
+    menu: Menü
+    salir: Abmelden
+    pestanas:
+      inicio: Start
+      caja: Kasse
+      conteos: Zählungen
+      inventario: Bestand
+      admin: Verwaltung
+      ajustes: Einstellungen
+      compras: Einkauf
+      almacenes: Lager
+    grupos:
+      ver: Ansehen
+      revisar: Prüfen
+      ajustes: Einstellungen
+      vender: Verkaufen
+      corte: Kassenabschluss
+      recibir: Annehmen
+      contar: Zählen
+      cargos: Belastungen
+      consultar: Nachsehen
+      capturar: Erfassen
+      catalogo: Katalog
+      gente: Personen
+      facturas: Rechnungen
+      proveedores: Lieferanten
+      granel: Umbuchungen
+    botones:
+      inicio: Start
+      ventas_por_producto: Verkäufe je Produkt
+      por_revisar: Zu prüfen
+      ajustes: Einstellungen
+      vender: Verkaufen
+      ventas: Verkäufe
+      devolucion: Rückgabe
+      corte: Kassenabschluss
+      nuevo_conteo: Neue Zählung
+      conteos: Zählungen
+      cargos: Belastungen
+      existencias: Bestände
+      kardex: Bewegungen
+      entrada_ajuste: Eingang / Korrektur
+      productos: Produkte
+      promociones: Aktionen
+      usuarios: Benutzer
+      roles: Rollen
+      sucursales: Filialen
+      recibir: Annehmen
+      recepciones: Wareneingänge
+      nueva_factura: Neue Rechnung
+      cuentas_por_pagar: Verbindlichkeiten
+      proveedores: Lieferanten
+      traspaso_granel: Neue Umbuchung
+      traspasos: Umlagerungen
+  acerca:
+    titulo: Über Sakuya
+    lema: Kasse und Backoffice für die Zentrale und ihre Läden
+    version: Version
+    motor: Technik
+    sesion: Sitzung
+    servidor: Server
+    creditos_html: Sakuya Izayoi und Touhou Project gehören Team Shanghai Alice (ZUN). Der Name ist eine inoffizielle Fan-Hommage ohne Verbindung, gemäß deren Richtlinien für abgeleitete Werke.
+    tecnologia: Gebaut mit Rails, Hotwire und Tailwind. Open Source unter der Apache-2.0-Lizenz.
+    codigo: Code auf GitHub
+    reportar: Problem melden
+    pwa_descripcion: Kasse und Warenwirtschaft in Modulen, mit Regeln, die jedes Geschäft anpasst.
+    instalar: App installieren
+  sesion:
+    usuario: Benutzer
+    contrasena: Passwort
+    entrar: Anmelden
+    hola: Hallo, %{nombre}
+    incorrectos: Benutzer oder Passwort falsch
+    cerrada: Abgemeldet
+    inicia_para_continuar: Zum Fortfahren anmelden
+  errores:
+    sin_permiso:
+      titulo: Keine Berechtigung
+      texto_html: Deine Rolle enthält %{clave} nicht. Bitte jemanden mit Berechtigung, es zu tun oder dich freizugeben.
+    hace_falta_motivo: ein Grund ist nötig
+    minimo:
+      maximo_menor: das Maximum darf nicht unter dem Minimum liegen
+    mayor_que_cero: muss größer als null sein
+    barcode:
+      doce_digitos: 12 Ziffern erwartet
+      plu_rango: PLU außerhalb des Bereichs
+      secuencia_rango: Laufnummer außerhalb des Bereichs
+    corte:
+      ya_abierto: in %{sucursal} ist bereits ein Kassenabschnitt offen
+      cerrado: der Kassenabschnitt ist geschlossen
+      sin_efectivo: so viel Bargeld ist nicht in der Lade (%{monto})
+      ya_cerrado: der Kassenabschnitt ist bereits geschlossen
+      diferencia_sin_motivo: 'die Differenz (%{diferencia}) übersteigt die Grenze (%{tope}): Grund angeben'
+      sin_caja_en_almacen: "%{sucursal} ist ein Lager: dort gibt es keine Kasse"
+    caja:
+      clave_ticket: der Ticketschlüssel fehlt
+      sin_caja: 'keine Kasse offen in %{sucursal}: mit Wechselgeld öffnen'
+      sin_caja_simple: keine Kasse offen
+      excede_limite: 'mehr als %{monto} in der Lade: erst Abschöpfung in den Tresor'
+      ticket_vacio: das Ticket ist leer
+      no_se_vende_sin: "%{mensaje}. Was nicht da ist, wird nicht verkauft: erst den Transfer empfangen."
+      sin_caja_en: keine Kasse offen in %{sucursal}
+      forma_desconocida: 'unbekannte Zahlungsart: %{forma}'
+      ya_devuelta: der Verkauf ist bereits komplett erstattet
+      sin_caja_devolver: keine Kasse offen, um das Geld zurückzugeben
+      nada_devuelto: nichts zurückgegeben
+      max_devolver: "%{producto}: höchstens %{max} können zurückgegeben werden"
+      cantidad_invalida: "%{producto}: ungültige Menge"
+      piezas_enteras: "%{producto} geht nur in ganzen Stücken"
+      sin_precio: "%{producto}: kein Preis in %{sucursal}; vor dem Verkauf bei der Zentrale anfragen"
+      piso_precio: "%{producto}: der Preis darf nicht unter %{piso} % des Katalogs fallen (%{monto})"
+      falta_dinero: 'Geld fehlt: das Ticket ist %{total} und gezahlt werden %{pago}'
+      no_efectivo_excede: Überweisung oder Einzahlung dürfen die Summe nicht übersteigen
+      sin_ticket_devolucion: 'Ohne Beleg keine Rückgabe: „%{codigo}“ nicht gefunden'
+    escribe_motivo: Grund angeben
+    conteo:
+      ya_abierto: in %{sucursal} ist bereits eine Zählung offen
+      cerrado: die Zählung ist geschlossen
+      fuera_de_alcance: "%{producto} gehört nicht zu dieser Teilzählung"
+      parcial_vacio: eine Linie oder mindestens ein Produkt wählen
+      cantidad_invalida: ungültige Menge
+      ya_cerrado: die Zählung ist bereits geschlossen
+      se_teclea: "%{producto} wird in Bruchteilen verkauft: von Hand eintippen"
+      no_encontrado: "„%{codigo}“ nicht gefunden"
+    cargo:
+      sin_origen: eine Belastung stammt aus einer Zählung, einer Prüfung oder einer Fahrt
+      ya_esta: die Belastung ist bereits %{estado}
+    inventario:
+      cantidad_cero: die Menge muss größer als null sein
+      insuficiente: 'Nicht genug Bestand von %{producto} in %{sucursal}: vorhanden %{hay}, angefragt %{piden}'
+    revision:
+      ya_esta: die Prüfung ist bereits %{estado}
+    promocion:
+      hasta_antes: darf nicht vor „von“ liegen
+    rol:
+      lista: muss eine Liste sein
+      desconocidos: 'unbekannt: %{claves}'
+    ajuste:
+      entero: "%{clave}: muss eine ganze Zahl sein"
+      logo: das Logo muss ein PNG-, JPG- oder WebP-Bild unter 300 KB sein
+      prefijo: "%{clave}: das Präfix hat bis zu 4 Buchstaben oder Ziffern, ohne Bindestrich"
+      modo_folios: unbekannter Nummerierungsmodus
+      denominaciones: Stückelungen durch Komma getrennt, z. B. 500,200,100,50,20,10,5,2,1,0.5
+    movimiento:
+      tipo_desconocido: 'unbekannte Bewegungsart: %{tipo}'
+    usuario:
+      formato: nur Kleinbuchstaben, Ziffern, Punkt und Bindestrich
+    modulo_apagado:
+      titulo: Das Modul %{modulo} ist aus
+      texto: Dieser Betrieb nutzt es nicht. Wer Benutzer verwaltet, kann es unter Einstellungen › System einschalten.
+    modulo:
+      con_trabajo_abierto: "%{modulo} lässt sich nicht ausschalten: es gibt offene Arbeit; erst abschließen"
+      con_dependientes: "%{modulo} lässt sich nicht ausschalten: %{dependientes} benötigt es; ebenfalls ausschalten oder eingeschaltet lassen"
+    compras:
+      factura_de_otro: diese Rechnung gehört zu einem anderen Lieferanten
+      factura_cancelada: diese Rechnung ist storniert
+      sin_renglones: 'keine Positionen: mindestens ein Produkt scannen oder wählen'
+      recepcion_cancelada: der Wareneingang ist bereits storniert
+      folio_obligatorio: die Rechnungsnummer fehlt
+      folio_repetido: Rechnung %{folio} dieses Lieferanten ist schon erfasst
+      monto_cero: der Betrag muss größer als null sein
+      excede_recibido: 'es wird mehr abgerechnet als erhalten (%{detalle}): Grund angeben'
+      factura_ya_cancelada: die Rechnung ist bereits storniert
+      factura_con_pagos: 'die Rechnung hat Zahlungen: erst stornieren'
+      pago_excede: die Zahlung übersteigt den Rest der Rechnung (%{resta})
+      anticipo_excede: die Zahlung übersteigt die Schuld (%{saldo}); bei Anzahlung eine Rechnung verknüpfen
+      pago_ya_anulado: die Zahlung ist bereits storniert
+      corte_cerrado: 'der Kassenabschluss dieser Zahlung ist geschlossen: das Bargeld kann nicht zurück in die Lade'
+      envases_insuficientes: so viele %{envase} schulden wir nicht (Saldo %{saldo})
+    traspaso:
+      mismo_lugar: Herkunft und Ziel sind derselbe Ort
+      externo_solo_a_matriz: von %{almacen} geht Ware nur zur Zentrale; von dort in die Filialen
+      ya_cancelado: die Umlagerung ist bereits storniert
+  inicio:
+    titulo: Start
+    ventas: Verkäufe
+    tickets: Bons
+    ticket_promedio: Durchschnittsbon
+    devoluciones: Rückgaben
+    efectivo: Bargeld
+    transferencias: Überweisungen
+    depositos: Einzahlungen
+    inventario_valorizado: Bestandswert
+    lo_mas_vendido: Meistverkauft
+    sin_ventas: Keine Verkäufe im Zeitraum.
+    cortes_cerrados: Abgeschlossene Kassen
+    sin_cortes: Keine Abschlüsse im Zeitraum.
+    conteos: Zählungen
+    sin_conteos: Keine Zählungen im Zeitraum.
+    ventas_por_producto: Verkäufe je Produkt
+    descargar_csv: CSV herunterladen
+    lineas: Zeilen
+    revisar: Prüfen
+    por_revisar_html:
+      one: "%{n} Vorgang ohne Freigabe wartet auf Prüfung."
+      other: "%{n} Vorgänge ohne Freigabe warten auf Prüfung."
+    csv:
+      clave: schluessel
+      producto: produkt
+      unidad: einheit
+      cantidad: menge
+      importe: betrag
+      lineas: zeilen
+  revisiones:
+    titulo: Zu prüfen
+    solo_esta: Nur %{sucursal}
+    explicacion: Vorgänge, die jemand ausgeführt hat, ohne dass gerade jemand sie freigeben konnte. Sie wurden durchgeführt und auf seinen Namen verbucht; hier entscheidest du, was mit jedem passiert. Beim Beanstanden kannst du den Betrag dem Verantwortlichen belasten.
+    cuando: Wann
+    quien: Wer
+    que: Was
+    vale: Wert
+    decidir: Entscheiden
+    aprobar: Freigeben
+    observar_y_cargar: Beanstanden und belasten
+    nada: Nichts zu prüfen.
+    sin_cargar: Um ohne Belastung zu beanstanden, lass den Betrag auf 0.
+    revisadas: Geprüft
+    cargo: Belastung
+    aprobada: Freigegeben
+    observada_sin_cargo: Beanstandet, ohne Belastung
+    observada_cargada: 'Beanstandet und %{quien} belastet: %{monto}'
+    desc:
+      movimiento: "%{tipo} über %{cantidad}"
+      retiro: Abschöpfung von %{monto} aus Abschnitt %{folio}
+      venta_linea: 'Preis gesenkt in %{folio}: %{producto} auf %{precio} (Katalog %{catalogo})'
+      factura_proveedor: Rechnung %{folio} von %{proveedor} mit mehr als erhalten
+      corte: Abschnitt %{folio} mit einer Differenz von %{diferencia} geschlossen
+  estados:
+    pendiente: offen
+    aprobada: freigegeben
+    observada: beanstandet
+    cerrado: abgeschlossen
+    cancelado: storniert
+    cancelada: storniert
+    abierta: offen
+    cerrada: geschlossen
+    abierto: offen
+    faltante: fehlend
+    sobrante: überzählig
+    cobrada: bezahlt
+    devuelta: zurückgegeben
+    perdonado: erlassen
+    cobrado: eingezogen
+  movimientos:
+    entrada: Eingang
+    recepcion: Annahme
+    devolucion_cliente: Kundenrückgabe
+    ajuste_entrada: Korrektur (+)
+    venta: Verkauf
+    salida: Lieferung
+    merma: Schwund
+    ajuste_salida: Korrektur (−)
+  permisos:
+    caja.vender: An der Kasse verkaufen
+    caja.abrir: Kasse öffnen und abschließen
+    caja.retirar: Bargeld in den Tresor legen
+    caja.diferencia: Abschluss mit einer Differenz über der Grenze
+    caja.bajar_precio: Preis unter Liste freigeben
+    caja.devolver: Kundenrückgaben annehmen
+    inventario.ver: Bestände und Bewegungen sehen
+    inventario.ajustar: Bestände mit Begründung korrigieren
+    conteos.hacer: Inventuren durchführen und Fehlmengen belasten
+    conteos.cargos: Belastungen einziehen oder erlassen
+    reportes.ver: Übersicht und Berichte sehen
+    revisiones.resolver: Prüfen, was ohne Freigabe geschah (freigeben, beanstanden, belasten)
+    admin.catalogo: Produkte und Codes verwalten
+    admin.usuarios: Benutzer, Rollen und Filialen verwalten
+    compras.ver: Lieferanten, Verbindlichkeiten und Leergut sehen
+    compras.recibir: Ware vom Lieferanten annehmen
+    compras.facturar: Lieferantenrechnungen erfassen und stornieren
+    compras.pagar: Lieferanten aus der Kasse bezahlen
+    compras.exceder: Mehr als erhalten abrechnen, ohne dass es zur Prüfung geht
+    almacenes.traspasar: Umbuchungen zwischen Filialen und Lagern
+  js:
+    pos:
+      ticket_vacio: Das Ticket ist leer
+      cantidad: Menge eintippen
+    unidades:
+      kg: kg
+      pieza: St.
+      litro: l
+      metro: m
+    ticket:
+      logo_grande: Das Logo ist größer als 300 KB; nimm ein kleineres Bild.
+    pwa:
+      version_nueva: Eine neue Version von Sakuya ist bereit.
+      recargar: Neu laden
+  caja:
+    nueva_venta: Neuer Verkauf
+    corte_de_caja: Kassenabschnitt
+    corte: Abschnitt
+    fondo: Wechselgeld
+    ventas: Verkäufe
+    efectivo_de_ventas: Bargeld aus Verkäufen
+    devoluciones: Erstattungen
+    retiros: Abschöpfungen
+    en_gaveta: In der Lade
+    corte_abierto_por: Abschnitt %{folio} geöffnet von %{quien} am %{fecha}
+    n_ventas:
+      one: 1 Verkauf
+      other: "%{count} Verkäufe"
+    retiro_caja_fuerte: Abschöpfung in den Tresor
+    monto: Betrag
+    retiro_por_revisar: Die Abschöpfung wird erfasst und geht zur Prüfung.
+    retirar: Abschöpfen
+    cerrar_corte: Abschnitt schließen
+    cerrar_corte_ayuda: Zähle, wie viele Scheine und Münzen von jeder Sorte da sind (mit Wechselgeld) oder gib die Summe ein. Das System speichert Soll, Aufschlüsselung und Differenz.
+    confirmar_cerrar_corte: Abschnitt %{folio} schließen?
+    efectivo_contado: Gezähltes Bargeld
+    suma: Summe
+    tope_diferencia_aviso: Die Differenz übersteigt %{monto}.
+    motivo_diferencia: Grund der Differenz
+    cortes_cerrados: Geschlossene Abschnitte
+    resumen: Tagesübersicht
+    ver_resumen: Übersicht
+    ver_resumen_abierto: Tagesübersicht bis jetzt ansehen
+    compartir: Teilen
+    copiado: Übersicht kopiert
+    cargos: Belastungen
+    en_total: insgesamt
+    por_revisar_n:
+      one: 1 offene Prüfung
+      other: "%{count} offene Prüfungen"
+    resumen_texto: Abschnitt %{folio} · %{sucursal} · Umsatz %{ventas} (%{tickets}) · in der Lade %{efectivo} · Differenz %{diferencia}
+    abierto: Geöffnet
+    cerrado: Geschlossen
+    cajero: Kassierer
+    esperado: Soll
+    contado: Gezählt
+    diferencia: Differenz
+    devolucion: Erstattung
+    ticket: Ticket
+    vendido: Verkauft
+    ya_devuelto: Schon zurück
+    devolver: Zurückgeben
+    devolver_y_regresar: Zurückgeben und Geld erstatten
+    excede_limite_html: 'Mehr als %{monto} in der Lade: %{enlace}, bevor weiter verkauft wird.'
+    haz_un_retiro: Abschöpfung in den Tresor machen
+    escanea_o_teclea: Barcode scannen oder PLU / Kürzel eintippen und Enter
+    cambio: Rückgeld
+    cobrar: Kassieren
+    vaciar_ticket: Ticket leeren
+    sin_caja_en: Keine Kasse offen in %{sucursal}.
+    fondo_inicial: Anfangs-Wechselgeld
+    abrir_caja: Kasse öffnen
+    pide_que_la_abran: Bitte jemanden mit Berechtigung, sie zu öffnen.
+    le_atendio: Bedient von
+    devoluciones_solo_con_ticket: Erstattungen nur mit diesem Ticket
+    hora: Uhrzeit
+    lineas: Zeilen
+    pago: Zahlung
+    sin_ventas: Keine Verkäufe.
+    avisos:
+      abierta: Kasse geöffnet mit Wechselgeld %{fondo}
+      bajo_precio: "%{producto} von %{de} auf %{a} gesenkt in %{folio}"
+      corte_cerrado: 'Abschnitt %{folio} geschlossen: Soll %{esperado}, gezählt %{contado}, Differenz %{diferencia}'
+      retiro: Abschöpfung von %{monto} erfasst
+      queda_por_revisar: "; geht zur Prüfung"
+      devolucion: Erstattung %{folio} über %{monto} auf %{venta}
+    escanea_ticket: Beleg scannen oder eintippen
+  formas_pago:
+    efectivo: Bar
+    transferencia: Überweisung
+    deposito: Einzahlung
+  conteos:
+    conteos: Zählungen
+    conteo: Zählung
+    supervisor: Aufsicht
+    responsable: Verantwortlich
+    faltante: Fehlbestand
+    sobrante: Überschuss
+    sin_conteos: Keine Zählungen.
+    nuevo: Neue Zählung
+    ya_hay_abierto: 'Es ist bereits eine Zählung offen:'
+    cierralo_antes: Erst schließen, dann eine neue öffnen.
+    responsable_ayuda: Verantwortlich für den Bestand (dem der Fehlbestand belastet wird)
+    alcance: Umfang
+    alcance_total: Der ganze Bestand
+    alcance_parcial: Nur eine Linie oder einige Produkte
+    o_estos_productos: Oder diese Produkte
+    parcial_ayuda: Eine Teilzählung berichtigt nur das Gewählte; der Rest bleibt unberührt. Bei gewählter Linie werden die Produkte ignoriert.
+    parcial_badge:
+      one: teilweise · 1 Produkt
+      other: teilweise · %{count} Produkte
+    toca_contar: 'Zählung fällig: gezählt wird alle %{cada} Tage und die letzte abgeschlossene Zählung ist älter (oder es gibt keine).'
+    nuevo_ayuda: 'Beim Öffnen wird der Systembestand übernommen. Stücke scannen; was nach Kilo, Liter oder Meter geht, wird eingetippt. Beim Schließen gilt die Zählung: der Bestand wird angepasst und der Fehlbetrag dem Verantwortlichen belastet.'
+    abrir: Zählung öffnen
+    escanear: Scannen
+    contar: Zählen
+    contar_a_mano: Von Hand zählen
+    cerrar: Zählung schließen
+    confirmar_cerrar: 'Die Zählung gilt: der Bestand wird angepasst und der Fehlbetrag %{responsable} belastet. Schließen?'
+    sistema: System
+    escaneado: Gescannt
+    a_mano: Von Hand
+    contado: Gezählt
+    avisos:
+      abierto: 'Zählung %{folio} geöffnet: alles scannen, was da ist'
+      contado: "%{producto}: ein Stück mehr"
+    codigo_placeholder: Barcode, PLU oder Kürzel
+    escanear_ayuda: Jeder Scan zählt ein Stück. Was nach Kilo, Liter oder Meter verkauft wird, wird von Hand eingetippt.
+  cargos:
+    cargos: Belastungen
+    revision: Prüfung
+    cobrado: Eingezogen
+    perdonar: Erlassen
+    sin_cargos: Keine Belastungen.
+    avisos:
+      marcado: Belastung von %{quien} als %{estado} markiert
+  inventario:
+    existencias: Bestand
+    kardex: Lagerbuch
+    sin_existencias: Noch kein Bestand.
+    sin_movimientos: Keine Bewegungen.
+    entrada_o_ajuste: Eingang oder Korrektur
+    queda_por_revisar: Wird trotzdem erfasst und geht zur Tagesprüfung.
+    registrar: Erfassen
+  promociones:
+    tipos:
+      precio: Sonderpreis
+      porcentaje: Rabatt %
+      por_cantidad: Preis ab einer Menge
+    desc:
+      precio: "%{precio} fest"
+      porcentaje: "%{pct} % Rabatt"
+      por_cantidad: "%{precio} ab %{desde} %{unidad}"
+  admin:
+    modelos:
+      producto: Produkt
+      promocion: Aktion
+      rol: Rolle
+      sucursal: Filiale
+      usuario: Benutzer
+    modulos:
+      admin: Verwaltung
+      caja: Kasse
+      conteos: Zählungen
+      inventario: Bestand
+      reportes: Berichte
+      revisiones: Prüfungen
+    avisos:
+      creado: "%{que} angelegt"
+      guardado: "%{que} gespeichert"
+      borrado: "%{que} gelöscht"
+      ya_usado: "%{que} wird bereits verwendet: deaktivieren statt löschen"
+      codigo_agregado: Code %{codigo} hinzugefügt
+      codigo_quitado: Code entfernt
+    borrar: löschen
+    precio_por_sucursal: Preis je Filiale
+    precio_por_sucursal_ayuda: Leer = erbt den allgemeinen Preis (%{precio}). Wird mit der Schaltfläche %{boton} des Produkts gespeichert.
+    general: allgemein
+    codigos_proveedor: Lieferantencodes
+    escanea_o_teclea_codigo: Code scannen oder eintippen
+    plu_automatico: PLU (leer = automatisch)
+    linea: Linie
+    productos: Produkte
+    nuevo_producto: Neues Produkt
+    codigos: Codes
+    nombre_en_ticket: Name (erscheint auf dem Ticket)
+    regla: Regel
+    descuento_pct: Rabatt %
+    cantidad_minima: Mindestmenge
+    desde_opcional: Von (optional)
+    hasta_opcional: Bis (optional)
+    activa: Aktiv
+    promocion_ayuda: Sonderpreis und Preis ab einer Menge nutzen das Feld Preis; der Rabatt nutzt den Prozentsatz auf den Filialpreis. Gelten mehrere, wendet die Kasse die günstigste an.
+    promociones: Aktionen
+    nueva_promocion: Neue Aktion
+    vigencia: Gültigkeit
+    siempre: immer
+    confirmar_borrar: "%{nombre} löschen?"
+    sin_promociones: Keine Aktionen.
+    rol: Rolle
+    nuevo_rol: Neue Rolle
+    roles: Rollen
+    permisos: Berechtigungen
+    usuarios: Benutzer
+    todo_administrador: Alles (Administrator)
+    todo_el_modulo: ganzes Modul
+    nueva_sucursal: Neue Filiale
+    sucursales: Filialen
+    tienda: Laden
+    limite_efectivo: Maximales Bargeld in der Lade, bevor eine Abschöpfung nötig ist
+    dias_conteo: Zählen alle (Tage; leer = keine Erinnerung)
+    limite_en_gaveta: Ladenlimit
+    nuevo_usuario: Neuer Benutzer
+    usuario: Benutzername
+    usuario_minusculas: Benutzername (Kleinbuchstaben)
+    nueva_contrasena: Neues Passwort (leer = unverändert)
+    almacen: Lager (nur Lagerung, keine Kasse)
+    almacen_corto: Lager
+  instalacion:
+    titulo: Erster Start
+    intro: Die Datenbank ist leer. Gib dem Betrieb einen Namen und lege den ersten Administrator an; damit meldest du dich an und richtest den Rest ein (Produkte, Filialen, Benutzer).
+    negocio: Betrieb
+    nombre_negocio: Name des Betriebs
+    nombre_negocio_ayuda: Steht auf den Tickets. Lässt sich später in den Einstellungen ändern.
+    matriz: Zentrale (von hier geht alles aus)
+    matriz_ayuda: Das Kürzel steht in den Belegnummern. Filialen werden später angelegt.
+    administrador: Administrator
+    crear: Anlegen und anmelden
+    lista: 'Fertig. Sakuya gehört dir: fang in der Verwaltung mit Produkten, Filialen und Benutzern an.'
+    giro: Art des Betriebs
+    giro_ayuda: 'Wähle, was deinem Betrieb am nächsten kommt. Es legt nur fest, welche Module eingeschaltet starten: die durchgestrichenen lassen sich später in den Einstellungen einschalten, die eingeschalteten ausschalten.'
+    sucursal_detalle: Name und Code der Hauptfiliale (sonst der Betriebsname und MTZ)
+    bienvenida: Willkommen bei Sakuya
+    apariencia_ayuda: 'Jetzt mach es dir bequem: helles oder dunkles Thema, Schriftgröße und Dichte. Gilt sofort, bleibt bei deinem Benutzer, und jeder wählt seins in den Einstellungen.'
+    pasos:
+      apariencia: Darstellung
+      negocio: Betrieb
+      sucursal: Hauptfiliale
+      administrador: Administrator
+      resumen: Prüfen und anlegen
+      idioma: Sprache
+      folios: Nummerierung
+    matriz_placeholder: der Betriebsname
+    administrador_ayuda: Der erste Benutzer darf alles. Die übrigen legst du danach mit ihren Rollen an.
+    contrasena_ayuda: Mindestens 8 Zeichen.
+    resumen_ayuda: Prüfen; mit Zurück lässt sich alles korrigieren. Beim Anlegen bist du direkt angemeldet.
+    anterior: Zurück
+    siguiente: Weiter
+    idioma_ayuda: Fangen wir mit der Sprache an. Du wählst sie jetzt für diese Installation, kannst sie aber später in den Einstellungen ändern, und jeder Benutzer, den du anlegst, wählt seine eigene.
+    idioma_nota: Bei der Auswahl lädt die Seite in dieser Sprache neu; deshalb ist es der erste Schritt, bevor du etwas eintippst.
+    siempre_incluye: Kasse, Bestand, Einstellungen und Verwaltung (immer)
+    folios:
+      ayuda: Wie Bons und die anderen Belege nummeriert werden. Später in Einstellungen › Nummerierung änderbar, ohne dass der Zähler neu beginnt.
+      modo: Ein Zähler je Beleg oder einer für alles?
+      letra: Was steht vor der Nummer?
+      letras:
+        sucursal: Das Filialkürzel
+        sucursal_ayuda: 'Aus dem Filialkürzel: MTZ-00001. Jede Filiale unterscheidet sich von selbst.'
+        propia: Eigene Buchstaben
+        propia_ayuda: Du wählst die Buchstaben der Bons (B, NV, TK…). Der Rest in den Einstellungen.
+        ninguna: Keine
+        ninguna_ayuda: 'Nur die Nummer: 00001.'
+      venta: Buchstaben der Bons
+      ejemplo: 'Dein erster Bon wäre:'
+      despues: Die übrigen Belege (Abschlüsse, Wareneingänge, Umbuchungen…) nutzen ihren Standardbuchstaben; änderbar unter Einstellungen › Nummern.
+  modulos:
+    necesita_alguno: Benötigt mindestens %{lista}
+    necesita: Benötigt %{lista}
+    lo_necesita: Benötigt von %{lista}
+    conteos:
+      nombre: Zählungen
+      que: Inventur per Scan; der Fehlbestand wird dem Verantwortlichen belastet.
+    compras:
+      nombre: Einkauf
+      que: Lieferanten, Wareneingang, Lieferantenrechnungen, Verbindlichkeiten und Leergut.
+    almacenes:
+      nombre: Lager
+      que: Lager (reine Lagerorte) und Umbuchungen zwischen Filialen.
+  giros:
+    todo:
+      nombre: Alles an
+      que: 'alle Module: Einkauf, Lager und Inventur.'
+    tienda:
+      nombre: Ein Laden
+      que: Kasse, Bestand, Einkauf und Inventur.
+    varias_sucursales:
+      nombre: Mehrere Filialen
+      que: Alles für einen Laden, dazu Lager und Umbuchungen zwischen Filialen.
+  unidades:
+    kg: Kilo
+    pieza: Stück
+    litro: Liter
+    metro: Meter
+  activerecord:
+    attributes:
+      producto:
+        clave: Schlüssel
+        nombre: Name
+        linea: Linie
+        unidad: Einheit
+        precio: Preis
+        precio_centavos: Preis
+        plu: PLU
+        activo: Aktiv
+        codigo: Code
+      usuario:
+        nombre: Name
+        usuario: Benutzername
+        password: Passwort
+        rol: Rolle
+        sucursal: Filiale
+        idioma: Sprache
+        tema: Thema
+        densidad: Dichte
+        letra: Schriftgröße
+        activo: Aktiv
+      sucursal:
+        codigo: Code
+        nombre: Name
+        tipo: Art
+        limite_efectivo: Bargeldlimit in der Lade
+        limite_efectivo_centavos: Bargeldlimit in der Lade
+        activa: Aktiv
+      promocion:
+        nombre: Name
+        producto: Produkt
+        sucursal: Filiale
+        tipo: Regel
+        precio: Preis
+        precio_centavos: Preis
+        porcentaje: Rabatt %
+        cantidad_minima: Mindestmenge
+        desde: Von
+        hasta: Bis
+        activa: Aktiv
+      rol:
+        nombre: Name
+        permisos: Berechtigungen
+      codigo_barras:
+        codigo: Code
+      conteo:
+        responsable: Verantwortlich
+      ajuste:
+        clave: Schlüssel
+        valor: Wert
+      proveedor:
+        nombre: Name
+        rfc: Steuernummer
+        contacto: Kontakt
+        telefono: Telefon
+        dias_credito: Zahlungsziel (Tage)
+        notas: Notizen
+        activo: Aktiv
+    models:
+      producto: Produkt
+      usuario: Benutzer
+      sucursal: Filiale
+      promocion: Aktion
+      rol: Rolle
+      conteo: Zählung
+      proveedor: Lieferant
+      recepcion: Wareneingang
+      factura_proveedor: Lieferantenrechnung
+  compras:
+    proveedores: Lieferanten
+    proveedor: Lieferant
+    nuevo_proveedor: Neuer Lieferant
+    proveedores_ayuda: Wer uns beliefert. Der Saldo ist, was wir laut Rechnungen und Zahlungen schulden.
+    sin_proveedores: Noch keine Lieferanten.
+    contacto: Kontakt
+    telefono: Telefon
+    rfc: Steuernummer
+    dias_credito: Zahlungsziel
+    dias_credito_ayuda: 0 = bar. Mit Tagen sind Rechnungen am Datum + Tage fällig.
+    saldo: Saldo
+    cuenta: Konto
+    inactivo: inaktiv
+    primero_proveedor: Zuerst einen Lieferanten anlegen
+    recepciones: Wareneingänge
+    recepcion: Wareneingang
+    recibir: Annehmen
+    recibir_mercancia: Ware annehmen
+    recepciones_ayuda: Was vom Lieferanten in %{sucursal} eingegangen ist. Jeder Wareneingang ist eine Bestandsbuchung.
+    recibir_ayuda: Barcode des Lieferanten scannen oder Produkt wählen, Menge eintragen, und es geht in den Bestand von %{sucursal}. Die Rechnung wird später verknüpft, wenn sie kommt.
+    remision: Lieferschein
+    remision_ayuda: Nummer auf dem Papier des Fahrers
+    escanear: Scannen
+    escanear_ayuda: Lieferanten-Barcode, PLU, Kürzel oder Name + Enter
+    cajas: Kisten
+    registrar_entrada: Eingang buchen
+    renglones: Positionen
+    sin_factura: ohne Rechnung
+    sin_factura_aun: Noch keiner Rechnung zugeordnet.
+    sin_recepciones: Noch keine Wareneingänge.
+    ninguna: "— keine —"
+    ligar: Verknüpfen
+    desligar: Lösen
+    capturar_factura: Rechnung erfassen
+    cancelar_recepcion: Wareneingang stornieren
+    cancelar_recepcion_ayuda: Die Ware verlässt den Bestand und das Leergut wird abgezogen. Nur bei Fehleingabe.
+    confirmar_cancelar: "%{folio} stornieren?"
+    facturas: Rechnungen
+    factura: Rechnung
+    nueva_factura: Neue Rechnung
+    factura_ayuda: Die Lieferantenrechnung erzeugt die Schuld. Mit Positionen wird der Betrag berechnet; ohne (Fracht, Eis) den Betrag eintippen.
+    folio_proveedor: Rechnungsnummer des Lieferanten
+    folio_proveedor_ayuda: wie aufgedruckt
+    vence: Fällig
+    vence_ayuda: Leer = Datum + Zahlungsziel des Lieferanten.
+    monto_sin_renglones: Betrag (ohne Positionen)
+    monto_sin_renglones_ayuda: Zählt nur ohne Positionen.
+    concepto: Bezeichnung
+    precio_compra: Preis
+    registrar_factura: Rechnung buchen
+    todos_los_proveedores: Alle Lieferanten
+    pagado: Bezahlt
+    resta: Rest
+    sin_facturas: Keine Rechnungen.
+    facturado_vs_recibido: Berechnet vs. erhalten
+    recepcion_estado:
+      sin_recepcion: ohne Wareneingang
+      parcial: teilweise erhalten
+      completa: vollständig erhalten
+    recepciones_a_ligar: Wareneingänge, die diese Rechnung abdeckt
+    recepciones_a_ligar_ayuda: Wareneingänge ohne Rechnung dieses Lieferanten ankreuzen; sie werden beim Speichern verknüpft. Später auch aus der Rechnung möglich.
+    motivo_exceso: Grund, falls mehr als erhalten abgerechnet wird
+    candado_aviso: 'Sperre aktiv: hat eine Zeile mehr Menge als die angekreuzten Wareneingänge, ist ein Grund nötig und die Rechnung geht zur Prüfung.'
+    comparativo_ayuda: 'Pro Produkt: was die Rechnung sagt und was in den verknüpften Wareneingängen ankam. Ein Hinweis, keine Sperre.'
+    sin_renglones_ni_recepciones: 'Keine Positionen und keine verknüpften Wareneingänge: nichts zu vergleichen.'
+    facturado: Berechnet
+    recibido: Erhalten
+    diferencia: Differenz
+    recepciones_ligadas: Verknüpfte Wareneingänge
+    ninguna_recepcion: Noch kein Wareneingang verknüpft.
+    recepciones_sueltas: Wareneingänge dieses Lieferanten ohne Rechnung
+    pagos: Zahlungen
+    sin_pagos: Keine Zahlungen.
+    cancelar_factura: Rechnung stornieren
+    cancelar_factura_ayuda: Die Schuld wird zurückgebucht und die Wareneingänge gelöst. Nicht möglich mit gültigen Zahlungen.
+    cuentas_por_pagar: Verbindlichkeiten
+    cuentas_ayuda: Was jedem Lieferanten geschuldet wird und welche Rechnungen fällig sind. Barzahlungen verlassen die offene Lade als Entnahme.
+    debemos: Wir schulden
+    vencidas: Überfällig
+    vencen_esta_semana: Diese Woche fällig
+    n_facturas:
+      one: 1 Rechnung
+      other: "%{count} Rechnungen"
+    por_proveedor: Nach Lieferant
+    sin_deuda: Nichts geschuldet.
+    vencimientos: Fälligkeiten
+    nada_vence: Nichts überfällig oder diese Woche fällig.
+    pagar: Bezahlen
+    pago_sale_de_caja: Bargeld verlässt die offene Lade von %{sucursal} als Entnahme; Überweisung und Einzahlung berühren die Kasse nicht.
+    pago_sin_caja: 'Keine Kasse offen in %{sucursal}: nur Überweisung oder Einzahlung möglich.'
+    a_cuenta: auf Konto (ohne Rechnung)
+    forma: Zahlungsart
+    referencia: Referenz
+    registrar_pago: Zahlung buchen
+    facturas_abiertas: Offene Rechnungen
+    sin_facturas_abiertas: Nichts offen.
+    anular: Stornieren
+    confirmar_anular: Zahlung über %{monto} stornieren?
+    libro: Lieferantenkonto
+    movimientos:
+      cargo: Belastung
+      abono: Zahlung
+      ajuste: Korrektur
+    estados:
+      registrada: gebucht
+      cancelada: storniert
+      abierta: offen
+      pagada: bezahlt
+      vencida: überfällig
+    avisos:
+      proveedor_creado: Lieferant %{nombre} angelegt
+      proveedor_guardado: Lieferant %{nombre} gespeichert
+      recibida: 'Wareneingang %{folio} gebucht: die Ware ist im Bestand'
+      recepcion_cancelada: Wareneingang %{folio} storniert
+      ligada: Mit Rechnung %{folio} verknüpft
+      desligada: Wareneingang ohne Rechnung
+      facturada: Rechnung %{folio} über %{monto} gebucht
+      factura_cancelada: Rechnung %{folio} storniert
+      pagado: Zahlung über %{monto} an %{proveedor} gebucht; Saldo %{saldo}
+      pago_anulado: Zahlung über %{monto} storniert
+      envases_movidos: Leergut gebucht
+      entrada_motivo: Wareneingang %{folio} von %{proveedor}
+      cancelacion_motivo: 'Storno von %{folio}: %{motivo}'
+      cargo_factura: Rechnung %{folio}
+      cancelacion_factura: 'Storno der Rechnung %{folio}: %{motivo}'
+      retiro_pago: Zahlung an %{proveedor} %{folio}
+      abono_pago: Zahlung %{folio} (%{forma})
+      anulacion_pago: 'Zahlung storniert: %{motivo}'
+  traspasos:
+    titulo: Umbuchungen
+    traspaso: Umlagerung
+    nuevo: Umbuchung
+    ayuda: 'Ware, die die Filiale wechselt: sie verlässt den Ursprung und kommt sofort am Ziel an.'
+    nuevo_ayuda: Verlässt den Ursprung und kommt sofort am Ziel an.
+    de: Von
+    a: Nach
+    registrar: Umlagerung buchen
+    ninguno: Noch keine Umlagerungen.
+    cancelar: Umlagerung stornieren
+    cancelar_ayuda: Die Ware geht zurück, wenn das Ziel sie noch hat.
+    reglas: 'Regel: aus einem Lager geht Ware nur an die Zentrale.'
+    estados:
+      registrado: gebucht
+      cancelado: storniert
+    avisos:
+      registrado: 'Umlagerung %{folio} gebucht: die Ware ist jetzt in %{destino}'
+      cancelado: Umlagerung %{folio} storniert
+      motivo: 'Umlagerung %{folio}: %{origen} → %{destino}'
+      cancelacion: 'Storno von %{folio}: %{motivo}'

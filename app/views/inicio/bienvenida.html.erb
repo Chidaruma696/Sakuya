@@ -1,0 +1,9 @@
+<h1 class="text-2xl font-bold">Sakuya</h1>
+<p class="mt-2 text-stone-600"><%= t("comun.sucursal") %> <strong><%= sucursal_actual %></strong> · <%= usuario_actual.rol %></p>
+<%= render "por_revisar" %>
+<ul class="mt-6 grid gap-3 sm:grid-cols-2">
+  <% Permiso::CLAVES.each_key do |clave| %>
+    <% next unless puede?(clave) && Modulo.permiso_activo?(clave) %>
+    <li class="rounded border border-stone-200 bg-white px-4 py-3 text-sm"><%= Permiso.nombre(clave) %> <span class="text-stone-400">(<%= clave %>)</span></li>
+  <% end %>
+</ul>

@@ -1,0 +1,8 @@
+matriz:
+  codigo: MTZ
+  nombre: Matriz
+  tipo: matriz
+tienda:
+  codigo: T01
+  nombre: Tienda 1
+  tipo: tienda

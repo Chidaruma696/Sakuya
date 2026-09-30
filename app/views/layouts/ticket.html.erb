@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta charset="utf-8">
+    <title><%= @venta&.folio || @titulo %></title>
+    <style>
+      /* Ticket térmico: puro negro (los grises se ven sucios), letra chica y densa, ancho según el
+         papel (80 mm → 72 imprimibles, 58 → 48). */
+      @page { size: <%= Ajuste.entero("ticket.ancho") == 58 ? 58 : 80 %>mm auto; margin: 2mm; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: "DejaVu Sans", Arial, sans-serif; font-size: 8pt; color: #000; }
+      .ticket { width: <%= Ajuste.ancho_ticket_mm %>mm; padding: 2mm; }
+      .centro { text-align: center; }
+      .der { text-align: right; white-space: nowrap; }
+      .neg { font-weight: bold; }
+      .mono { font-family: "DejaVu Sans Mono", monospace; }
+      .cursiva { font-style: italic; }
+      .oculto { display: none; }
+      .logo { text-align: center; margin-bottom: 1.5mm; }
+      .logo img { max-width: 30mm; max-height: 20mm; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { padding: 0.5mm 0.6mm; vertical-align: top; }
+      th:first-child, td:first-child { padding-left: 0; }
+      th:last-child, td:last-child { padding-right: 0; }
+      th { font-size: 7.5pt; border-bottom: 1px solid #000; text-align: left; }
+      .linea { border-top: 1px solid #000; margin: 1.5mm 0; }
+      .linea-punteada { border-top: 1px dashed #000; margin: 1.5mm 0; }
+      .total { font-size: 11.5pt; }
+      .tanto { text-align: center; font-weight: bold; border: 1px solid #000; padding: 0.6mm 1mm; margin: 1mm 0; }
+      .cancelado { color: #000; font-weight: bold; font-size: 16pt; text-align: center; margin: 2mm 0; letter-spacing: 2px; }
+      .recuadro { border: 1px dashed #000; padding: 1.2mm 1.6mm; margin: 1.5mm 0; }
+      svg { width: 100%; height: auto; }
+      /* Hojas de trabajo: letra un punto más grande que el ticket. */
+      .hoja { font-size: 9.5pt; }
+      .hoja th { font-size: 9pt; }
+      /* En pantalla el papel se ve al doble y centrado; al imprimir sale a su tamaño real. */
+      @media screen {
+        body { background: #e7e5e4; padding: 24px 16px 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+        .ticket { background: white; box-shadow: 0 2px 12px rgba(0,0,0,.18); zoom: 1.9; }
+        .acciones { display: flex; gap: 10px; font-family: system-ui, sans-serif; }
+        .acciones button, .acciones a { font: 600 15px/1 system-ui, sans-serif; padding: 10px 18px; border-radius: 8px; border: 1px solid #4659a8; background: #4659a8; color: white; text-decoration: none; cursor: pointer; }
+        .acciones a { background: white; color: #4659a8; }
+      }
+      /* Dentro del diseñador el zoom lo manejan los botones de la página, no este layout. */
+      @media screen { body.previa { padding: 12px; gap: 0; } body.previa .ticket { zoom: 1; } body.previa .acciones { display: none; } }
+      @media print { .acciones { display: none; } }
+    </style>
+  </head>
+  <body class="<%= "previa" if @previa %>">
+    <%= yield %>
+    <div class="acciones" <%= "hidden" if @previa %>>
+      <button onclick="window.print()"><%= t("comun.imprimir") %></button>
+      <% if @venta %><a href="<%= caja_path %>"><%= t("caja.nueva_venta") %></a><% end %>
+    </div>
+    <% if params[:imprimir] %><script>window.addEventListener("load", () => window.print());</script><% end %>
+  </body>
+</html>

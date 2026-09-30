@@ -1,0 +1,43 @@
+<%# El ticket de venta. `venta` puede ser real o la muestra de Ajustes › Ticket; los data-ticket
+    son para que la vista previa se actualice al escribir. %>
+<% a = Ajuste.todos %>
+<div class="ticket" style="width: <%= Ajuste.ancho_ticket_mm %>mm" data-ticket="papel">
+  <div class="logo <%= 'oculto' if a["ticket.logo"].blank? %>" data-ticket="logo"><img src="<%= a["ticket.logo"].presence || "data:," %>" alt=""></div>
+  <div class="centro neg" style="font-size: 10pt;" data-ticket="negocio.nombre" data-vacio="<%= venta.sucursal&.nombre %>"><%= a["negocio.nombre"].presence || venta.sucursal&.nombre %></div>
+  <div class="centro <%= 'oculto' if a["ticket.lema"].blank? %>" data-ticket="ticket.lema"><%= a["ticket.lema"] %></div>
+  <% if a["negocio.nombre"].present? && venta.sucursal && venta.sucursal.nombre != a["negocio.nombre"] %><div class="centro" data-ticket="sucursal"><%= venta.sucursal.nombre %></div><% end %>
+  <div class="centro <%= 'oculto' if a["negocio.direccion"].blank? %>" data-ticket="negocio.direccion"><%= a["negocio.direccion"] %></div>
+  <div class="centro neg <%= 'oculto' if a["negocio.telefono"].blank? %>" data-ticket="negocio.telefono"><%= a["negocio.telefono"] %></div>
+  <div class="centro <%= 'oculto' if a["ticket.rfc"].blank? %>" data-ticket="ticket.rfc"><%= a["ticket.rfc"] %></div>
+  <div class="linea"></div>
+  <table>
+    <tr>
+      <td><%= t("comun.fecha") %>: <%= l venta.created_at, format: :short %><br><span class="neg"><%= t("comun.folio") %>: <%= venta.folio %></span></td>
+      <td class="der <%= 'oculto' if a["ticket.mostrar_cajero"] != "1" %>" data-ticket="ticket.mostrar_cajero"><%= t("caja.le_atendio") %><br><span class="neg"><%= venta.usuario&.nombre %></span></td>
+    </tr>
+  </table>
+  <table style="margin-top: 1mm;">
+    <thead><tr><th style="width: 46%;"><%= t("comun.producto") %></th><th class="der" style="width: 20%;"><%= t("comun.cantidad") %></th><th class="der" style="width: 16%;"><%= t("comun.precio") %></th><th class="der" style="width: 18%;"><%= t("comun.importe") %></th></tr></thead>
+    <tbody>
+      <% venta.lineas.each do |l| %>
+        <tr>
+          <td><%= l.producto.nombre %><%= " (#{l.promocion.nombre})" if l.promocion %><%= " *" if l.precio_centavos < l.catalogo_centavos %></td>
+          <td class="der mono"><%= cantidad(l.cantidad, l.producto) %></td>
+          <td class="der mono"><%= pesos(l.precio_centavos) %></td>
+          <td class="der mono"><%= pesos(l.importe_centavos) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="linea"></div>
+  <table>
+    <tr><td class="neg total"><%= t("comun.total").upcase %></td><td class="der neg mono total"><%= pesos(venta.total_centavos) %></td></tr>
+    <% venta.pagos.each do |p| %><tr><td><%= t("formas_pago.#{p.forma}") %></td><td class="der mono"><%= pesos(p.monto_centavos) %></td></tr><% end %>
+    <tr><td><%= t("caja.cambio") %></td><td class="der mono"><%= pesos(venta.cambio_centavos) %></td></tr>
+  </table>
+  <% if venta.estado == "devuelta" %><div class="cancelado"><%= t("estados.devuelta").upcase %></div><% end %>
+  <div class="linea-punteada"></div>
+  <div class="centro" style="font-size: 7pt;" data-ticket="ticket.leyenda_devoluciones" data-vacio="<%= t("caja.devoluciones_solo_con_ticket") %>"><%= a["ticket.leyenda_devoluciones"].presence || t("caja.devoluciones_solo_con_ticket") %></div>
+  <div class="centro <%= 'oculto' if a["ticket.mostrar_codigo"] != "1" %>" data-ticket="ticket.mostrar_codigo"><%= ean13_svg(venta.codigo, alto: 34, modulo: 2) %></div>
+  <div class="centro cursiva <%= 'oculto' if a["negocio.pie_ticket"].blank? %>" style="margin-top: 1.5mm;" data-ticket="negocio.pie_ticket"><%= a["negocio.pie_ticket"] %></div>
+</div>

@@ -1,0 +1,6 @@
+_fixture:
+  model_class: CodigoBarras
+
+catsup_ean:
+  producto: catsup
+  codigo: "7501006559019"

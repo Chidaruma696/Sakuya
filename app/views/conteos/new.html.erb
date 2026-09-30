@@ -1,0 +1,31 @@
+<h1 class="mb-4 text-2xl font-bold"><%= t("conteos.nuevo") %> · <%= sucursal_actual %></h1>
+<% if @abierto %>
+  <p class="rounded bg-amber-50 p-3 text-sm"><%= t("conteos.ya_hay_abierto") %> <%= link_to @abierto.folio, conteo_path(@abierto), class: "chip-folio" %>. <%= t("conteos.cierralo_antes") %></p>
+<% else %>
+  <%= form_with url: conteos_path, class: "formulario" do |f| %>
+    <div class="campos">
+      <div class="md:col-span-2">
+        <%= f.label :responsable_id, t("conteos.responsable_ayuda"), class: "block text-sm font-medium" %>
+        <%= f.collection_select :responsable_id, @responsables, :id, :nombre, {}, class: "entrada" %>
+      </div>
+    </div>
+    <fieldset class="rounded-lg border border-stone-200 p-4" data-controller="alcance">
+      <legend class="px-1 text-sm font-medium"><%= t("conteos.alcance") %></legend>
+      <div class="flex flex-wrap gap-4 text-sm">
+        <label class="flex items-center gap-2"><%= radio_button_tag :alcance, "total", true, data: { action: "alcance#cambiar" } %> <%= t("conteos.alcance_total") %></label>
+        <label class="flex items-center gap-2"><%= radio_button_tag :alcance, "parcial", false, data: { action: "alcance#cambiar" } %> <%= t("conteos.alcance_parcial") %></label>
+      </div>
+      <div class="mt-3 hidden gap-4 md:grid-cols-2" data-alcance-target="parcial">
+        <label class="block text-sm"><%= t("admin.linea") %>
+          <%= select_tag :linea, options_for_select([ [ "—", "" ] ] + @lineas.map { |l| [ l, l ] }), class: "entrada" %>
+        </label>
+        <label class="block text-sm"><%= t("conteos.o_estos_productos") %>
+          <%= select_tag :producto_ids, options_from_collection_for_select(@productos, :id, ->(p) { "#{p.nombre} (#{p.unidad})" }), multiple: true, size: 8, class: "entrada h-auto" %>
+        </label>
+        <p class="text-xs text-stone-600 md:col-span-2"><%= t("conteos.parcial_ayuda") %></p>
+      </div>
+    </fieldset>
+    <p class="text-sm text-stone-600"><%= t("conteos.nuevo_ayuda") %></p>
+    <%= f.submit t("conteos.abrir"), class: "btn btn-primary btn-lg" %>
+  <% end %>
+<% end %>

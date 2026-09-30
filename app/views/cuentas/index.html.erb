@@ -1,0 +1,33 @@
+<h1 class="mb-1 text-2xl font-bold"><%= t("compras.cuentas_por_pagar") %></h1>
+<p class="mb-4 text-sm text-stone-600"><%= t("compras.cuentas_ayuda") %></p>
+<div class="mb-4 grid gap-4 md:grid-cols-3">
+  <div class="card"><div class="text-xs uppercase text-stone-500"><%= t("compras.debemos") %></div><div class="font-mono text-3xl"><%= pesos(@total) %></div></div>
+  <div class="card"><div class="text-xs uppercase text-stone-500"><%= t("compras.vencidas") %></div><div class="font-mono text-3xl <%= 'text-red-700' if @vencidas.any? %>"><%= pesos(@vencidas.sum(&:resta_centavos)) %></div><div class="text-xs text-stone-500"><%= t("compras.n_facturas", count: @vencidas.size) %></div></div>
+  <div class="card"><div class="text-xs uppercase text-stone-500"><%= t("compras.vencen_esta_semana") %></div><div class="font-mono text-3xl"><%= pesos(@por_vencer.sum(&:resta_centavos)) %></div><div class="text-xs text-stone-500"><%= t("compras.n_facturas", count: @por_vencer.size) %></div></div>
+</div>
+<div class="grid gap-4 lg:grid-cols-2">
+  <div>
+    <h2 class="mb-2 font-semibold"><%= t("compras.por_proveedor") %></h2>
+    <table class="tabla">
+      <thead><tr><th><%= t("compras.proveedor") %></th><th class="text-right"><%= t("compras.saldo") %></th><th></th></tr></thead>
+      <tbody>
+        <% @proveedores.each do |p, s| %>
+          <tr><td class="px-3 py-2"><%= p.nombre %></td><td class="px-3 py-2 text-right font-mono"><%= pesos(s) %></td><td class="px-3 py-2 text-right"><%= link_to icono("wallet2", t("compras.cuenta")), cuenta_path(p), class: "btn btn-secondary btn-xs" %></td></tr>
+        <% end %>
+        <% if @proveedores.empty? %><tr><td colspan="3" class="px-3 py-6 text-center text-stone-500"><%= t("compras.sin_deuda") %></td></tr><% end %>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h2 class="mb-2 font-semibold"><%= t("compras.vencimientos") %></h2>
+    <table class="tabla">
+      <thead><tr><th><%= t("compras.vence") %></th><th><%= t("comun.folio") %></th><th><%= t("compras.proveedor") %></th><th class="text-right"><%= t("compras.resta") %></th></tr></thead>
+      <tbody>
+        <% (@vencidas + @por_vencer).each do |x| %>
+          <tr class="<%= 'text-red-700' if x.vencida? %>"><td class="px-3 py-2 whitespace-nowrap"><%= l x.vence %></td><td class="px-3 py-2"><%= link_to x.folio, factura_path(x), class: "chip-folio" %></td><td class="px-3 py-2"><%= x.proveedor %></td><td class="px-3 py-2 text-right font-mono"><%= pesos(x.resta_centavos) %></td></tr>
+        <% end %>
+        <% if @vencidas.empty? && @por_vencer.empty? %><tr><td colspan="4" class="px-3 py-6 text-center text-stone-500"><%= t("compras.nada_vence") %></td></tr><% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<h1 class="mb-1 text-2xl font-bold"><%= t("compras.recibir_mercancia") %></h1>
+<p class="mb-4 text-sm text-stone-600"><%= t("compras.recibir_ayuda", sucursal: sucursal_actual) %></p>
+<%= form_with model: @recepcion, url: recepciones_path, class: "formulario", data: { controller: "renglones", renglones_url_value: buscar_productos_path } do |f| %>
+  <%= f.hidden_field :clave, value: @clave %>
+  <div class="campos">
+    <div>
+      <%= f.label :proveedor_id, t("compras.proveedor"), class: "block text-sm font-medium" %>
+      <%= f.collection_select :proveedor_id, @proveedores, :id, :nombre, { include_blank: "—" }, required: true, class: "entrada" %>
+      <% if @proveedores.empty? %><p class="mt-1 text-xs text-amber-700"><%= link_to t("compras.primero_proveedor"), new_proveedor_path, class: "enlace" %></p><% end %>
+    </div>
+    <div><%= f.label :remision, t("compras.remision"), class: "block text-sm font-medium" %><%= f.text_field :remision, class: "entrada font-mono", placeholder: t("compras.remision_ayuda") %></div>
+    <div><%= f.label :fecha, t("comun.fecha"), class: "block text-sm font-medium" %><%= f.date_field :fecha, class: "entrada" %></div>
+    <div class="md:col-span-2 xl:col-span-3"><%= f.label :notas, t("comun.notas"), class: "block text-sm font-medium" %><%= f.text_field :notas, class: "entrada" %></div>
+  </div>
+  <div class="rounded-lg border border-stone-200 p-4">
+    <div class="mb-3 flex flex-wrap items-center gap-3">
+      <label class="text-sm font-medium" for="escaner"><%= icono("upc-scan", t("compras.escanear")) %></label>
+      <input id="escaner" type="text" autocomplete="off" autofocus data-renglones-target="escaner" data-action="keydown->renglones#escanear" placeholder="<%= t("compras.escanear_ayuda") %>" class="entrada mt-0 max-w-md font-mono">
+      <span data-renglones-target="aviso" class="text-sm text-amber-700"></span>
+    </div>
+    <table class="w-full text-sm">
+      <thead><tr class="text-left text-stone-500"><th class="py-1"><%= t("comun.producto") %></th><th class="w-40 py-1"><%= t("comun.cantidad") %></th><th class="w-32 py-1"><%= t("compras.cajas") %></th><th class="w-10"></th></tr></thead>
+      <tbody data-renglones-target="cuerpo">
+        <%= f.fields_for :lineas do |l| %>
+          <tr data-renglones-target="fila">
+            <td class="py-1 pr-2"><%= l.collection_select :producto_id, @productos, :id, ->(p) { "#{p.nombre} (#{p.unidad_corta})" }, { include_blank: "—" }, class: "entrada mt-0" %></td>
+            <td class="py-1 pr-2"><%= l.number_field :cantidad, step: "0.001", min: "0.001", data: { campo: "cantidad" }, class: "entrada mt-0 font-mono" %></td>
+            <td class="py-1 pr-2"><%= l.number_field :cajas, min: 0, placeholder: "0", class: "entrada mt-0 font-mono" %></td>
+            <td class="py-1"><button type="button" data-action="renglones#quitar" class="btn btn-ghost-danger btn-sm"><i class="bi bi-x-lg"></i></button></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <button type="button" data-action="renglones#nuevo" class="btn btn-secondary mt-3">+ <%= t("comun.renglon") %></button>
+  </div>
+  <%= f.submit t("compras.registrar_entrada"), class: "btn btn-primary btn-lg" %>
+<% end %>

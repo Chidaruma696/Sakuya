@@ -1,0 +1,29 @@
+<%# Acerca de: versión, de qué commit salió, quién está dentro, créditos y a dónde reportar. %>
+<dialog class="m-auto w-full max-w-md rounded-xl p-0 shadow-2xl" data-dialogo-target="dialogo" data-action="click->dialogo#cerrarFuera">
+  <div class="flex items-center gap-4 border-b border-stone-200 px-6 py-5">
+    <%= image_tag "logo-b.png", alt: "Sakuya", class: "h-14 w-14" %>
+    <div class="min-w-0 flex-1">
+      <div class="text-xl font-bold tracking-tight">Sakuya</div>
+      <div class="text-sm text-stone-600"><%= t("acerca.lema") %></div>
+    </div>
+    <button type="button" class="btn btn-ghost btn-sm" data-action="dialogo#cerrar" title="<%= t("comun.cerrar") %>"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 px-6 py-4 text-sm">
+    <dt class="text-stone-500"><%= t("acerca.version") %></dt><dd class="font-mono"><%= Sakuya::VERSION %> <span class="text-stone-500">· build <%= Sakuya::COMMIT %><%= " · #{l Date.parse(Sakuya::COMMIT_FECHA), format: :long}" if Sakuya::COMMIT_FECHA %></span></dd>
+    <dt class="text-stone-500"><%= t("acerca.motor") %></dt><dd class="font-mono">Rails <%= Rails.version %> · Ruby <%= RUBY_VERSION %> · <%= ActiveRecord::Base.connection.adapter_name %></dd>
+    <% if usuario_actual %>
+      <dt class="text-stone-500"><%= t("acerca.sesion") %></dt><dd><%= usuario_actual %> · <%= usuario_actual.rol %> · <%= sucursal_actual %><%= " (#{t('comun.matriz')})" if sucursal_actual&.matriz? %></dd>
+      <dt class="text-stone-500"><%= t("acerca.servidor") %></dt><dd class="font-mono"><%= request.host_with_port %> · <%= Rails.env %></dd>
+    <% end %>
+  </dl>
+  <div class="border-t border-stone-200 bg-stone-50 px-6 py-4 text-xs leading-relaxed text-stone-600">
+    <p><%= t("acerca.creditos_html") %></p>
+    <p class="mt-1"><%= t("acerca.tecnologia") %></p>
+  </div>
+  <div class="flex flex-wrap items-center justify-end gap-2 border-t border-stone-200 px-6 py-3">
+    <button type="button" class="btn btn-secondary btn-sm hidden" data-pwa-target="boton" data-action="pwa#instalar"><i class="bi bi-download"></i> <%= t("acerca.instalar") %></button>
+    <%= link_to t("acerca.codigo"), "https://github.com/Chidaruma696/Sakuya", target: "_blank", rel: "noopener", class: "btn btn-secondary btn-sm" %>
+    <%= link_to t("acerca.reportar"), "https://github.com/Chidaruma696/Sakuya/issues/new", target: "_blank", rel: "noopener", class: "btn btn-secondary btn-sm" %>
+    <button type="button" class="btn btn-primary btn-sm" data-action="dialogo#cerrar"><%= t("comun.cerrar") %></button>
+  </div>
+</dialog>

@@ -1,0 +1,17 @@
+<%= form_with url: ajustes_preferencias_path, method: :patch, class: "formulario" do |f| %>
+  <% opciones = { idioma: Usuario::IDIOMAS, tema: Usuario::TEMAS, densidad: Usuario::DENSIDADES, letra: Usuario::LETRAS } %>
+  <% opciones.each do |campo, valores| %>
+    <fieldset>
+      <legend class="mb-2 text-sm font-medium"><%= t("ajustes.#{campo}") %></legend>
+      <div class="grid gap-2 sm:grid-cols-3">
+        <% valores.each do |v| %>
+          <label class="opcion py-3 text-base">
+            <%= f.radio_button campo, v, checked: usuario_actual.public_send(campo) == v, class: "sr-only", name: "usuario[#{campo}]", onchange: "this.form.requestSubmit()" %>
+            <%= campo == :idioma ? t("ajustes.idiomas.#{v}") : t("ajustes.#{campo}_opciones.#{v}") %>
+            <i class="bi bi-check-circle-fill opcion-check"></i>
+          </label>
+        <% end %>
+      </div>
+    </fieldset>
+  <% end %>
+<% end %>

@@ -1,0 +1,12 @@
+<h1 class="mb-2 text-2xl font-bold"><%= t("inicio.ventas_por_producto") %> · <%= @todas ? t("comun.todas_las_sucursales") : @sucursal %></h1>
+<%= render "filtro" %>
+<p class="mb-2 text-sm"><%= link_to icono("download", t("inicio.descargar_csv")), ventas_por_producto_path(format: :csv, desde: @desde, hasta: @hasta, sucursal_id: params[:sucursal_id]), class: "btn btn-secondary btn-sm" %></p>
+<table class="tabla">
+  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("comun.clave") %></th><th class="px-3 py-2"><%= t("comun.producto") %></th><th class="px-3 py-2 text-right"><%= t("comun.cantidad") %></th><th class="px-3 py-2 text-right"><%= t("comun.importe") %></th><th class="px-3 py-2 text-right"><%= t("inicio.lineas") %></th></tr></thead>
+  <tbody>
+    <% @filas.each do |clave, nombre, unidad, cant, importe, n| %>
+      <tr class="border-t border-stone-100"><td class="px-3 py-2 font-mono"><%= clave %></td><td class="px-3 py-2"><%= nombre %></td><td class="px-3 py-2 text-right font-mono"><%= number_with_precision(cant, precision: unidad == "pieza" ? 0 : 3) %> <%= Producto::UNIDADES_CORTAS.fetch(unidad, unidad) %></td><td class="px-3 py-2 text-right font-mono"><%= pesos(importe) %></td><td class="px-3 py-2 text-right"><%= n %></td></tr>
+    <% end %>
+    <% if @filas.empty? %><tr><td colspan="5" class="px-3 py-6 text-center text-stone-500"><%= t("inicio.sin_ventas") %></td></tr><% end %>
+  </tbody>
+</table>

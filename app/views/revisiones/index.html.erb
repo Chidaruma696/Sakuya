@@ -1,0 +1,46 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("revisiones.titulo") %> · <%= @todas ? t("comun.todas_las_sucursales") : sucursal_actual %></h1>
+  <% if sucursal_actual.matriz? %>
+    <%= link_to @todas ? t("revisiones.solo_esta", sucursal: sucursal_actual) : t("comun.todas_las_sucursales"), revisiones_path(sucursal_id: @todas ? nil : "todas"), class: "btn btn-secondary btn-sm" %>
+  <% end %>
+</div>
+<p class="mb-4 text-sm text-stone-600"><%= t("revisiones.explicacion") %></p>
+<table class="tabla">
+  <thead class="bg-stone-200 text-left"><tr><th class="px-3 py-2"><%= t("revisiones.cuando") %></th><th class="px-3 py-2"><%= t("revisiones.quien") %></th><th class="px-3 py-2"><%= t("revisiones.que") %></th><th class="px-3 py-2"><%= t("comun.motivo") %></th><th class="px-3 py-2 text-right"><%= t("revisiones.vale") %></th><th class="px-3 py-2"><%= t("revisiones.decidir") %></th></tr></thead>
+  <tbody>
+    <% @pendientes.each do |r| %>
+      <tr class="border-t border-stone-100 align-top">
+        <td class="px-3 py-2 whitespace-nowrap"><%= l r.created_at, format: :short %><% if @todas %><div class="text-xs text-stone-500"><%= r.sucursal %></div><% end %></td>
+        <td class="px-3 py-2"><%= r.usuario %></td>
+        <td class="px-3 py-2"><%= link_to r.descripcion, enlace_de_revision(r), class: "enlace" %></td>
+        <td class="px-3 py-2 text-stone-600"><%= r.motivo %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= pesos(r.valor_centavos) %></td>
+        <td class="px-3 py-2">
+          <%= form_with url: resolver_revision_path(r, sucursal_id: params[:sucursal_id]), class: "flex flex-wrap items-center gap-1" do |f| %>
+            <%= f.text_field :nota, placeholder: t("comun.nota"), class: "w-32 rounded border border-stone-300 px-2 py-1" %>
+            <%= f.button t("revisiones.aprobar"), name: "estado", value: "aprobada", class: "btn btn-success btn-sm" %>
+            <%= f.number_field :cargo, step: "0.01", min: "0", value: Dinero.pesos(r.valor_centavos).delete("$,"), class: "w-24 rounded border border-stone-300 px-2 py-1 font-mono" %>
+            <%= f.button t("revisiones.observar_y_cargar"), name: "estado", value: "observada", class: "btn btn-outline-danger btn-sm" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    <% if @pendientes.empty? %><tr><td colspan="6" class="px-3 py-6 text-center text-stone-500"><%= t("revisiones.nada") %></td></tr><% end %>
+  </tbody>
+</table>
+<p class="mt-1 text-xs text-stone-500"><%= t("revisiones.sin_cargar") %></p>
+<% if @resueltas.any? %>
+  <h2 class="mb-2 mt-8 font-semibold"><%= t("revisiones.revisadas") %></h2>
+  <table class="tabla">
+    <tbody>
+      <% @resueltas.each do |r| %>
+        <tr class="border-t border-stone-100">
+          <td class="px-3 py-1 whitespace-nowrap"><%= l r.revisado_en, format: :short %></td>
+          <td class="px-3 py-1"><%= r.usuario %></td>
+          <td class="px-3 py-1"><%= r.descripcion %> · <span class="text-stone-500"><%= r.motivo %></span></td>
+          <td class="px-3 py-1 <%= r.estado == 'observada' ? 'text-red-700' : 'text-green-700' %>"><%= t("estados.#{r.estado}") %> · <%= r.revisado_por %><%= " · #{r.nota}" if r.nota.present? %><%= " · #{t('revisiones.cargo')} #{pesos(r.cargo.monto_centavos)}" if r.cargo %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

@@ -1,0 +1,49 @@
+<% c = @c %>
+<% formas = { "efectivo" => t("inicio.efectivo"), "transferencia" => t("inicio.transferencias"), "deposito" => t("inicio.depositos") } %>
+<div class="ticket hoja" id="resumen">
+  <div class="centro"><strong><%= t("caja.resumen").upcase %></strong></div>
+  <div class="centro"><%= c.sucursal %> · <%= t("caja.corte") %> <%= c.folio %></div>
+  <div class="centro"><%= l c.abierto_en, format: :short %> → <%= c.cerrado_en ? l(c.cerrado_en, format: :short) : t("estados.abierto") %></div>
+  <div class="centro"><%= t("caja.cajero").downcase %> <%= c.usuario %><%= " · #{t("estados.cerrado").downcase} #{c.cerrado_por}" if c.cerrado_por %></div>
+  <div class="linea"></div>
+  <table>
+    <tr><td><%= t("caja.ventas") %></td><td class="der"><%= t("caja.n_ventas", count: @tickets) %></td><td class="der neg"><%= pesos(@total) %></td></tr>
+    <% formas.each do |forma, nombre| %><% next unless @por_forma[forma] %>
+      <tr><td></td><td><%= nombre %></td><td class="der"><%= pesos(@por_forma[forma]) %></td></tr>
+    <% end %>
+    <% if c.ventas_cobradas.sum(:cambio_centavos).positive? %><tr><td></td><td><%= t("caja.cambio") %></td><td class="der">−<%= pesos(c.ventas_cobradas.sum(:cambio_centavos)) %></td></tr><% end %>
+    <% if c.devoluciones_centavos.positive? %><tr><td><%= t("caja.devoluciones") %></td><td class="der"><%= c.devoluciones.count %></td><td class="der">−<%= pesos(c.devoluciones_centavos) %></td></tr><% end %>
+    <% if c.retiros_centavos.positive? %><tr><td><%= t("caja.retiros") %></td><td class="der"><%= c.retiros.count %></td><td class="der">−<%= pesos(c.retiros_centavos) %></td></tr><% end %>
+  </table>
+  <div class="linea"></div>
+  <table>
+    <tr><td><%= t("caja.fondo") %></td><td class="der"><%= pesos(c.fondo_centavos) %></td></tr>
+    <tr><td><%= t("caja.esperado") %></td><td class="der"><%= pesos(c.esperado_centavos || c.efectivo_esperado_centavos) %></td></tr>
+    <% if c.contado_centavos %>
+      <tr><td><%= t("caja.contado") %></td><td class="der"><%= pesos(c.contado_centavos) %></td></tr>
+      <tr class="total"><td class="neg"><%= t("caja.diferencia") %></td><td class="der neg"><%= pesos(c.diferencia_centavos) %></td></tr>
+    <% end %>
+  </table>
+  <% if c.desglose.present? %><div class="mono"><%= c.desglose_texto %></div><% end %>
+  <% if c.retiros.any? %>
+    <div class="linea-punteada"></div>
+    <div class="neg"><%= t("caja.retiros") %></div>
+    <table><% c.retiros.each do |r| %><tr><td><%= l r.created_at, format: :short %></td><td><%= r.motivo %></td><td class="der"><%= pesos(r.monto_centavos) %></td></tr><% end %></table>
+  <% end %>
+  <% if @top.any? %>
+    <div class="linea-punteada"></div>
+    <div class="neg"><%= t("inicio.lo_mas_vendido") %></div>
+    <table><% @top.each do |nombre, unidad, cant, importe| %><tr><td><%= nombre %></td><td class="der"><%= number_with_precision(cant, precision: unidad == "pieza" ? 0 : 3) %> <%= Producto::UNIDADES_CORTAS.fetch(unidad, unidad) %></td><td class="der"><%= pesos(importe) %></td></tr><% end %></table>
+  <% end %>
+  <% if @revisiones.any? || @cargos.any? %>
+    <div class="linea-punteada"></div>
+    <% if @revisiones.any? %><div class="neg"><%= t("caja.por_revisar_n", count: @revisiones.count(&:pendiente?)) %> · <%= @revisiones.size %> <%= t("caja.en_total") %></div>
+      <table><% @revisiones.each do |r| %><tr><td><%= r.usuario %></td><td><%= r.descripcion %></td><td class="der"><%= t("estados.#{r.estado}") %></td></tr><% end %></table><% end %>
+    <% if @cargos.any? %><div class="neg"><%= t("caja.cargos") %></div>
+      <table><% @cargos.each do |g| %><tr><td><%= g.usuario %></td><td class="der"><%= pesos(g.monto_centavos) %></td><td class="der"><%= t("estados.#{g.estado}", default: g.estado) %></td></tr><% end %></table><% end %>
+  <% end %>
+</div>
+<div class="acciones">
+  <button type="button" data-texto="<%= t("caja.resumen_texto", folio: c.folio, sucursal: c.sucursal, ventas: pesos(@total), tickets: @tickets, efectivo: pesos(c.efectivo_esperado_centavos), diferencia: (c.diferencia_centavos ? pesos(c.diferencia_centavos) : "—")) %>" onclick="const t = this.dataset.texto; if (navigator.share) { navigator.share({ title: document.title, text: t, url: location.href }) } else { navigator.clipboard.writeText(t + ' ' + location.href).then(() => alert('<%= j t("caja.copiado") %>')) }"><%= t("caja.compartir") %></button>
+  <a href="<%= caja_corte_path %>"><%= t("caja.corte_de_caja") %></a>
+</div>
