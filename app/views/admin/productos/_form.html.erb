@@ -5,7 +5,7 @@
     <div class="md:col-span-2"><%= render "admin/campo", f: f, campo: :nombre, etiqueta: t("comun.nombre"), tipo: :text_field %></div>
     <%= render "admin/campo", f: f, campo: :linea, etiqueta: t("admin.linea"), tipo: :text_field %>
     <div>
-      <%= f.label :unidad, t("comun.unidad"), class: "block text-sm font-medium" %>
+      <%= f.label :unidad, t("comun.unidad"), class: "etiqueta-campo" %>
       <%= f.select :unidad, Producto::UNIDADES.map { |u| [ Producto.nombre_unidad(u), u ] }, {}, class: "entrada" %>
     </div>
     <%= render "admin/campo", f: f, campo: :precio, etiqueta: t("comun.precio"), tipo: :number_field, opciones: { step: "0.01", min: 0 } %>

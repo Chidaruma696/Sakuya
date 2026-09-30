@@ -67,7 +67,7 @@
       <section class="hidden max-w-2xl space-y-6" data-pasos-target="paso">
         <h1 class="text-3xl font-bold"><%= t("instalacion.pasos.negocio") %></h1>
         <div>
-          <%= f.label :negocio, t("instalacion.nombre_negocio"), class: "block text-sm font-medium" %>
+          <%= f.label :negocio, t("instalacion.nombre_negocio"), class: "etiqueta-campo" %>
           <%= f.text_field :negocio, value: @datos[:negocio], required: true, class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 text-lg" %>
           <p class="mt-1 text-xs text-stone-500"><%= t("instalacion.nombre_negocio_ayuda") %></p>
         </div>
@@ -100,11 +100,11 @@
         <p class="text-stone-600"><%= t("instalacion.matriz_ayuda") %></p>
         <div class="grid grid-cols-3 gap-3">
           <div class="col-span-2">
-            <%= f.label :sucursal, t("instalacion.matriz"), class: "block text-sm font-medium" %>
+            <%= f.label :sucursal, t("instalacion.matriz"), class: "etiqueta-campo" %>
             <%= f.text_field :sucursal, value: @datos[:sucursal], placeholder: t("instalacion.matriz_placeholder"), class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 text-lg" %>
           </div>
           <div>
-            <%= f.label :codigo, t("comun.codigo"), class: "block text-sm font-medium" %>
+            <%= f.label :codigo, t("comun.codigo"), class: "etiqueta-campo" %>
             <%= f.text_field :codigo, value: @datos[:codigo], maxlength: 10, class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 font-mono text-lg uppercase" %>
           </div>
         </div>
@@ -140,7 +140,7 @@
         </fieldset>
         <div class="grid grid-cols-3 gap-3 items-end">
           <div data-folios-ejemplo-target="propia">
-            <%= f.label :folios_venta, t("instalacion.folios.venta"), class: "block text-sm font-medium" %>
+            <%= f.label :folios_venta, t("instalacion.folios.venta"), class: "etiqueta-campo" %>
             <%= f.text_field :folios_venta, value: @datos[:folios_venta], maxlength: 4, pattern: "[A-Za-z0-9]{0,4}", class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 font-mono text-lg uppercase", data: { action: "input->folios-ejemplo#pintar" } %>
           </div>
           <p class="col-span-2 text-sm text-stone-600"><%= t("instalacion.folios.ejemplo") %> <strong class="valor-dato text-lg" data-folios-ejemplo-target="ejemplo"></strong></p>
@@ -153,16 +153,16 @@
         <h1 class="text-3xl font-bold"><%= t("instalacion.pasos.administrador") %></h1>
         <p class="text-stone-600"><%= t("instalacion.administrador_ayuda") %></p>
         <div>
-          <%= f.label :nombre, t("comun.nombre"), class: "block text-sm font-medium" %>
+          <%= f.label :nombre, t("comun.nombre"), class: "etiqueta-campo" %>
           <%= f.text_field :nombre, value: @datos[:nombre], required: true, autocomplete: "name", class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 text-lg" %>
         </div>
         <div class="grid gap-3 sm:grid-cols-2">
           <div>
-            <%= f.label :usuario, t("sesion.usuario"), class: "block text-sm font-medium" %>
+            <%= f.label :usuario, t("sesion.usuario"), class: "etiqueta-campo" %>
             <%= f.text_field :usuario, value: @datos[:usuario], required: true, autocomplete: "username", autocapitalize: "none", class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 text-lg" %>
           </div>
           <div>
-            <%= f.label :password, t("sesion.contrasena"), class: "block text-sm font-medium" %>
+            <%= f.label :password, t("sesion.contrasena"), class: "etiqueta-campo" %>
             <%= f.password_field :password, required: true, minlength: 8, autocomplete: "new-password", class: "mt-1 w-full rounded border border-stone-300 px-3 py-3 text-lg" %>
             <p class="mt-1 text-xs text-stone-500"><%= t("instalacion.contrasena_ayuda") %></p>
           </div>

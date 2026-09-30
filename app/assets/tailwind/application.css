@@ -29,29 +29,32 @@
 }
 
 @layer base {
+  /* Campos: esquinas suaves, borde que se aclara al pasar y un halo azul al enfocar. */
   input[type="text"], input[type="number"], input[type="password"], input[type="date"], input[type="search"], input[type="email"], select, textarea {
-    @apply rounded-md border border-stone-300 bg-white text-stone-900 outline-none transition placeholder:text-stone-400 focus:border-marca-500 focus:ring-2 focus:ring-marca-200 disabled:bg-stone-100;
+    @apply rounded-lg border border-stone-300 bg-white text-stone-900 shadow-[0_1px_1px_rgb(28_33_57/0.04)] outline-none transition placeholder:text-stone-400 hover:border-stone-400 focus:border-marca-500 focus:ring-4 focus:ring-marca-500/15 disabled:cursor-not-allowed disabled:bg-stone-100 disabled:text-stone-500;
   }
+  input[type="checkbox"], input[type="radio"] { @apply size-4 cursor-pointer; accent-color: var(--color-marca-600); }
   summary { @apply select-none; }
   .font-mono, table { font-variant-numeric: tabular-nums; }
   dialog::backdrop { @apply bg-stone-900/40; }
 }
 
 @layer components {
-  /* Botones: siempre con forma de botón, nunca un enlace pelón. */
+  /* Botones: siempre con forma de botón, nunca un enlace pelón. Esquinas suaves, texto medio y un
+     contorno azul al llegar con el teclado. */
   .btn {
-    @apply inline-flex cursor-pointer items-center justify-center gap-1 rounded-md border border-transparent px-3 py-1.5 text-sm font-semibold leading-5 whitespace-nowrap shadow-sm transition-colors select-none disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent px-3.5 py-2 text-sm font-medium leading-5 whitespace-nowrap shadow-[0_1px_2px_rgb(28_33_57/0.06)] transition select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marca-500 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50;
   }
-  .btn-xs { @apply px-2 py-0.5 text-xs shadow-none; }
+  .btn-xs { @apply gap-1 rounded-md px-2 py-0.5 text-xs shadow-none; }
   .btn-sm { @apply px-2.5 py-1 text-xs; }
-  .btn-lg { @apply px-5 py-3 text-lg; }
-  .btn-primary { @apply bg-marca-600 text-claro hover:bg-marca-500 active:bg-marca-700; }
-  .btn-secondary { @apply border-stone-300 bg-white text-stone-800 hover:bg-stone-50 active:bg-stone-100; }
-  .btn-success { @apply bg-emerald-700 text-claro hover:bg-emerald-600 active:bg-emerald-800; }
-  .btn-danger { @apply bg-corbata-700 text-claro hover:bg-corbata-600 active:bg-corbata-800; }
-  .btn-outline-danger { @apply border-corbata-700 bg-white text-corbata-700 hover:bg-red-50; }
-  .btn-outline-success { @apply border-emerald-700 bg-white text-emerald-800 hover:bg-emerald-50; }
-  .btn-warning { @apply border-amber-400 bg-amber-50 text-amber-900 hover:bg-amber-100; }
+  .btn-lg { @apply px-5 py-2.5 text-base; }
+  .btn-primary { @apply bg-marca-600 text-claro shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_1px_2px_rgb(28_33_57/0.15)] hover:bg-marca-700 active:bg-marca-800; }
+  .btn-secondary { @apply border-stone-300 bg-white text-stone-800 hover:border-stone-400 hover:bg-stone-50 active:bg-stone-100; }
+  .btn-success { @apply bg-emerald-700 text-claro hover:bg-emerald-800; }
+  .btn-danger { @apply bg-corbata-700 text-claro hover:bg-corbata-800; }
+  .btn-outline-danger { @apply border-corbata-700/40 bg-white text-corbata-700 hover:border-corbata-700 hover:bg-red-50; }
+  .btn-outline-success { @apply border-emerald-700/40 bg-white text-emerald-800 hover:border-emerald-700 hover:bg-emerald-50; }
+  .btn-warning { @apply border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100; }
   .btn-ghost { @apply border-transparent bg-transparent text-stone-600 shadow-none hover:bg-stone-100 hover:text-stone-900; }
   .btn-ghost-danger { @apply border-transparent bg-transparent text-corbata-700 shadow-none hover:bg-red-50; }
   .btn-light { @apply border-white/60 bg-white/90 text-stone-900 hover:bg-white; }
@@ -70,16 +73,18 @@
   .valor-dato { @apply mt-1 font-semibold tracking-tight text-stone-900; font-variant-numeric: tabular-nums; }
   .badge { @apply inline-flex items-center gap-1 rounded-full bg-stone-100 px-2 py-0.5 text-xs font-medium text-stone-700 ring-1 ring-stone-200 ring-inset; }
 
-  /* Formularios: a todo lo ancho, campos en rejilla (1 col en móvil, 2 en tableta, 3 en escritorio). */
-  .formulario { @apply w-full space-y-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-stone-200 xl:p-8; }
-  .campos { @apply grid gap-4 md:grid-cols-2 xl:grid-cols-3; }
-  .campos-2 { @apply grid gap-4 md:grid-cols-2; }
-  .campos-4 { @apply grid gap-4 md:grid-cols-2 xl:grid-cols-4; }
-  .entrada { @apply mt-1 w-full rounded-md border border-stone-300 bg-white px-3 py-2.5 text-base; }
+  /* Formularios: a todo lo ancho, campos en rejilla (1 col en móvil, 2 en tableta, 3 en escritorio),
+     con la misma piel que las tarjetas. */
+  .formulario { @apply w-full space-y-6 rounded-xl bg-white p-6 shadow-[0_1px_2px_rgb(28_33_57/0.05)] ring-1 ring-stone-200/80 xl:p-8; }
+  .campos { @apply grid gap-x-5 gap-y-4 md:grid-cols-2 xl:grid-cols-3; }
+  .campos-2 { @apply grid gap-x-5 gap-y-4 md:grid-cols-2; }
+  .campos-4 { @apply grid gap-x-5 gap-y-4 md:grid-cols-2 xl:grid-cols-4; }
+  .etiqueta-campo { @apply block text-sm font-medium text-stone-700; }
+  .entrada { @apply mt-1.5 w-full px-3 py-2 text-base; }
 
   /* Opción grande y amigable (radio escondido dentro): arranque y ajustes. */
-  .opcion { @apply flex cursor-pointer items-center gap-3 rounded-lg border-2 border-stone-300 bg-white px-4 py-4 text-lg font-semibold transition-colors hover:border-marca-400; }
-  .opcion:has(:checked) { @apply border-marca-600 bg-marca-50 text-marca-900; }
+  .opcion { @apply flex cursor-pointer items-center gap-3 rounded-xl border border-stone-300 bg-white px-4 py-3.5 text-base font-medium transition hover:border-marca-400 hover:bg-marca-50/40; }
+  .opcion:has(:checked) { @apply border-marca-500 bg-marca-50 text-marca-900 ring-4 ring-marca-500/15; }
   .opcion-check { @apply ml-auto text-marca-600 invisible; }
   .opcion:has(:checked) .opcion-check { @apply visible; }
 

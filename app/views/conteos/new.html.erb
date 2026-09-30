@@ -5,7 +5,7 @@
   <%= form_with url: conteos_path, class: "formulario" do |f| %>
     <div class="campos">
       <div class="md:col-span-2">
-        <%= f.label :responsable_id, t("conteos.responsable_ayuda"), class: "block text-sm font-medium" %>
+        <%= f.label :responsable_id, t("conteos.responsable_ayuda"), class: "etiqueta-campo" %>
         <%= f.collection_select :responsable_id, @responsables, :id, :nombre, {}, class: "entrada" %>
       </div>
     </div>

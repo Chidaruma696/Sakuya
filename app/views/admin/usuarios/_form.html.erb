@@ -3,8 +3,8 @@
     <%= render "admin/campo", f: f, campo: :nombre, etiqueta: t("comun.nombre"), tipo: :text_field %>
     <%= render "admin/campo", f: f, campo: :usuario, etiqueta: t("admin.usuario_minusculas"), tipo: :text_field, opciones: { autocapitalize: "none" } %>
     <%= render "admin/campo", f: f, campo: :password, etiqueta: @usuario.new_record? ? t("sesion.contrasena") : t("admin.nueva_contrasena"), tipo: :password_field, opciones: { autocomplete: "new-password" } %>
-    <div><%= f.label :rol_id, t("admin.rol"), class: "block text-sm font-medium" %><%= f.collection_select :rol_id, Rol.order(:nombre), :id, :nombre, {}, class: "entrada" %></div>
-    <div><%= f.label :sucursal_id, t("comun.sucursal"), class: "block text-sm font-medium" %><%= f.collection_select :sucursal_id, Sucursal.order(:nombre), :id, :nombre, {}, class: "entrada" %></div>
+    <div><%= f.label :rol_id, t("admin.rol"), class: "etiqueta-campo" %><%= f.collection_select :rol_id, Rol.order(:nombre), :id, :nombre, {}, class: "entrada" %></div>
+    <div><%= f.label :sucursal_id, t("comun.sucursal"), class: "etiqueta-campo" %><%= f.collection_select :sucursal_id, Sucursal.order(:nombre), :id, :nombre, {}, class: "entrada" %></div>
   </div>
   <div class="flex flex-wrap items-center gap-4">
     <%= f.submit @usuario.new_record? ? t("comun.crear") : t("comun.guardar"), class: "btn btn-primary btn-lg" %>

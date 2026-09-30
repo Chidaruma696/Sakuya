@@ -4,13 +4,13 @@
   <%= f.hidden_field :clave, value: @clave %>
   <div class="campos">
     <div>
-      <%= f.label :proveedor_id, t("compras.proveedor"), class: "block text-sm font-medium" %>
+      <%= f.label :proveedor_id, t("compras.proveedor"), class: "etiqueta-campo" %>
       <%= f.collection_select :proveedor_id, @proveedores, :id, :nombre, { include_blank: "—" }, required: true, class: "entrada" %>
       <% if @proveedores.empty? %><p class="mt-1 text-xs text-amber-700"><%= link_to t("compras.primero_proveedor"), new_proveedor_path, class: "enlace" %></p><% end %>
     </div>
-    <div><%= f.label :remision, t("compras.remision"), class: "block text-sm font-medium" %><%= f.text_field :remision, class: "entrada font-mono", placeholder: t("compras.remision_ayuda") %></div>
-    <div><%= f.label :fecha, t("comun.fecha"), class: "block text-sm font-medium" %><%= f.date_field :fecha, class: "entrada" %></div>
-    <div class="md:col-span-2 xl:col-span-3"><%= f.label :notas, t("comun.notas"), class: "block text-sm font-medium" %><%= f.text_field :notas, class: "entrada" %></div>
+    <div><%= f.label :remision, t("compras.remision"), class: "etiqueta-campo" %><%= f.text_field :remision, class: "entrada font-mono", placeholder: t("compras.remision_ayuda") %></div>
+    <div><%= f.label :fecha, t("comun.fecha"), class: "etiqueta-campo" %><%= f.date_field :fecha, class: "entrada" %></div>
+    <div class="md:col-span-2 xl:col-span-3"><%= f.label :notas, t("comun.notas"), class: "etiqueta-campo" %><%= f.text_field :notas, class: "entrada" %></div>
   </div>
   <div class="rounded-lg border border-stone-200 p-4">
     <div class="mb-3 flex flex-wrap items-center gap-3">

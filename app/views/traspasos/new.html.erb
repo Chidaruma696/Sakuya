@@ -4,7 +4,7 @@
   <%= f.hidden_field :clave, value: @clave %>
   <div class="campos">
     <div>
-      <%= f.label :sucursal_origen_id, t("traspasos.de"), class: "block text-sm font-medium" %>
+      <%= f.label :sucursal_origen_id, t("traspasos.de"), class: "etiqueta-campo" %>
       <% if @origenes.size > 1 %>
         <%= f.collection_select :sucursal_origen_id, @origenes, :id, ->(s) { "#{s.nombre}#{" · #{t("admin.almacen_corto")}" if s.almacen?}" }, {}, class: "entrada" %>
       <% else %>
@@ -12,11 +12,11 @@
       <% end %>
     </div>
     <div>
-      <%= f.label :sucursal_destino_id, t("traspasos.a"), class: "block text-sm font-medium" %>
+      <%= f.label :sucursal_destino_id, t("traspasos.a"), class: "etiqueta-campo" %>
       <%= f.collection_select :sucursal_destino_id, @destinos, :id, ->(s) { "#{s.nombre}#{" · #{t("admin.almacen_corto")}" if s.almacen?}" }, { include_blank: "—" }, required: true, class: "entrada" %>
     </div>
-    <div><%= f.label :fecha, t("comun.fecha"), class: "block text-sm font-medium" %><%= f.date_field :fecha, class: "entrada" %></div>
-    <div class="md:col-span-2 xl:col-span-3"><%= f.label :notas, t("comun.notas"), class: "block text-sm font-medium" %><%= f.text_field :notas, class: "entrada" %></div>
+    <div><%= f.label :fecha, t("comun.fecha"), class: "etiqueta-campo" %><%= f.date_field :fecha, class: "entrada" %></div>
+    <div class="md:col-span-2 xl:col-span-3"><%= f.label :notas, t("comun.notas"), class: "etiqueta-campo" %><%= f.text_field :notas, class: "entrada" %></div>
   </div>
   <div class="rounded-lg border border-stone-200 p-4">
     <div class="mb-3 flex flex-wrap items-center gap-3">

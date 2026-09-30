@@ -14,12 +14,12 @@
   <% end %>
   <%= form_with url: entrar_path, class: "space-y-4" do |f| %>
     <div>
-      <%= f.label :usuario, t("sesion.usuario"), class: "block text-sm font-medium" %>
+      <%= f.label :usuario, t("sesion.usuario"), class: "etiqueta-campo" %>
       <%= f.text_field :usuario, autofocus: true, autocomplete: "username", autocapitalize: "none",
                        class: "mt-1 w-full rounded border border-stone-300 px-3 py-2" %>
     </div>
     <div>
-      <%= f.label :password, t("sesion.contrasena"), class: "block text-sm font-medium" %>
+      <%= f.label :password, t("sesion.contrasena"), class: "etiqueta-campo" %>
       <%= f.password_field :password, autocomplete: "current-password",
                            class: "mt-1 w-full rounded border border-stone-300 px-3 py-2" %>
     </div>

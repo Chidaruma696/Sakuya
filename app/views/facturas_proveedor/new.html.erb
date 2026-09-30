@@ -3,14 +3,14 @@
 <%= form_with model: @factura, url: facturas_path, scope: :factura, class: "formulario", data: { controller: "renglones", renglones_url_value: buscar_productos_path } do |f| %>
   <div class="campos">
     <div>
-      <%= f.label :proveedor_id, t("compras.proveedor"), class: "block text-sm font-medium" %>
+      <%= f.label :proveedor_id, t("compras.proveedor"), class: "etiqueta-campo" %>
       <%= f.collection_select :proveedor_id, @proveedores, :id, :nombre, { include_blank: "—" }, required: true, class: "entrada" %>
     </div>
-    <div><%= f.label :folio, t("compras.folio_proveedor"), class: "block text-sm font-medium" %><%= f.text_field :folio, required: true, class: "entrada font-mono", placeholder: t("compras.folio_proveedor_ayuda") %></div>
-    <div><%= f.label :fecha, t("comun.fecha"), class: "block text-sm font-medium" %><%= f.date_field :fecha, required: true, class: "entrada" %></div>
-    <div><%= f.label :vence, t("compras.vence"), class: "block text-sm font-medium" %><%= f.date_field :vence, class: "entrada" %><p class="mt-1 text-xs text-stone-500"><%= t("compras.vence_ayuda") %></p></div>
-    <div><%= f.label :monto, t("compras.monto_sin_renglones"), class: "block text-sm font-medium" %><%= f.number_field :monto, step: "0.01", min: 0, class: "entrada font-mono" %><p class="mt-1 text-xs text-stone-500"><%= t("compras.monto_sin_renglones_ayuda") %></p></div>
-    <div><%= f.label :concepto, t("compras.concepto"), class: "block text-sm font-medium" %><%= f.text_field :concepto, class: "entrada" %></div>
+    <div><%= f.label :folio, t("compras.folio_proveedor"), class: "etiqueta-campo" %><%= f.text_field :folio, required: true, class: "entrada font-mono", placeholder: t("compras.folio_proveedor_ayuda") %></div>
+    <div><%= f.label :fecha, t("comun.fecha"), class: "etiqueta-campo" %><%= f.date_field :fecha, required: true, class: "entrada" %></div>
+    <div><%= f.label :vence, t("compras.vence"), class: "etiqueta-campo" %><%= f.date_field :vence, class: "entrada" %><p class="mt-1 text-xs text-stone-500"><%= t("compras.vence_ayuda") %></p></div>
+    <div><%= f.label :monto, t("compras.monto_sin_renglones"), class: "etiqueta-campo" %><%= f.number_field :monto, step: "0.01", min: 0, class: "entrada font-mono" %><p class="mt-1 text-xs text-stone-500"><%= t("compras.monto_sin_renglones_ayuda") %></p></div>
+    <div><%= f.label :concepto, t("compras.concepto"), class: "etiqueta-campo" %><%= f.text_field :concepto, class: "entrada" %></div>
   </div>
   <div class="rounded-lg border border-stone-200 p-4">
     <div class="mb-3 flex flex-wrap items-center gap-3">
@@ -47,7 +47,7 @@
   <% end %>
   <% if @candado %>
     <div>
-      <%= f.label :motivo, t("compras.motivo_exceso"), class: "block text-sm font-medium" %>
+      <%= f.label :motivo, t("compras.motivo_exceso"), class: "etiqueta-campo" %>
       <%= f.text_field :motivo, class: "entrada max-w-xl" %>
       <p class="mt-1 text-xs text-stone-500"><%= t("compras.candado_aviso") %></p>
     </div>
