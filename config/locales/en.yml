@@ -996,3 +996,6 @@ en:
       pieza: dashboard only takes (tile …) and (panel …), and got %{valor}
       clave: the product code goes in quotes
       producto: there is no product with code %{clave}
+    muestra: Load sample data
+    muestra_ayuda: Try it with made-up figures, to see the dashboard full even with no sales today. Nothing is touched.
+    vista_previa_muestra: 'Made-up sample data: these are not your business’s sales.'

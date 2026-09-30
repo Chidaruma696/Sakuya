@@ -16,7 +16,7 @@ class TableroController < ApplicationController
   # solo lleva la marca probar=1. Desde el modal llega por fetch y devuelve solo la vista previa.
   def probar
     @codigo = params[:codigo].to_s
-    vista_previa(@codigo)
+    vista_previa(@codigo, muestra: params[:muestra] == "1")
     estado = @error_programa ? :unprocessable_entity : :ok
     return render(partial: "tablero/vista_previa", status: estado) if request.xhr?
     render :edit, status: estado
@@ -43,8 +43,8 @@ class TableroController < ApplicationController
   private
 
   # A diferencia de Inicio, aquí el error no se esconde detrás del tablero de fábrica: se enseña.
-  def vista_previa(codigo)
-    armar_tablero(codigo: codigo)
+  def vista_previa(codigo, muestra: false)
+    armar_tablero(codigo: codigo, muestra: muestra)
     @error_programa = @tablero_error
     @versiones = Regla.de("tablero").includes(:usuario).limit(15)
   end

@@ -996,3 +996,6 @@ de:
       pieza: dashboard nimmt nur (tile …) und (panel …), bekam aber %{valor}
       clave: das Produktkürzel steht in Anführungszeichen
       producto: kein Produkt mit dem Kürzel %{clave}
+    muestra: Beispieldaten laden
+    muestra_ayuda: Mit erfundenen Zahlen ausprobieren, um die Übersicht gefüllt zu sehen, auch ohne Verkäufe heute. Es wird nichts verändert.
+    vista_previa_muestra: 'Erfundene Beispieldaten: das sind nicht die Verkäufe deines Geschäfts.'

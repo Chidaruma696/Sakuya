@@ -2,6 +2,10 @@
 <% if @error_programa %>
   <p class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><i class="bi bi-exclamation-triangle-fill text-corbata-700"></i> <%= @error_programa %></p>
 <% else %>
-  <p class="mb-3 text-sm text-stone-600"><%= t("tablero.vista_previa_ayuda") %></p>
+  <% if @muestra %>
+    <p class="mb-3 flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900"><i class="bi bi-eyedropper"></i> <%= t("tablero.vista_previa_muestra") %></p>
+  <% else %>
+    <p class="mb-3 text-sm text-stone-600"><%= t("tablero.vista_previa_ayuda") %></p>
+  <% end %>
   <%= render "inicio/tablero" %>
 <% end %>

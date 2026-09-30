@@ -134,4 +134,36 @@ module Tablero
       VentaLinea.where(venta: ventas_del_rango, producto: producto)
     end
   end
+
+  # Datos de prueba para la vista previa: cifras inventadas pero creíbles, para ver el tablero
+  # lleno aunque hoy no haya ventas. No toca la base; los productos que se nombren sí tienen que
+  # existir, para que un error de dedo se note igual que con los datos de verdad.
+  class Muestra
+    def initialize(desde:, hasta:)
+      @desde = desde
+      @hasta = hasta
+    end
+
+    def ventas = BigDecimal("18450.50") * dias
+    def tickets = 137 * dias
+    def ticket_promedio = (ventas / tickets).round(2)
+    def devoluciones = BigDecimal("320.00") * dias
+    def efectivo = BigDecimal("11200.00") * dias
+    def transferencias = BigDecimal("5430.50") * dias
+    def depositos = BigDecimal("1500.00") * dias
+    def valor_existencias = BigDecimal("245000.00")
+    def por_pagar = BigDecimal("38900.00")
+    def por_revisar = 3
+    def dias = (@hasta - @desde).to_i + 1
+
+    def vendido(clave) = BigDecimal((producto(clave).id * 7 % 40) + 5) * dias
+    def vendido_importe(clave) = (vendido(clave) * BigDecimal(producto(clave).precio_centavos) / 100).round(2)
+
+    private
+
+    def producto(clave)
+      raise Lisp::Error, I18n.t("tablero.errores.clave") unless clave.is_a?(String)
+      Producto.find_by(clave: clave.upcase) or raise Lisp::Error, I18n.t("tablero.errores.producto", clave: clave.upcase)
+    end
+  end
 end

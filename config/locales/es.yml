@@ -996,3 +996,6 @@ es:
       pieza: dashboard solo lleva (tile …) y (panel …), y recibió %{valor}
       clave: la clave del producto va entre comillas
       producto: no hay producto con clave %{clave}
+    muestra: Cargar datos de prueba
+    muestra_ayuda: Probar con cifras inventadas, para ver el tablero lleno aunque hoy no haya ventas. No toca nada.
+    vista_previa_muestra: 'Datos de prueba inventados: no son las ventas de tu negocio.'

@@ -51,6 +51,22 @@ class TableroControllerTest < ActionDispatch::IntegrationTest
     assert_select "button[data-action='vista-previa#probar']"
   end
 
+  test "con datos de prueba la vista previa sale llena, avisa que son inventados y no guarda nada" do
+    post tablero_guardar_path, params: { probar: "1", muestra: "1", codigo: %((dashboard (tile :sales) (tile "Pechuga" (sold "PECH")) (panel :top-products) (panel :closed-cash-counts))) }, xhr: true
+    assert_response :ok
+    assert_match "Datos de prueba inventados", response.body
+    assert_select ".valor-dato", /\$18,450\.50/
+    assert_select "td", /Pechuga de pollo/
+    assert_select "td", /C-00041/
+    post tablero_guardar_path, params: { probar: "1", muestra: "1", codigo: %((dashboard (tile "x" (sold "NADA")))) }, xhr: true
+    assert_response :unprocessable_entity
+    assert_match "no hay producto con clave NADA", response.body
+    assert_equal 0, Regla.count
+    assert_equal 0, Venta.count, "la muestra no toca la base"
+    get tablero_editar_path
+    assert_select "input[type=checkbox][name=muestra]"
+  end
+
   test "un programa que truena en Inicio no tumba la página: sale el de fábrica con aviso" do
     Regla.create!(gancho: "tablero", codigo: "(dashboard (tile :nada))", usuario: usuarios(:admin))
     get root_path

@@ -12,9 +12,12 @@
     <% if @error_programa %>
       <p class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><i class="bi bi-exclamation-triangle-fill text-corbata-700"></i> <%= @error_programa %></p>
     <% end %>
-    <div class="flex flex-wrap gap-2">
+    <div class="flex flex-wrap items-center gap-2">
       <%= f.button name: "probar", value: "1", class: "btn btn-secondary", data: { action: "vista-previa#probar" } do %><i class="bi bi-play"></i> <%= t("tablero.probar") %><% end %>
       <%= f.button class: "btn btn-primary" do %><i class="bi bi-check2"></i> <%= t("tablero.guardar") %><% end %>
+      <label class="ml-2 flex items-center gap-2 text-sm text-stone-700" title="<%= t("tablero.muestra_ayuda") %>">
+        <%= check_box_tag :muestra, "1", params[:muestra] == "1", id: "muestra" %> <%= t("tablero.muestra") %>
+      </label>
     </div>
   <% end %>
 
