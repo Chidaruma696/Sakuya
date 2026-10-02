@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><g transform="translate(256,262) scale(1.12)">
+  <defs><mask id="m" maskUnits="userSpaceOnUse" x="-400" y="-400" width="800" height="800">
+    <rect x="-400" y="-400" width="800" height="800" fill="white"/><g transform="rotate(45)" fill="black" stroke="black" stroke-width="30" stroke-linejoin="round">
+  <path d="M0,-288 C14,-250 30,-196 32,-150 L32,34 L-32,34 L-32,-150 C-30,-196 -14,-250 0,-288 Z"/>
+  <rect x="-74" y="34" width="148" height="30" rx="13"/>
+  <rect x="-21" y="60" width="42" height="150" rx="10"/>
+  <path fill-rule="evenodd" d="M0,206 a36,36 0 1,0 0.01,0 Z M0,226 a16,16 0 1,0 0.01,0 Z"/>
+</g></mask></defs>
+  <g fill="#1c2139" mask="url(#m)"><g transform="rotate(-45)">
+  <path d="M0,-288 C14,-250 30,-196 32,-150 L32,34 L-32,34 L-32,-150 C-30,-196 -14,-250 0,-288 Z"/>
+  <rect x="-74" y="34" width="148" height="30" rx="13"/>
+  <rect x="-21" y="60" width="42" height="150" rx="10"/>
+  <path fill-rule="evenodd" d="M0,206 a36,36 0 1,0 0.01,0 Z M0,226 a16,16 0 1,0 0.01,0 Z"/>
+</g></g>
+  <g fill="#1c2139"><g transform="rotate(45)">
+  <path d="M0,-288 C14,-250 30,-196 32,-150 L32,34 L-32,34 L-32,-150 C-30,-196 -14,-250 0,-288 Z"/>
+  <rect x="-74" y="34" width="148" height="30" rx="13"/>
+  <rect x="-21" y="60" width="42" height="150" rx="10"/>
+  <path fill-rule="evenodd" d="M0,206 a36,36 0 1,0 0.01,0 Z M0,226 a16,16 0 1,0 0.01,0 Z"/>
+</g></g>
+</g></svg>
