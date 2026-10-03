@@ -22,7 +22,7 @@ class Ajuste < ApplicationRecord
     "caja.limite_gaveta" => "3000",      # pesos, para sucursales nuevas
     "caja.denominaciones" => "1000,500,200,100,50,20,10,5,2,1,0.5", # billetes y monedas para contar la gaveta
     "caja.tope_diferencia" => "0",       # pesos; si |contado − esperado| lo pasa, el cierre pide motivo. 0 = sin tope
-    "compras.candado_recibido" => "0", # "1" = facturar más de lo recibido exige motivo (o compras.exceder)
+    "compras.candado_recibido" => "1", # "1" = facturar más de lo recibido se frena (de fábrica, puesto)
     "folios.modo" => "por_documento",   # o "unico": una sola numeración corrida para todo
     "folios.unico" => "F",
     "folios.sucursal" => "0",            # "1" = el código de la sucursal va delante del folio

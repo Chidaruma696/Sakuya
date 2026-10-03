@@ -55,6 +55,7 @@ class Revision < ApplicationRecord
   # Qué fue lo que se hizo, en una línea.
   def descripcion
     return I18n.t("revisiones.desc.frenado_producto", producto: revisable.nombre) if frenado? && revisable.is_a?(Producto)
+    return I18n.t("revisiones.desc.frenado_proveedor", proveedor: revisable.nombre) if frenado? && revisable.is_a?(Proveedor)
     return I18n.t("revisiones.desc.frenado", folio: revisable.to_s) if frenado?
     case revisable
     when Movimiento then I18n.t("revisiones.desc.movimiento", tipo: revisable.nombre_tipo, cantidad: cantidad_de(revisable))

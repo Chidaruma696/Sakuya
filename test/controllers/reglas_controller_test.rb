@@ -86,6 +86,19 @@ class ReglasControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, Revision.count
   end
 
+  test "facturas: el editor prueba con el candado de Ajustes y desaparece con el módulo de compras apagado" do
+    post regla_guardar_path("factura"), params: { probar: "1", codigo: ReglaFactura::DE_FABRICA, productos_de_mas: "2", valor_de_mas: "300" }
+    assert_select "#decision", /Se frena/
+    assert_select "p", /candado de Ajustes › Compras está puesto/
+    post regla_guardar_path("factura"), params: { probar: "1", codigo: ReglaFactura::EJEMPLO, productos_de_mas: "1", valor_de_mas: "80" }
+    assert_select "#decision", /Se registra y queda por revisar: Small excess/
+    get regla_editar_path("factura")
+    assert_select "a[href=?]", regla_editar_path("factura")
+    Modulo.guardar!(Modulo::OPCIONALES - %w[compras], comprobar: false)
+    get regla_editar_path("corte")
+    assert_select "a[href=?]", regla_editar_path("factura"), 0
+  end
+
   test "sin reglas.editar no se entra" do
     post entrar_path, params: { usuario: "cajera", password: "secreto1" }
     get regla_editar_path("corte")

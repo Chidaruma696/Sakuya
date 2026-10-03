@@ -29,7 +29,7 @@ es:
     negocio_ayuda: Lo que se imprime en el encabezado y el pie del ticket. Si el nombre va vacío, se usa el de la sucursal.
     caja: Caja
     caja_ayuda: El tope de efectivo en gaveta se fija por sucursal.
-    candado_recibido_ayuda: Con el candado, una factura con más cantidad que las recepciones que liga exige motivo y queda por revisar con el exceso valuado; quien tenga el permiso de exceder la registra sin más. Sin candado solo se enseña la diferencia.
+    candado_recibido_ayuda: Con el candado (puesto de fábrica), una factura con más cantidad que las recepciones que liga no se registra y el intento queda reportado; quien tenga el permiso de exceder la registra con motivo y queda por revisar con el exceso valuado. Sin candado solo se enseña la diferencia.
     compras_apagado: El módulo de compras está apagado; enciéndelo en
     ir_sucursales: Ver sucursales
     claves:
@@ -91,6 +91,7 @@ es:
       regla_precio: Precio en Lisp
       regla_retiro: Retiros en Lisp
       regla_movimiento: Inventario en Lisp
+      regla_factura: Facturas en Lisp
     secciones_ayuda:
       para_ti: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
       negocio: Los datos del negocio como salen en el ticket, con el ticket al lado tal cual va a imprimirse. Vale para todas las sucursales.
@@ -337,7 +338,8 @@ es:
       folio_obligatorio: hace falta el folio de la factura
       folio_repetido: la factura %{folio} de este proveedor ya está capturada
       monto_cero: el monto debe ser mayor que cero
-      excede_recibido: 'se factura más de lo recibido (%{detalle}): escribe el motivo'
+      falta_motivo: '%{motivo}: escribe el motivo'
+      factura_frenada: '%{motivo}. Así no se registra: liga las recepciones que faltan o que la registre alguien con permiso para exceder. Queda reportado.'
       factura_ya_cancelada: la factura ya está cancelada
       factura_con_pagos: 'la factura tiene pagos: anúlalos antes de cancelarla'
       pago_excede: el pago pasa de lo que resta de la factura (%{resta})
@@ -405,6 +407,7 @@ es:
       corte: Corte %{folio} cerrado con diferencia de %{diferencia}
       frenado: Intento frenado en el corte %{folio}
       frenado_producto: 'Movimiento frenado: %{producto}'
+      frenado_proveedor: 'Factura frenada de %{proveedor}'
       corte_abierto: Corte %{folio}, abierto
   estados:
     pendiente: pendiente
@@ -888,7 +891,8 @@ es:
     recepciones_a_ligar: Recepciones que cubre esta factura
     recepciones_a_ligar_ayuda: Marca las recepciones sin factura de este proveedor; se ligan al registrar. Se pueden ligar después desde la ficha.
     motivo_exceso: Motivo si se factura más de lo recibido
-    candado_aviso: 'Hay candado: si algún renglón trae más cantidad que las recepciones marcadas, hace falta motivo y la factura queda por revisar.'
+    candado_aviso: 'Hay candado: si algún renglón trae más cantidad que las recepciones marcadas, la factura no se registra; con permiso para exceder, hace falta motivo y queda por revisar.'
+    factura_frenada: 'Factura %{folio} frenada: %{regla}'
     comparativo_ayuda: 'Por producto: lo que dice la factura y lo que entró en las recepciones ligadas. Es un aviso, no un candado.'
     sin_renglones_ni_recepciones: 'Sin renglones ni recepciones ligadas: nada que comparar.'
     facturado: Facturado
@@ -991,6 +995,35 @@ es:
     lee: Lo que lee (en pesos)
     contesta: Lo que contesta
     ejemplo: Ejemplo
+  regla_factura:
+    titulo: Facturas en Lisp
+    ayuda: Antes de registrar una factura de proveedor, esta regla compara lo facturado con lo recibido en las recepciones que se ligan, y decide si se registra, si queda por revisar o si se frena. Probar no guarda nada.
+    fallo: 'La regla de facturas falló y decidió la de fábrica: %{error}'
+    motivos:
+      over_received: 'se factura más de lo recibido (%{detalle})'
+    caso:
+      productos_de_mas: Productos de más
+      valor_de_mas: Valor de lo de más
+      total: Total de la factura
+      candado_puesto: El candado de Ajustes › Compras está puesto.
+      candado_quitado: El candado de Ajustes › Compras está quitado.
+      autorizado: Factura alguien con permiso para exceder
+    veredictos:
+      allow: Se registra
+      review: Se registra y queda por revisar
+      reject: Se frena
+    funciones:
+      excess_items: cuántos productos vienen de más
+      excess_value: lo que vale lo de más
+      total: el total de la factura
+      receipts: cuántas recepciones se ligan
+      supplier: el nombre del proveedor
+      lock: si el candado de Ajustes › Compras está puesto
+      authorized: si quien factura tiene permiso para exceder
+    allow: se registra
+    to_review: pide motivo y queda por revisar
+    reject: no se registra y deja reportado el intento
+    nucleo: Quien tiene permiso para exceder nunca se queda sin poder registrarla; para esa persona, frenar es revisar con motivo.
   regla_movimiento:
     titulo: Inventario en Lisp
     ayuda: Antes de una entrada suelta, un ajuste o una merma, esta regla mira qué, cuánto y por qué, y decide si se mueve, si queda por revisar o si se frena. Que haya motivo y existencias lo exige Sakuya antes de preguntar. Probar no guarda nada.

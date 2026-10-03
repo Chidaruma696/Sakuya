@@ -29,7 +29,7 @@ de:
     negocio_ayuda: Steht im Kopf und Fuß des Kassenbons. Bleibt der Name leer, wird der Name der Filiale verwendet.
     caja: Kasse
     caja_ayuda: Das Bargeldlimit der Kassenlade wird pro Filiale festgelegt.
-    candado_recibido_ayuda: Mit Sperre verlangt eine Rechnung mit mehr Menge als die verknüpften Wareneingänge einen Grund und geht mit dem bewerteten Überschuss zur Prüfung; wer die Berechtigung zum Überschreiten hat, erfasst sie ohne weiteres. Ohne Sperre wird nur die Differenz angezeigt.
+    candado_recibido_ayuda: Mit Sperre (Standard) wird eine Rechnung mit mehr Menge als die verknüpften Wareneingänge nicht erfasst und der Versuch gemeldet; wer die Berechtigung zum Überschreiten hat, erfasst sie mit Grund und sie geht mit dem bewerteten Überschuss zur Prüfung. Ohne Sperre wird nur die Differenz angezeigt.
     compras_apagado: Das Einkaufsmodul ist aus; einschalten unter
     ir_sucursales: Filialen ansehen
     claves:
@@ -91,6 +91,7 @@ de:
       regla_precio: Preis in Lisp
       regla_retiro: Entnahmen in Lisp
       regla_movimiento: Bestand in Lisp
+      regla_factura: Rechnungen in Lisp
     secciones_ayuda:
       para_ti: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
       negocio: Die Betriebsdaten, wie sie auf dem Ticket stehen, mit dem Ticket daneben genau so, wie es gedruckt wird. Gilt für alle Filialen.
@@ -337,7 +338,8 @@ de:
       folio_obligatorio: die Rechnungsnummer fehlt
       folio_repetido: Rechnung %{folio} dieses Lieferanten ist schon erfasst
       monto_cero: der Betrag muss größer als null sein
-      excede_recibido: 'es wird mehr abgerechnet als erhalten (%{detalle}): Grund angeben'
+      falta_motivo: '%{motivo}: Grund angeben'
+      factura_frenada: '%{motivo}. So kann sie nicht erfasst werden: fehlende Wareneingänge verknüpfen oder jemanden mit Berechtigung zum Überschreiten erfassen lassen. Es wurde gemeldet.'
       factura_ya_cancelada: die Rechnung ist bereits storniert
       factura_con_pagos: 'die Rechnung hat Zahlungen: erst stornieren'
       pago_excede: die Zahlung übersteigt den Rest der Rechnung (%{resta})
@@ -405,6 +407,7 @@ de:
       corte: Abschnitt %{folio} mit einer Differenz von %{diferencia} geschlossen
       frenado: Versuch im Kassenabschnitt %{folio} gestoppt
       frenado_producto: 'Bewegung gestoppt: %{producto}'
+      frenado_proveedor: 'Rechnung gestoppt von %{proveedor}'
       corte_abierto: Kassenabschnitt %{folio}, offen
   estados:
     pendiente: offen
@@ -888,7 +891,8 @@ de:
     recepciones_a_ligar: Wareneingänge, die diese Rechnung abdeckt
     recepciones_a_ligar_ayuda: Wareneingänge ohne Rechnung dieses Lieferanten ankreuzen; sie werden beim Speichern verknüpft. Später auch aus der Rechnung möglich.
     motivo_exceso: Grund, falls mehr als erhalten abgerechnet wird
-    candado_aviso: 'Sperre aktiv: hat eine Zeile mehr Menge als die angekreuzten Wareneingänge, ist ein Grund nötig und die Rechnung geht zur Prüfung.'
+    candado_aviso: 'Sperre aktiv: hat eine Zeile mehr Menge als die angekreuzten Wareneingänge, wird die Rechnung nicht erfasst; mit Berechtigung zum Überschreiten ist ein Grund nötig und sie geht zur Prüfung.'
+    factura_frenada: 'Rechnung %{folio} gestoppt: %{regla}'
     comparativo_ayuda: 'Pro Produkt: was die Rechnung sagt und was in den verknüpften Wareneingängen ankam. Ein Hinweis, keine Sperre.'
     sin_renglones_ni_recepciones: 'Keine Positionen und keine verknüpften Wareneingänge: nichts zu vergleichen.'
     facturado: Berechnet
@@ -991,6 +995,35 @@ de:
     lee: Was sie liest (in Pesos)
     contesta: Was sie antwortet
     ejemplo: Beispiel
+  regla_factura:
+    titulo: Rechnungen in Lisp
+    ayuda: Bevor eine Lieferantenrechnung erfasst wird, vergleicht diese Regel das Abgerechnete mit den verknüpften Wareneingängen und entscheidet, ob sie erfasst wird, ob sie zur Prüfung geht oder ob gestoppt wird. Testen speichert nichts.
+    fallo: 'Die Rechnungsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    motivos:
+      over_received: 'es wird mehr abgerechnet als erhalten (%{detalle})'
+    caso:
+      productos_de_mas: Produkte zu viel
+      valor_de_mas: Wert des Überschusses
+      total: Rechnungssumme
+      candado_puesto: Die Sperre in Einstellungen › Einkauf ist aktiv.
+      candado_quitado: Die Sperre in Einstellungen › Einkauf ist aus.
+      autorizado: Abgerechnet von jemandem mit Berechtigung zum Überschreiten
+    veredictos:
+      allow: Wird erfasst
+      review: Wird erfasst und geprüft
+      reject: Wird gestoppt
+    funciones:
+      excess_items: wie viele Produkte zu viel kommen
+      excess_value: was der Überschuss wert ist
+      total: die Rechnungssumme
+      receipts: wie viele Wareneingänge verknüpft sind
+      supplier: der Name des Lieferanten
+      lock: ob die Sperre in Einstellungen › Einkauf aktiv ist
+      authorized: ob die Person überschreiten darf
+    allow: wird erfasst
+    to_review: verlangt einen Grund und geht zur Prüfung
+    reject: wird nicht erfasst und der Versuch gemeldet
+    nucleo: Wer überschreiten darf, kann sie immer erfassen; für diese Person heißt Stoppen Prüfung mit Grund.
   regla_movimiento:
     titulo: Bestand in Lisp
     ayuda: Vor einem losen Zugang, einer Korrektur oder Schwund prüft diese Regel was, wie viel und warum und entscheidet, ob gebucht wird, ob es zur Prüfung geht oder ob gestoppt wird. Grund und genug Bestand verlangt Sakuya vorher. Testen speichert nichts.

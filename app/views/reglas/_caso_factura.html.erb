@@ -1,0 +1,7 @@
+<div><label for="productos_de_mas" class="etiqueta-campo"><%= t("#{textos}.caso.productos_de_mas") %></label>
+  <%= number_field_tag :productos_de_mas, caso[:productos_de_mas], step: 1, min: 0, id: "productos_de_mas", class: "w-24 font-mono" %></div>
+<div><label for="valor_de_mas" class="etiqueta-campo"><%= t("#{textos}.caso.valor_de_mas") %></label>
+  <%= number_field_tag :valor_de_mas, format("%.2f", caso[:valor_de_mas] / 100r), step: "0.01", min: 0, id: "valor_de_mas", class: "w-32 font-mono" %></div>
+<div><label for="total" class="etiqueta-campo"><%= t("#{textos}.caso.total") %></label>
+  <%= number_field_tag :total, format("%.2f", caso[:total] / 100r), step: "0.01", min: 0, id: "total", class: "w-32 font-mono" %></div>
+<p class="pb-2 text-stone-600"><%= t("#{textos}.caso.candado_#{ReglaFactura.candado? ? 'puesto' : 'quitado'}") %></p>

@@ -49,45 +49,53 @@ class ComprasControllerTest < ActionDispatch::IntegrationTest
     assert_equal 200_00, Corte.abierto_en(@matriz).efectivo_esperado_centavos
   end
 
-  test "candado de compras: facturar más de lo recibido exige motivo y queda por revisar; el estado de recepción se ve" do
+  test "candado de compras, puesto de fábrica: facturar de más se frena y se reporta; con permiso pide motivo y queda por revisar" do
     prov = Proveedor.create!(nombre: "Granja", dias_credito: 0)
     r = Compras.recibir!(sucursal: @matriz, proveedor: prov, usuario: usuarios(:admin), lineas: [ { producto_id: productos(:catsup).id, cantidad: "12" } ])
     lineas = { "0" => { producto_id: productos(:catsup).id, cantidad: "15", precio: "30" } }
+    get ajustes_seccion_path("compras")
+    assert_select "input[name='ajuste[compras.candado_recibido]'][checked]", 1, "de fábrica, puesto"
     # Sin candado solo se enseña la diferencia.
+    Ajuste.guardar!("compras.candado_recibido" => "0")
     post facturas_path, params: { factura: { proveedor_id: prov.id, folio: "F-1", fecha: Date.current, recepcion_ids: [ r.id ], lineas_attributes: lineas } }
     assert_redirected_to factura_path(FacturaProveedor.last)
     assert_equal 0, Revision.count
     assert_equal "parcial", FacturaProveedor.last.estado_recepcion
     Ajuste.guardar!("compras.candado_recibido" => "1")
-    # El admin tiene compras.exceder: pasa sin motivo y sin revisión.
+    # El admin tiene compras.exceder: la registra, pero con motivo y queda por revisar.
     post facturas_path, params: { factura: { proveedor_id: prov.id, folio: "F-2", fecha: Date.current, lineas_attributes: lineas } }
-    assert_redirected_to factura_path(FacturaProveedor.last)
-    assert_equal 0, Revision.count
-    assert_equal "sin_recepcion", FacturaProveedor.last.estado_recepcion
+    assert_match "más de lo recibido (Cátsup 1 kg +15 pz): escribe el motivo", flash[:alert]
+    post facturas_path, params: { factura: { proveedor_id: prov.id, folio: "F-2", fecha: Date.current, motivo: "llega mañana", lineas_attributes: lineas } }
+    f = FacturaProveedor.find_by!(folio: "F-2")
+    assert_redirected_to factura_path(f)
+    assert_match "queda por revisar", flash[:notice]
+    assert_equal "sin_recepcion", f.estado_recepcion
+    rev = Revision.last
+    assert_equal [ f, 45_000 ], [ rev.revisable, rev.valor_centavos ], "15 de más × 30.00"
+    assert_match "llega mañana (Cátsup 1 kg +15 pz)", rev.motivo
+    assert_match "con más de lo recibido", rev.descripcion
+    # Sin el permiso no se registra y el intento queda reportado.
     roles(:administrador).update!(permisos: Permiso::CLAVES.keys - [ "compras.exceder" ])
     get new_factura_path
     assert_select "input[name='factura[motivo]']"
     assert_select "input[name='factura[recepcion_ids][]']", { count: 0 }, "la recepción ya se ligó a F-1"
-    post facturas_path, params: { factura: { proveedor_id: prov.id, folio: "F-3", fecha: Date.current, lineas_attributes: lineas } }
-    assert_match "más de lo recibido", flash[:alert]
-    assert_nil FacturaProveedor.find_by(folio: "F-3")
     r2 = Compras.recibir!(sucursal: @matriz, proveedor: prov, usuario: usuarios(:admin), lineas: [ { producto_id: productos(:catsup).id, cantidad: "10" } ])
     post facturas_path, params: { factura: { proveedor_id: prov.id, folio: "F-3", fecha: Date.current, recepcion_ids: [ r2.id ], motivo: "el proveedor cobra la merma", lineas_attributes: lineas } }
-    f = FacturaProveedor.find_by!(folio: "F-3")
-    assert_redirected_to factura_path(f)
-    assert_match "queda por revisar", flash[:notice]
+    assert_match "Así no se registra", flash[:alert]
+    assert_nil FacturaProveedor.find_by(folio: "F-3")
     rev = Revision.last
-    assert_equal f, rev.revisable
-    assert_equal 15_000, rev.valor_centavos, "5 de más × 30.00"
-    assert_match "Cátsup 1 kg +5", rev.motivo
-    assert_match "con más de lo recibido", rev.descripcion
+    assert rev.frenado?
+    assert_equal [ prov, 15_000 ], [ rev.revisable, rev.valor_centavos ], "5 de más × 30.00"
+    assert_match "Factura F-3 frenada", rev.motivo
+    assert_match "Factura frenada de Granja", rev.descripcion
+    r3 = Compras.recibir!(sucursal: @matriz, proveedor: prov, usuario: usuarios(:admin), lineas: [ { producto_id: productos(:catsup).id, cantidad: "5" } ])
+    post facturas_path, params: { factura: { proveedor_id: prov.id, folio: "F-3", fecha: Date.current, recepcion_ids: [ r2.id, r3.id ], lineas_attributes: lineas } }
+    assert_equal "completa", FacturaProveedor.find_by!(folio: "F-3").estado_recepcion, "con lo que faltaba ligado, pasa"
     post facturas_path, params: { factura: { proveedor_id: prov.id, folio: "F-4", fecha: Date.current, monto: "80" } }
     assert_equal "completa", FacturaProveedor.find_by!(folio: "F-4").estado_recepcion, "sin renglones no hay qué comparar"
     get facturas_path
     assert_select "span", /recibida parcial/
     assert_select "span", /sin recepción/
-    get ajustes_seccion_path("compras")
-    assert_select "input[name='ajuste[compras.candado_recibido]'][checked]"
   end
 
   test "con el módulo apagado sus pantallas lo dicen y desaparece de la cinta" do
