@@ -41,6 +41,17 @@
       </div>
     <% end %>
 
+    <% if @informes.any? %>
+      <div id="informes">
+        <h3 class="etiqueta-dato mb-1"><%= t("repl.informes") %></h3>
+        <div class="flex flex-wrap gap-2">
+          <% @informes.each do |i| %>
+            <%= button_to i.titulo, repl_evaluar_path, params: { texto: i.codigo }, form: { data: { turbo: false } }, class: "btn btn-secondary btn-sm", title: "#{i.plugin} · #{i.codigo}" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
     <% if @historial.any? %>
       <div>
         <h3 class="etiqueta-dato mb-1"><%= t("repl.historial") %></h3>

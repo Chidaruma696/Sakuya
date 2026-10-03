@@ -9,6 +9,7 @@ class ReplController < ApplicationController
   def show
     @texto = params[:texto].presence || "(sales)"
     @historial = session[:repl] || []
+    @informes = informes
   end
 
   def evaluar
@@ -21,6 +22,16 @@ class ReplController < ApplicationController
     end
     session[:repl] = ([ @texto.strip ] + (session[:repl] || [])).uniq.first(HISTORIAL) if @texto.present? && @texto.size <= 300
     @historial = session[:repl]
+    @informes = informes
     render :show, status: @error ? :unprocessable_entity : :ok
+  end
+
+  private
+
+  # Los informes que traen los plugins encendidos; si alguno ya no se lee, no estorba al REPL.
+  def informes
+    Plugin.informes
+  rescue Lisp::Error
+    []
   end
 end

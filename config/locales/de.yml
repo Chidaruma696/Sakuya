@@ -1095,6 +1095,7 @@ de:
     ayuda: Stell den Live-Daten Fragen mit demselben Lisp wie die Regeln. Abfragen liefern Listen von Maps, die man filtern, sortieren und summieren kann; eine Liste von Maps erscheint als Tabelle. Von hier aus lässt sich nichts ändern. Daten wie "2026-10-03"; ohne Datum heute.
     evaluar: Auswerten
     historial: Zuletzt gefragt
+    informes: Berichte der Plugins
     consultas: Abfragen
     herramientas: Zum Bearbeiten der Listen
     solo_lectura: der REPL liest nur; das hat versucht, in die Datenbank zu schreiben

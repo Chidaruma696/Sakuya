@@ -1095,6 +1095,7 @@ en:
     ayuda: Ask the live data questions with the same Lisp as the rules. Queries return lists of maps you can filter, sort and add up; a list of maps shows as a table. Nothing can be changed from here. Dates like "2026-10-03"; without dates, today.
     evaluar: Evaluate
     historial: What you asked last
+    informes: Plugin reports
     consultas: Queries
     herramientas: To work the lists
     solo_lectura: the REPL only reads; that tried to write to the database

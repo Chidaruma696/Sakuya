@@ -25,6 +25,17 @@ class PluginsTest < ActionDispatch::IntegrationTest
     assert_match "No se instaló", flash[:alert]
   end
 
+  test "los informes de un plugin encendido salen como botones en el REPL" do
+    Plugin.instalar!(%((plugin "fonda") (report "Cuántos productos" (count (products)))), usuario: usuarios(:admin))
+    get repl_path
+    assert_select "#informes", 0, "apagado no aporta nada"
+    Plugin.last.update!(activo: true)
+    get repl_path
+    assert_select "#informes button", "Cuántos productos"
+    post repl_evaluar_path, params: { texto: "(count (products))" }
+    assert_select "#resultado pre", Producto.count.to_s
+  end
+
   test "sin reglas.editar no se entra" do
     post entrar_path, params: { usuario: "cajera", password: "secreto1" }
     get plugins_path

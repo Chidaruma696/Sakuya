@@ -1095,6 +1095,7 @@ es:
     ayuda: Pregúntale cosas a los datos en vivo con el mismo Lisp de las reglas. Las consultas devuelven listas de mapas que se filtran, ordenan y suman; una lista de mapas sale como tabla. No se puede cambiar nada desde aquí. Fechas como "2026-10-03"; sin fechas, hoy.
     evaluar: Evaluar
     historial: Lo último que preguntaste
+    informes: Informes de los plugins
     consultas: Consultas
     herramientas: Para trabajar las listas
     solo_lectura: el REPL solo lee; eso intentó escribir en la base
