@@ -1,55 +1,55 @@
 require "test_helper"
 
-class FoliosPorSucursalTest < ActiveSupport::TestCase
-  test "cada sucursal lleva su propia numeración: dos tiendas pueden tener su K-00001" do
-    a = Conteo.abrir!(sucursal: sucursales(:matriz), usuario: usuarios(:admin), responsable: usuarios(:admin))
-    b = Conteo.abrir!(sucursal: sucursales(:tienda), usuario: usuarios(:supervisora), responsable: usuarios(:cajera))
+class FoliosByBranchTest < ActiveSupport::TestCase
+  test "each branch keeps its own numbering: two stores can both have their K-00001" do
+    a = StockCount.open!(branch: branches(:head_office), user: users(:admin), responsible: users(:admin))
+    b = StockCount.open!(branch: branches(:store), user: users(:supervisor), responsible: users(:cashier))
     assert_equal a.folio, b.folio
     assert_equal "K-00001", b.folio
-    assert_raises(ActiveRecord::RecordInvalid) { Conteo.create!(sucursal: sucursales(:tienda), usuario: usuarios(:supervisora), responsable: usuarios(:cajera), folio: "K-00001") }
+    assert_raises(ActiveRecord::RecordInvalid) { StockCount.create!(branch: branches(:store), user: users(:supervisor), responsible: users(:cashier), folio: "K-00001") }
   end
 end
 
 class FolioTest < ActiveSupport::TestCase
-  test "numera por sucursal y prefijo, empezando en 1 y con cinco dígitos" do
-    assert_equal "B-00001", Folio.siguiente!(sucursales(:matriz), "venta")
-    assert_equal "B-00002", Folio.siguiente!(sucursales(:matriz), "venta")
-    assert_equal "B-00001", Folio.siguiente!(sucursales(:tienda), "venta")
-    assert_equal "TG-00001", Folio.siguiente!(sucursales(:matriz), "traspaso")
+  test "numbers by branch and prefix, starting at 1 with five digits" do
+    assert_equal "B-00001", Folio.next_number!(branches(:head_office), "sale")
+    assert_equal "B-00002", Folio.next_number!(branches(:head_office), "sale")
+    assert_equal "B-00001", Folio.next_number!(branches(:store), "sale")
+    assert_equal "TG-00001", Folio.next_number!(branches(:head_office), "stock_transfer")
   end
 
-  test "no repite folios aunque se pidan muchos seguidos" do
-    folios = 50.times.map { Folio.siguiente!(sucursales(:tienda), "venta") }
+  test "never repeats a folio even when many are requested in a row" do
+    folios = 50.times.map { Folio.next_number!(branches(:store), "sale") }
     assert_equal folios.uniq.size, folios.size
     assert_equal "B-00050", folios.last
   end
 
-  test "el prefijo lo elige el negocio y cambiarlo no reinicia la numeración; sin prefijo sale solo el número" do
-    Folio.siguiente!(sucursales(:matriz), "venta")
-    Ajuste.guardar!("folios.venta" => "nv")
-    assert_equal "NV-00002", Folio.siguiente!(sucursales(:matriz), "venta"), "se guarda en mayúsculas y sigue la cuenta"
-    Ajuste.guardar!("folios.venta" => "")
-    assert_equal "00003", Folio.siguiente!(sucursales(:matriz), "venta")
-    assert_raises(ArgumentError) { Ajuste.guardar!("folios.venta" => "B-1") }
-    assert_raises(ArgumentError) { Ajuste.guardar!("folios.venta" => "LARGO") }
+  test "the business picks the prefix and changing it does not restart the count; with no prefix only the number comes out" do
+    Folio.next_number!(branches(:head_office), "sale")
+    Setting.store!("folios.sale" => "nv")
+    assert_equal "NV-00002", Folio.next_number!(branches(:head_office), "sale"), "it is stored in uppercase and the count goes on"
+    Setting.store!("folios.sale" => "")
+    assert_equal "00003", Folio.next_number!(branches(:head_office), "sale")
+    assert_raises(ArgumentError) { Setting.store!("folios.sale" => "B-1") }
+    assert_raises(ArgumentError) { Setting.store!("folios.sale" => "TOOLONG") }
   end
 
-  test "el código de la sucursal puede ir delante, y el asistente arma los ajustes según lo elegido" do
-    Ajuste.guardar!("folios.sucursal" => "1")
-    assert_equal "MTZ-B-00001", Folio.siguiente!(sucursales(:matriz), "venta")
-    assert_equal({ "folios.modo" => "por_documento", "folios.sucursal" => "0", "folios.venta" => "NV" }, Instalacion.ajustes_de_folios("por_documento", "propia", "nv"))
-    assert_equal "", Instalacion.ajustes_de_folios("unico", "ninguna", nil)["folios.unico"]
-    assert_equal({ "folios.modo" => "unico", "folios.sucursal" => "1", "folios.unico" => "" }, Instalacion.ajustes_de_folios("unico", "sucursal", "B"))
+  test "the branch code can go in front, and the setup wizard builds the settings from the choices" do
+    Setting.store!("folios.branch" => "1")
+    assert_equal "MTZ-B-00001", Folio.next_number!(branches(:head_office), "sale")
+    assert_equal({ "folios.mode" => "per_document", "folios.branch" => "0", "folios.sale" => "NV" }, Setup.folio_settings("per_document", "own", "nv"))
+    assert_equal "", Setup.folio_settings("single", "none", nil)["folios.single"]
+    assert_equal({ "folios.mode" => "single", "folios.branch" => "1", "folios.single" => "" }, Setup.folio_settings("single", "branch", "B"))
   end
 
-  test "con numeración única todos los documentos comparten la cuenta, por sucursal" do
-    Ajuste.guardar!("folios.modo" => "unico", "folios.unico" => "F")
-    assert_equal "F-00001", Folio.siguiente!(sucursales(:matriz), "venta")
-    assert_equal "F-00002", Folio.siguiente!(sucursales(:matriz), "corte")
-    assert_equal "F-00003", Folio.siguiente!(sucursales(:matriz), "recepcion")
-    assert_equal "F-00001", Folio.siguiente!(sucursales(:tienda), "venta")
-    assert_raises(ArgumentError) { Ajuste.guardar!("folios.modo" => "raro") }
-    Ajuste.guardar!("folios.modo" => "por_documento")
-    assert_equal "B-00001", Folio.siguiente!(sucursales(:matriz), "venta"), "al volver, cada documento retoma su propia cuenta"
+  test "with single numbering every document shares the count, per branch" do
+    Setting.store!("folios.mode" => "single", "folios.single" => "F")
+    assert_equal "F-00001", Folio.next_number!(branches(:head_office), "sale")
+    assert_equal "F-00002", Folio.next_number!(branches(:head_office), "shift")
+    assert_equal "F-00003", Folio.next_number!(branches(:head_office), "receipt")
+    assert_equal "F-00001", Folio.next_number!(branches(:store), "sale")
+    assert_raises(ArgumentError) { Setting.store!("folios.mode" => "odd") }
+    Setting.store!("folios.mode" => "per_document")
+    assert_equal "B-00001", Folio.next_number!(branches(:head_office), "sale"), "when switching back, each document picks up its own count"
   end
 end

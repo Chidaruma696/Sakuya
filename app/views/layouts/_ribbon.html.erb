@@ -1,49 +1,49 @@
-<% activa = pestana_activa %>
-<%# Cinta simplificada, como el Office de hoy: una barra delgada con el nombre, las pestañas con una
-    rayita bajo la activa y una sola fila de comandos, icono y texto en línea. El grupo de cada
-    comando va en su title. En pantalla angosta todo vive en la barra lateral. %>
-<div class="sticky top-0 z-30 shadow-sm" id="cinta">
-  <header class="bg-marca-700 text-claro">
+<% active = active_tab %>
+<%# Simplified ribbon, like today's Office: a thin bar with the name, the tabs with a little
+    line under the active one and a single row of commands, icon and text inline. Each command's
+    group goes in its title. On a narrow screen everything lives in the sidebar. %>
+<div class="sticky top-0 z-30 shadow-sm" id="ribbon">
+  <header class="bg-brand-700 text-light">
     <div class="flex h-11 w-full items-center gap-3 px-4 text-sm">
-      <%# El logo: en pantalla ancha abre el "Acerca de"; en angosta abre la barra lateral %>
-      <button type="button" data-action="lateral#abrir" title="<%= t("cinta.menu") %>" class="flex shrink-0 items-center rounded-md p-0.5 transition hover:bg-claro/15 focus:bg-claro/20 focus:outline-none md:hidden">
-        <%= image_tag "logo-w.png", alt: t("cinta.menu"), class: "h-7 w-7" %>
+      <%# The logo: on a wide screen it opens "About"; on a narrow one it opens the sidebar %>
+      <button type="button" data-action="sidebar#open" title="<%= t("ribbon.menu") %>" class="flex shrink-0 items-center rounded-md p-0.5 transition hover:bg-light/15 focus:bg-light/20 focus:outline-none md:hidden">
+        <%= image_tag "logo-w.png", alt: t("ribbon.menu"), class: "h-7 w-7" %>
       </button>
-      <button type="button" data-action="dialogo#abrir" title="<%= t("acerca.titulo") %>" class="hidden shrink-0 items-center gap-2 rounded-md py-0.5 pl-0.5 pr-2 transition hover:bg-claro/15 focus:bg-claro/20 focus:outline-none md:flex">
+      <button type="button" data-action="dialog#open" title="<%= t("about.title") %>" class="hidden shrink-0 items-center gap-2 rounded-md py-0.5 pl-0.5 pr-2 transition hover:bg-light/15 focus:bg-light/20 focus:outline-none md:flex">
         <%= image_tag "logo-w.png", alt: "Sakuya", class: "h-7 w-7" %>
         <span class="font-semibold tracking-wide">Sakuya</span>
       </button>
-      <span class="font-semibold md:hidden"><%= t("cinta.pestanas.#{activa[:id]}") %></span>
-      <span class="ml-auto hidden truncate text-claro/80 lg:inline" title="<%= sucursal_actual %> · <%= usuario_actual %>"><%= sucursal_actual %> · <%= usuario_actual %></span>
-      <%# En angosto, Salir vive solo en la barra lateral %>
-      <%= button_to salir_path, method: :delete, class: "btn btn-sm shrink-0 border-claro/30 bg-claro/10 text-claro shadow-none hover:bg-claro/20", title: "#{sucursal_actual} · #{usuario_actual}", form: { class: "ml-auto hidden md:block lg:ml-0" } do %>
-        <i class="bi bi-box-arrow-right"></i> <%= t("cinta.salir") %>
+      <span class="font-semibold md:hidden"><%= t("ribbon.tabs.#{active[:id]}") %></span>
+      <span class="ml-auto hidden truncate text-light/80 lg:inline" title="<%= current_branch %> · <%= current_user %>"><%= current_branch %> · <%= current_user %></span>
+      <%# On narrow screens, Log out lives only in the sidebar %>
+      <%= button_to logout_path, method: :delete, class: "btn btn-sm shrink-0 border-light/30 bg-light/10 text-light shadow-none hover:bg-light/20", title: "#{current_branch} · #{current_user}", form: { class: "ml-auto hidden md:block lg:ml-0" } do %>
+        <i class="bi bi-box-arrow-right"></i> <%= t("ribbon.logout") %>
       <% end %>
     </div>
   </header>
 
   <div class="hidden border-b border-stone-200 bg-white md:block">
-    <nav class="flex w-full items-end gap-1 overflow-x-auto px-3 text-sm" aria-label="<%= t("cinta.menu") %>">
-      <% pestanas_visibles.each do |p| %>
-        <% actual = p[:id] == activa[:id] %>
-        <%= link_to t("cinta.pestanas.#{p[:id]}"), ruta_de_pestana(p),
-              class: "relative shrink-0 px-3 pb-2 pt-2.5 font-medium transition-colors #{actual ? 'text-marca-800 after:absolute after:inset-x-2 after:bottom-0 after:h-[3px] after:rounded-full after:bg-marca-600' : 'text-stone-600 hover:text-stone-900'}",
-              "aria-current": (actual ? "page" : nil) %>
+    <nav class="flex w-full items-end gap-1 overflow-x-auto px-3 text-sm" aria-label="<%= t("ribbon.menu") %>">
+      <% visible_tabs.each do |tab| %>
+        <% current = tab[:id] == active[:id] %>
+        <%= link_to t("ribbon.tabs.#{tab[:id]}"), route_of_tab(tab),
+              class: "relative shrink-0 px-3 pb-2 pt-2.5 font-medium transition-colors #{current ? 'text-brand-800 after:absolute after:inset-x-2 after:bottom-0 after:h-[3px] after:rounded-full after:bg-brand-600' : 'text-stone-600 hover:text-stone-900'}",
+              "aria-current": (current ? "page" : nil) %>
       <% end %>
     </nav>
-    <%# La fila de comandos de la pestaña activa: los grupos se separan con una rayita vertical %>
+    <%# The command row of the active tab: groups are separated by a little vertical line %>
     <div class="flex w-full flex-wrap items-center gap-1 px-3 pb-2 pt-1">
-      <% grupos = activa[:grupos].select { |g| grupo_visible?(g) } %>
-      <% grupos.each_with_index do |g, i| %>
-        <% botones = g[:botones].select { |b| boton_visible?(b) } %>
-        <% next if botones.empty? %>
+      <% groups = active[:groups].select { |g| group_visible?(g) } %>
+      <% groups.each_with_index do |g, i| %>
+        <% buttons = g[:buttons].select { |b| button_visible?(b) } %>
+        <% next if buttons.empty? %>
         <% if i.positive? %><span class="mx-1 h-5 w-px bg-stone-200" aria-hidden="true"></span><% end %>
-        <% botones.each do |b| %>
-          <% ruta = send(b.ruta) %>
-          <%= link_to ruta, title: t("cinta.grupos.#{g[:id]}"),
-                class: "cinta-comando inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors #{current_page?(ruta) ? 'bg-marca-100 font-medium text-marca-900' : 'text-stone-700 hover:bg-marca-50 hover:text-marca-800'}" do %>
-            <i class="bi bi-<%= b.icono %> text-base leading-none"></i>
-            <span><%= t("cinta.botones.#{b.clave}") %></span>
+        <% buttons.each do |b| %>
+          <% route = send(b.route) %>
+          <%= link_to route, title: t("ribbon.groups.#{g[:id]}"),
+                class: "ribbon-command inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm transition-colors #{current_page?(route) ? 'bg-brand-100 font-medium text-brand-900' : 'text-stone-700 hover:bg-brand-50 hover:text-brand-800'}" do %>
+            <i class="bi bi-<%= b.icon %> text-base leading-none"></i>
+            <span><%= t("ribbon.buttons.#{b.key}") %></span>
           <% end %>
         <% end %>
       <% end %>
@@ -51,41 +51,41 @@
   </div>
 </div>
 
-<%# Barra lateral (solo en pantalla angosta): todas las pestañas con sus botones, en vertical %>
-<div class="fixed inset-0 z-40 hidden bg-stone-900/50 md:hidden" data-lateral-target="fondo" data-action="click->lateral#cerrar"></div>
-<aside class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] -translate-x-full flex-col bg-fondo shadow-2xl transition-transform duration-200 md:hidden" data-lateral-target="panel" aria-label="<%= t("cinta.menu") %>">
-  <div class="flex items-center gap-3 bg-marca-700 px-4 py-3 text-claro">
+<%# Sidebar (narrow screens only): every tab with its buttons, stacked vertically %>
+<div class="fixed inset-0 z-40 hidden bg-stone-900/50 md:hidden" data-sidebar-target="backdrop" data-action="click->sidebar#close"></div>
+<aside class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] -translate-x-full flex-col bg-surface shadow-2xl transition-transform duration-200 md:hidden" data-sidebar-target="panel" aria-label="<%= t("ribbon.menu") %>">
+  <div class="flex items-center gap-3 bg-brand-700 px-4 py-3 text-light">
     <%= image_tag "logo-w.png", alt: "", class: "h-8 w-8" %>
     <div class="min-w-0 flex-1">
       <div class="font-bold leading-tight">Sakuya</div>
-      <div class="truncate text-xs text-claro/80"><%= sucursal_actual %> · <%= usuario_actual %></div>
+      <div class="truncate text-xs text-light/80"><%= current_branch %> · <%= current_user %></div>
     </div>
-    <button type="button" class="btn btn-sm border-transparent bg-claro/15 text-claro shadow-none hover:bg-claro/25" data-action="lateral#cerrar" title="<%= t("comun.cerrar") %>"><i class="bi bi-x-lg"></i></button>
+    <button type="button" class="btn btn-sm border-transparent bg-light/15 text-light shadow-none hover:bg-light/25" data-action="sidebar#close" title="<%= t("common.close") %>"><i class="bi bi-x-lg"></i></button>
   </div>
   <nav class="flex-1 overflow-y-auto px-2 py-2 text-sm">
-    <% pestanas_visibles.each do |p| %>
-      <div class="mt-3 px-2 text-[11px] font-bold uppercase tracking-wide <%= p[:id] == activa[:id] ? 'text-marca-800' : 'text-stone-500' %>"><%= t("cinta.pestanas.#{p[:id]}") %></div>
-      <% p[:grupos].select { |g| grupo_visible?(g) }.each do |g| %>
-        <% g[:botones].select { |b| boton_visible?(b) }.each do |b| %>
-          <% ruta = send(b.ruta) %>
-          <%= link_to ruta, class: "flex items-center gap-3 rounded-md px-2 py-2 text-stone-800 hover:bg-white #{'bg-white font-semibold text-marca-900 shadow-sm ring-1 ring-marca-200' if current_page?(ruta)}" do %>
-            <i class="bi bi-<%= b.icono %> w-5 text-center text-lg leading-none text-stone-600"></i>
-            <span><%= t("cinta.botones.#{b.clave}") %></span>
-            <span class="ml-auto text-[10px] uppercase text-stone-400"><%= t("cinta.grupos.#{g[:id]}") %></span>
+    <% visible_tabs.each do |tab| %>
+      <div class="mt-3 px-2 text-[11px] font-bold uppercase tracking-wide <%= tab[:id] == active[:id] ? 'text-brand-800' : 'text-stone-500' %>"><%= t("ribbon.tabs.#{tab[:id]}") %></div>
+      <% tab[:groups].select { |g| group_visible?(g) }.each do |g| %>
+        <% g[:buttons].select { |b| button_visible?(b) }.each do |b| %>
+          <% route = send(b.route) %>
+          <%= link_to route, class: "flex items-center gap-3 rounded-md px-2 py-2 text-stone-800 hover:bg-white #{'bg-white font-semibold text-brand-900 shadow-sm ring-1 ring-brand-200' if current_page?(route)}" do %>
+            <i class="bi bi-<%= b.icon %> w-5 text-center text-lg leading-none text-stone-600"></i>
+            <span><%= t("ribbon.buttons.#{b.key}") %></span>
+            <span class="ml-auto text-[10px] uppercase text-stone-400"><%= t("ribbon.groups.#{g[:id]}") %></span>
           <% end %>
         <% end %>
       <% end %>
     <% end %>
   </nav>
   <div class="border-t border-stone-300 px-2 py-2 text-sm">
-    <button type="button" class="flex w-full items-center gap-3 rounded-md px-2 py-2 text-stone-800 hover:bg-white" data-action="lateral#cerrar dialogo#abrir">
-      <i class="bi bi-info-circle w-5 text-center text-lg leading-none text-stone-600"></i><span><%= t("acerca.titulo") %></span>
+    <button type="button" class="flex w-full items-center gap-3 rounded-md px-2 py-2 text-stone-800 hover:bg-white" data-action="sidebar#close dialog#open">
+      <i class="bi bi-info-circle w-5 text-center text-lg leading-none text-stone-600"></i><span><%= t("about.title") %></span>
     </button>
-    <button type="button" class="hidden w-full items-center gap-3 rounded-md px-2 py-2 text-stone-800 hover:bg-white [&:not(.hidden)]:flex" data-pwa-target="boton" data-action="lateral#cerrar pwa#instalar">
-      <i class="bi bi-download w-5 text-center text-lg leading-none text-stone-600"></i><span><%= t("acerca.instalar") %></span>
+    <button type="button" class="hidden w-full items-center gap-3 rounded-md px-2 py-2 text-stone-800 hover:bg-white [&:not(.hidden)]:flex" data-pwa-target="button" data-action="sidebar#close pwa#install">
+      <i class="bi bi-download w-5 text-center text-lg leading-none text-stone-600"></i><span><%= t("about.install") %></span>
     </button>
-    <%= button_to salir_path, method: :delete, class: "flex w-full items-center gap-3 rounded-md px-2 py-2 text-corbata-700 hover:bg-white" do %>
-      <i class="bi bi-box-arrow-left w-5 text-center text-lg leading-none"></i><span><%= t("cinta.salir") %></span>
+    <%= button_to logout_path, method: :delete, class: "flex w-full items-center gap-3 rounded-md px-2 py-2 text-accent-700 hover:bg-white" do %>
+      <i class="bi bi-box-arrow-left w-5 text-center text-lg leading-none"></i><span><%= t("ribbon.logout") %></span>
     <% end %>
   </div>
 </aside>

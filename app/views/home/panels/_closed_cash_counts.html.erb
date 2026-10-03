@@ -1,0 +1,9 @@
+<div class="card">
+  <h2 class="mb-2 font-semibold"><%= t("home.closed_shifts") %></h2>
+  <table class="w-full text-sm">
+    <% @shifts.first(piece.limit).each do |c| %>
+      <tr class="border-t border-stone-100"><td class="py-1 font-mono"><%= c.folio %></td><td class="py-1"><%= c.branch %> · <%= c.user %></td><td class="py-1 text-right font-mono"><%= format_money(c.expected_cents) %></td><td class="py-1 text-right font-mono <%= c.difference_cents.to_i.negative? ? 'text-red-700' : 'text-green-700' %>"><%= format_money(c.difference_cents) %></td></tr>
+    <% end %>
+    <% if @shifts.empty? %><tr><td class="py-3 text-center text-stone-500"><%= t("home.no_shifts") %></td></tr><% end %>
+  </table>
+</div>

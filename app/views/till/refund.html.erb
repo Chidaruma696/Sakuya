@@ -1,0 +1,30 @@
+<h1 class="mb-4 text-2xl font-bold"><%= t("till.refund") %> · <%= current_branch %></h1>
+<%= form_with url: till_refund_path, method: :get, class: "mb-4 flex gap-2" do |f| %>
+  <%= f.text_field :code, value: params[:code], autofocus: true, autocomplete: "off", placeholder: t("till.scans_ticket"), class: "flex-1 rounded border border-stone-300 px-3 py-3 font-mono" %>
+  <%= f.submit t("common.search"), class: "btn btn-primary" %>
+<% end %>
+<% if @sale %>
+  <%= form_with url: till_create_refund_path, class: "card" do |f| %>
+    <%= f.hidden_field :sale_id, value: @sale.id %>
+    <%= f.hidden_field :code, value: params[:code] %>
+    <p class="mb-2 text-sm"><%= t("till.ticket") %> <strong class="font-mono"><%= @sale.folio %></strong> · <%= l @sale.created_at, format: :short %> · <%= format_money(@sale.total_cents) %> · <%= t("statuses.#{@sale.status}") %></p>
+    <table class="w-full text-sm">
+      <thead><tr><th class="px-3 py-2"><%= t("common.product") %></th><th class="px-3 py-2 text-right"><%= t("till.sold") %></th><th class="px-3 py-2 text-right"><%= t("till.already_refunded") %></th><th class="px-3 py-2 text-right"><%= t("common.price") %></th><th class="px-3 py-2"><%= t("till.do_refund") %></th></tr></thead>
+      <tbody>
+        <% @sale.lines.includes(:product, :refund_lines).each do |l| %>
+          <tr class="border-t border-stone-100">
+            <td class="px-3 py-2"><%= l.product.name %></td>
+            <td class="px-3 py-2 text-right font-mono"><%= quantity(l.quantity, l.product) %></td>
+            <td class="px-3 py-2 text-right font-mono"><%= number_with_precision(l.refunded_quantity, precision: l.product.decimals) %></td>
+            <td class="px-3 py-2 text-right font-mono"><%= format_money(l.price_cents) %></td>
+            <td class="px-3 py-2"><% if l.pending_quantity.positive? %><%= number_field_tag "lines[#{l.id}]", nil, step: l.product.fractional? ? "0.001" : "1", min: 0, max: l.pending_quantity, class: "w-28 rounded border border-stone-300 px-2 py-1 font-mono" %><% else %><span class="text-stone-400"><%= t("common.nothing").delete(".") %></span><% end %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <div class="mt-3 flex items-end gap-3 text-sm">
+      <div class="flex-1"><%= label_tag :reason, t("common.reason"), class: "block" %><%= text_field_tag :reason, nil, required: true, class: "w-full rounded border border-stone-300 px-3 py-2" %></div>
+      <%= submit_tag t("till.refund_and_back"), class: "btn btn-danger" %>
+    </div>
+  <% end %>
+<% end %>

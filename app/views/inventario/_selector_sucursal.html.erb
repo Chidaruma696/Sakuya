@@ -1,8 +1,0 @@
-<% if sucursal_actual.matriz? || puede?("admin.usuarios") %>
-  <%= form_with url: url_for, method: :get, class: "flex items-center gap-2 text-sm" do |f| %>
-    <%= f.hidden_field :producto_id, value: params[:producto_id] if params[:producto_id].present? %>
-    <%= f.label :sucursal_id, t("comun.sucursal") %>
-    <%= f.select :sucursal_id, Sucursal.activas.order(:nombre).pluck(:nombre, :id), { selected: @sucursal.id },
-                 onchange: "this.form.requestSubmit()", class: "btn btn-secondary btn-xs" %>
-  <% end %>
-<% end %>

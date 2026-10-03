@@ -1,0 +1,19 @@
+<h1 class="mb-1 text-2xl font-bold"><%= t("restock.title") %></h1>
+<p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("restock.help") %></p>
+<div class="space-y-4">
+  <% @branches.each do |s| %>
+    <% suggested = @suggested[s.id] %>
+    <div class="card text-sm" id="branch_<%= s.id %>">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h2 class="font-semibold"><%= s.name %> <span class="badge"><%= t("restock.missing", count: suggested.size) %></span></h2>
+        <div class="flex gap-2">
+          <%= link_to t("restock.minimums"), restock_minimums_path(branch_id: s.id), class: "btn btn-secondary btn-sm" %>
+          <%= link_to icon("boxes", t("restock.build")), new_stock_transfer_path(destination: s.id, suggested: 1), class: "btn btn-primary btn-sm" if suggested.any? %>
+        </div>
+      </div>
+      <% if suggested.any? %>
+        <p class="mt-2 text-stone-700"><%= suggested.map { |p, c| "#{quantity(c, p)} #{p.short_unit} #{p.name}" }.join(" · ") %></p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

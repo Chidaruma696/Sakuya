@@ -1,0 +1,19 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("admin.promotions") %></h1>
+  <%= link_to t("admin.new_promotion"), new_admin_promotion_path, class: "btn btn-primary btn-sm" %>
+</div>
+<table class="table">
+  <thead><tr><th class="px-3 py-2"><%= t("common.name") %></th><th class="px-3 py-2"><%= t("common.product") %></th><th class="px-3 py-2"><%= t("common.branch") %></th><th class="px-3 py-2"><%= t("admin.rule") %></th><th class="px-3 py-2"><%= t("admin.validity") %></th><th class="px-3 py-2"><%= t("admin.active") %></th><th></th></tr></thead>
+  <tbody>
+    <% @promotions.each do |p| %>
+      <tr class="border-t border-stone-100 <%= 'text-stone-400' unless p.current? %>">
+        <td class="px-3 py-2"><%= p.name %></td><td class="px-3 py-2"><%= p.product.name %></td><td class="px-3 py-2"><%= p.branch || t("common.all").downcase %></td>
+        <td class="px-3 py-2"><%= p.description %></td>
+        <td class="px-3 py-2"><%= [ p.from && l(p.from, format: :short), p.to && l(p.to, format: :short) ].compact.join(" → ").presence || t("admin.always") %></td>
+        <td class="px-3 py-2"><%= p.active ? t("common.yes") : t("common.no") %></td>
+        <td class="px-3 py-2 text-right whitespace-nowrap"><%= link_to t("common.edit").downcase, edit_admin_promotion_path(p), class: "link" %> · <%= button_to t("admin.delete"), admin_promotion_path(p), method: :delete, class: "inline text-red-700", form: { class: "inline", data: { turbo_confirm: t("admin.confirm_delete", name: p.name) } } %></td>
+      </tr>
+    <% end %>
+    <% if @promotions.empty? %><tr><td colspan="7" class="px-3 py-6 text-center text-stone-500"><%= t("admin.no_promotions") %></td></tr><% end %>
+  </tbody>
+</table>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>" data-theme="<%= current_user&.theme || "light" %>" data-density="<%= current_user&.density || "normal" %>" data-text-size="<%= current_user&.text_size || "normal" %>">
+  <head>
+    <meta charset="utf-8">
+    <title>Sakuya</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#7a90d2">
+    <link rel="manifest" href="<%= pwa_manifest_path(format: :json) %>">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <%= csrf_meta_tags %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body class="min-h-screen bg-surface text-stone-900 flex items-center justify-center <%= content_for?(:body_class) ? yield(:body_class) : "" %>">
+    <%= yield %>
+  </body>
+</html>

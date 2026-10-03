@@ -1,259 +1,259 @@
 import { Controller } from "@hotwired/stimulus"
-import { guardarCatalogo, catalogo, encolar, pendientes, quitar, buscar, claveNueva, pedir } from "sin_conexion"
+import { saveCatalog, catalog, enqueue, pending, remove, search, newKey, request } from "offline"
 
-// El ticket en pantalla: escanea, arma líneas, calcula para mostrar y manda todo al servidor,
-// que es quien de verdad cobra y recalcula. Sin conexión sigue vendiendo con el catálogo guardado
-// en el equipo y encola las ventas; al volver la red se suben solas, una por una.
+// The on-screen ticket: scans, builds lines, calculates for display and sends everything to the server,
+// which is what really checks out and recalculates. Offline it keeps selling with the catalog saved
+// on the device and queues the sales; when the network comes back they upload by themselves, one by one.
 export default class extends Controller {
-  static targets = ["codigo", "cuerpo", "total", "efectivo", "transferencia", "deposito", "cambio", "aviso",
-                    "pendiente", "pendienteNombre", "pendienteCantidad", "botonCobrar", "cliente", "credito", "conexion"]
-  static values = { escanearUrl: String, cobrarUrl: String, catalogoUrl: String, tokenUrl: String, sucursal: Number, clave: String, pedido: Object }
+  static targets = ["code", "body", "total", "cash", "transfer", "deposit", "change", "notice",
+                    "pending", "pendingName", "pendingQuantity", "checkoutButton", "customer", "credit", "connection"]
+  static values = { scanUrl: String, checkoutUrl: String, catalogUrl: String, tokenUrl: String, branch: Number, key: String, order: Object }
 
   connect() {
-    this.lineas = []
-    this.pendienteProducto = null
-    // La página puede venir de la caché (sin conexión): cada ticket estrena clave en el equipo.
-    this.clave = claveNueva()
-    this.alCambiarRed = () => { this.pintarConexion(); if (navigator.onLine) this.sincronizar() }
-    window.addEventListener("online", this.alCambiarRed)
-    window.addEventListener("offline", this.alCambiarRed)
-    this.reloj = setInterval(() => this.sincronizar(), 30_000)
-    this.actualizarCatalogo()
-    this.sincronizar()
-    // Cobrar un pedido: el ticket llega armado con sus renglones y su cliente.
-    if (this.pedidoValue.lineas) {
-      this.pedidoValue.lineas.forEach(l => this.agregar(l))
-      if (this.hasClienteTarget) this.clienteTarget.value = this.pedidoValue.cliente_id
+    this.lines = []
+    this.pendingProduct = null
+    // The page may come from the cache (offline): every ticket gets a fresh key on the device.
+    this.key = newKey()
+    this.onNetworkChange = () => { this.renderConnection(); if (navigator.onLine) this.sync() }
+    window.addEventListener("online", this.onNetworkChange)
+    window.addEventListener("offline", this.onNetworkChange)
+    this.clock = setInterval(() => this.sync(), 30_000)
+    this.updateCatalog()
+    this.sync()
+    // Checking out an order: the ticket arrives prefilled with its lines and its customer.
+    if (this.orderValue.lines) {
+      this.orderValue.lines.forEach(l => this.add(l))
+      if (this.hasCustomerTarget) this.customerTarget.value = this.orderValue.customer_id
     }
     this.render()
   }
 
   disconnect() {
-    window.removeEventListener("online", this.alCambiarRed)
-    window.removeEventListener("offline", this.alCambiarRed)
-    clearInterval(this.reloj)
+    window.removeEventListener("online", this.onNetworkChange)
+    window.removeEventListener("offline", this.onNetworkChange)
+    clearInterval(this.clock)
   }
 
-  async escanear(event) {
+  async scan(event) {
     event.preventDefault()
-    const codigo = this.codigoTarget.value.trim()
-    if (!codigo) return
-    this.codigoTarget.value = ""
-    const r = await pedir(`${this.escanearUrlValue}?codigo=${encodeURIComponent(codigo)}`, { headers: { Accept: "application/json" } })
-    let datos
+    const code = this.codeTarget.value.trim()
+    if (!code) return
+    this.codeTarget.value = ""
+    const r = await request(`${this.scanUrlValue}?code=${encodeURIComponent(code)}`, { headers: { Accept: "application/json" } })
+    let data
     if (r) {
-      datos = await r.json()
-      if (!r.ok) { this.avisar(datos.error); return }
+      data = await r.json()
+      if (!r.ok) { this.notify(data.error); return }
     } else {
-      // Sin conexión: el catálogo guardado en el equipo
-      datos = buscar(await catalogo(this.sucursalValue), codigo)
-      if (!datos) { this.avisar(T.pos.no_en_catalogo); return }
-      this.pintarConexion(false)
+      // Offline: the catalog saved on the device
+      data = search(await catalog(this.branchValue), code)
+      if (!data) { this.notify(T.pos.not_in_catalog); return }
+      this.renderConnection(false)
     }
-    this.avisar("")
-    if (datos.unidad !== "pieza") {
-      // Kilo, litro o metro: se teclea la cantidad
-      this.pendienteProducto = datos
-      this.pendienteNombreTarget.textContent = `${datos.nombre} (${T.unidades[datos.unidad] || datos.unidad})`
-      this.pendienteCantidadTarget.value = ""
-      this.pendienteTarget.classList.remove("hidden")
-      this.pendienteCantidadTarget.focus()
+    this.notify("")
+    if (data.unit !== "piece") {
+      // Kilo, liter or meter: the quantity is typed in
+      this.pendingProduct = data
+      this.pendingNameTarget.textContent = `${data.name} (${T.units[data.unit] || data.unit})`
+      this.pendingQuantityTarget.value = ""
+      this.pendingTarget.classList.remove("hidden")
+      this.pendingQuantityTarget.focus()
     } else {
-      const previa = this.lineas.find(l => l.producto_id === datos.producto_id)
-      if (previa) { previa.cantidad += 1; this.render() } else this.agregar({ ...datos, cantidad: 1 })
+      const existing = this.lines.find(l => l.product_id === data.product_id)
+      if (existing) { existing.quantity += 1; this.render() } else this.add({ ...data, quantity: 1 })
     }
   }
 
-  confirmarPendiente(event) {
+  confirmPending(event) {
     event?.preventDefault()
-    const cantidad = Number(this.pendienteCantidadTarget.value)
-    if (!(cantidad > 0)) { this.avisar(T.pos.cantidad); return }
-    this.agregar({ ...this.pendienteProducto, cantidad })
-    this.cancelarPendiente()
+    const quantity = Number(this.pendingQuantityTarget.value)
+    if (!(quantity > 0)) { this.notify(T.pos.quantity); return }
+    this.add({ ...this.pendingProduct, quantity })
+    this.cancelPending()
   }
 
-  cancelarPendiente() {
-    this.pendienteProducto = null
-    this.pendienteTarget.classList.add("hidden")
-    this.codigoTarget.focus()
+  cancelPending() {
+    this.pendingProduct = null
+    this.pendingTarget.classList.add("hidden")
+    this.codeTarget.focus()
   }
 
-  agregar(datos) {
-    const l = { producto_id: datos.producto_id, nombre: datos.nombre, unidad: datos.unidad, decimales: datos.decimales,
-                cantidad: datos.cantidad, catalogo: datos.precio_centavos, promociones: datos.promociones || [], manual: false }
-    l.precio = this.precioVigente(l)
-    this.lineas.push(l)
+  add(data) {
+    const l = { product_id: data.product_id, name: data.name, unit: data.unit, decimals: data.decimals,
+                quantity: data.quantity, catalog: data.price_cents, promotions: data.promotions || [], manual: false }
+    l.price = this.currentPrice(l)
+    this.lines.push(l)
     this.render()
-    this.codigoTarget.focus()
+    this.codeTarget.focus()
   }
 
-  // El mejor precio legítimo para la cantidad: promoción vigente o catálogo. El servidor lo recalcula.
-  precioVigente(l) {
-    let mejor = l.catalogo
+  // The best legitimate price for the quantity: an active promotion or the catalog. The server recalculates it.
+  currentPrice(l) {
+    let best = l.catalog
     l.promo = null
-    for (const p of l.promociones) {
-      if (l.cantidad < Number(p.cantidad_minima)) continue
-      const precio = p.tipo === "porcentaje" ? Math.round(l.catalogo * (1 - Number(p.porcentaje) / 100)) : p.precio_centavos
-      if (precio < mejor) { mejor = precio; l.promo = p.nombre }
+    for (const p of l.promotions) {
+      if (l.quantity < Number(p.minimum_quantity)) continue
+      const price = p.kind === "percentage" ? Math.round(l.catalog * (1 - Number(p.percentage) / 100)) : p.price_cents
+      if (price < best) { best = price; l.promo = p.name }
     }
-    return mejor
+    return best
   }
 
-  quitar(event) {
-    this.lineas.splice(Number(event.params.indice), 1)
+  remove(event) {
+    this.lines.splice(Number(event.params.index), 1)
     this.render()
   }
 
-  cambiarPrecio(event) {
-    const l = this.lineas[Number(event.params.indice)]
-    l.precio = Math.round(Number(event.target.value) * 100)
+  changePrice(event) {
+    const l = this.lines[Number(event.params.index)]
+    l.price = Math.round(Number(event.target.value) * 100)
     l.manual = true
     this.render(false)
   }
 
-  cambiarCantidad(event) {
-    const l = this.lineas[Number(event.params.indice)]
-    l.cantidad = Number(event.target.value)
-    if (!l.manual) l.precio = this.precioVigente(l)
+  changeQuantity(event) {
+    const l = this.lines[Number(event.params.index)]
+    l.quantity = Number(event.target.value)
+    if (!l.manual) l.price = this.currentPrice(l)
     this.render()
   }
 
-  importe(l) { return Math.round(l.cantidad * l.precio) }
-  totalCentavos() { return this.lineas.reduce((s, l) => s + this.importe(l), 0) }
-  // Mismo formato que Dinero.pesos en el servidor: símbolo del negocio, miles con coma, dos decimales.
-  pesos(c) { const n = Math.abs(c) / 100; return `${c < 0 ? "−" : ""}${window.MONEDA?.simbolo ?? "$"}${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
-  centavos(input) { return Math.round(Number(input.value || 0) * 100) }
+  amount(l) { return Math.round(l.quantity * l.price) }
+  totalCents() { return this.lines.reduce((s, l) => s + this.amount(l), 0) }
+  // Same format as Money.format_money on the server: the business symbol, comma thousands, two decimals.
+  format_money(c) { const n = Math.abs(c) / 100; return `${c < 0 ? "−" : ""}${window.CURRENCY?.symbol ?? "$"}${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
+  cents(input) { return Math.round(Number(input.value || 0) * 100) }
 
-  render(filas = true) {
-    if (filas) {
-      this.cuerpoTarget.innerHTML = this.lineas.map((l, i) => `
-        <tr class="border-t border-stone-100 ${l.manual && l.precio < l.catalogo ? "bg-amber-50" : ""}">
-          <td class="px-3 py-2">${l.nombre}${l.promo ? ` <span class="rounded bg-emerald-100 px-1 text-xs text-emerald-800">${l.promo}</span>` : ""}</td>
-          <td class="px-3 py-2 text-right font-mono"><input type="number" value="${l.cantidad}" step="${l.unidad === "pieza" ? "1" : "0.001"}" min="0" data-action="change->pos#cambiarCantidad" data-pos-indice-param="${i}" class="w-24 rounded border border-stone-300 px-1 text-right font-mono"> ${l.unidad}</td>
-          <td class="px-3 py-2 text-right font-mono"><input type="number" value="${(l.precio / 100).toFixed(2)}" step="0.01" min="0" data-action="change->pos#cambiarPrecio" data-pos-indice-param="${i}" class="w-24 rounded border border-stone-300 px-1 text-right font-mono"></td>
-          <td class="px-3 py-2 text-right font-mono" data-importe="${i}">${this.pesos(this.importe(l))}</td>
-          <td class="px-1"><button type="button" data-action="pos#quitar" data-pos-indice-param="${i}" class="px-2 text-red-700"><i class="bi bi-x-lg"></i></button></td>
+  render(rows = true) {
+    if (rows) {
+      this.bodyTarget.innerHTML = this.lines.map((l, i) => `
+        <tr class="border-t border-stone-100 ${l.manual && l.price < l.catalog ? "bg-amber-50" : ""}">
+          <td class="px-3 py-2">${l.name}${l.promo ? ` <span class="rounded bg-emerald-100 px-1 text-xs text-emerald-800">${l.promo}</span>` : ""}</td>
+          <td class="px-3 py-2 text-right font-mono"><input type="number" value="${l.quantity}" step="${l.unit === "piece" ? "1" : "0.001"}" min="0" data-action="change->pos#changeQuantity" data-pos-index-param="${i}" class="w-24 rounded border border-stone-300 px-1 text-right font-mono"> ${l.unit}</td>
+          <td class="px-3 py-2 text-right font-mono"><input type="number" value="${(l.price / 100).toFixed(2)}" step="0.01" min="0" data-action="change->pos#changePrice" data-pos-index-param="${i}" class="w-24 rounded border border-stone-300 px-1 text-right font-mono"></td>
+          <td class="px-3 py-2 text-right font-mono" data-amount="${i}">${this.format_money(this.amount(l))}</td>
+          <td class="px-1"><button type="button" data-action="pos#remove" data-pos-index-param="${i}" class="px-2 text-red-700"><i class="bi bi-x-lg"></i></button></td>
         </tr>`).join("")
     } else {
-      this.lineas.forEach((l, i) => { const c = this.cuerpoTarget.querySelector(`[data-importe="${i}"]`); if (c) c.textContent = this.pesos(this.importe(l)) })
+      this.lines.forEach((l, i) => { const c = this.bodyTarget.querySelector(`[data-amount="${i}"]`); if (c) c.textContent = this.format_money(this.amount(l)) })
     }
-    this.totalTarget.textContent = this.pesos(this.totalCentavos())
-    this.recalcular()
+    this.totalTarget.textContent = this.format_money(this.totalCents())
+    this.recalculate()
   }
 
-  // Con el módulo de clientes, lo que va a cuenta cuenta como pagado (el servidor decide si se fía).
-  aCuenta() { return this.hasCreditoTarget ? this.centavos(this.creditoTarget) : 0 }
+  // With the customers feature, what goes on account counts as paid (the server decides whether to extend credit).
+  onAccount() { return this.hasCreditTarget ? this.cents(this.creditTarget) : 0 }
 
-  recalcular() {
-    const pagado = this.centavos(this.efectivoTarget) + this.centavos(this.transferenciaTarget) + this.centavos(this.depositoTarget) + this.aCuenta()
-    const cambio = pagado - this.totalCentavos()
-    this.cambioTarget.textContent = this.pesos(Math.max(cambio, 0))
-    this.cambioTarget.classList.toggle("text-red-700", cambio < 0)
+  recalculate() {
+    const paid = this.cents(this.cashTarget) + this.cents(this.transferTarget) + this.cents(this.depositTarget) + this.onAccount()
+    const change = paid - this.totalCents()
+    this.changeTarget.textContent = this.format_money(Math.max(change, 0))
+    this.changeTarget.classList.toggle("text-red-700", change < 0)
   }
 
-  async cobrar() {
-    if (this.lineas.length === 0) { this.avisar(T.pos.ticket_vacio); return }
-    const total = this.totalCentavos()
-    let efectivo = this.centavos(this.efectivoTarget)
-    const otros = this.centavos(this.transferenciaTarget) + this.centavos(this.depositoTarget) + this.aCuenta()
-    if (efectivo + otros === 0) efectivo = total  // pago exacto en efectivo si no se capturó nada
-    const pagos = [
-      { forma: "efectivo", monto_centavos: efectivo },
-      { forma: "transferencia", monto_centavos: this.centavos(this.transferenciaTarget) },
-      { forma: "deposito", monto_centavos: this.centavos(this.depositoTarget) },
-      { forma: "credito", monto_centavos: this.aCuenta() }
+  async checkout() {
+    if (this.lines.length === 0) { this.notify(T.pos.ticket_empty); return }
+    const total = this.totalCents()
+    let cash = this.cents(this.cashTarget)
+    const others = this.cents(this.transferTarget) + this.cents(this.depositTarget) + this.onAccount()
+    if (cash + others === 0) cash = total  // exact cash payment if nothing was entered
+    const payments = [
+      { payment_method: "cash", amount_cents: cash },
+      { payment_method: "transfer", amount_cents: this.cents(this.transferTarget) },
+      { payment_method: "deposit", amount_cents: this.cents(this.depositTarget) },
+      { payment_method: "credit", amount_cents: this.onAccount() }
     ]
-    const cuerpo = new FormData()
-    cuerpo.append("lineas", JSON.stringify(this.lineas.map(l => ({ producto_id: l.producto_id, cantidad: l.cantidad, precio_centavos: l.manual ? l.precio : null }))))
-    cuerpo.append("pagos", JSON.stringify(pagos))
-    cuerpo.append("clave", this.clave)
-    if (this.hasClienteTarget) cuerpo.append("cliente_id", this.clienteTarget.value)
-    if (this.pedidoValue.id) cuerpo.append("pedido_id", this.pedidoValue.id)
+    const body = new FormData()
+    body.append("lines", JSON.stringify(this.lines.map(l => ({ product_id: l.product_id, quantity: l.quantity, price_cents: l.manual ? l.price : null }))))
+    body.append("payments", JSON.stringify(payments))
+    body.append("key", this.key)
+    if (this.hasCustomerTarget) body.append("customer_id", this.customerTarget.value)
+    if (this.orderValue.id) body.append("order_id", this.orderValue.id)
     const token = document.querySelector("meta[name=csrf-token]")?.content
-    if (token) cuerpo.append("authenticity_token", token)
-    this.botonCobrarTarget.disabled = true
+    if (token) body.append("authenticity_token", token)
+    this.checkoutButtonTarget.disabled = true
     try {
-      const r = await pedir(this.cobrarUrlValue, { method: "POST", body: cuerpo, headers: { Accept: "application/json" } })
-      if (!r) { await this.guardarSinConexion(cuerpo, total, efectivo + otros - total); return }
-      const datos = await r.json()
-      if (!r.ok) { this.avisar(datos.error); return }
-      window.location.assign(datos.url)
+      const r = await request(this.checkoutUrlValue, { method: "POST", body: body, headers: { Accept: "application/json" } })
+      if (!r) { await this.saveOffline(body, total, cash + others - total); return }
+      const data = await r.json()
+      if (!r.ok) { this.notify(data.error); return }
+      window.location.assign(data.url)
     } finally {
-      this.botonCobrarTarget.disabled = false
+      this.checkoutButtonTarget.disabled = false
     }
   }
 
-  vaciar() {
-    this.lineas = []
-    this.efectivoTarget.value = this.transferenciaTarget.value = this.depositoTarget.value = ""
-    if (this.hasCreditoTarget) this.creditoTarget.value = ""
-    if (this.hasClienteTarget) this.clienteTarget.value = ""
+  clear() {
+    this.lines = []
+    this.cashTarget.value = this.transferTarget.value = this.depositTarget.value = ""
+    if (this.hasCreditTarget) this.creditTarget.value = ""
+    if (this.hasCustomerTarget) this.customerTarget.value = ""
     this.render()
-    this.codigoTarget.focus()
+    this.codeTarget.focus()
   }
 
-  // Los avisos son errores en rojo; `bien` los pinta en verde (una venta guardada sin conexión).
-  avisar(texto, bien = false) {
-    this.avisoTarget.textContent = texto
-    for (const c of ["bg-red-50", "text-red-800"]) this.avisoTarget.classList.toggle(c, !bien)
-    for (const c of ["bg-green-50", "text-green-800"]) this.avisoTarget.classList.toggle(c, bien)
+  // Notices are errors in red; `ok` paints them green (a sale saved offline).
+  notify(text, ok = false) {
+    this.noticeTarget.textContent = text
+    for (const c of ["bg-red-50", "text-red-800"]) this.noticeTarget.classList.toggle(c, !ok)
+    for (const c of ["bg-green-50", "text-green-800"]) this.noticeTarget.classList.toggle(c, ok)
   }
 
-  // ---- sin conexión
+  // ---- offline
 
-  async actualizarCatalogo() {
-    if (!this.hasCatalogoUrlValue) return
-    const r = await pedir(this.catalogoUrlValue, { headers: { Accept: "application/json" } })
-    if (r?.ok) await guardarCatalogo(await r.json())
+  async updateCatalog() {
+    if (!this.hasCatalogUrlValue) return
+    const r = await request(this.catalogUrlValue, { headers: { Accept: "application/json" } })
+    if (r?.ok) await saveCatalog(await r.json())
   }
 
-  // El cobro no llegó al servidor: la venta queda en el equipo con su clave y la hora en que se hizo.
-  async guardarSinConexion(cuerpo, total, cambio) {
-    if (this.aCuenta() > 0 || this.pedidoValue.id) { this.avisar(T.pos.necesita_conexion); return }
-    await encolar({ clave: this.clave, lineas: cuerpo.get("lineas"), pagos: cuerpo.get("pagos"), cliente_id: cuerpo.get("cliente_id") || "",
-                    vendida_en: new Date().toISOString(), total })
-    const aviso = T.pos.guardada_sin_conexion.replace("%{total}", this.pesos(total)).replace("%{cambio}", this.pesos(Math.max(cambio, 0)))
-    this.vaciar()
-    this.clave = claveNueva()
-    this.avisar(aviso, true)
-    this.pintarConexion(false)
+  // The checkout did not reach the server: the sale stays on the device with its key and the time it was made.
+  async saveOffline(body, total, change) {
+    if (this.onAccount() > 0 || this.orderValue.id) { this.notify(T.pos.needs_connection); return }
+    await enqueue({ key: this.key, lines: body.get("lines"), payments: body.get("payments"), customer_id: body.get("customer_id") || "",
+                    sold_at: new Date().toISOString(), total })
+    const notice = T.pos.saved_offline.replace("%{total}", this.format_money(total)).replace("%{change}", this.format_money(Math.max(change, 0)))
+    this.clear()
+    this.key = newKey()
+    this.notify(notice, true)
+    this.renderConnection(false)
   }
 
-  // Sube la cola, la más vieja primero. Una que el servidor rechaza se queda con su error (no se
-  // pierde); si se cae la red a la mitad, sigue la próxima vez.
-  async sincronizar() {
-    if (this.subiendo) return
-    this.subiendo = true
+  // Uploads the queue, oldest first. One the server rejects stays with its error (it is not
+  // lost); if the network drops halfway, it carries on next time.
+  async sync() {
+    if (this.uploading) return
+    this.uploading = true
     try {
-      const cola = (await pendientes()).sort((a, b) => a.vendida_en.localeCompare(b.vendida_en))
-      if (cola.length === 0) return
-      const t = await pedir(this.tokenUrlValue, { headers: { Accept: "application/json" } })
+      const queue = (await pending()).sort((a, b) => a.sold_at.localeCompare(b.sold_at))
+      if (queue.length === 0) return
+      const t = await request(this.tokenUrlValue, { headers: { Accept: "application/json" } })
       if (!t?.ok) return
       const { token } = await t.json()
-      for (const v of cola) {
-        const cuerpo = new FormData()
-        for (const campo of ["clave", "lineas", "pagos", "cliente_id", "vendida_en"]) cuerpo.append(campo, v[campo] || "")
-        cuerpo.append("authenticity_token", token)
-        const r = await pedir(this.cobrarUrlValue, { method: "POST", body: cuerpo, headers: { Accept: "application/json" } })
+      for (const v of queue) {
+        const body = new FormData()
+        for (const field of ["key", "lines", "payments", "customer_id", "sold_at"]) body.append(field, v[field] || "")
+        body.append("authenticity_token", token)
+        const r = await request(this.checkoutUrlValue, { method: "POST", body: body, headers: { Accept: "application/json" } })
         if (!r) break
-        if (r.ok) await quitar(v.clave)
-        else await encolar({ ...v, error: (await r.json().catch(() => ({}))).error || String(r.status) })
+        if (r.ok) await remove(v.key)
+        else await enqueue({ ...v, error: (await r.json().catch(() => ({}))).error || String(r.status) })
       }
     } finally {
-      this.subiendo = false
-      this.pintarConexion()
+      this.uploading = false
+      this.renderConnection()
     }
   }
 
-  async pintarConexion(enLinea = navigator.onLine) {
-    if (!this.hasConexionTarget) return
-    const cola = await pendientes().catch(() => [])
-    const errores = cola.filter((v) => v.error)
-    const partes = []
-    if (!enLinea) partes.push(T.pos.sin_conexion)
-    if (cola.length) partes.push(cola.length === 1 ? T.pos.por_subir_una : T.pos.por_subir.replace("%{n}", cola.length))
-    this.conexionTarget.hidden = partes.length === 0
-    this.conexionTarget.querySelector("[data-texto]").textContent = partes.join(" · ")
-    this.conexionTarget.querySelector("[data-errores]").textContent = errores.map((v) => `${this.pesos(v.total)}: ${v.error}`).join(" · ")
+  async renderConnection(online = navigator.onLine) {
+    if (!this.hasConnectionTarget) return
+    const queue = await pending().catch(() => [])
+    const errors = queue.filter((v) => v.error)
+    const parts = []
+    if (!online) parts.push(T.pos.offline)
+    if (queue.length) parts.push(queue.length === 1 ? T.pos.to_upload_one : T.pos.to_upload.replace("%{n}", queue.length))
+    this.connectionTarget.hidden = parts.length === 0
+    this.connectionTarget.querySelector("[data-text]").textContent = parts.join(" · ")
+    this.connectionTarget.querySelector("[data-errors]").textContent = errors.map((v) => `${this.format_money(v.total)}: ${v.error}`).join(" · ")
   }
 }

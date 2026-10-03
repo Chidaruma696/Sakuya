@@ -1,0 +1,19 @@
+<%= form_with url: settings_system_path, method: :patch, class: "form" do |f| %>
+  <%= hidden_field_tag :back, "till" %>
+  <div class="fields-2">
+    <label class="block text-sm"><%= t("settings.keys.till.price_floor") %>
+      <%= f.number_field "setting[till.price_floor]", value: @settings["till.price_floor"], min: 0, max: 100, class: "input font-mono" %>
+    </label>
+    <label class="block text-sm"><%= t("settings.keys.till.drawer_limit") %>
+      <%= f.number_field "setting[till.drawer_limit]", value: @settings["till.drawer_limit"], min: 1, class: "input font-mono" %>
+    </label>
+    <label class="block text-sm"><%= t("settings.keys.till.denominations") %>
+      <%= f.text_field "setting[till.denominations]", value: @settings["till.denominations"], class: "input font-mono" %>
+    </label>
+    <label class="block text-sm"><%= t("settings.keys.till.difference_cap") %>
+      <%= f.number_field "setting[till.difference_cap]", value: @settings["till.difference_cap"], min: 0, class: "input font-mono" %>
+    </label>
+  </div>
+  <p class="text-xs text-stone-500"><%= t("settings.till_help") %> <%= link_to t("settings.go_branches"), admin_branches_path, class: "link" %></p>
+  <%= f.submit t("settings.save"), class: "btn btn-primary btn-lg" %>
+<% end %>

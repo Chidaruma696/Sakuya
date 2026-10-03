@@ -1,0 +1,33 @@
+<%# Lives inside Settings, under the advanced options: all the rules in one file. %>
+<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+<%= render "settings/menu", current: "rules_file" %>
+<section class="min-w-0 space-y-6">
+  <div>
+    <h2 class="mb-1 text-xl font-bold"><%= t("settings.sections.rules_file") %></h2>
+    <p class="max-w-3xl text-sm text-stone-600"><%= t("rules.file.help") %></p>
+  </div>
+
+  <div class="card space-y-3 text-sm">
+    <h3 class="font-semibold"><%= t("rules.file.export") %></h3>
+    <% if @in_force.any? %>
+      <ul class="space-y-0.5">
+        <% @in_force.each do |r| %>
+          <li><%= t("settings.sections.#{r.hook == "dashboard" ? r.hook : "#{r.hook}_rule"}") %> <span class="text-xs text-stone-500"><%= t("rules.contract", n: r.version) %> · <%= l r.created_at, format: :short %> · <%= r.user %></span></li>
+        <% end %>
+      </ul>
+      <%= link_to export_rules_path, class: "btn btn-secondary" do %><i class="bi bi-download"></i> <%= t("rules.file.download") %><% end %>
+    <% else %>
+      <p class="text-stone-500"><%= t("rules.file.all_default") %></p>
+    <% end %>
+  </div>
+
+  <div class="card space-y-3 text-sm">
+    <h3 class="font-semibold"><%= t("rules.file.import") %></h3>
+    <p class="text-stone-600"><%= t("rules.file.import_help") %></p>
+    <%= form_with url: import_rules_path, multipart: true, class: "flex flex-wrap items-center gap-3" do |f| %>
+      <%= f.file_field :file, accept: ".lisp,text/plain", required: true %>
+      <%= f.button class: "btn btn-primary" do %><i class="bi bi-upload"></i> <%= t("rules.file.upload") %><% end %>
+    <% end %>
+  </div>
+</section>
+</div>

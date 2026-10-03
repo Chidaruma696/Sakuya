@@ -1,0 +1,12 @@
+<h1 class="mb-2 text-2xl font-bold"><%= t("home.sales_by_product") %> · <%= @all ? t("common.all_branches") : @branch %></h1>
+<%= render "filter" %>
+<p class="mb-2 text-sm"><%= link_to icon("download", t("home.download_csv")), sales_by_product_path(format: :csv, from: @from, to: @to, branch_id: params[:branch_id]), class: "btn btn-secondary btn-sm" %></p>
+<table class="table">
+  <thead><tr><th class="px-3 py-2"><%= t("common.key") %></th><th class="px-3 py-2"><%= t("common.product") %></th><th class="px-3 py-2 text-right"><%= t("common.quantity") %></th><th class="px-3 py-2 text-right"><%= t("common.line_amount") %></th><th class="px-3 py-2 text-right"><%= t("home.lines") %></th></tr></thead>
+  <tbody>
+    <% @rows.each do |key, name, unit, qty, amount, n| %>
+      <tr class="border-t border-stone-100"><td class="px-3 py-2 font-mono"><%= key %></td><td class="px-3 py-2"><%= name %></td><td class="px-3 py-2 text-right font-mono"><%= number_with_precision(qty, precision: unit == "piece" ? 0 : 3) %> <%= t("short_units.#{unit}", default: unit) %></td><td class="px-3 py-2 text-right font-mono"><%= format_money(amount) %></td><td class="px-3 py-2 text-right"><%= n %></td></tr>
+    <% end %>
+    <% if @rows.empty? %><tr><td colspan="5" class="px-3 py-6 text-center text-stone-500"><%= t("home.no_sales") %></td></tr><% end %>
+  </tbody>
+</table>

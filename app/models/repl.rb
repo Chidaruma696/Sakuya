@@ -1,21 +1,21 @@
-# El REPL de solo lectura: preguntarle cosas a los datos en vivo con el Lisp de Sakuya. Las
-# consultas devuelven listas de mapas ({:folio "B-00012" :total 126.00 …}) que se filtran, ordenan
-# y agrupan con las funciones de aquí y las de siempre (map, filter, reduce).
+# The read-only REPL: asking the live data questions with Sakuya's Lisp. The queries return lists
+# of maps ({:folio "B-00012" :total 126.00 …}) that are filtered, sorted and grouped with the
+# functions here and the usual ones (map, filter, reduce).
 #
-# No escribe nada: además de que el Lisp solo sabe llamar lo que se le da, cada evaluación corre
-# con las escrituras bloqueadas en la base, con límite de pasos y de filas.
+# It writes nothing: besides the Lisp only being able to call what it is given, every evaluation
+# runs with database writes blocked, with a step limit and a row limit.
 #
 #   (sum-of :total (sales "2026-10-01" (today)))
 #   (sort-by-desc :balance (customers))
 #   (count-by :cashier (sales))
 module Repl
-  FILAS = 500
-  PASOS = 200_000
+  ROWS = 500
+  STEPS = 200_000
 
-  CONSULTAS = %w[today days-ago sales sale-lines products stock customers cash-counts reviews rules].freeze
-  HERRAMIENTAS = %w[where sort-by sort-by-desc group-by count-by sum-of pluck take].freeze
-  # Cómo se llaman, para la referencia del REPL.
-  FIRMAS = {
+  QUERIES = %w[today days-ago sales sale-lines products stock customers cash-counts reviews rules].freeze
+  TOOLS = %w[where sort-by sort-by-desc group-by count-by sum-of pluck take].freeze
+  # How they are called, for the REPL reference.
+  SIGNATURES = {
     "today" => "(today)", "days-ago" => "(days-ago 7)", "sales" => "(sales [from] [to])", "sale-lines" => "(sale-lines [from] [to])",
     "products" => "(products)", "stock" => "(stock [\"CODE\"])", "customers" => "(customers)", "cash-counts" => "(cash-counts [from] [to])",
     "reviews" => "(reviews)", "rules" => "(rules)", "where" => "(where :key value list)", "sort-by" => "(sort-by :key list)",
@@ -23,145 +23,146 @@ module Repl
     "sum-of" => "(sum-of :key list)", "pluck" => "(pluck :key list)", "take" => "(take n list)"
   }.freeze
 
-  # Evalúa el texto y devuelve el valor; levanta Lisp::Error con lo que falló.
-  def self.evaluar(texto, sucursales:)
-    solo_lectura { Lisp.ejecutar(texto, funciones: funciones(sucursales), pasos: PASOS, preludio: Plugin.preludio) }
+  # Evaluates the text and returns the value; raises Lisp::Error with whatever failed.
+  def self.evaluate(text, branches:)
+    read_only { Lisp.run(text, functions: functions(branches), steps: STEPS, prelude: Plugin.prelude) }
   end
 
-  # Corre el bloque con las escrituras bloqueadas en la base; si algo intenta escribir, es un error.
-  def self.solo_lectura(&)
+  # Runs the block with database writes blocked; if anything tries to write, it is an error.
+  def self.read_only(&)
     ActiveRecord::Base.while_preventing_writes(&)
   rescue ActiveRecord::ReadOnlyError
-    raise Lisp::Error, I18n.t("repl.solo_lectura")
+    raise Lisp::Error, I18n.t("repl.read_only")
   end
 
-  def self.funciones(sucursales)
-    consultas(Consultas.new(sucursales)).merge(herramientas)
+  def self.functions(branches)
+    queries(Queries.new(branches)).merge(tools)
   end
 
-  def self.consultas(c)
+  def self.queries(q)
     {
       "today" => -> { Date.current.iso8601 },
-      "days-ago" => ->(n) { (Date.current - Lisp::Base.numero!(n, "days-ago").to_i).iso8601 },
-      "sales" => ->(*rango) { c.ventas(*rango) },
-      "sale-lines" => ->(*rango) { c.renglones(*rango) },
-      "products" => -> { c.productos },
-      "stock" => ->(*clave) { c.existencias(*clave) },
-      "customers" => -> { c.clientes },
-      "cash-counts" => ->(*rango) { c.cortes(*rango) },
-      "reviews" => -> { c.revisiones },
-      "rules" => -> { c.reglas }
+      "days-ago" => ->(n) { (Date.current - Lisp::Base.number!(n, "days-ago").to_i).iso8601 },
+      "sales" => ->(*range) { q.sales(*range) },
+      "sale-lines" => ->(*range) { q.rows(*range) },
+      "products" => -> { q.products },
+      "stock" => ->(*key) { q.stock_levels(*key) },
+      "customers" => -> { q.customers },
+      "cash-counts" => ->(*range) { q.shifts(*range) },
+      "reviews" => -> { q.reviews },
+      "rules" => -> { q.rules }
     }
   end
 
-  def self.herramientas
-    lista = ->(l, quien) { Lisp::Base.lista!(l, quien) }
-    campo = ->(fila, k) { fila.is_a?(Hash) ? fila[k] : raise(Lisp::Error, I18n.t("repl.errores.no_es_mapa", valor: Lisp.a_texto(fila))) }
-    ordenable = ->(v) { v.nil? ? [ 1, 0 ] : [ 0, v.is_a?(Numeric) ? v : v.to_s ] }
+  def self.tools
+    list = ->(l, who) { Lisp::Base.list!(l, who) }
+    field = ->(row, k) { row.is_a?(Hash) ? row[k] : raise(Lisp::Error, I18n.t("repl.errors.not_to_map", value: Lisp.to_text(row))) }
+    sortable = ->(v) { v.nil? ? [ 1, 0 ] : [ 0, v.is_a?(Numeric) ? v : v.to_s ] }
     {
-      "where" => ->(k, v, l) { lista.(l, "where").select { |f| campo.(f, k) == v } },
-      "sort-by" => ->(k, l) { lista.(l, "sort-by").sort_by { |f| ordenable.(campo.(f, k)) } },
-      "sort-by-desc" => ->(k, l) { lista.(l, "sort-by-desc").sort_by { |f| ordenable.(campo.(f, k)) }.reverse },
-      "group-by" => ->(k, l) { lista.(l, "group-by").group_by { |f| campo.(f, k) } },
-      "count-by" => ->(k, l) { lista.(l, "count-by").group_by { |f| campo.(f, k) }.transform_values(&:size) },
-      "sum-of" => ->(k, l) { lista.(l, "sum-of").sum(BigDecimal("0")) { |f| campo.(f, k) || 0 } },
-      "pluck" => ->(k, l) { lista.(l, "pluck").map { |f| campo.(f, k) } }
+      "where" => ->(k, v, l) { list.(l, "where").select { |r| field.(r, k) == v } },
+      "sort-by" => ->(k, l) { list.(l, "sort-by").sort_by { |r| sortable.(field.(r, k)) } },
+      "sort-by-desc" => ->(k, l) { list.(l, "sort-by-desc").sort_by { |r| sortable.(field.(r, k)) }.reverse },
+      "group-by" => ->(k, l) { list.(l, "group-by").group_by { |r| field.(r, k) } },
+      "count-by" => ->(k, l) { list.(l, "count-by").group_by { |r| field.(r, k) }.transform_values(&:size) },
+      "sum-of" => ->(k, l) { list.(l, "sum-of").sum(BigDecimal("0")) { |r| field.(r, k) || 0 } },
+      "pluck" => ->(k, l) { list.(l, "pluck").map { |r| field.(r, k) } }
     }
   end
 
-  private_class_method :funciones, :consultas, :herramientas
+  private_class_method :functions, :queries, :tools
 
-  # Las consultas en sí: solo leen, solo de las sucursales que se ven, y en pesos.
-  class Consultas
-    def initialize(sucursales)
-      @sucursales = sucursales
+  # The queries themselves: they only read, only from the visible branches, and money comes in
+  # currency units, not cents.
+  class Queries
+    def initialize(branches)
+      @branches = branches
     end
 
-    def ventas(desde = nil, hasta = nil)
-      ventas_de(desde, hasta).includes(:sucursal, :usuario, :cliente).map do |v|
-        { folio: v.folio, date: v.fecha_negocio.iso8601, branch: v.sucursal.nombre, cashier: v.usuario.nombre, customer: v.cliente&.nombre,
-          total: pesos(v.total_centavos), change: pesos(v.cambio_centavos), status: v.estado }
+    def sales(from = nil, to = nil)
+      sales_for(from, to).includes(:branch, :user, :customer).map do |s|
+        { folio: s.folio, date: s.business_date.iso8601, branch: s.branch.name, cashier: s.user.name, customer: s.customer&.name,
+          total: money(s.total_cents), change: money(s.change_cents), status: s.status }
       end
     end
 
-    def renglones(desde = nil, hasta = nil)
-      VentaLinea.where(venta: ventas_de(desde, hasta)).includes(:venta, :producto).limit(FILAS + 1).map do |l|
-        { folio: l.venta.folio, date: l.venta.fecha_negocio.iso8601, code: l.producto.clave, product: l.producto.nombre,
-          quantity: BigDecimal(l.cantidad.to_s), price: pesos(l.precio_centavos), amount: pesos(l.importe_centavos) }
+    def rows(from = nil, to = nil)
+      SaleLine.where(sale: sales_for(from, to)).includes(:sale, :product).limit(ROWS + 1).map do |l|
+        { folio: l.sale.folio, date: l.sale.business_date.iso8601, code: l.product.key, product: l.product.name,
+          quantity: BigDecimal(l.quantity.to_s), price: money(l.price_cents), amount: money(l.amount_cents) }
       end
     end
 
-    def productos
-      Producto.order(:nombre).limit(FILAS + 1).map do |p|
-        { code: p.clave, name: p.nombre, unit: p.unidad, price: pesos(p.precio_centavos), active: p.activo }
+    def products
+      Product.order(:name).limit(ROWS + 1).map do |p|
+        { code: p.key, name: p.name, unit: p.unit, price: money(p.price_cents), active: p.active }
       end
     end
 
-    def existencias(clave = nil)
-      e = Existencia.where(sucursal: @sucursales).includes(:sucursal, :producto).joins(:producto).order("productos.nombre")
-      e = e.where(productos: { clave: texto!(clave, "stock").upcase }) if clave
-      apartados = @sucursales.to_h { |s| [ s.id, Apartado.por_producto(s) ] }
-      e.limit(FILAS + 1).map do |x|
-        reservado = BigDecimal(apartados.dig(x.sucursal_id, x.producto_id).to_s.presence || "0")
-        { branch: x.sucursal.nombre, code: x.producto.clave, product: x.producto.nombre, quantity: BigDecimal(x.cantidad.to_s),
-          reserved: reservado, available: BigDecimal(x.cantidad.to_s) - reservado }
+    def stock_levels(key = nil)
+      levels = StockLevel.where(branch: @branches).includes(:branch, :product).joins(:product).order("products.name")
+      levels = levels.where(products: { key: text!(key, "stock").upcase }) if key
+      reservations = @branches.to_h { |b| [ b.id, Reservations.by_product(b) ] }
+      levels.limit(ROWS + 1).map do |x|
+        reserved = BigDecimal(reservations.dig(x.branch_id, x.product_id).to_s.presence || "0")
+        { branch: x.branch.name, code: x.product.key, product: x.product.name, quantity: BigDecimal(x.quantity.to_s),
+          reserved: reserved, available: BigDecimal(x.quantity.to_s) - reserved }
       end
     end
 
-    def clientes
-      return [] unless Modulo.activo?("clientes")
-      saldos = MovimientoCredito.group(:cliente_id).sum(:monto_centavos)
-      Cliente.order(:nombre).limit(FILAS + 1).map do |c|
-        { name: c.nombre, balance: pesos(saldos[c.id] || 0), limit: pesos(c.limite_credito_centavos), active: c.activo }
+    def customers
+      return [] unless Features.active?("customers")
+      balances = CreditMovement.group(:customer_id).sum(:amount_cents)
+      Customer.order(:name).limit(ROWS + 1).map do |c|
+        { name: c.name, balance: money(balances[c.id] || 0), limit: money(c.credit_limit_cents), active: c.active }
       end
     end
 
-    def cortes(desde = nil, hasta = nil)
-      d, h = rango(desde, hasta)
-      Corte.where(sucursal: @sucursales, abierto_en: d.beginning_of_day..h.end_of_day).includes(:sucursal, :usuario).order(:abierto_en).limit(FILAS + 1).map do |c|
-        { folio: c.folio, branch: c.sucursal.nombre, cashier: c.usuario.nombre, status: c.estado, opened: c.abierto_en.iso8601,
-          expected: c.esperado_centavos && pesos(c.esperado_centavos), counted: c.contado_centavos && pesos(c.contado_centavos),
-          difference: c.diferencia_centavos && pesos(c.diferencia_centavos) }
+    def shifts(from = nil, to = nil)
+      first, last = range(from, to)
+      Shift.where(branch: @branches, opened_at: first.beginning_of_day..last.end_of_day).includes(:branch, :user).order(:opened_at).limit(ROWS + 1).map do |s|
+        { folio: s.folio, branch: s.branch.name, cashier: s.user.name, status: s.status, opened: s.opened_at.iso8601,
+          expected: s.expected_cents && money(s.expected_cents), counted: s.counted_cents && money(s.counted_cents),
+          difference: s.difference_cents && money(s.difference_cents) }
       end
     end
 
-    def revisiones
-      Revision.pendientes.where(sucursal: @sucursales).includes(:usuario, :revisable).order(:created_at).limit(FILAS + 1).map do |r|
-        { when: r.created_at.iso8601, who: r.usuario.nombre, what: r.descripcion, reason: r.motivo, value: pesos(r.valor_centavos), stopped: r.frenado }
+    def reviews
+      Review.pending.where(branch: @branches).includes(:user, :reviewable).order(:created_at).limit(ROWS + 1).map do |r|
+        { when: r.created_at.iso8601, who: r.user.name, what: r.description, reason: r.reason, value: money(r.value_cents), stopped: r.stopped }
       end
     end
 
-    def reglas
-      Regla::GANCHOS.filter_map do |g|
-        r = Regla.vigente(g) or next
-        { hook: g, contract: r.version, current: Regla.contrato(g), saved: r.created_at.iso8601, by: r.usuario.nombre }
+    def rules
+      Rule::HOOKS.filter_map do |hook|
+        r = Rule.current(hook) or next
+        { hook: hook, contract: r.version, current: Rule.contract(hook), saved: r.created_at.iso8601, by: r.user.name }
       end
     end
 
     private
 
-    def ventas_de(desde, hasta)
-      d, h = rango(desde, hasta)
-      Venta.where(sucursal: @sucursales, fecha_negocio: d..h).order(:id).limit(FILAS + 1)
+    def sales_for(from, to)
+      first, last = range(from, to)
+      Sale.where(branch: @branches, business_date: first..last).order(:id).limit(ROWS + 1)
     end
 
-    # Sin fechas, hoy; con una, ese día; con dos, de una a otra. Fechas como "2026-10-03".
-    def rango(desde, hasta)
-      d = desde ? fecha!(desde) : Date.current
-      h = hasta ? fecha!(hasta) : d
-      d <= h ? [ d, h ] : [ h, d ]
+    # No dates, today; one, that day; two, from one to the other. Dates like "2026-10-03".
+    def range(from, to)
+      first = from ? date!(from) : Date.current
+      last = to ? date!(to) : first
+      first <= last ? [ first, last ] : [ last, first ]
     end
 
-    def fecha!(texto)
-      Date.iso8601(texto!(texto, "fecha"))
+    def date!(text)
+      Date.iso8601(text!(text, "date"))
     rescue Date::Error
-      raise Lisp::Error, I18n.t("repl.errores.fecha", valor: texto)
+      raise Lisp::Error, I18n.t("repl.errors.date", value: text)
     end
 
-    def texto!(x, quien)
-      x.is_a?(String) ? x : raise(Lisp::Error, I18n.t("repl.errores.texto", quien: quien, valor: Lisp.a_texto(x)))
+    def text!(x, who)
+      x.is_a?(String) ? x : raise(Lisp::Error, I18n.t("repl.errors.text", who: who, value: Lisp.to_text(x)))
     end
 
-    def pesos(centavos) = BigDecimal(centavos.to_i) / 100
+    def money(cents) = BigDecimal(cents.to_i) / 100
   end
 end

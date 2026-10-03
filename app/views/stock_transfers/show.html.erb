@@ -1,0 +1,28 @@
+<% x = @stock_transfer %>
+<div class="mb-2 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("stock_transfers.stock_transfer") %> <span class="font-mono"><%= x.folio %></span><%= tag.span(" · #{t("stock_transfers.statuses.cancelled")}", class: "text-red-700") if x.cancelled? %></h1>
+  <%= link_to icon("arrow-left", t("stock_transfers.title")), stock_transfers_path, class: "btn btn-ghost btn-sm" %>
+</div>
+<p class="mb-4 text-sm text-stone-600"><%= x.origin_branch %> → <%= x.destination_branch %> · <%= l x.date %> · <%= x.user %><%= " · #{x.notes}" if x.notes.present? %><%= " · #{x.cancellation_reason}" if x.cancelled? %></p>
+<div class="grid gap-4 lg:grid-cols-3">
+  <div class="card lg:col-span-2">
+    <table class="w-full text-sm">
+      <thead><tr class="text-left text-stone-500"><th class="py-1"><%= t("common.product") %></th><th class="py-1 text-right"><%= t("common.quantity") %></th><th class="py-1 text-right"><%= t("purchases.boxes") %></th></tr></thead>
+      <tbody>
+        <% x.lines.each do |l| %>
+          <tr class="border-t border-stone-100"><td class="py-1"><%= l.product.name %></td><td class="py-1 text-right font-mono"><%= quantity(l.quantity, l.product) %></td><td class="py-1 text-right font-mono"><%= l.boxes unless l.boxes.zero? %></td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% if x.registered? %>
+    <div class="card">
+      <h2 class="mb-2 font-semibold"><%= t("stock_transfers.cancel") %></h2>
+      <p class="mb-2 text-xs text-stone-500"><%= t("stock_transfers.cancel_help") %></p>
+      <%= form_with url: cancel_stock_transfer_path(x), class: "flex flex-wrap gap-2 text-sm", data: { turbo_confirm: t("purchases.confirm_cancel", folio: x.folio) } do |f| %>
+        <%= f.text_field :reason, placeholder: t("common.reason").downcase, required: true, class: "input mt-0 flex-1" %>
+        <%= f.submit t("common.cancel"), class: "btn btn-ghost-danger btn-sm" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

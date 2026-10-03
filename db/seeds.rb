@@ -1,3 +1,3 @@
-# Solo los roles base. El primer administrador, la matriz y el nombre del negocio se crean desde
-# la pantalla de primer arranque (/instalar) al abrir el sistema con la base vacía.
-Rol.base!
+# Only the base roles. The first administrator, the head office and the business name are created
+# from the first-run screen (/install) when the system is opened with an empty database.
+Role.base!

@@ -1,0 +1,71 @@
+<%# Lives inside Settings, under the advanced options, next to the dashboard. Serves every rule that decides; each one provides its test scenario. %>
+<% texts = "#{@hook}_rule" %>
+<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+<%= render "settings/menu", current: texts %>
+<section class="min-w-0">
+<h2 class="mb-1 text-xl font-bold"><%= t("#{texts}.title") %></h2>
+<p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("#{texts}.help") %></p>
+<%= render "rules/notice_old", rule: @versions.first %>
+
+<div class="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_22rem]">
+  <%= form_with url: rule_save_path(@hook), id: "form_rule", class: "form space-y-4", data: { turbo: false } do |f| %>
+    <label for="code" class="field-label"><%= t("dashboard.program") %></label>
+    <%= text_area_tag :code, @code, id: "code", rows: 14, spellcheck: false, autocomplete: "off", class: "code w-full px-3 py-2" %>
+    <% if @program_error %>
+      <p class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><i class="bi bi-exclamation-triangle-fill text-accent-700"></i> <%= @program_error %></p>
+    <% end %>
+
+    <fieldset class="rounded-lg border border-stone-200 bg-white px-4 py-3">
+      <legend class="px-1 text-sm font-semibold"><%= t("rules.scenario") %></legend>
+      <div class="flex flex-wrap items-end gap-4 text-sm">
+        <%= render @rule_module::SCENARIO, scenario: @scenario, texts: texts %>
+        <label class="flex items-center gap-2 pb-2"><%= check_box_tag :authorized, "1", @scenario[:authorized], id: "authorized" %> <%= t("#{texts}.scenario.authorized") %></label>
+      </div>
+      <% if @decisions %>
+        <div class="mt-3 space-y-1" id="decision">
+          <% @decisions.each do |label, decision, by_permission| %>
+            <% tone = { allow: "border-green-200 bg-green-50 text-green-900", review: "border-amber-200 bg-amber-50 text-amber-900", reject: "border-red-200 bg-red-50 text-red-900" }[decision.verdict] %>
+            <p class="rounded-lg border px-3 py-2 text-sm <%= tone %>">
+              <% if label %><span class="text-stone-600"><%= label %> ·</span> <% end %><strong><%= t("#{texts}.verdicts.#{decision.verdict}") %></strong><% if decision.reason %>: <%= decision.reason %><% end %>
+              <% if by_permission %><span class="block text-xs"><%= t("rules.by_permission") %></span><% end %>
+            </p>
+          <% end %>
+        </div>
+      <% end %>
+    </fieldset>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <%= f.button name: "dry_run", value: "1", class: "btn btn-secondary" do %><i class="bi bi-play"></i> <%= t("dashboard.trial") %><% end %>
+      <%= f.button class: "btn btn-primary" do %><i class="bi bi-check2"></i> <%= t("dashboard.save") %><% end %>
+    </div>
+  <% end %>
+
+  <aside class="card space-y-4 text-sm">
+    <h2 class="font-semibold"><%= t("dashboard.reference.title") %></h2>
+    <div>
+      <h3 class="stat-label mb-1"><%= t("rules.reads") %></h3>
+      <ul class="space-y-0.5">
+        <% @rule_module::FUNCTIONS.each do |name| %>
+          <li><code class="code text-brand-800">(<%= name %>)</code> <span class="text-stone-500"><%= t("#{texts}.functions.#{name.underscore}") %></span></li>
+        <% end %>
+      </ul>
+    </div>
+    <div>
+      <h3 class="stat-label mb-1"><%= t("rules.answers") %></h3>
+      <ul class="space-y-0.5">
+        <li><code class="code text-brand-800">(allow)</code> <span class="text-stone-500"><%= t("#{texts}.allow") %></span></li>
+        <li><code class="code text-brand-800">(to-review "…")</code> <span class="text-stone-500"><%= t("#{texts}.to_review") %></span></li>
+        <li><code class="code text-brand-800">(reject "…")</code> <span class="text-stone-500"><%= t("#{texts}.reject") %></span></li>
+      </ul>
+      <p class="mt-1 text-stone-600"><%= t("#{texts}.core") %></p>
+    </div>
+    <div>
+      <h3 class="stat-label mb-1"><%= t("rules.example") %></h3>
+      <pre class="code mt-1 overflow-x-auto rounded-lg bg-stone-50 p-2 text-xs ring-1 ring-stone-200"><%= @rule_module::EXAMPLE %></pre>
+    </div>
+  </aside>
+</div>
+
+<%= render "rules/versions", versions: @versions, scope: "rules", restore: ->(v) { rule_restore_path(@hook, v) } %>
+</section>
+</div>

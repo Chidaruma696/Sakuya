@@ -1,38 +1,38 @@
 module Admin
   class RolesController < BaseController
-    before_action { autorizar!("admin.usuarios") }
-    before_action :cargar, only: %i[edit update]
+    before_action { authorize!("admin.users") }
+    before_action :load_record, only: %i[edit update]
 
     def index
-      @roles = Rol.order(:nombre).includes(:usuarios)
+      @roles = Role.order(:name).includes(:users)
     end
 
     def new
-      @rol = Rol.new(permisos: [])
+      @role = Role.new(permissions: [])
     end
 
     def create
-      @rol = Rol.new(permitidos)
-      guardar(@rol, admin_roles_path, t("admin.avisos.creado", que: t("admin.modelos.rol")))
+      @role = Role.new(allowed)
+      save(@role, admin_roles_path, t("admin.notices.created", what: t("admin.models.role")))
     end
 
     def edit
     end
 
     def update
-      @rol.assign_attributes(permitidos)
-      guardar(@rol, admin_roles_path, t("admin.avisos.guardado", que: t("admin.modelos.rol")))
+      @role.assign_attributes(allowed)
+      save(@role, admin_roles_path, t("admin.notices.saved", what: t("admin.models.role")))
     end
 
     private
 
-    def cargar
-      @rol = Rol.find(params[:id])
+    def load_record
+      @role = Role.find(params[:id])
     end
 
-    def permitidos
-      p = params.require(:rol).permit(:nombre, permisos: [])
-      p[:permisos] = Array(p[:permisos]).reject(&:blank?)
+    def allowed
+      p = params.require(:role).permit(:name, permissions: [])
+      p[:permissions] = Array(p[:permissions]).reject(&:blank?)
       p
     end
   end

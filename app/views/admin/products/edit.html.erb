@@ -1,0 +1,29 @@
+<h1 class="mb-4 text-2xl font-bold"><%= @product.name %></h1>
+<div class="grid gap-6 lg:grid-cols-2">
+  <%= render "form" %>
+  <div class="space-y-6">
+  <div class="card p-6">
+    <h2 class="mb-2 font-semibold"><%= t("admin.price_by_branch") %></h2>
+    <p class="mb-2 text-sm text-stone-600"><%= t("admin.price_by_branch_help", price: format_money(@product.price_cents), button: t("common.save")) %></p>
+    <table class="w-full text-sm">
+      <% Branch.active.order(:name).each do |s| %>
+        <% fixed = @product.branch_prices.find { |ps| ps.branch_id == s.id } %>
+        <tr class="border-t border-stone-100"><td class="py-1"><%= s.name %></td>
+          <td class="py-1 text-right"><input type="number" step="0.01" min="0" name="prices[<%= s.id %>]" form="form_product" value="<%= fixed ? (fixed.price_cents / 100.0) : '' %>" placeholder="<%= t("admin.general") %>" class="w-32 rounded border border-stone-300 px-2 py-1 text-right font-mono"></td></tr>
+      <% end %>
+    </table>
+  </div>
+  <div class="card p-6">
+    <h2 class="mb-2 font-semibold"><%= t("admin.supplier_codes") %></h2>
+    <ul class="mb-3 text-sm">
+      <% @product.product_barcodes.each do |c| %>
+        <li class="flex items-center justify-between border-t border-stone-100 py-1"><span class="font-mono"><%= c.code %></span> <%= button_to t("common.remove"), admin_product_code_path(@product, c), method: :delete, class: "text-red-700" %></li>
+      <% end %>
+    </ul>
+    <%= form_with url: admin_product_codes_path(@product), class: "flex gap-2" do |f| %>
+      <%= f.text_field :code, placeholder: t("admin.scans_or_types_code"), autocomplete: "off", class: "flex-1 rounded border border-stone-300 px-3 py-2 font-mono" %>
+      <%= f.submit t("common.add"), class: "btn btn-primary" %>
+    <% end %>
+  </div>
+  </div>
+</div>

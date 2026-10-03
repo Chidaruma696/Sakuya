@@ -1,0 +1,17 @@
+<%= form_with url: settings_system_path, method: :patch, class: "form", data: { controller: "features" } do |f| %>
+  <%= hidden_field_tag :back, "features" %>
+  <%= hidden_field_tag "features[]", "" %>
+  <div class="grid gap-3 md:grid-cols-2">
+    <% Features::OPTIONAL.each do |m| %>
+      <% needs = Features.needs(m) %><% dependents = Features.dependents(m) %><% any = Features.any(m) %>
+      <label class="option items-start text-base">
+        <%= check_box_tag "features[]", m, Features.active?(m), id: "feature_#{m}", class: "mt-1.5", data: { features_target: "toggle", feature: m, needs: needs.join(" "), any: any.join(" "), dependents: dependents.join(" "), action: "features#change" } %>
+        <span><%= t("features.#{m}.name") %><br><span class="text-sm font-normal text-stone-600"><%= t("features.#{m}.what") %></span>
+          <% notices = [] %><% notices << t("features.needs", list: needs.map { |x| Features.name(x) }.join(", ")) if needs.any? %><% notices << t("features.needs_any", list: any.map { |x| Features.name(x) }.join(" / ")) if any.any? %><% notices << t("features.needed_by", list: dependents.map { |x| Features.name(x) }.join(", ")) if dependents.any? %>
+          <% if notices.any? %><br><span class="text-xs font-normal text-stone-500"><%= notices.join(" · ") %></span><% end %></span>
+        <i class="bi bi-check-circle-fill option-check"></i>
+      </label>
+    <% end %>
+  </div>
+  <%= f.submit t("settings.save"), class: "btn btn-primary btn-lg" %>
+<% end %>

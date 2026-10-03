@@ -1,0 +1,46 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("reviews.title") %> · <%= @all ? t("common.all_branches") : current_branch %></h1>
+  <% if current_branch.head_office? %>
+    <%= link_to @all ? t("reviews.only_this", branch: current_branch) : t("common.all_branches"), reviews_path(branch_id: @all ? nil : "all"), class: "btn btn-secondary btn-sm" %>
+  <% end %>
+</div>
+<p class="mb-4 text-sm text-stone-600"><%= t("reviews.explanation") %></p>
+<table class="table">
+  <thead><tr><th class="px-3 py-2"><%= t("reviews.when") %></th><th class="px-3 py-2"><%= t("reviews.who") %></th><th class="px-3 py-2"><%= t("reviews.what") %></th><th class="px-3 py-2"><%= t("common.reason") %></th><th class="px-3 py-2 text-right"><%= t("reviews.worth") %></th><th class="px-3 py-2"><%= t("reviews.decide") %></th></tr></thead>
+  <tbody>
+    <% @pending.each do |r| %>
+      <tr class="border-t border-stone-100 align-top">
+        <td class="px-3 py-2 whitespace-nowrap"><%= l r.created_at, format: :short %><% if @all %><div class="text-xs text-stone-500"><%= r.branch %></div><% end %></td>
+        <td class="px-3 py-2"><%= r.user %></td>
+        <td class="px-3 py-2"><%= link_to r.description, link_of_review(r), class: "link" %></td>
+        <td class="px-3 py-2 text-stone-600"><%= r.reason %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= format_money(r.value_cents) %></td>
+        <td class="px-3 py-2">
+          <%= form_with url: resolve_review_path(r, branch_id: params[:branch_id]), class: "flex flex-wrap items-center gap-1" do |f| %>
+            <%= f.text_field :note, placeholder: t("common.note"), class: "w-32 rounded border border-stone-300 px-2 py-1" %>
+            <%= f.button t("reviews.approve"), name: "status", value: "approved", class: "btn btn-success btn-sm" %>
+            <%= f.number_field :charge, step: "0.01", min: "0", value: Money.format_money(r.value_cents).delete("$,"), class: "w-24 rounded border border-stone-300 px-2 py-1 font-mono" %>
+            <%= f.button t("reviews.flag_and_charge"), name: "status", value: "flagged", class: "btn btn-outline-danger btn-sm" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    <% if @pending.empty? %><tr><td colspan="6" class="px-3 py-6 text-center text-stone-500"><%= t("reviews.nothing") %></td></tr><% end %>
+  </tbody>
+</table>
+<p class="mt-1 text-xs text-stone-500"><%= t("reviews.no_load") %></p>
+<% if @resolved.any? %>
+  <h2 class="mb-2 mt-8 font-semibold"><%= t("reviews.reviewed") %></h2>
+  <table class="table">
+    <tbody>
+      <% @resolved.each do |r| %>
+        <tr class="border-t border-stone-100">
+          <td class="px-3 py-1 whitespace-nowrap"><%= l r.reviewed_at, format: :short %></td>
+          <td class="px-3 py-1"><%= r.user %></td>
+          <td class="px-3 py-1"><%= r.description %> · <span class="text-stone-500"><%= r.reason %></span></td>
+          <td class="px-3 py-1 <%= r.status == 'flagged' ? 'text-red-700' : 'text-green-700' %>"><%= t("statuses.#{r.status}") %> · <%= r.reviewed_by %><%= " · #{r.note}" if r.note.present? %><%= " · #{t('reviews.charge')} #{format_money(r.charge.amount_cents)}" if r.charge %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

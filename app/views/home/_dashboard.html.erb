@@ -1,0 +1,17 @@
+<%# The pieces the dashboard program returned, in order: the figures in a grid and the lists
+    below, two by two. %>
+<% figures, panels = @pieces.partition { |p| p.kind == :tile } %>
+<% if figures.any? %>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <% figures.each do |c| %>
+      <div class="card"><div class="stat-label"><%= c.title %></div><div class="stat-value text-2xl"><%= dashboard_figure(c) %></div></div>
+    <% end %>
+  </div>
+<% end %>
+<% if panels.any? %>
+  <div class="mt-6 grid gap-6 lg:grid-cols-2">
+    <% panels.each do |piece| %>
+      <%= render "home/panels/#{piece.panel.to_s.tr("-", "_")}", piece: piece %>
+    <% end %>
+  </div>
+<% end %>

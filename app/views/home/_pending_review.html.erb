@@ -1,0 +1,6 @@
+<% if @pending_review.to_i.positive? %>
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded border border-amber-300 bg-amber-50 px-4 py-3 text-sm">
+    <span><%= t("home.pending_review_html", count: @pending_review, n: content_tag(:strong, @pending_review)) %></span>
+    <%= link_to t("home.review"), reviews_path(branch_id: current_branch.head_office? ? "all" : nil), class: "rounded bg-amber-600 px-3 py-1 font-semibold text-light hover:bg-amber-500" %>
+  </div>
+<% end %>

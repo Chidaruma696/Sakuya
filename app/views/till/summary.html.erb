@@ -1,0 +1,50 @@
+<% c = @summary_shift %>
+<% payment_methods = { "cash" => t("home.cash"), "transfer" => t("home.transfers"), "deposit" => t("home.deposits") } %>
+<div class="ticket sheet" id="summary">
+  <div class="center"><strong><%= t("till.summary").upcase %></strong></div>
+  <div class="center"><%= c.branch %> · <%= t("till.shift") %> <%= c.folio %></div>
+  <div class="center"><%= l c.opened_at, format: :short %> → <%= c.closed_at ? l(c.closed_at, format: :short) : t("statuses.open") %></div>
+  <div class="center"><%= t("till.cashier").downcase %> <%= c.user %><%= " · #{t("statuses.closed").downcase} #{c.closed_by}" if c.closed_by %></div>
+  <div class="line"></div>
+  <table>
+    <tr><td><%= t("till.sales") %></td><td class="right"><%= t("till.n_sales", count: @tickets) %></td><td class="right bold"><%= format_money(@total) %></td></tr>
+    <% payment_methods.each do |payment_method, name| %><% next unless @by_payment_method[payment_method] %>
+      <tr><td></td><td><%= name %></td><td class="right"><%= format_money(@by_payment_method[payment_method]) %></td></tr>
+    <% end %>
+    <% if c.paid_sales.sum(:change_cents).positive? %><tr><td></td><td><%= t("till.change") %></td><td class="right">−<%= format_money(c.paid_sales.sum(:change_cents)) %></td></tr><% end %>
+    <% if c.refunds_cents.positive? %><tr><td><%= t("till.refunds") %></td><td class="right"><%= c.refunds.count %></td><td class="right">−<%= format_money(c.refunds_cents) %></td></tr><% end %>
+    <% if c.account_payments.any? %><tr><td><%= t("till.account_payments") %></td><td class="right"><%= c.account_payments.count %></td><td class="right"><%= format_money(c.account_payments.sum(:amount_cents)) %></td></tr><% end %>
+    <% if c.withdrawals_cents.positive? %><tr><td><%= t("till.withdrawals") %></td><td class="right"><%= c.withdrawals.count %></td><td class="right">−<%= format_money(c.withdrawals_cents) %></td></tr><% end %>
+  </table>
+  <div class="line"></div>
+  <table>
+    <tr><td><%= t("till.float") %></td><td class="right"><%= format_money(c.float_cents) %></td></tr>
+    <tr><td><%= t("till.expected") %></td><td class="right"><%= format_money(c.expected_cents || c.expected_cash_cents) %></td></tr>
+    <% if c.counted_cents %>
+      <tr><td><%= t("till.counted") %></td><td class="right"><%= format_money(c.counted_cents) %></td></tr>
+      <tr class="total"><td class="bold"><%= t("till.difference") %></td><td class="right bold"><%= format_money(c.difference_cents) %></td></tr>
+    <% end %>
+  </table>
+  <% if c.breakdown.present? %><div class="mono"><%= c.breakdown_text %></div><% end %>
+  <% if c.withdrawals.any? %>
+    <div class="line-dotted"></div>
+    <div class="bold"><%= t("till.withdrawals") %></div>
+    <table><% c.withdrawals.each do |r| %><tr><td><%= l r.created_at, format: :short %></td><td><%= r.reason %></td><td class="right"><%= format_money(r.amount_cents) %></td></tr><% end %></table>
+  <% end %>
+  <% if @top.any? %>
+    <div class="line-dotted"></div>
+    <div class="bold"><%= t("home.best_sellers") %></div>
+    <table><% @top.each do |name, unit, qty, amount| %><tr><td><%= name %></td><td class="right"><%= number_with_precision(qty, precision: unit == "piece" ? 0 : 3) %> <%= t("short_units.#{unit}", default: unit) %></td><td class="right"><%= format_money(amount) %></td></tr><% end %></table>
+  <% end %>
+  <% if @reviews.any? || @charges.any? %>
+    <div class="line-dotted"></div>
+    <% if @reviews.any? %><div class="bold"><%= t("till.pending_review_n", count: @reviews.count(&:pending?)) %> · <%= @reviews.size %> <%= t("till.in_total") %></div>
+      <table><% @reviews.each do |r| %><tr><td><%= r.user %></td><td><%= r.description %></td><td class="right"><%= t("statuses.#{r.status}") %></td></tr><% end %></table><% end %>
+    <% if @charges.any? %><div class="bold"><%= t("till.charges") %></div>
+      <table><% @charges.each do |g| %><tr><td><%= g.user %></td><td class="right"><%= format_money(g.amount_cents) %></td><td class="right"><%= t("statuses.#{g.status}", default: g.status) %></td></tr><% end %></table><% end %>
+  <% end %>
+</div>
+<div class="actions">
+  <button type="button" data-text="<%= t("till.summary_text", folio: c.folio, branch: c.branch, sales: format_money(@total), tickets: @tickets, cash: format_money(c.expected_cash_cents), difference: (c.difference_cents ? format_money(c.difference_cents) : "—")) %>" onclick="const t = this.dataset.text; if (navigator.share) { navigator.share({ title: document.title, text: t, url: location.href }) } else { navigator.clipboard.writeText(t + ' ' + location.href).then(() => alert('<%= j t("till.copied") %>')) }"><%= t("till.share") %></button>
+  <a href="<%= till_shift_path %>"><%= t("till.till_shift") %></a>
+</div>

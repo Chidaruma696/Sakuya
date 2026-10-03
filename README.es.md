@@ -114,7 +114,7 @@ El Lisp es propio de Sakuya, escrito en Ruby (`lib/lisp*.rb`): un lector, un eva
 - **Los ganchos son un contrato.** Cerrar una venta, el precio de un renglón, la diferencia del corte, recibir mercancía: cada gancho lleva versión, para que actualizar Sakuya no rompa las reglas de un negocio.
 - **Una transacción por operación, dinero en centavos enteros, libros a los que solo se añade.** Cancelar compensa; nada se edita en su sitio.
 
-En `docs/decisiones.md` están las razones de cada decisión; en `docs/arquitectura.md`, el mapa de módulos.
+En `docs/decisions.md` (en inglés) están las razones de cada decisión; en `docs/architecture.md`, el mapa de módulos.
 
 <br/>
 
@@ -133,7 +133,7 @@ bin/dev          # http://localhost:3000
 
 Las semillas solo crean los roles base; lo demás sale del primer arranque. Tests (199 hoy): `bin/rails test`.
 
-- **PostgreSQL:** con `DATABASE_URL=postgres://usuario:clave@servidor/sakuya` corre igual; la CI prueba las dos bases. Para mudar una instalación con datos: carga el esquema en el PostgreSQL vacío y `bin/rails "sakuya:copiar_base[postgres://…]"`.
+- **PostgreSQL:** con `DATABASE_URL=postgres://usuario:clave@servidor/sakuya` corre igual; la CI prueba las dos bases. Para mudar una instalación con datos: carga el esquema en el PostgreSQL vacío y `bin/rails "sakuya:copy_database[postgres://…]"`.
 - **Impresora:** cada sucursal elige en Admin › Sucursales si imprime con el navegador, en una térmica de red (dirección:puerto, casi siempre el 9100) o en una por cable desde Chrome. El ticket también se baja en ESC/POS.
 - **Sin conexión:** la caja guarda su página y el catálogo en el equipo y encola las ventas; para recargarla sin red hace falta servirla por HTTPS (o en localhost).
 

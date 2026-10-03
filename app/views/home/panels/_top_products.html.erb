@@ -1,0 +1,9 @@
+<div class="card">
+  <h2 class="mb-2 font-semibold"><%= t("home.best_sellers") %></h2>
+  <table class="w-full text-sm">
+    <% @top.first(piece.limit).each do |name, unit, qty, amount| %>
+      <tr class="border-t border-stone-100"><td class="py-1"><%= name %></td><td class="py-1 text-right font-mono"><%= number_with_precision(qty, precision: unit == "piece" ? 0 : 3) %> <%= t("short_units.#{unit}", default: unit) %></td><td class="py-1 text-right font-mono"><%= format_money(amount) %></td></tr>
+    <% end %>
+    <% if @top.empty? %><tr><td class="py-3 text-center text-stone-500"><%= t("home.no_sales") %></td></tr><% end %>
+  </table>
+</div>

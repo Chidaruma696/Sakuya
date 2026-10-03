@@ -1,1177 +1,1189 @@
 es:
-  ajustes:
-    titulo: Ajustes
-    guardado: Ajustes guardados
-    guardar: Guardar
-    para_ti: Para ti
-    para_ti_ayuda: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
-    idioma: Idioma
-    tema: Tema
-    densidad: Densidad
-    letra: Tamaño de letra
-    idiomas:
+  settings:
+    defaults:
+      ticket_footer: "¡Gracias por su compra!"
+    title: Ajustes
+    saved: Ajustes guardados
+    save: Guardar
+    for_you: Para ti
+    for_you_help: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
+    language: Idioma
+    theme: Tema
+    density: Densidad
+    text_size: Tamaño de letra
+    languages:
       es: Español
       en: English
       de: Deutsch
-    tema_opciones:
-      sistema: Como el sistema
-      claro: Claro
-      oscuro: Oscuro
-    densidad_opciones:
+    theme_options:
+      system: Como el sistema
+      light: Claro
+      dark: Oscuro
+    density_options:
       normal: Normal
-      compacta: Compacta
-    letra_opciones:
+      compact: Compacta
+    text_size_options:
       normal: Normal
-      grande: Grande
-      chica: Chica
-    sistema: Sistema
-    negocio: Negocio
-    negocio_ayuda: Lo que se imprime en el encabezado y el pie del ticket. Si el nombre va vacío, se usa el de la sucursal.
-    caja: Caja
-    caja_ayuda: El tope de efectivo en gaveta se fija por sucursal.
-    candado_recibido_ayuda: Con el candado (puesto de fábrica), una factura con más cantidad que las recepciones que liga no se registra y el intento queda reportado; quien tenga el permiso de exceder la registra con motivo y queda por revisar con el exceso valuado. Sin candado solo se enseña la diferencia.
-    compras_apagado: El módulo de compras está apagado; enciéndelo en
-    ir_sucursales: Ver sucursales
-    claves:
-      negocio:
-        nombre: Nombre del negocio
-        direccion: Dirección
-        telefono: Teléfono
-        pie_ticket: Pie del ticket
-        moneda: Moneda (código ISO)
-        simbolo: Símbolo
-      caja:
-        piso_precio: Piso de precio (% del catálogo)
-        limite_gaveta: Tope de gaveta para sucursales nuevas ($)
-        denominaciones: Billetes y monedas para contar la gaveta (separados por coma)
-        tope_diferencia: Tope de diferencia al cerrar el corte ($; 0 = sin tope)
-      compras:
-        candado_recibido: No dejar facturar más de lo recibido sin motivo
+      large: Grande
+      small: Chica
+    system: Sistema
+    business: Negocio
+    business_help: Lo que se imprime en el encabezado y el pie del ticket. Si el nombre va vacío, se usa el de la sucursal.
+    till: Caja
+    till_help: El tope de efectivo en gaveta se fija por sucursal.
+    lock_received_help: Con el candado (puesto de fábrica), una factura con más cantidad que las recepciones que liga no se registra y el intento queda reportado; quien tenga el permiso de exceder la registra con motivo y queda por revisar con el exceso valuado. Sin candado solo se enseña la diferencia.
+    purchases_off: El módulo de compras está apagado; enciéndelo en
+    go_branches: Ver sucursales
+    keys:
+      business:
+        name: Nombre del negocio
+        address: Dirección
+        phone: Teléfono
+        ticket_footer: Pie del ticket
+        currency: Moneda (código ISO)
+        symbol: Símbolo
+      till:
+        price_floor: Piso de precio (% del catálogo)
+        drawer_limit: Tope de gaveta para sucursales nuevas ($)
+        denominations: Billetes y monedas para contar la gaveta (separados por coma)
+        difference_cap: Tope de diferencia al cerrar el corte ($; 0 = sin tope)
+      purchases:
+        lock_received: No dejar facturar más de lo recibido sin motivo
       ticket:
-        lema: Lema o renglón bajo el nombre
-        rfc: Identificación fiscal (RFC, NIT…)
-        leyenda_devoluciones: Leyenda de devoluciones
-        mostrar_cajero: Mostrar quién atendió
-        mostrar_codigo: Imprimir el código de barras del ticket
-        ancho: Ancho del papel
-    modulos: Módulos
-    modulos_ayuda: Lo apagado desaparece de la cinta, de los roles y de sus pantallas; los datos se quedan. No se apaga un módulo con trabajo abierto.
+        tagline: Lema o renglón bajo el nombre
+        tax_id: Identificación fiscal (RFC, NIT…)
+        returns_legend: Leyenda de devoluciones
+        show_cashier: Mostrar quién atendió
+        show_code: Imprimir el código de barras del ticket
+        width: Ancho del papel
+    features: Módulos
+    features_help: Lo apagado desaparece de la cinta, de los roles y de sus pantallas; los datos se quedan. No se apaga un módulo con trabajo abierto.
     ticket:
-      titulo: Diseño del ticket
+      title: Diseño del ticket
       intro: Lo que llenes a la izquierda se ve al momento en el ticket de la derecha, tal cual va a salir de la impresora. Vale para todas las sucursales.
-      ir: Diseñar el ticket
-      ir_ayuda: 'Logo, nombre, dirección, teléfonos, identificación fiscal y pie: se editan con vista previa.'
-      encabezado: Encabezado
-      cuerpo: Cuerpo
-      pie: Pie
-      vista_previa: Así se ve
-      sin_logo: Sin logo
-      subir_logo: Subir logo
-      quitar_logo: Quitar
-      logo_ayuda: PNG o JPG en negro sobre blanco, menos de 300 KB; sale a 30 mm de ancho. Los grises se ven sucios en térmica.
-      muestra:
-        producto_kg: Producto por kilo
-        producto_pieza: Producto por pieza
-      zoom_mas: Acercar
-      zoom_menos: Alejar
-      zoom_ajustar: Ajustar al ancho
-      imprimir_prueba: Imprimir prueba
-      imprimir_prueba_ayuda: Manda esta muestra a la impresora, tal cual, para probar papel y ancho
-    moneda_ayuda: 'El símbolo va pegado a la cifra en todo el sistema y en el ticket ($, €, Q, S/…). Sin conversiones: una sola moneda por instalación.'
-    moneda: Moneda
-    secciones:
-      para_ti: Para ti
-      negocio: Negocio y ticket
-      modulos: Módulos
-      caja: Caja
+      go: Diseñar el ticket
+      go_help: 'Logo, nombre, dirección, teléfonos, identificación fiscal y pie: se editan con vista previa.'
+      header: Encabezado
+      body: Cuerpo
+      footer: Pie
+      preview: Así se ve
+      no_logo: Sin logo
+      upload_logo: Subir logo
+      remove_logo: Quitar
+      logo_help: PNG o JPG en negro sobre blanco, menos de 300 KB; sale a 30 mm de ancho. Los grises se ven sucios en térmica.
+      sample:
+        product_kg: Producto por kilo
+        product_piece: Producto por pieza
+      zoom_in: Acercar
+      zoom_minus: Alejar
+      zoom_fit: Ajustar al ancho
+      print_test: Imprimir prueba
+      print_test_help: Manda esta muestra a la impresora, tal cual, para probar papel y ancho
+    currency_help: 'El símbolo va pegado a la cifra en todo el sistema y en el ticket ($, €, Q, S/…). Sin conversiones: una sola moneda por instalación.'
+    currency: Moneda
+    sections:
+      for_you: Para ti
+      business: Negocio y ticket
+      features: Módulos
+      till: Caja
       folios: Folios
-      compras: Compras
-      tablero: Tablero en Lisp
-      regla_corte: Cierre de caja en Lisp
-      regla_precio: Precio en Lisp
-      regla_venta: Ventas en Lisp
-      regla_credito: Crédito en Lisp
-      regla_retiro: Retiros en Lisp
-      regla_movimiento: Inventario en Lisp
-      regla_recepcion: Recepciones en Lisp
-      regla_factura: Facturas en Lisp
-      archivo_reglas: Exportar e importar
+      purchases: Compras
+      dashboard: Tablero en Lisp
+      shift_rule: Cierre de caja en Lisp
+      price_rule: Precio en Lisp
+      sale_rule: Ventas en Lisp
+      credit_rule: Crédito en Lisp
+      withdrawal_rule: Retiros en Lisp
+      movement_rule: Inventario en Lisp
+      receipt_rule: Recepciones en Lisp
+      invoice_rule: Facturas en Lisp
+      rules_file: Exportar e importar
       repl: REPL
       plugins: Plugins
-    secciones_ayuda:
-      para_ti: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
-      negocio: Los datos del negocio como salen en el ticket, con el ticket al lado tal cual va a imprimirse. Vale para todas las sucursales.
-      modulos: Lo apagado desaparece de la cinta, de los roles y de sus pantallas; los datos se quedan. No se apaga un módulo con trabajo abierto.
-      caja: Reglas de la caja para todas las sucursales.
+    sections_help:
+      for_you: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
+      business: Los datos del negocio como salen en el ticket, con el ticket al lado tal cual va a imprimirse. Vale para todas las sucursales.
+      features: Lo apagado desaparece de la cinta, de los roles y de sus pantallas; los datos se quedan. No se apaga un módulo con trabajo abierto.
+      till: Reglas de la caja para todas las sucursales.
       folios: 'Cómo se numeran los documentos: la letra que va antes del número la elige el negocio, o una sola numeración corrida para todo. Cambiar la letra no reinicia la cuenta; la numeración va por sucursal.'
-      compras: Reglas de compras para todas las sucursales.
+      purchases: Reglas de compras para todas las sucursales.
     folios:
-      modos:
-        por_documento: Una cuenta por documento
-        por_documento_ayuda: 'Cada documento lleva su propia numeración y su propio prefijo: B-00001 para ventas, C-00001 para cortes…'
-        unico: Una sola numeración corrida
-        unico_ayuda: 'Todos los documentos comparten la misma cuenta y el mismo prefijo: F-00001 venta, F-00002 corte, F-00003 recepción…'
-      unico: Prefijo de la numeración única
-      ejemplo: 'Ejemplo: %{folio}'
-      por_documento: Prefijo por documento
-      ayuda: Hasta 4 letras o números; vacío = solo el número. Solo cuenta cuando la numeración es por documento.
-      documentos:
-        venta: Venta (ticket)
-        corte: Corte de caja
-        devolucion: Devolución
-        conteo: Conteo
-        recepcion: Recepción de compra
-        traspaso: Traspaso
-        abono: Abono
-        pedido: Pedido de cliente
-      sucursal: Anteponer el código de la sucursal
-    avanzadas: Opciones avanzadas
-  comun:
-    monto: Monto
-    cerrar: Cerrar
-    guardar: Guardar
-    editar: Editar
-    ver: Ver
-    buscar: Buscar
-    si: sí
+      modes:
+        per_document: Una cuenta por documento
+        per_document_help: 'Cada documento lleva su propia numeración y su propio prefijo: B-00001 para ventas, C-00001 para cortes…'
+        single: Una sola numeración corrida
+        single_help: 'Todos los documentos comparten la misma cuenta y el mismo prefijo: F-00001 venta, F-00002 corte, F-00003 recepción…'
+      single: Prefijo de la numeración única
+      example: 'Ejemplo: %{folio}'
+      per_document: Prefijo por documento
+      help: Hasta 4 letras o números; vacío = solo el número. Solo cuenta cuando la numeración es por documento.
+      documents:
+        sale: Venta (ticket)
+        shift: Corte de caja
+        refund: Devolución
+        stock_count: Conteo
+        receipt: Recepción de compra
+        stock_transfer: Traspaso
+        account_payment: Abono
+        order: Pedido de cliente
+      branch: Anteponer el código de la sucursal
+    advanced: Opciones avanzadas
+  common:
+    amount: Monto
+    close: Cerrar
+    save: Guardar
+    edit: Editar
+    view: Ver
+    search: Buscar
+    'yes': sí
     'no': 'no'
     folio: Folio
-    producto: Producto
-    cantidad: Cantidad
-    estado: Estado
-    notas: Notas
-    nota: nota
-    motivo: Motivo
-    importe: Importe
-    clave: Clave
-    sucursal: Sucursal
-    matriz: matriz
-    desde: Desde
-    hasta: Hasta
-    todas: Todas
-    todas_las_sucursales: todas las sucursales
-    de: de
-    fecha: Fecha
-    cancelar: Cancelar
-    volver: Volver
-    nombre: Nombre
-    unidad: Unidad
-    precio: Precio
+    product: Producto
+    quantity: Cantidad
+    status: Estado
+    notes: Notas
+    note: nota
+    reason: Motivo
+    line_amount: Importe
+    key: Clave
+    branch: Sucursal
+    head_office: matriz
+    from: Desde
+    to: Hasta
+    all: Todas
+    all_branches: todas las sucursales
+    of: de
+    date: Fecha
+    cancel: Cancelar
+    back: Volver
+    name: Nombre
+    unit: Unidad
+    price: Precio
     total: Total
-    acciones: Acciones
+    actions: Acciones
     kg: kg
-    pieza: pieza
-    piezas: piezas
-    abrir: Abrir
-    imprimir: Imprimir
-    nada: Nada.
-    activo: Activo
-    quien: Quién
-    cuando: Cuándo
-    codigo: Código
-    kg_cada_una: kg c/u
-    crear: Crear
-    tipo: Tipo
-    renglon: renglón
-    autorizo: autorizó
-    por_revisar: por revisar
-    origen: Origen
-    saldo: Saldo
-    detalle: Detalle
-    concepto: Concepto
-    agregar: Agregar
-    quitar: Quitar
-  cinta:
+    piece: pieza
+    pieces: piezas
+    open: Abrir
+    print: Imprimir
+    nothing: Nada.
+    active: Activo
+    who: Quién
+    when: Cuándo
+    code: Código
+    kg_each_one: kg c/u
+    create: Crear
+    kind: Tipo
+    row: renglón
+    authorized: autorizó
+    pending_review: por revisar
+    origin: Origen
+    balance: Saldo
+    detail: Detalle
+    concept: Concepto
+    add: Agregar
+    remove: Quitar
+  ribbon:
     menu: Menú
-    salir: Salir
-    pestanas:
-      inicio: Inicio
-      caja: Caja
-      conteos: Conteos
-      inventario: Inventario
+    logout: Salir
+    tabs:
+      home: Inicio
+      till: Caja
+      stock_counts: Conteos
+      inventory: Inventario
       admin: Admin
-      ajustes: Ajustes
-      compras: Compras
-      almacenes: Almacenes
-      clientes: Clientes
-    grupos:
-      ver: Ver
-      revisar: Revisar
-      ajustes: Ajustes
-      vender: Vender
-      corte: Corte
-      recibir: Recibir
-      contar: Contar
-      cargos: Cargos
-      consultar: Consultar
-      capturar: Capturar
-      catalogo: Catálogo
-      gente: Gente
-      facturas: Facturas
-      proveedores: Proveedores
-      granel: Traspasos
-      reabasto: Reabasto
-      clientes: Clientes
-      pedidos: Pedidos
-    botones:
-      inicio: Inicio
-      reabastecer: Reabastecer
-      clientes: Clientes
-      nuevo_cliente: Nuevo cliente
-      nuevo_pedido: Nuevo pedido
-      pedidos: Pedidos
-      ventas_por_producto: Ventas por producto
-      por_revisar: Por revisar
-      ajustes: Ajustes
-      vender: Vender
-      ventas: Ventas
-      devolucion: Devolución
-      corte: Corte
-      nuevo_conteo: Nuevo conteo
-      conteos: Conteos
-      cargos: Cargos
-      existencias: Existencias
+      settings: Ajustes
+      purchases: Compras
+      warehouses: Almacenes
+      customers: Clientes
+    groups:
+      view: Ver
+      review: Revisar
+      settings: Ajustes
+      sell: Vender
+      shift: Corte
+      receive: Recibir
+      count: Contar
+      charges: Cargos
+      query: Consultar
+      capture: Capturar
+      catalog: Catálogo
+      people: Gente
+      invoices: Facturas
+      suppliers: Proveedores
+      bulk: Traspasos
+      restock: Reabasto
+      customers: Clientes
+      orders: Pedidos
+    buttons:
+      home: Inicio
+      restock: Reabastecer
+      customers: Clientes
+      new_customer: Nuevo cliente
+      new_order: Nuevo pedido
+      orders: Pedidos
+      sales_by_product: Ventas por producto
+      pending_review: Por revisar
+      settings: Ajustes
+      sell: Vender
+      sales: Ventas
+      refund: Devolución
+      shift: Corte
+      new_stock_count: Nuevo conteo
+      stock_counts: Conteos
+      charges: Cargos
+      stock_levels: Existencias
       kardex: Kardex
-      entrada_ajuste: Entrada / ajuste
-      productos: Productos
-      promociones: Promociones
-      usuarios: Usuarios
+      inflow_adjustment: Entrada / ajuste
+      products: Productos
+      promotions: Promociones
+      users: Usuarios
       roles: Roles
-      sucursales: Sucursales
-      recibir: Recibir
-      recepciones: Recepciones
-      nueva_factura: Nueva factura
-      cuentas_por_pagar: Cuentas por pagar
-      proveedores: Proveedores
-      traspaso_granel: Nuevo traspaso
-      traspasos: Traspasos
-  acerca:
-    titulo: Acerca de Sakuya
-    lema: Punto de venta y trastienda para la matriz y sus tiendas
+      branches: Sucursales
+      receive: Recibir
+      receipts: Recepciones
+      new_invoice: Nueva factura
+      accounts_payable: Cuentas por pagar
+      suppliers: Proveedores
+      stock_transfer_bulk: Nuevo traspaso
+      stock_transfers: Traspasos
+  about:
+    title: Acerca de Sakuya
+    tagline: Punto de venta y trastienda para la matriz y sus tiendas
     version: Versión
-    motor: Motor
-    sesion: Sesión
-    servidor: Servidor
-    creditos_html: Sakuya Izayoi y Touhou Project pertenecen a Team Shanghai Alice (ZUN). El nombre es un homenaje de fan, no oficial y sin afiliación, hecho según sus directrices para obras derivadas.
-    tecnologia: Hecho con Rails, Hotwire y Tailwind. Código abierto bajo licencia Apache 2.0.
-    codigo: Código en GitHub
-    reportar: Reportar un problema
-    pwa_descripcion: Punto de venta y trastienda por módulos, con reglas que cada negocio ajusta.
-    instalar: Instalar la app
-  sesion:
-    usuario: Usuario
-    contrasena: Contraseña
-    entrar: Entrar
-    hola: Hola, %{nombre}
-    incorrectos: Usuario o contraseña incorrectos
-    cerrada: Sesión cerrada
-    inicia_para_continuar: Inicia sesión para continuar
-  errores:
-    apartado:
-      no_alcanza: '%{producto}: hay %{hay}, pero %{apartado} está apartado para pedidos; disponible %{disponible}'
-    impresora:
-      sin_direccion: la sucursal no tiene la dirección de su térmica de red
-      no_contesta: 'la térmica %{direccion} no contesta (%{error})'
-    pedido:
-      sin_renglones: el pedido no trae renglones
-      no_abierto: el pedido %{folio} ya no está abierto
-      no_alcanza: '%{producto}: pides %{pide} y hay %{disponible} disponible para apartar (o guárdalo sin apartar)'
-    abono:
-      mayor_que_cero: el abono tiene que ser mayor que cero
-      sin_caja: no hay caja abierta en %{sucursal} para recibir el abono
-    sin_permiso:
-      titulo: Sin permiso
-      texto_html: Tu rol no incluye %{clave}. Pide a alguien con permiso que lo haga o que te autorice.
-    hace_falta_motivo: hace falta el motivo
-    minimo:
-      maximo_menor: el máximo no puede ser menor que el mínimo
-    mayor_que_cero: debe ser mayor que cero
+    engine: Motor
+    session: Sesión
+    server: Servidor
+    credits_html: Sakuya Izayoi y Touhou Project pertenecen a Team Shanghai Alice (ZUN). El nombre es un homenaje de fan, no oficial y sin afiliación, hecho según sus directrices para obras derivadas.
+    technology: Hecho con Rails, Hotwire y Tailwind. Código abierto bajo licencia Apache 2.0.
+    code: Código en GitHub
+    report: Reportar un problema
+    pwa_description: Punto de venta y trastienda por módulos, con reglas que cada negocio ajusta.
+    install: Instalar la app
+  session:
+    user: Usuario
+    password: Contraseña
+    login: Entrar
+    welcome: Hola, %{name}
+    wrong: Usuario o contraseña incorrectos
+    closed: Sesión cerrada
+    sign_in_to_continue: Inicia sesión para continuar
+  errors:
+    reserved:
+      not_enough: '%{product}: hay %{on_hand}, pero %{reserved} está apartado para pedidos; disponible %{available}'
+    printer:
+      no_address: la sucursal no tiene la dirección de su térmica de red
+      no_answer: 'la térmica %{address} no contesta (%{error})'
+    order:
+      no_rows: el pedido no trae renglones
+      not_open: el pedido %{folio} ya no está abierto
+      not_enough: '%{product}: pides %{asks} y hay %{available} disponible para apartar (o guárdalo sin apartar)'
+    account_payment:
+      greater_than_zero: el abono tiene que ser mayor que cero
+      no_till: no hay caja abierta en %{branch} para recibir el abono
+    not_allowed:
+      title: Sin permiso
+      text_html: Tu rol no incluye %{key}. Pide a alguien con permiso que lo haga o que te autorice.
+    reason_required: hace falta el motivo
+    minimum:
+      maximum_below_minimum: el máximo no puede ser menor que el mínimo
+    greater_than_zero: debe ser mayor que cero
     barcode:
-      doce_digitos: se esperan 12 dígitos
-      plu_rango: PLU fuera de rango
-      secuencia_rango: secuencia fuera de rango
-    corte:
-      ya_abierto: ya hay un corte abierto en %{sucursal}
-      cerrado: el corte está cerrado
-      sin_efectivo: no hay tanto efectivo en la gaveta (%{monto})
-      ya_cerrado: el corte ya está cerrado
-      falta_motivo: '%{motivo}: escribe el motivo'
-      rechazado: '%{motivo}. Así no se cierra: vuelve a contar o que cierre alguien con permiso para diferencias. Queda reportado.'
-      sin_caja_en_almacen: "%{sucursal} es un almacén: ahí no hay caja"
-    caja:
-      clave_ticket: hace falta la clave del ticket
-      sin_caja: 'no hay caja abierta en %{sucursal}: ábrela con su fondo'
-      sin_caja_simple: no hay caja abierta
-      excede_limite: 'hay más de %{monto} en la gaveta: haz un retiro a la caja fuerte antes de seguir'
-      ticket_vacio: el ticket está vacío
-      no_se_vende_sin: "%{mensaje}. No se vende lo que no hay: recibe el traspaso antes."
-      sin_caja_en: no hay caja abierta en %{sucursal}
-      forma_desconocida: 'forma de pago desconocida: %{forma}'
-      ya_devuelta: la venta ya está devuelta completa
-      sin_caja_devolver: no hay caja abierta para devolver el dinero
-      nada_devuelto: no se devolvió nada
-      max_devolver: "%{producto}: se pueden devolver como mucho %{max}"
-      cantidad_invalida: "%{producto}: cantidad inválida"
-      piezas_enteras: "%{producto} va por piezas enteras"
-      sin_precio: "%{producto}: sin precio en %{sucursal}; pídelo a la matriz antes de venderlo"
-      piso_precio: "%{producto}: el precio no puede bajar del %{piso} % del catálogo (%{monto})"
-      precio_frenado: '%{cobro}: %{motivo}. Así no se cobra: deja el precio que toca o que cobre alguien con permiso para bajar precios. Queda reportado.'
-      retiro_frenado: '%{motivo}. Así no se retira: que lo haga alguien con permiso para retirar. Queda reportado.'
-      venta_frenada: '%{motivo}. Así no se cobra: que la cobre alguien con permiso. Queda reportado.'
-      credito_frenado: '%{motivo}. Así no se fía: que lo autorice alguien con permiso, o que pague de otra forma. Queda reportado.'
-      a_cuenta_sin_cliente: para vender a cuenta hay que elegir el cliente
-      a_cuenta_sin_conexion: vender a cuenta necesita conexión
-      vendida_en_rara: la hora de la venta sin conexión no cuadra (más de 7 días o en el futuro)
-      falta_dinero: 'falta dinero: el ticket es %{total} y se pagan %{pago}'
-      no_efectivo_excede: una transferencia o depósito no puede pasarse del total
-      sin_ticket_devolucion: 'Sin ticket no hay devolución: no se encontró «%{codigo}»'
-    escribe_motivo: escribe el motivo
-    conteo:
-      ya_abierto: ya hay un conteo abierto en %{sucursal}
-      cerrado: el conteo está cerrado
-      fuera_de_alcance: "%{producto} no está en este conteo parcial"
-      parcial_vacio: elige una línea o al menos un producto
-      cantidad_invalida: cantidad inválida
-      ya_cerrado: el conteo ya está cerrado
-      se_teclea: "%{producto} se vende en fracciones: tecléalo a mano"
-      no_encontrado: no se encontró «%{codigo}»
-    cargo:
-      sin_origen: el cargo viene de un conteo, de una revisión o de un viaje
-      ya_esta: el cargo ya está %{estado}
-    inventario:
-      movimiento_frenado: '%{motivo}. Así no se mueve: que lo haga alguien con permiso para ajustar. Queda reportado.'
-      cantidad_cero: la cantidad debe ser mayor que cero
-      insuficiente: 'Existencia insuficiente de %{producto} en %{sucursal}: hay %{hay}, se piden %{piden}'
-    revision:
-      ya_esta: la revisión ya está %{estado}
-    promocion:
-      hasta_antes: no puede ser antes de desde
-    rol:
-      lista: debe ser una lista
-      desconocidos: 'desconocidos: %{claves}'
-    ajuste:
-      entero: "%{clave}: debe ser un número entero"
+      twelve_digits: se esperan 12 dígitos
+      plu_range: PLU fuera de rango
+      sequence_range: secuencia fuera de rango
+    shift:
+      already_open: ya hay un corte abierto en %{branch}
+      closed: el corte está cerrado
+      no_cash: no hay tanto efectivo en la gaveta (%{amount})
+      already_closed: el corte ya está cerrado
+      missing_reason: '%{reason}: escribe el motivo'
+      rejected: '%{reason}. Así no se cierra: vuelve a contar o que cierre alguien con permiso para diferencias. Queda reportado.'
+      no_till_in_warehouse: "%{branch} es un almacén: ahí no hay caja"
+    till:
+      key_ticket: hace falta la clave del ticket
+      no_till: 'no hay caja abierta en %{branch}: ábrela con su fondo'
+      no_till_simple: no hay caja abierta
+      exceeds_limit: 'hay más de %{amount} en la gaveta: haz un retiro a la caja fuerte antes de seguir'
+      ticket_empty: el ticket está vacío
+      cannot_sell_without: "%{message}. No se vende lo que no hay: recibe el traspaso antes."
+      no_till_in: no hay caja abierta en %{branch}
+      unknown_payment_method: 'forma de pago desconocida: %{payment_method}'
+      already_refunded: la venta ya está devuelta completa
+      no_till_refund: no hay caja abierta para devolver el dinero
+      nothing_refunded: no se devolvió nada
+      max_refund: "%{product}: se pueden devolver como mucho %{max}"
+      invalid_quantity: "%{product}: cantidad inválida"
+      whole_pieces: "%{product} va por piezas enteras"
+      not_found: No se encontró «%{code}»
+      no_price: "%{product}: sin precio en %{branch}; pídelo a la matriz antes de venderlo"
+      price_floor: "%{product}: el precio no puede bajar del %{floor} % del catálogo (%{amount})"
+      price_stopped: '%{line}: %{reason}. Así no se cobra: deja el precio que toca o que cobre alguien con permiso para bajar precios. Queda reportado.'
+      withdrawal_stopped: '%{reason}. Así no se retira: que lo haga alguien con permiso para retirar. Queda reportado.'
+      sale_stopped: '%{reason}. Así no se cobra: que la cobre alguien con permiso. Queda reportado.'
+      credit_stopped: '%{reason}. Así no se fía: que lo autorice alguien con permiso, o que pague de otra forma. Queda reportado.'
+      on_account_no_customer: para vender a cuenta hay que elegir el cliente
+      on_account_offline: vender a cuenta necesita conexión
+      sold_at_odd: la hora de la venta sin conexión no cuadra (más de 7 días o en el futuro)
+      missing_money: 'falta dinero: el ticket es %{total} y se pagan %{payment}'
+      non_cash_exceeds: una transferencia o depósito no puede pasarse del total
+      no_ticket_refund: 'Sin ticket no hay devolución: no se encontró «%{code}»'
+    writes_reason: escribe el motivo
+    stock_count:
+      already_open: ya hay un conteo abierto en %{branch}
+      closed: el conteo está cerrado
+      out_of_scope: "%{product} no está en este conteo parcial"
+      partial_empty: elige una línea o al menos un producto
+      invalid_quantity: cantidad inválida
+      already_closed: el conteo ya está cerrado
+      is_typed: "%{product} se vende en fracciones: tecléalo a mano"
+      not_found: no se encontró «%{code}»
+    charge:
+      no_origin: el cargo viene de un conteo, de una revisión o de un viaje
+      already: el cargo ya está %{status}
+    inventory:
+      movement_stopped: '%{reason}. Así no se mueve: que lo haga alguien con permiso para ajustar. Queda reportado.'
+      zero_quantity: la cantidad debe ser mayor que cero
+      insufficient: 'Existencia insuficiente de %{product} en %{branch}: hay %{on_hand}, se piden %{requested}'
+    review:
+      already: la revisión ya está %{status}
+    promotion:
+      to_before: no puede ser antes de desde
+    role:
+      list: debe ser una lista
+      unknown: 'desconocidos: %{keys}'
+    setting:
+      integer: "%{key}: debe ser un número entero"
       logo: el logo debe ser una imagen PNG, JPG o WebP de menos de 300 KB
-      prefijo: "%{clave}: el prefijo lleva hasta 4 letras o números, sin guion"
-      modo_folios: modo de numeración desconocido
-      denominaciones: las denominaciones van separadas por coma, por ejemplo 500,200,100,50,20,10,5,2,1,0.5
-    movimiento:
-      tipo_desconocido: 'tipo de movimiento desconocido: %{tipo}'
-    usuario:
-      formato: solo minúsculas, números, punto y guion
-    modulo_apagado:
-      titulo: El módulo %{modulo} está apagado
-      texto: Este negocio no lo usa. Quien administra usuarios puede encenderlo en Ajustes › Sistema.
-    modulo:
-      con_trabajo_abierto: 'no se puede apagar %{modulo}: hay trabajo abierto; ciérralo primero'
-      con_dependientes: 'no se puede apagar %{modulo}: lo necesita %{dependientes}; apágalo también o déjalo encendido'
-    compras:
-      factura_de_otro: esa factura es de otro proveedor
-      factura_cancelada: esa factura está cancelada
-      sin_renglones: 'no hay renglones: escanea o elige al menos un producto'
-      recepcion_cancelada: la recepción ya está cancelada
-      folio_obligatorio: hace falta el folio de la factura
-      folio_repetido: la factura %{folio} de este proveedor ya está capturada
-      monto_cero: el monto debe ser mayor que cero
-      falta_motivo: '%{motivo}: escribe el motivo'
-      factura_frenada: '%{motivo}. Así no se registra: liga las recepciones que faltan o que la registre alguien con permiso para exceder. Queda reportado.'
-      recepcion_frenada: '%{motivo}. Así no entra: que la reciba alguien con permiso. Queda reportado.'
-      factura_ya_cancelada: la factura ya está cancelada
-      factura_con_pagos: 'la factura tiene pagos: anúlalos antes de cancelarla'
-      pago_excede: el pago pasa de lo que resta de la factura (%{resta})
-      anticipo_excede: el pago pasa de lo que se le debe (%{saldo}); liga una factura si es anticipo
-      pago_ya_anulado: el pago ya está anulado
-      corte_cerrado: 'el corte de ese pago ya cerró: el efectivo no puede regresar a la gaveta'
-      envases_insuficientes: no se le deben tantos %{envase} (saldo %{saldo})
-    traspaso:
-      mismo_lugar: origen y destino son el mismo lugar
-      externo_solo_a_matriz: de %{almacen} la mercancía solo va a la matriz; de ahí sale a las tiendas
-      ya_cancelado: el traspaso ya está cancelado
-  inicio:
-    titulo: Inicio
-    ventas: Ventas
+      prefix: "%{key}: el prefijo lleva hasta 4 letras o números, sin guion"
+      mode_folios: modo de numeración desconocido
+      denominations: las denominaciones van separadas por coma, por ejemplo 500,200,100,50,20,10,5,2,1,0.5
+    movement:
+      unknown_kind: 'tipo de movimiento desconocido: %{kind}'
+    user:
+      format: solo minúsculas, números, punto y guion
+    feature_off:
+      title: El módulo %{feature} está apagado
+      text: Este negocio no lo usa. Quien administra usuarios puede encenderlo en Ajustes › Sistema.
+    feature:
+      with_work_open: 'no se puede apagar %{feature}: hay trabajo abierto; ciérralo primero'
+      with_dependents: 'no se puede apagar %{feature}: lo necesita %{dependents}; apágalo también o déjalo encendido'
+    purchases:
+      invoice_of_other: esa factura es de otro proveedor
+      invoice_cancelled: esa factura está cancelada
+      no_rows: 'no hay renglones: escanea o elige al menos un producto'
+      receipt_cancelled: la recepción ya está cancelada
+      folio_required: hace falta el folio de la factura
+      folio_repeated: la factura %{folio} de este proveedor ya está capturada
+      zero_amount: el monto debe ser mayor que cero
+      missing_reason: '%{reason}: escribe el motivo'
+      invoice_stopped: '%{reason}. Así no se registra: liga las recepciones que faltan o que la registre alguien con permiso para exceder. Queda reportado.'
+      receipt_stopped: '%{reason}. Así no entra: que la reciba alguien con permiso. Queda reportado.'
+      invoice_already_cancelled: la factura ya está cancelada
+      invoice_with_payments: 'la factura tiene pagos: anúlalos antes de cancelarla'
+      payment_exceeds: el pago pasa de lo que resta de la factura (%{remaining})
+      advance_exceeds: el pago pasa de lo que se le debe (%{balance}); liga una factura si es anticipo
+      payment_already_voided: el pago ya está anulado
+      closed_shift: 'el corte de ese pago ya cerró: el efectivo no puede regresar a la gaveta'
+    stock_transfer:
+      same_place: origen y destino son el mismo lugar
+      external_only_to_head_office: de %{warehouse} la mercancía solo va a la matriz; de ahí sale a las tiendas
+      already_cancelled: el traspaso ya está cancelado
+  home:
+    title: Inicio
+    sales: Ventas
     tickets: Tickets
-    ticket_promedio: Ticket promedio
-    devoluciones: Devoluciones
-    efectivo: Efectivo
-    transferencias: Transferencias
-    depositos: Depósitos
-    inventario_valorizado: Inventario valorizado
-    lo_mas_vendido: Lo más vendido
-    sin_ventas: Sin ventas en el rango.
-    cortes_cerrados: Cortes cerrados
-    sin_cortes: Sin cortes en el rango.
-    conteos: Conteos
-    sin_conteos: Sin conteos en el rango.
-    ventas_por_producto: Ventas por producto
-    descargar_csv: Descargar CSV
-    lineas: Líneas
-    revisar: Revisar
-    por_revisar_html:
+    average_ticket: Ticket promedio
+    refunds: Devoluciones
+    cash: Efectivo
+    transfers: Transferencias
+    deposits: Depósitos
+    inventory_valued: Inventario valorizado
+    best_sellers: Lo más vendido
+    no_sales: Sin ventas en el rango.
+    closed_shifts: Cortes cerrados
+    no_shifts: Sin cortes en el rango.
+    stock_counts: Conteos
+    no_stock_counts: Sin conteos en el rango.
+    sales_by_product: Ventas por producto
+    download_csv: Descargar CSV
+    lines: Líneas
+    review: Revisar
+    pending_review_html:
       one: "%{n} operación hecha sin autorización espera revisión."
       other: "%{n} operaciones hechas sin autorización esperan revisión."
     csv:
-      clave: clave
-      producto: producto
-      unidad: unidad
-      cantidad: cantidad
-      importe: importe
-      lineas: lineas
-  revisiones:
-    titulo: Por revisar
-    solo_esta: Solo %{sucursal}
-    explicacion: Operaciones que alguien hizo sin quien las autorizara en ese momento. Se hicieron y quedaron a su nombre; aquí decides qué pasa con cada una. Al observar puedes cargarle el monto al responsable.
-    cuando: Cuándo
-    quien: Quién
-    que: Qué
-    vale: Vale
-    decidir: Decidir
-    aprobar: Aprobar
-    observar_y_cargar: Observar y cargar
-    nada: Nada por revisar.
-    sin_cargar: Para observar sin cargar, deja el monto en 0.
-    revisadas: Revisadas
-    cargo: cargo
-    aprobada: Aprobada
-    observada_sin_cargo: Observada, sin cargo
-    observada_cargada: 'Observada y cargada a %{quien}: %{monto}'
+      key: clave
+      product: producto
+      unit: unidad
+      quantity: cantidad
+      amount: importe
+      lines: lineas
+  reviews:
+    title: Por revisar
+    only_this: Solo %{branch}
+    explanation: Operaciones que alguien hizo sin quien las autorizara en ese momento. Se hicieron y quedaron a su nombre; aquí decides qué pasa con cada una. Al observar puedes cargarle el monto al responsable.
+    when: Cuándo
+    who: Quién
+    what: Qué
+    worth: Vale
+    decide: Decidir
+    approve: Aprobar
+    flag_and_charge: Observar y cargar
+    nothing: Nada por revisar.
+    no_load: Para observar sin cargar, deja el monto en 0.
+    reviewed: Revisadas
+    charge: cargo
+    approved: Aprobada
+    flagged_no_charge: Observada, sin cargo
+    flagged_loaded: 'Observada y cargada a %{who}: %{amount}'
     desc:
-      movimiento: "%{tipo} de %{cantidad}"
-      retiro: Retiro de %{monto} del corte %{folio}
-      venta_linea: 'Precio bajado en %{folio}: %{producto} a %{precio} (catálogo %{catalogo})'
-      factura_proveedor: Factura %{folio} de %{proveedor} con más de lo recibido
-      corte: Corte %{folio} cerrado con diferencia de %{diferencia}
-      frenado: Intento frenado en el corte %{folio}
-      frenado_producto: 'Movimiento frenado: %{producto}'
-      frenado_proveedor: 'Factura frenada de %{proveedor}'
-      venta: 'Venta %{folio} de %{total}'
-      recepcion: 'Recepción %{folio} de %{proveedor}'
-      corte_abierto: Corte %{folio}, abierto
-  estados:
-    pendiente: pendiente
-    aprobada: aprobada
-    observada: observada
-    cerrado: cerrado
-    cancelado: cancelado
-    cancelada: cancelada
-    abierta: abierta
-    cerrada: cerrada
-    abierto: abierto
-    faltante: faltante
-    sobrante: sobrante
-    cobrada: cobrada
-    devuelta: devuelta
-    perdonado: perdonado
-    cobrado: cobrado
-  movimientos:
-    entrada: Entrada
-    recepcion: Recepción
-    devolucion_cliente: Devolución de cliente
-    ajuste_entrada: Ajuste (+)
-    venta: Venta
-    salida: Salida
-    merma: Merma
-    ajuste_salida: Ajuste (−)
-  permisos:
-    caja.vender: Vender en caja
-    caja.abrir: Abrir y cerrar caja
-    caja.retirar: Retirar efectivo a caja fuerte
-    caja.diferencia: Cerrar el corte con una diferencia mayor al tope
-    caja.bajar_precio: Autorizar un precio por debajo del catálogo
-    caja.forzar_venta: Cobrar una venta que la regla de ventas frena (queda por revisar)
-    caja.devolver: Recibir devoluciones de clientes
-    inventario.ver: Ver existencias y movimientos
-    inventario.ajustar: Ajustar existencias con justificación
-    conteos.hacer: Hacer conteos físicos y cargar faltantes
-    conteos.cargos: Cobrar o perdonar cargos
-    reportes.ver: Ver el tablero y los reportes
-    revisiones.resolver: Revisar lo que se hizo sin autorización (aprobar, observar, cargar)
-    admin.catalogo: Administrar productos y códigos
-    admin.usuarios: Administrar usuarios, roles y sucursales
-    compras.ver: Ver proveedores, cuentas por pagar y envases
-    compras.recibir: Recibir mercancía del proveedor
-    compras.facturar: Capturar y cancelar facturas del proveedor
-    clientes.ver: Ver clientes
-    clientes.editar: Dar de alta y editar clientes
-    clientes.pedidos: Tomar y cancelar pedidos de clientes
-    clientes.abonar: Recibir abonos de clientes en la caja
-    clientes.forzar_credito: Vender a cuenta aunque la regla de crédito lo frene (queda por revisar)
-    compras.forzar_recepcion: Recibir mercancía que la regla de recepciones frena (queda por revisar)
-    compras.pagar: Pagar a proveedores desde la caja
-    compras.exceder: Registrar una factura con más de lo recibido (con motivo, queda por revisar)
-    almacenes.traspasar: Traspasos entre sucursales y almacenes
-    reglas.editar: Escribir los programas en Lisp del negocio (el tablero)
+      movement: "%{kind} de %{quantity}"
+      withdrawal: Retiro de %{amount} del corte %{folio}
+      sale_line: 'Precio bajado en %{folio}: %{product} a %{price} (catálogo %{catalog})'
+      supplier_invoice: Factura %{folio} de %{supplier} con más de lo recibido
+      shift: Corte %{folio} cerrado con diferencia de %{difference}
+      stopped: Intento frenado en el corte %{folio}
+      stopped_product: 'Movimiento frenado: %{product}'
+      stopped_supplier: 'Factura frenada de %{supplier}'
+      sale: 'Venta %{folio} de %{total}'
+      receipt: 'Recepción %{folio} de %{supplier}'
+      open_shift: Corte %{folio}, abierto
+  statuses:
+    pending: pendiente
+    approved: aprobada
+    flagged: observada
+    closed: cerrado
+    cancelled: cancelado
+    open: abierto
+    shortage: faltante
+    surplus: sobrante
+    forgiven: perdonado
+    paid: cobrado
+  sale_statuses:
+    paid: cobrada
+    cancelled: cancelada
+    refunded: devuelta
+  movements:
+    inflow: Entrada
+    receipt: Recepción
+    customer_return: Devolución de cliente
+    adjustment_inflow: Ajuste (+)
+    sale: Venta
+    outflow: Salida
+    waste: Merma
+    adjustment_outflow: Ajuste (−)
+  permissions:
+    till.sell: Vender en caja
+    till.open: Abrir y cerrar caja
+    till.withdraw: Retirar efectivo a caja fuerte
+    till.difference: Cerrar el corte con una diferencia mayor al tope
+    till.lower_price: Autorizar un precio por debajo del catálogo
+    till.force_sale: Cobrar una venta que la regla de ventas frena (queda por revisar)
+    till.refund: Recibir devoluciones de clientes
+    inventory.view: Ver existencias y movimientos
+    inventory.adjust: Ajustar existencias con justificación
+    stock_counts.make: Hacer conteos físicos y cargar faltantes
+    stock_counts.charges: Cobrar o perdonar cargos
+    reports.view: Ver el tablero y los reportes
+    reviews.resolve: Revisar lo que se hizo sin autorización (aprobar, observar, cargar)
+    admin.catalog: Administrar productos y códigos
+    admin.users: Administrar usuarios, roles y sucursales
+    purchases.view: Ver proveedores, cuentas por pagar y envases
+    purchases.receive: Recibir mercancía del proveedor
+    purchases.invoice: Capturar y cancelar facturas del proveedor
+    customers.view: Ver clientes
+    customers.edit: Dar de alta y editar clientes
+    customers.orders: Tomar y cancelar pedidos de clientes
+    customers.pay_account: Recibir abonos de clientes en la caja
+    customers.force_credit: Vender a cuenta aunque la regla de crédito lo frene (queda por revisar)
+    purchases.force_receipt: Recibir mercancía que la regla de recepciones frena (queda por revisar)
+    purchases.pay: Pagar a proveedores desde la caja
+    purchases.exceed: Registrar una factura con más de lo recibido (con motivo, queda por revisar)
+    warehouses.transfer_stock: Traspasos entre sucursales y almacenes
+    rules.edit: Escribir los programas en Lisp del negocio (el tablero)
   js:
     pos:
-      no_en_catalogo: No está en el catálogo guardado en este equipo
-      necesita_conexion: Sin conexión no se vende a cuenta ni se cobra un pedido
-      guardada_sin_conexion: 'Venta guardada sin conexión (%{total}, cambio %{cambio}). Se sube sola al volver la red; el ticket se imprime desde Ventas cuando suba.'
-      sin_conexion: 'Sin conexión: vendiendo con el catálogo guardado'
-      por_subir: '%{n} ventas por subir'
-      por_subir_una: 1 venta por subir
-      corte_pendientes: 'En este equipo hay %{n} ventas hechas sin conexión que no han subido: espera a que suban antes de cerrar el corte.'
-      corte_pendiente: 'En este equipo hay 1 venta hecha sin conexión que no ha subido: espera a que suba antes de cerrar el corte.'
-      ticket_vacio: El ticket está vacío
-      cantidad: Teclea la cantidad
-    unidades:
+      not_in_catalog: No está en el catálogo guardado en este equipo
+      needs_connection: Sin conexión no se vende a cuenta ni se cobra un pedido
+      saved_offline: 'Venta guardada sin conexión (%{total}, cambio %{change}). Se sube sola al volver la red; el ticket se imprime desde Ventas cuando suba.'
+      offline: 'Sin conexión: vendiendo con el catálogo guardado'
+      to_upload: '%{n} ventas por subir'
+      to_upload_one: 1 venta por subir
+      shift_pending_other: 'En este equipo hay %{n} ventas hechas sin conexión que no han subido: espera a que suban antes de cerrar el corte.'
+      shift_pending_one: 'En este equipo hay 1 venta hecha sin conexión que no ha subido: espera a que suba antes de cerrar el corte.'
+      ticket_empty: El ticket está vacío
+      quantity: Teclea la cantidad
+    units:
       kg: kg
-      pieza: pz
-      litro: l
-      metro: m
+      piece: pz
+      liter: l
+      meter: m
     ticket:
-      logo_grande: El logo pesa más de 300 KB; usa una imagen más chica.
+      logo_large: El logo pesa más de 300 KB; usa una imagen más chica.
     pwa:
-      version_nueva: Hay una versión nueva de Sakuya.
-      recargar: Recargar
-    cargando: Cargando…
-    no_se_pudo: No se pudo cargar. Revisa la conexión.
-  caja:
-    nueva_venta: Nueva venta
-    bajar_escpos: Bajar ESC/POS
-    escpos_ayuda: El ticket en bytes para una impresora térmica
-    imprimir_termica: Imprimir en la térmica
-    subir_ahora: Subir ahora
-    impreso: Ticket impreso.
-    sin_serial: 'Este navegador no puede hablarle a la impresora por cable; usa Chrome o Edge, o bájalo en ESC/POS.'
-    elige_impresora: 'Elige la impresora con «Imprimir en la térmica»; luego ya no se pregunta.'
-    corte_de_caja: Corte de caja
-    corte: Corte
-    fondo: Fondo
-    ventas: Ventas
-    efectivo_de_ventas: Efectivo de ventas
-    devoluciones: Devoluciones
-    retiros: Retiros
-    en_gaveta: En gaveta
-    corte_abierto_por: Corte %{folio} abierto por %{quien} el %{fecha}
-    n_ventas:
+      new_version: Hay una versión nueva de Sakuya.
+      reload: Recargar
+    loading: Cargando…
+    load_failed: No se pudo cargar. Revisa la conexión.
+  till:
+    new_sale: Nueva venta
+    download_escpos: Bajar ESC/POS
+    escpos_help: El ticket en bytes para una impresora térmica
+    print_thermal: Imprimir en la térmica
+    upload_now: Subir ahora
+    printed: Ticket impreso.
+    no_serial: 'Este navegador no puede hablarle a la impresora por cable; usa Chrome o Edge, o bájalo en ESC/POS.'
+    choose_printer: 'Elige la impresora con «Imprimir en la térmica»; luego ya no se pregunta.'
+    till_shift: Corte de caja
+    shift: Corte
+    float: Fondo
+    sales: Ventas
+    cash_from_sales: Efectivo de ventas
+    refunds: Devoluciones
+    withdrawals: Retiros
+    in_drawer: En gaveta
+    shift_opened_by: Corte %{folio} abierto por %{who} el %{date}
+    n_sales:
       one: 1 venta
       other: "%{count} ventas"
-    retiro_caja_fuerte: Retiro a caja fuerte
-    monto: Monto
-    retiro_por_revisar: Sin permiso para retirar, el retiro se frena y queda reportado.
-    retirar: Retirar
-    cerrar_corte: Cerrar corte
-    cerrar_corte_ayuda: Cuenta cuántos billetes y monedas hay de cada uno (con el fondo) o escribe el total. El sistema guarda lo esperado, el desglose y la diferencia.
-    confirmar_cerrar_corte: "¿Cerrar el corte %{folio}?"
-    efectivo_contado: Efectivo contado
-    suma: Suma
-    tope_diferencia_aviso: La diferencia pasa de %{monto}.
-    tope_frena: 'No se puede cerrar así: vuelve a contar o llama a alguien con permiso para diferencias. El intento queda reportado.'
-    tope_queda_por_revisar: Se cierra con tu motivo y queda por revisar.
-    cierre_frenado: 'Intento de cierre frenado: contó %{contado}, diferencia de %{diferencia} (%{motivo})'
-    cobro: '%{producto} a %{precio} (toca %{regular})'
-    retiro_frenado: 'Retiro de %{monto} frenado (%{motivo}): %{regla}'
-    venta_frenada: 'Venta de %{total} frenada: %{motivo}'
-    cliente: Cliente
-    sin_cliente: — sin cliente —
-    abonos: Abonos
-    credito_frenado: 'A cuenta de %{cliente} por %{monto} frenado: %{motivo}'
-    sin_conexion_aviso: 'Venta sin conexión que de otra forma se habría frenado: %{aviso}'
-    sin_conexion_excede_limite: la gaveta ya pasaba del tope de efectivo
-    motivo_diferencia: Motivo de la diferencia
-    regla_propia_aviso: 'El negocio tiene su propia regla para el cierre: si la diferencia pide motivo, escríbelo aquí.'
-    cortes_cerrados: Cortes cerrados
-    resumen: Resumen del día
-    ver_resumen: Resumen
-    ver_resumen_abierto: Ver el resumen del día hasta ahora
-    compartir: Compartir
-    copiado: Resumen copiado
-    cargos: Cargos
-    en_total: en total
-    por_revisar_n:
+    safe_drop: Retiro a caja fuerte
+    amount: Monto
+    withdrawal_pending_review: Sin permiso para retirar, el retiro se frena y queda reportado.
+    withdraw: Retirar
+    close_shift: Cerrar corte
+    close_shift_help: Cuenta cuántos billetes y monedas hay de cada uno (con el fondo) o escribe el total. El sistema guarda lo esperado, el desglose y la diferencia.
+    confirm_close_shift: "¿Cerrar el corte %{folio}?"
+    counted_cash: Efectivo contado
+    sum: Suma
+    difference_cap_notice: La diferencia pasa de %{amount}.
+    cap_stops: 'No se puede cerrar así: vuelve a contar o llama a alguien con permiso para diferencias. El intento queda reportado.'
+    cap_remains_pending_review: Se cierra con tu motivo y queda por revisar.
+    closing_stopped: 'Intento de cierre frenado: contó %{counted}, diferencia de %{difference} (%{reason})'
+    price_line: '%{product} a %{price} (toca %{regular})'
+    withdrawal_stopped: 'Retiro de %{amount} frenado (%{reason}): %{rule}'
+    sale_stopped: 'Venta de %{total} frenada: %{reason}'
+    customer: Cliente
+    no_customer: — sin cliente —
+    account_payments: Abonos
+    credit_stopped: 'A cuenta de %{customer} por %{amount} frenado: %{reason}'
+    offline_notice: 'Venta sin conexión que de otra forma se habría frenado: %{notice}'
+    offline_exceeds_limit: la gaveta ya pasaba del tope de efectivo
+    reason_difference: Motivo de la diferencia
+    custom_rule_notice: 'El negocio tiene su propia regla para el cierre: si la diferencia pide motivo, escríbelo aquí.'
+    closed_shifts: Cortes cerrados
+    summary: Resumen del día
+    view_summary: Resumen
+    view_summary_open: Ver el resumen del día hasta ahora
+    share: Compartir
+    copied: Resumen copiado
+    charges: Cargos
+    in_total: en total
+    pending_review_n:
       one: 1 pendiente por revisar
       other: "%{count} pendientes por revisar"
-    resumen_texto: Corte %{folio} · %{sucursal} · ventas %{ventas} (%{tickets}) · en gaveta %{efectivo} · diferencia %{diferencia}
-    abierto: Abierto
-    cerrado: Cerrado
-    cajero: Cajero
-    esperado: Esperado
-    contado: Contado
-    diferencia: Diferencia
-    devolucion: Devolución
+    summary_text: Corte %{folio} · %{branch} · ventas %{sales} (%{tickets}) · en gaveta %{cash} · diferencia %{difference}
+    open: Abierto
+    closed: Cerrado
+    cashier: Cajero
+    expected: Esperado
+    counted: Contado
+    difference: Diferencia
+    refund: Devolución
     ticket: Ticket
-    vendido: Vendido
-    ya_devuelto: Ya devuelto
-    devolver: Devolver
-    devolver_y_regresar: Devolver y regresar el dinero
-    excede_limite_html: 'Hay más de %{monto} en la gaveta: %{enlace} antes de seguir vendiendo.'
-    haz_un_retiro: haz un retiro a la caja fuerte
-    escanea_o_teclea: Escanea el código o teclea PLU / clave y Enter
-    cambio: Cambio
-    cobrar: Cobrar
-    vaciar_ticket: Vaciar ticket
-    sin_caja_en: No hay caja abierta en %{sucursal}.
-    fondo_inicial: Fondo inicial
-    abrir_caja: Abrir caja
-    pide_que_la_abran: Pide a alguien con permiso que la abra.
-    le_atendio: Le atendió
-    devoluciones_solo_con_ticket: Devoluciones solo con este ticket
-    hora: Hora
-    lineas: Líneas
-    pago: Pago
-    sin_ventas: Sin ventas.
-    avisos:
-      abierta: Caja abierta con fondo de %{fondo}
-      corte_cerrado: 'Corte %{folio} cerrado: esperado %{esperado}, contado %{contado}, diferencia %{diferencia}'
-      retiro: Retiro de %{monto} registrado
-      queda_por_revisar: "; queda por revisar"
-      devolucion: Devolución %{folio} de %{monto} sobre %{venta}
-    escanea_ticket: Escanea o teclea el ticket
-  formas_pago:
-    efectivo: Efectivo
-    transferencia: Transferencia
-    deposito: Depósito
-    credito: A cuenta
-  conteos:
-    conteos: Conteos
-    conteo: Conteo
+    sold: Vendido
+    already_refunded: Ya devuelto
+    do_refund: Devolver
+    refund_and_back: Devolver y regresar el dinero
+    exceeds_limit_html: 'Hay más de %{amount} en la gaveta: %{link} antes de seguir vendiendo.'
+    make_to_withdrawal: haz un retiro a la caja fuerte
+    scans_or_types: Escanea el código o teclea PLU / clave y Enter
+    change: Cambio
+    checkout: Cobrar
+    clear_ticket: Vaciar ticket
+    no_till_in: No hay caja abierta en %{branch}.
+    initial_float: Fondo inicial
+    open_till: Abrir caja
+    ask_to_open_it: Pide a alguien con permiso que la abra.
+    served_by: Le atendió
+    refunds_only_with_ticket: Devoluciones solo con este ticket
+    hour: Hora
+    lines: Líneas
+    payment: Pago
+    no_sales: Sin ventas.
+    notices:
+      open: Caja abierta con fondo de %{float}
+      closed_shift: 'Corte %{folio} cerrado: esperado %{expected}, contado %{counted}, diferencia %{difference}'
+      withdrawal: Retiro de %{amount} registrado
+      remains_pending_review: "; queda por revisar"
+      refund: Devolución %{folio} de %{amount} sobre %{sale}
+    scans_ticket: Escanea o teclea el ticket
+  payment_methods:
+    cash: Efectivo
+    transfer: Transferencia
+    deposit: Depósito
+    credit: A cuenta
+  stock_counts:
+    stock_counts: Conteos
+    stock_count: Conteo
     supervisor: Supervisor
-    responsable: Responsable
-    faltante: Faltante
-    sobrante: Sobrante
-    sin_conteos: Sin conteos.
-    nuevo: Nuevo conteo
-    ya_hay_abierto: 'Ya hay un conteo abierto:'
-    cierralo_antes: Ciérralo antes de abrir otro.
-    responsable_ayuda: Responsable de la caja (a quien se carga el faltante)
-    alcance: Alcance
-    alcance_total: Todo el inventario
-    alcance_parcial: Solo una línea o unos productos
-    o_estos_productos: O estos productos
-    parcial_ayuda: En un conteo parcial solo se ajusta lo elegido; lo demás no se toca. Si eliges línea, se ignoran los productos.
-    parcial_badge:
+    responsible: Responsable
+    shortage: Faltante
+    surplus: Sobrante
+    no_stock_counts: Sin conteos.
+    new: Nuevo conteo
+    already_open: 'Ya hay un conteo abierto:'
+    close_it_before: Ciérralo antes de abrir otro.
+    responsible_help: Responsable de la caja (a quien se carga el faltante)
+    scope: Alcance
+    scope_total: Todo el inventario
+    scope_partial: Solo una línea o unos productos
+    or_these_products: O estos productos
+    partial_help: En un conteo parcial solo se ajusta lo elegido; lo demás no se toca. Si eliges línea, se ignoran los productos.
+    partial_badge:
       one: parcial · 1 producto
       other: parcial · %{count} productos
-    toca_contar: 'Toca contar: se cuenta cada %{cada} días y el último conteo cerrado es más viejo (o no hay ninguno).'
-    nuevo_ayuda: 'Al abrir se toma la existencia del sistema. Escanea las piezas; lo que va por kilo, litro o metro se teclea. Al cerrar, el conteo manda: el inventario se ajusta y el faltante se carga al responsable.'
-    abrir: Abrir conteo
-    escanear: Escanear
-    contar: Contar
-    contar_a_mano: Contar a mano
-    cerrar: Cerrar conteo
-    confirmar_cerrar: 'El conteo manda: se ajusta el inventario y el faltante se carga a %{responsable}. ¿Cerrar?'
-    sistema: Sistema
-    escaneado: Escaneado
-    a_mano: A mano
-    contado: Contado
-    avisos:
-      abierto: 'Conteo %{folio} abierto: escanea todo lo que hay'
-      contado: "%{producto}: una pieza más"
-    codigo_placeholder: Código, PLU o clave
-    escanear_ayuda: Cada escaneo suma una pieza. Lo que se vende por kilo, litro o metro se teclea a mano.
-  cargos:
-    cargos: Cargos
-    revision: revisión
-    cobrado: Cobrado
-    perdonar: Perdonar
-    sin_cargos: Sin cargos.
-    avisos:
-      marcado: Cargo de %{quien} marcado como %{estado}
-  inventario:
-    apartado: Apartado
-    disponible: Disponible
-    movimiento_frenado: 'Movimiento frenado, %{tipo} de %{cantidad} (%{motivo}): %{regla}'
-    existencias: Existencias
+    count_due: 'Toca contar: se cuenta cada %{each} días y el último conteo cerrado es más viejo (o no hay ninguno).'
+    new_help: 'Al abrir se toma la existencia del sistema. Escanea las piezas; lo que va por kilo, litro o metro se teclea. Al cerrar, el conteo manda: el inventario se ajusta y el faltante se carga al responsable.'
+    open: Abrir conteo
+    scan: Escanear
+    count: Contar
+    count_by_hand: Contar a mano
+    close: Cerrar conteo
+    confirm_close: 'El conteo manda: se ajusta el inventario y el faltante se carga a %{responsible}. ¿Cerrar?'
+    system: Sistema
+    scanned: Escaneado
+    by_hand: A mano
+    counted: Contado
+    notices:
+      open: 'Conteo %{folio} abierto: escanea todo lo que hay'
+      counted: "%{product}: una pieza más"
+      counted_manual: "%{product}: %{quantity} contado a mano"
+      closed: 'Conteo %{folio} cerrado: faltante %{shortage}, sobrante %{surplus}'
+      charge_to: " · cargo a %{responsible}"
+      kardex_reason: Conteo %{folio}
+      shortage_line: "%{product}: faltan %{quantity} %{unit} (%{amount})"
+    code_placeholder: Código, PLU o clave
+    scan_help: Cada escaneo suma una pieza. Lo que se vende por kilo, litro o metro se teclea a mano.
+  charges:
+    charges: Cargos
+    review: revisión
+    paid: Cobrado
+    forgive: Perdonar
+    no_charges: Sin cargos.
+    notices:
+      marked: Cargo de %{who} marcado como %{status}
+  inventory:
+    reserved: Apartado
+    available: Disponible
+    movement_stopped: 'Movimiento frenado, %{kind} de %{quantity} (%{reason}): %{rule}'
+    movement_recorded: '%{kind} de %{product} registrado'
+    stock_levels: Existencias
     kardex: Kardex
-    sin_existencias: Sin existencias todavía.
-    sin_movimientos: Sin movimientos.
-    entrada_o_ajuste: Entrada o ajuste
-    queda_por_revisar: Sin permiso para ajustar, el movimiento se frena y queda reportado.
-    registrar: Registrar
-  promociones:
-    tipos:
-      precio: Precio especial
-      porcentaje: Descuento %
-      por_cantidad: Precio a partir de una cantidad
+    no_stock_levels: Sin existencias todavía.
+    no_movements: Sin movimientos.
+    inflow_or_adjustment: Entrada o ajuste
+    remains_pending_review: Sin permiso para ajustar, el movimiento se frena y queda reportado.
+    register: Registrar
+  promotions:
+    kinds:
+      price: Precio especial
+      percentage: Descuento %
+      by_quantity: Precio a partir de una cantidad
     desc:
-      precio: "%{precio} fijo"
-      porcentaje: "%{pct} % de descuento"
-      por_cantidad: "%{precio} desde %{desde} %{unidad}"
+      price: "%{price} fijo"
+      percentage: "%{pct} % de descuento"
+      by_quantity: "%{price} desde %{from} %{unit}"
   admin:
-    impresora: Impresora de tickets
-    impresora_red: Térmica de red (dirección:puerto)
-    impresora_ayuda: 'Solo si imprime en una térmica de red; casi siempre el puerto 9100.'
-    impresoras:
-      navegador: Con el navegador
-      red: Térmica de red
+    printer: Impresora de tickets
+    network_printer: Térmica de red (dirección:puerto)
+    printer_help: 'Solo si imprime en una térmica de red; casi siempre el puerto 9100.'
+    printers:
+      browser: Con el navegador
+      network: Térmica de red
       serial: Térmica por cable (Chrome)
-    modelos:
-      producto: Producto
-      promocion: Promoción
-      rol: Rol
-      sucursal: Sucursal
-      usuario: Usuario
-    modulos:
+    models:
+      product: Producto
+      promotion: Promoción
+      role: Rol
+      branch: Sucursal
+      user: Usuario
+    features:
       admin: administración
-      caja: caja
-      conteos: conteos
-      inventario: inventario
-      reportes: reportes
-      revisiones: revisiones
-      reglas: reglas en Lisp
-    avisos:
-      creado: "%{que} creado"
-      guardado: "%{que} guardado"
-      borrado: "%{que} borrado"
-      ya_usado: "%{que} ya se usó: desactívalo en vez de borrarlo"
-      codigo_agregado: Código %{codigo} agregado
-      codigo_quitado: Código quitado
-    borrar: borrar
-    precio_por_sucursal: Precio por sucursal
-    precio_por_sucursal_ayuda: Vacío = hereda el precio general (%{precio}). Se guarda con el botón %{boton} del producto.
+      till: caja
+      stock_counts: conteos
+      inventory: inventario
+      reports: reportes
+      reviews: revisiones
+      rules: reglas en Lisp
+    notices:
+      created: "%{what} creado"
+      saved: "%{what} guardado"
+      deleted: "%{what} borrado"
+      already_used: "%{what} ya se usó: desactívalo en vez de borrarlo"
+      code_added: Código %{code} agregado
+      code_removed: Código quitado
+    delete: borrar
+    price_by_branch: Precio por sucursal
+    price_by_branch_help: Vacío = hereda el precio general (%{price}). Se guarda con el botón %{button} del producto.
     general: general
-    codigos_proveedor: Códigos del proveedor
-    escanea_o_teclea_codigo: escanea o teclea el código
-    plu_automatico: PLU (vacío = automático)
-    linea: Línea
-    productos: Productos
-    nuevo_producto: Nuevo producto
-    codigos: Códigos
-    nombre_en_ticket: Nombre (sale en el ticket)
-    regla: Regla
-    descuento_pct: Descuento %
-    cantidad_minima: Cantidad mínima
-    desde_opcional: Desde (opcional)
-    hasta_opcional: Hasta (opcional)
-    activa: Activa
-    promocion_ayuda: Precio especial y precio a partir de una cantidad usan el campo Precio; el descuento usa el porcentaje sobre el precio de la sucursal. Si hay varias vigentes, la caja aplica la más barata.
-    promociones: Promociones
-    nueva_promocion: Nueva promoción
-    vigencia: Vigencia
-    siempre: siempre
-    confirmar_borrar: "¿Borrar %{nombre}?"
-    sin_promociones: Sin promociones.
-    rol: Rol
-    nuevo_rol: Nuevo rol
+    supplier_codes: Códigos del proveedor
+    scans_or_types_code: escanea o teclea el código
+    plu_automatic: PLU (vacío = automático)
+    line: Línea
+    products: Productos
+    new_product: Nuevo producto
+    codes: Códigos
+    name_in_ticket: Nombre (sale en el ticket)
+    rule: Regla
+    discount_pct: Descuento %
+    minimum_quantity: Cantidad mínima
+    from_optional: Desde (opcional)
+    to_optional: Hasta (opcional)
+    active: Activa
+    promotion_help: Precio especial y precio a partir de una cantidad usan el campo Precio; el descuento usa el porcentaje sobre el precio de la sucursal. Si hay varias vigentes, la caja aplica la más barata.
+    promotions: Promociones
+    new_promotion: Nueva promoción
+    validity: Vigencia
+    always: siempre
+    confirm_delete: "¿Borrar %{name}?"
+    no_promotions: Sin promociones.
+    role: Rol
+    new_role: Nuevo rol
     roles: Roles
-    permisos: Permisos
-    usuarios: Usuarios
-    todo_administrador: Todo (administrador)
-    todo_el_modulo: todo el módulo
-    nueva_sucursal: Nueva sucursal
-    sucursales: Sucursales
-    tienda: tienda
-    limite_efectivo: Efectivo máximo en gaveta antes de obligar retiro
-    dias_conteo: Contar cada (días; vacío = sin aviso)
-    limite_en_gaveta: Límite en gaveta
-    nuevo_usuario: Nuevo usuario
-    usuario: Usuario
-    usuario_minusculas: Usuario (minúsculas)
-    nueva_contrasena: Nueva contraseña (vacío = igual)
-    almacen: 'Almacén (bodega: solo guarda mercancía, sin caja)'
-    almacen_corto: almacén
-  instalacion:
-    titulo: Primer arranque
+    permissions: Permisos
+    users: Usuarios
+    all_administrator: Todo (administrador)
+    all_feature: todo el módulo
+    new_branch: Nueva sucursal
+    branches: Sucursales
+    store: tienda
+    cash_limit: Efectivo máximo en gaveta antes de obligar retiro
+    count_interval_days: Contar cada (días; vacío = sin aviso)
+    limit_in_drawer: Límite en gaveta
+    new_user: Nuevo usuario
+    user: Usuario
+    user_lowercase: Usuario (minúsculas)
+    new_password: Nueva contraseña (vacío = igual)
+    warehouse: 'Almacén (bodega: solo guarda mercancía, sin caja)'
+    warehouse_short: almacén
+  setup:
+    head_office_name: Matriz
+    title: Primer arranque
     intro: La base está vacía. Di cómo se llama el negocio y crea al primer administrador; con él entras y das de alta lo demás (productos, sucursales, usuarios).
-    negocio: Negocio
-    nombre_negocio: Nombre del negocio
-    nombre_negocio_ayuda: Sale en los tickets. Se puede cambiar después en Ajustes.
-    matriz: Matriz (la oficina central, de donde sale todo)
-    matriz_ayuda: El código va en los folios. Las tiendas se dan de alta después.
-    administrador: Administrador
-    crear: Crear y entrar
-    lista: 'Listo. Sakuya es tuyo: empieza por Administración para dar de alta productos, sucursales y usuarios.'
-    giro: Giro del negocio
-    giro_ayuda: 'Marca lo más parecido a tu negocio. Solo decide qué módulos arrancan encendidos: los tachados se pueden encender después en Ajustes, y los encendidos se pueden apagar.'
-    sucursal_detalle: Nombre y código de la sucursal principal (si no, se usa el nombre del negocio y MTZ)
-    bienvenida: Bienvenido a Sakuya
-    apariencia_ayuda: 'Ahora ponlo cómodo para ti: tema claro u oscuro, tamaño de letra y densidad. Se aplican al momento, se guardan en tu usuario y cada quien elige lo suyo en Ajustes.'
-    pasos:
-      apariencia: Apariencia
-      negocio: Negocio
-      sucursal: Sucursal principal
-      administrador: Administrador
-      resumen: Revisar y crear
-      idioma: Idioma
+    business: Negocio
+    business_name: Nombre del negocio
+    business_name_help: Sale en los tickets. Se puede cambiar después en Ajustes.
+    head_office: Matriz (la oficina central, de donde sale todo)
+    head_office_help: El código va en los folios. Las tiendas se dan de alta después.
+    administrator: Administrador
+    create: Crear y entrar
+    list: 'Listo. Sakuya es tuyo: empieza por Administración para dar de alta productos, sucursales y usuarios.'
+    business_type: Giro del negocio
+    business_type_help: 'Marca lo más parecido a tu negocio. Solo decide qué módulos arrancan encendidos: los tachados se pueden encender después en Ajustes, y los encendidos se pueden apagar.'
+    branch_detail: Nombre y código de la sucursal principal (si no, se usa el nombre del negocio y MTZ)
+    welcome: Bienvenido a Sakuya
+    appearance_help: 'Ahora ponlo cómodo para ti: tema claro u oscuro, tamaño de letra y densidad. Se aplican al momento, se guardan en tu usuario y cada quien elige lo suyo en Ajustes.'
+    steps:
+      appearance: Apariencia
+      business: Negocio
+      branch: Sucursal principal
+      administrator: Administrador
+      summary: Revisar y crear
+      language: Idioma
       folios: Folios
-    matriz_placeholder: el nombre del negocio
-    administrador_ayuda: El primer usuario lo puede todo. Después das de alta a los demás con sus roles.
-    contrasena_ayuda: Mínimo 8 caracteres.
-    resumen_ayuda: Revisa; con Anterior puedes corregir. Al crear, entras directo.
-    anterior: Anterior
-    siguiente: Siguiente
-    idioma_ayuda: Empecemos por el idioma. Lo eliges ahora para esta instalación, pero lo puedes cambiar después en Ajustes, y cada usuario que des de alta elige el suyo.
-    idioma_nota: Al elegir uno la pantalla se vuelve a cargar en ese idioma; por eso es el primer paso, antes de escribir nada.
-    siempre_incluye: Caja, inventario, ajustes y administración (siempre)
+    head_office_placeholder: el nombre del negocio
+    administrator_help: El primer usuario lo puede todo. Después das de alta a los demás con sus roles.
+    password_help: Mínimo 8 caracteres.
+    summary_help: Revisa; con Anterior puedes corregir. Al crear, entras directo.
+    previous: Anterior
+    next_step: Siguiente
+    language_help: Empecemos por el idioma. Lo eliges ahora para esta instalación, pero lo puedes cambiar después en Ajustes, y cada usuario que des de alta elige el suyo.
+    language_note: Al elegir uno la pantalla se vuelve a cargar en ese idioma; por eso es el primer paso, antes de escribir nada.
+    always_includes: Caja, inventario, ajustes y administración (siempre)
     folios:
-      ayuda: Cómo se numeran las notas de caja y los demás documentos. Se puede cambiar después en Ajustes › Folios sin que se reinicie la cuenta.
-      modo: "¿Una cuenta por documento o una sola para todo?"
-      letra: "¿Qué letra va antes del número?"
-      letras:
-        sucursal: La de la sucursal
-        sucursal_ayuda: 'Se toma del código de la sucursal: MTZ-00001. Cada sucursal se distingue sola.'
-        propia: La pongo yo
-        propia_ayuda: Tú eliges la letra de las notas de caja (B, NV, TK…). Las demás en Ajustes.
-        ninguna: Ninguna
-        ninguna_ayuda: 'Solo el número: 00001.'
-      venta: Letra de las notas de caja
-      ejemplo: 'Tu primer ticket sería:'
-      despues: El resto de los documentos (cortes, recepciones, traspasos…) sale con su letra de fábrica; se cambia en Ajustes › Folios.
-  modulos:
-    necesita_alguno: Necesita al menos %{lista}
-    necesita: Necesita %{lista}
-    lo_necesita: Lo necesita %{lista}
-    conteos:
-      nombre: Conteos
-      que: Conteos físicos escaneando; el faltante se carga al responsable.
-    compras:
-      nombre: Compras
-      que: Proveedores, recepción de mercancía, facturas del proveedor, cuentas por pagar y envases.
-    almacenes:
-      nombre: Almacenes
-      que: Almacenes (bodegas que solo guardan mercancía) y traspasos entre sucursales.
-    clientes:
-      nombre: Clientes
-      que: Clientes, su cuenta de crédito y abonos, y pedidos.
-  giros:
-    todo:
-      nombre: Todo encendido
-      que: 'todos los módulos: compras, almacenes, conteos y clientes.'
-    tienda:
-      nombre: Una tienda
-      que: Caja, inventario, compras y conteos.
-    varias_sucursales:
-      nombre: Varias sucursales
-      que: Lo de una tienda más almacenes y traspasos entre sucursales.
-  unidades:
+      help: Cómo se numeran las notas de caja y los demás documentos. Se puede cambiar después en Ajustes › Folios sin que se reinicie la cuenta.
+      mode: "¿Una cuenta por documento o una sola para todo?"
+      prefix: "¿Qué letra va antes del número?"
+      prefixes:
+        branch: La de la sucursal
+        branch_help: 'Se toma del código de la sucursal: MTZ-00001. Cada sucursal se distingue sola.'
+        own: La pongo yo
+        own_help: Tú eliges la letra de las notas de caja (B, NV, TK…). Las demás en Ajustes.
+        none: Ninguna
+        none_help: 'Solo el número: 00001.'
+      sale: Letra de las notas de caja
+      example: 'Tu primer ticket sería:'
+      after: El resto de los documentos (cortes, recepciones, traspasos…) sale con su letra de fábrica; se cambia en Ajustes › Folios.
+  features:
+    needs_any: Necesita al menos %{list}
+    needs: Necesita %{list}
+    needed_by: Lo necesita %{list}
+    stock_counts:
+      name: Conteos
+      what: Conteos físicos escaneando; el faltante se carga al responsable.
+    purchases:
+      name: Compras
+      what: Proveedores, recepción de mercancía, facturas del proveedor, cuentas por pagar y envases.
+    warehouses:
+      name: Almacenes
+      what: Almacenes (bodegas que solo guardan mercancía) y traspasos entre sucursales.
+    customers:
+      name: Clientes
+      what: Clientes, su cuenta de crédito y abonos, y pedidos.
+  business_types:
+    all:
+      name: Todo encendido
+      what: 'todos los módulos: compras, almacenes, conteos y clientes.'
+    store:
+      name: Una tienda
+      what: Caja, inventario, compras y conteos.
+    several_branches:
+      name: Varias sucursales
+      what: Lo de una tienda más almacenes y traspasos entre sucursales.
+  short_units:
+    kg: kg
+    piece: pz
+    liter: l
+    meter: m
+  units:
     kg: Kilo
-    pieza: Pieza
-    litro: Litro
-    metro: Metro
+    piece: Pieza
+    liter: Litro
+    meter: Metro
   activerecord:
     attributes:
-      producto:
-        clave: Clave
-        nombre: Nombre
-        linea: Línea
-        unidad: Unidad
-        precio: Precio
-        precio_centavos: Precio
+      product:
+        key: Clave
+        name: Nombre
+        line: Línea
+        unit: Unidad
+        price: Precio
+        price_cents: Precio
         plu: PLU
-        activo: Activo
-        codigo: Código
-      usuario:
-        nombre: Nombre
-        usuario: Usuario
+        active: Activo
+        code: Código
+      user:
+        name: Nombre
+        user: Usuario
         password: Contraseña
-        rol: Rol
-        sucursal: Sucursal
-        idioma: Idioma
-        tema: Tema
-        densidad: Densidad
-        letra: Tamaño de letra
-        activo: Activo
-      sucursal:
-        codigo: Código
-        nombre: Nombre
-        tipo: Tipo
-        limite_efectivo: Efectivo máximo en gaveta
-        limite_efectivo_centavos: Efectivo máximo en gaveta
-        activa: Activa
-      promocion:
-        nombre: Nombre
-        producto: Producto
-        sucursal: Sucursal
-        tipo: Regla
-        precio: Precio
-        precio_centavos: Precio
-        porcentaje: Descuento %
-        cantidad_minima: Cantidad mínima
-        desde: Desde
-        hasta: Hasta
-        activa: Activa
-      rol:
-        nombre: Nombre
-        permisos: Permisos
-      codigo_barras:
-        codigo: Código
-      conteo:
-        responsable: Responsable
-      ajuste:
-        clave: Clave
-        valor: Valor
-      pedido:
-        cliente: Cliente
-        fecha_entrega: Entrega
-        notas: Notas
-      cliente:
-        nombre: Nombre
-        telefono: Teléfono
-        rfc: RFC / identificación fiscal
-        direccion: Dirección
-        notas: Notas
-        limite_credito: Límite de crédito
-        activo: Activo
-      proveedor:
-        nombre: Nombre
-        rfc: RFC / identificación fiscal
-        contacto: Contacto
-        telefono: Teléfono
-        dias_credito: Días de crédito
-        notas: Notas
-        activo: Activo
+        role: Rol
+        branch: Sucursal
+        language: Idioma
+        theme: Tema
+        density: Densidad
+        text_size: Tamaño de letra
+        active: Activo
+      branch:
+        code: Código
+        name: Nombre
+        kind: Tipo
+        cash_limit: Efectivo máximo en gaveta
+        cash_limit_cents: Efectivo máximo en gaveta
+        active: Activa
+      promotion:
+        name: Nombre
+        product: Producto
+        branch: Sucursal
+        kind: Regla
+        price: Precio
+        price_cents: Precio
+        percentage: Descuento %
+        minimum_quantity: Cantidad mínima
+        from: Desde
+        to: Hasta
+        active: Activa
+      role:
+        name: Nombre
+        permissions: Permisos
+      product_barcode:
+        code: Código
+      stock_count:
+        responsible: Responsable
+      setting:
+        key: Clave
+        value: Valor
+      order:
+        customer: Cliente
+        delivery_date: Entrega
+        notes: Notas
+      customer:
+        name: Nombre
+        phone: Teléfono
+        tax_id: RFC / identificación fiscal
+        address: Dirección
+        notes: Notas
+        credit_limit: Límite de crédito
+        active: Activo
+      supplier:
+        name: Nombre
+        tax_id: RFC / identificación fiscal
+        contact: Contacto
+        phone: Teléfono
+        credit_days: Días de crédito
+        notes: Notas
+        active: Activo
     models:
-      producto: Producto
-      usuario: Usuario
-      sucursal: Sucursal
-      promocion: Promoción
-      rol: Rol
-      conteo: Conteo
-      proveedor: Proveedor
-      cliente: Cliente
-      recepcion: Recepción
-      factura_proveedor: Factura del proveedor
-  pedidos:
-    titulo: Pedidos
-    nuevo: Nuevo pedido
-    pedido: Pedido %{folio}
-    ayuda: Lo que el cliente quiere y para cuándo. No aparta existencias ni lleva precio; se cobra en la caja cuando pasa por él, con las reglas de siempre.
-    entrega: Entrega
-    que: Qué
-    guardar: Guardar pedido
-    apartar: Apartar existencias
-    apartar_ayuda: Lo que pide queda apartado y no se vende ni se traspasa hasta cobrarlo o cancelarlo. Sin apartar, para pedidos a futuro.
-    apartado: aparta existencias
-    sin_apartar: sin apartar
-    cobrar: Cobrar en caja
-    cancelar: Cancelar pedido
-    cobrando: 'Cobrando el pedido %{folio} de %{cliente}.'
-    cobrado_en: Cobrado en la venta
-    cancelado_por: 'Cancelado: %{motivo}'
-    primero_cliente: Primero da de alta al cliente
-    sin_pedidos: No hay pedidos aquí.
-    estados:
-      abierto: Abiertos
-      entregado: Entregados
-      cancelado: Cancelados
-    avisos:
-      creado: Pedido %{folio} de %{cliente} guardado.
-      cancelado: Pedido %{folio} cancelado.
-  clientes:
-    cuenta:
-      abono: Abono %{folio} (%{forma})
-      titulo: Cuenta de %{nombre}
-      titulo_corto: Cuenta
-      dias: '%{rango} días'
-      abonar: Recibir un abono
-      registrar_abono: Registrar abono
-      entra_al_corte: Entra a la caja, al corte %{folio}.
-      sin_caja: No hay caja abierta en esta sucursal; ábrela para recibir abonos.
-      concepto: Concepto
-      cargo: Cargo
-      abono_col: Abono
-      sin_movimientos: Todavía no hay movimientos.
-      cargo_venta: Venta %{folio}
-      devolucion: Devolución de la venta %{folio}
-    titulo: Clientes
-    nuevo: Nuevo cliente
-    editar: Editar cliente
-    buscar: Buscar por nombre
-    telefono: Teléfono
-    rfc: RFC
-    limite_credito: Límite de crédito
-    debe: Debe
-    limite_ayuda: Lo lee la regla de crédito como (limit). De fábrica no se fía a nadie; la regla decide si se usa.
-    inactivo: inactivo
-    sin_clientes: Todavía no hay clientes.
-    avisos:
-      abono: 'Abono %{folio} por %{monto}; ahora debe %{saldo}.'
-      creado: Cliente %{nombre} dado de alta.
-      guardado: Cliente %{nombre} guardado.
-  compras:
-    proveedores: Proveedores
-    proveedor: Proveedor
-    nuevo_proveedor: Nuevo proveedor
-    proveedores_ayuda: Quién nos surte. El saldo es lo que le debemos según sus facturas y pagos.
-    sin_proveedores: Todavía no hay proveedores.
-    contacto: Contacto
-    telefono: Teléfono
-    rfc: RFC
-    dias_credito: Días de crédito
-    dias_credito_ayuda: 0 = de contado. Con días, las facturas vencen fecha + días.
-    saldo: Saldo
-    cuenta: Cuenta
-    inactivo: inactivo
-    primero_proveedor: Primero da de alta un proveedor
-    recepciones: Recepciones
-    recepcion: Recepción
-    recibir: Recibir
-    recibir_mercancia: Recibir mercancía
-    recepciones_ayuda: Lo que ha entrado del proveedor a %{sucursal}. Cada recepción es una entrada al inventario.
-    recibir_ayuda: Escanea el código del proveedor o elige el producto, anota cuánto llegó y entra al inventario de %{sucursal}. La factura se liga después, cuando llegue.
-    remision: Remisión
-    remision_ayuda: folio del papel que trae el chofer
-    escanear: Escanear
-    escanear_ayuda: código del proveedor, PLU, clave o nombre + Enter
-    cajas: Cajas
-    registrar_entrada: Registrar entrada
-    renglones: Renglones
-    sin_factura: sin factura
-    sin_factura_aun: Aún no se liga a una factura.
-    sin_recepciones: Todavía no hay recepciones.
-    ninguna: "— ninguna —"
-    ligar: Ligar
-    desligar: Desligar
-    capturar_factura: Capturar la factura
-    cancelar_recepcion: Cancelar recepción
-    cancelar_recepcion_ayuda: La mercancía sale del inventario y los envases se descuentan. Solo si la recepción se capturó mal.
-    confirmar_cancelar: "¿Cancelar %{folio}?"
-    facturas: Facturas
-    factura: Factura
-    nueva_factura: Nueva factura
-    factura_ayuda: La factura del proveedor es lo que crea la deuda. Con renglones el monto se calcula solo; sin renglones (flete, hielo) teclea el monto.
-    folio_proveedor: Folio del proveedor
-    folio_proveedor_ayuda: el que trae impreso
-    vence: Vence
-    vence_ayuda: Vacío = fecha + días de crédito del proveedor.
-    monto_sin_renglones: Monto (sin renglones)
-    monto_sin_renglones_ayuda: Solo cuenta si no capturas renglones.
-    concepto: Concepto
-    precio_compra: Precio
-    registrar_factura: Registrar factura
-    todos_los_proveedores: Todos los proveedores
-    pagado: Pagado
-    resta: Resta
-    sin_facturas: No hay facturas.
-    facturado_vs_recibido: Facturado contra recibido
-    recepcion_estado:
-      sin_recepcion: sin recepción
-      parcial: recibida parcial
-      completa: recibida completa
-    recepciones_a_ligar: Recepciones que cubre esta factura
-    recepciones_a_ligar_ayuda: Marca las recepciones sin factura de este proveedor; se ligan al registrar. Se pueden ligar después desde la ficha.
-    motivo_exceso: Motivo si se factura más de lo recibido
-    candado_aviso: 'Hay candado: si algún renglón trae más cantidad que las recepciones marcadas, la factura no se registra; con permiso para exceder, hace falta motivo y queda por revisar.'
-    factura_frenada: 'Factura %{folio} frenada: %{regla}'
-    recepcion_frenada: 'Recepción frenada: %{motivo}'
-    comparativo_ayuda: 'Por producto: lo que dice la factura y lo que entró en las recepciones ligadas. Es un aviso, no un candado.'
-    sin_renglones_ni_recepciones: 'Sin renglones ni recepciones ligadas: nada que comparar.'
-    facturado: Facturado
-    recibido: Recibido
-    diferencia: Diferencia
-    recepciones_ligadas: Recepciones ligadas
-    ninguna_recepcion: Ninguna recepción ligada todavía.
-    recepciones_sueltas: Recepciones de este proveedor sin factura
-    pagos: Pagos
-    sin_pagos: Sin pagos.
-    cancelar_factura: Cancelar factura
-    cancelar_factura_ayuda: La deuda se revierte y las recepciones quedan sueltas. No se puede con pagos vigentes.
-    cuentas_por_pagar: Cuentas por pagar
-    cuentas_ayuda: Lo que se debe a cada proveedor y qué facturas vencen. El pago en efectivo sale de la gaveta abierta como retiro.
-    debemos: Debemos
-    vencidas: Vencidas
-    vencen_esta_semana: Vencen esta semana
-    n_facturas:
+      product: Producto
+      user: Usuario
+      branch: Sucursal
+      promotion: Promoción
+      role: Rol
+      stock_count: Conteo
+      supplier: Proveedor
+      customer: Cliente
+      receipt: Recepción
+      supplier_invoice: Factura del proveedor
+  orders:
+    title: Pedidos
+    new: Nuevo pedido
+    order: Pedido %{folio}
+    help: Lo que el cliente quiere y para cuándo. No aparta existencias ni lleva precio; se cobra en la caja cuando pasa por él, con las reglas de siempre.
+    delivery: Entrega
+    what: Qué
+    save: Guardar pedido
+    reserve: Apartar existencias
+    reserve_help: Lo que pide queda apartado y no se vende ni se traspasa hasta cobrarlo o cancelarlo. Sin apartar, para pedidos a futuro.
+    reserved: aparta existencias
+    no_reserve: sin apartar
+    checkout: Cobrar en caja
+    cancel: Cancelar pedido
+    checking_out: 'Cobrando el pedido %{folio} de %{customer}.'
+    paid_in: Cobrado en la venta
+    cancelled_by: 'Cancelado: %{reason}'
+    first_customer: Primero da de alta al cliente
+    no_orders: No hay pedidos aquí.
+    statuses:
+      open: Abiertos
+      delivered: Entregados
+      cancelled: Cancelados
+    notices:
+      created: Pedido %{folio} de %{customer} guardado.
+      cancelled: Pedido %{folio} cancelado.
+  customers:
+    account:
+      account_payment: Abono %{folio} (%{payment_method})
+      title: Cuenta de %{name}
+      title_short: Cuenta
+      days: '%{range} días'
+      pay_account: Recibir un abono
+      register_account_payment: Registrar abono
+      goes_into_shift: Entra a la caja, al corte %{folio}.
+      no_till: No hay caja abierta en esta sucursal; ábrela para recibir abonos.
+      concept: Concepto
+      charge: Cargo
+      account_payment_col: Abono
+      no_movements: Todavía no hay movimientos.
+      charge_sale: Venta %{folio}
+      refund: Devolución de la venta %{folio}
+    title: Clientes
+    new: Nuevo cliente
+    edit: Editar cliente
+    search: Buscar por nombre
+    phone: Teléfono
+    tax_id: RFC
+    credit_limit: Límite de crédito
+    owes: Debe
+    limit_help: Lo lee la regla de crédito como (limit). De fábrica no se fía a nadie; la regla decide si se usa.
+    inactive: inactivo
+    no_customers: Todavía no hay clientes.
+    notices:
+      account_payment: 'Abono %{folio} por %{amount}; ahora debe %{balance}.'
+      created: Cliente %{name} dado de alta.
+      saved: Cliente %{name} guardado.
+  purchases:
+    suppliers: Proveedores
+    supplier: Proveedor
+    new_supplier: Nuevo proveedor
+    suppliers_help: Quién nos surte. El saldo es lo que le debemos según sus facturas y pagos.
+    no_suppliers: Todavía no hay proveedores.
+    contact: Contacto
+    phone: Teléfono
+    tax_id: RFC
+    credit_days: Días de crédito
+    credit_days_help: 0 = de contado. Con días, las facturas vencen fecha + días.
+    balance: Saldo
+    account: Cuenta
+    inactive: inactivo
+    first_supplier: Primero da de alta un proveedor
+    receipts: Recepciones
+    receipt: Recepción
+    receive: Recibir
+    receive_goods: Recibir mercancía
+    receipts_help: Lo que ha entrado del proveedor a %{branch}. Cada recepción es una entrada al inventario.
+    receive_help: Escanea el código del proveedor o elige el producto, anota cuánto llegó y entra al inventario de %{branch}. La factura se liga después, cuando llegue.
+    delivery_note: Remisión
+    delivery_note_help: folio del papel que trae el chofer
+    scan: Escanear
+    scan_help: código del proveedor, PLU, clave o nombre + Enter
+    boxes: Cajas
+    register_inflow: Registrar entrada
+    rows: Renglones
+    no_invoice: sin factura
+    no_invoice_still: Aún no se liga a una factura.
+    no_receipts: Todavía no hay recepciones.
+    none: "— ninguna —"
+    link: Ligar
+    unlink: Desligar
+    capture_invoice: Capturar la factura
+    cancel_receipt: Cancelar recepción
+    cancel_receipt_help: La mercancía sale del inventario y los envases se descuentan. Solo si la recepción se capturó mal.
+    confirm_cancel: "¿Cancelar %{folio}?"
+    invoices: Facturas
+    invoice: Factura
+    new_invoice: Nueva factura
+    invoice_help: La factura del proveedor es lo que crea la deuda. Con renglones el monto se calcula solo; sin renglones (flete, hielo) teclea el monto.
+    supplier_folio: Folio del proveedor
+    supplier_folio_help: el que trae impreso
+    due: Vence
+    due_help: Vacío = fecha + días de crédito del proveedor.
+    amount_no_rows: Monto (sin renglones)
+    amount_no_rows_help: Solo cuenta si no capturas renglones.
+    concept: Concepto
+    purchase_price: Precio
+    register_invoice: Registrar factura
+    all_suppliers: Todos los proveedores
+    paid: Pagado
+    remaining: Resta
+    no_invoices: No hay facturas.
+    invoiced_vs_received: Facturado contra recibido
+    receipt_status:
+      no_receipt: sin recepción
+      partial: recibida parcial
+      complete: recibida completa
+    receipts_to_link: Recepciones que cubre esta factura
+    receipts_to_link_help: Marca las recepciones sin factura de este proveedor; se ligan al registrar. Se pueden ligar después desde la ficha.
+    reason_excess: Motivo si se factura más de lo recibido
+    lock_notice: 'Hay candado: si algún renglón trae más cantidad que las recepciones marcadas, la factura no se registra; con permiso para exceder, hace falta motivo y queda por revisar.'
+    invoice_stopped: 'Factura %{folio} frenada: %{rule}'
+    receipt_stopped: 'Recepción frenada: %{reason}'
+    comparison_help: 'Por producto: lo que dice la factura y lo que entró en las recepciones ligadas. Es un aviso, no un candado.'
+    no_rows_nor_receipts: 'Sin renglones ni recepciones ligadas: nada que comparar.'
+    invoiced: Facturado
+    received: Recibido
+    difference: Diferencia
+    receipts_linked: Recepciones ligadas
+    no_receipt: Ninguna recepción ligada todavía.
+    receipts_loose: Recepciones de este proveedor sin factura
+    payments: Pagos
+    no_payments: Sin pagos.
+    cancel_invoice: Cancelar factura
+    cancel_invoice_help: La deuda se revierte y las recepciones quedan sueltas. No se puede con pagos vigentes.
+    accounts_payable: Cuentas por pagar
+    accounts_help: Lo que se debe a cada proveedor y qué facturas vencen. El pago en efectivo sale de la gaveta abierta como retiro.
+    owed: Debemos
+    overdue: Vencidas
+    due_this_week: Vencen esta semana
+    n_invoices:
       one: 1 factura
       other: "%{count} facturas"
-    por_proveedor: Por proveedor
-    sin_deuda: No se debe nada.
-    vencimientos: Vencimientos
-    nada_vence: Nada vencido ni por vencer esta semana.
-    pagar: Pagar
-    pago_sale_de_caja: El efectivo sale de la gaveta abierta de %{sucursal} como retiro; transferencia y depósito no tocan la caja.
-    pago_sin_caja: 'No hay caja abierta en %{sucursal}: solo se puede pagar por transferencia o depósito.'
-    a_cuenta: a cuenta (sin factura)
-    forma: Forma
-    referencia: Referencia
-    registrar_pago: Registrar pago
-    facturas_abiertas: Facturas abiertas
-    sin_facturas_abiertas: Nada pendiente.
-    anular: Anular
-    confirmar_anular: "¿Anular el pago de %{monto}?"
-    libro: Libro del proveedor
-    movimientos:
-      cargo: cargo
-      abono: abono
-      ajuste: ajuste
-    estados:
-      registrada: registrada
-      cancelada: cancelada
-      abierta: abierta
-      pagada: pagada
-      vencida: vencida
-    avisos:
-      proveedor_creado: Proveedor %{nombre} creado
-      proveedor_guardado: Proveedor %{nombre} guardado
-      recibida: 'Recepción %{folio} registrada: la mercancía ya está en el inventario'
-      recepcion_cancelada: Recepción %{folio} cancelada
-      ligada: Ligada a la factura %{folio}
-      desligada: Recepción sin factura
-      facturada: Factura %{folio} por %{monto} registrada
-      factura_cancelada: Factura %{folio} cancelada
-      pagado: Pago de %{monto} a %{proveedor} registrado; saldo %{saldo}
-      pago_anulado: Pago de %{monto} anulado
-      envases_movidos: Envases registrados
-      entrada_motivo: Recepción %{folio} de %{proveedor}
-      cancelacion_motivo: 'Cancelación de %{folio}: %{motivo}'
-      cargo_factura: Factura %{folio}
-      cancelacion_factura: 'Cancelación de la factura %{folio}: %{motivo}'
-      retiro_pago: Pago a %{proveedor} %{folio}
-      abono_pago: Pago %{folio} (%{forma})
-      anulacion_pago: 'Pago anulado: %{motivo}'
-  reabasto:
-    titulo: Reabastecer sucursales
-    ayuda: Lo que a cada sucursal le falta según sus mínimos y máximos. «Armar traspaso» abre un traspaso ya lleno con eso; se revisa, se ajusta y se registra como cualquier otro.
-    minimos: Mínimos y máximos
-    minimos_de: Mínimos y máximos de %{sucursal}
-    minimos_ayuda: Por debajo del mínimo, el reabasto sugiere lo que falta para llegar al máximo (o al mínimo, si no hay máximo). Un mínimo vacío quita el producto.
-    armar: Armar traspaso
-    hay: Hay
-    minimo: Mínimo
-    maximo: Máximo
-    nota_traspaso: Reabasto por mínimos
-    faltan:
+    by_supplier: Por proveedor
+    no_debt: No se debe nada.
+    due_dates: Vencimientos
+    nothing_due: Nada vencido ni por vencer esta semana.
+    pay: Pagar
+    payment_leaves_till: El efectivo sale de la gaveta abierta de %{branch} como retiro; transferencia y depósito no tocan la caja.
+    payment_no_till: 'No hay caja abierta en %{branch}: solo se puede pagar por transferencia o depósito.'
+    on_account: a cuenta (sin factura)
+    payment_method: Forma
+    reference: Referencia
+    register_payment: Registrar pago
+    invoices_open: Facturas abiertas
+    no_invoices_open: Nada pendiente.
+    void: Anular
+    confirm_void: "¿Anular el pago de %{amount}?"
+    book: Libro del proveedor
+    movements:
+      charge: cargo
+      account_payment: abono
+      setting: ajuste
+    statuses:
+      registered: registrada
+      cancelled: cancelada
+      open: abierta
+      paid: pagada
+      overdue: vencida
+    notices:
+      supplier_created: Proveedor %{name} creado
+      supplier_saved: Proveedor %{name} guardado
+      received: 'Recepción %{folio} registrada: la mercancía ya está en el inventario'
+      receipt_cancelled: Recepción %{folio} cancelada
+      linked: Ligada a la factura %{folio}
+      unlinked: Recepción sin factura
+      invoiced: Factura %{folio} por %{amount} registrada
+      invoice_cancelled: Factura %{folio} cancelada
+      paid: Pago de %{amount} a %{supplier} registrado; saldo %{balance}
+      payment_voided: Pago de %{amount} anulado
+      inflow_reason: Recepción %{folio} de %{supplier}
+      cancellation_reason: 'Cancelación de %{folio}: %{reason}'
+      charge_invoice: Factura %{folio}
+      cancellation_invoice: 'Cancelación de la factura %{folio}: %{reason}'
+      withdrawal_payment: Pago a %{supplier} %{folio}
+      supplier_payment: Pago %{folio} (%{payment_method})
+      void_payment: 'Pago anulado: %{reason}'
+  restock:
+    title: Reabastecer sucursales
+    help: Lo que a cada sucursal le falta según sus mínimos y máximos. «Armar traspaso» abre un traspaso ya lleno con eso; se revisa, se ajusta y se registra como cualquier otro.
+    minimums: Mínimos y máximos
+    minimums_of: Mínimos y máximos de %{branch}
+    minimums_help: Por debajo del mínimo, el reabasto sugiere lo que falta para llegar al máximo (o al mínimo, si no hay máximo). Un mínimo vacío quita el producto.
+    build: Armar traspaso
+    on_hand: Hay
+    minimum: Mínimo
+    maximum: Máximo
+    note_stock_transfer: Reabasto por mínimos
+    missing:
       zero: no le falta nada
       one: le falta 1 producto
       other: 'le faltan %{count} productos'
-    avisos:
-      guardados: Mínimos de %{sucursal} guardados.
-  traspasos:
-    titulo: Traspasos
-    traspaso: Traspaso
-    nuevo: Traspaso
-    ayuda: 'Mercancía que cambia de sucursal: sale del origen y entra al destino en el momento.'
-    nuevo_ayuda: Sale del origen y entra al destino en el momento.
-    de: De
+    notices:
+      saved: Mínimos de %{branch} guardados.
+  stock_transfers:
+    title: Traspasos
+    stock_transfer: Traspaso
+    new: Traspaso
+    help: 'Mercancía que cambia de sucursal: sale del origen y entra al destino en el momento.'
+    new_help: Sale del origen y entra al destino en el momento.
+    from: De
     a: A
-    registrar: Registrar traspaso
-    ninguno: Todavía no hay traspasos.
-    cancelar: Cancelar traspaso
-    cancelar_ayuda: La mercancía regresa al origen si el destino todavía la tiene.
-    reglas: 'Regla: de un almacén la mercancía solo va a la matriz.'
-    estados:
-      registrado: registrado
-      cancelado: cancelado
-    avisos:
-      registrado: 'Traspaso %{folio} registrado: la mercancía ya está en %{destino}'
-      cancelado: Traspaso %{folio} cancelado
-      motivo: 'Traspaso %{folio}: %{origen} → %{destino}'
-      cancelacion: 'Cancelación de %{folio}: %{motivo}'
+    register: Registrar traspaso
+    none: Todavía no hay traspasos.
+    cancel: Cancelar traspaso
+    cancel_help: La mercancía regresa al origen si el destino todavía la tiene.
+    rules: 'Regla: de un almacén la mercancía solo va a la matriz.'
+    statuses:
+      registered: registrado
+      cancelled: cancelado
+    notices:
+      registered: 'Traspaso %{folio} registrado: la mercancía ya está en %{destination}'
+      cancelled: Traspaso %{folio} cancelado
+      reason: 'Traspaso %{folio}: %{origin} → %{destination}'
+      cancellation: 'Cancelación de %{folio}: %{reason}'
   repl:
-    ver_bitacora: Ver quién ha preguntado qué.
-    bitacora: Bitácora del REPL
-    bitacora_ayuda: Cada pregunta queda aquí, con quién la hizo, desde qué sucursal y si corrió. No se edita ni se borra.
-    pregunta: Pregunta
-    corrio: corrió
-    fallo: falló
-    sin_consultas: Nadie le ha preguntado nada todavía.
-    titulo: REPL de solo lectura
-    ayuda: Pregúntale cosas a los datos en vivo con el mismo Lisp de las reglas. Las consultas devuelven listas de mapas que se filtran, ordenan y suman; una lista de mapas sale como tabla. No se puede cambiar nada desde aquí. Fechas como "2026-10-03"; sin fechas, hoy.
-    evaluar: Evaluar
-    historial: Lo último que preguntaste
-    informes: Informes de los plugins
-    consultas: Consultas
-    herramientas: Para trabajar las listas
-    solo_lectura: el REPL solo lee; eso intentó escribir en la base
-    cortado: 'se muestran las primeras %{n}'
-    filas:
+    view_log: Ver quién ha preguntado qué.
+    log: Bitácora del REPL
+    log_help: Cada pregunta queda aquí, con quién la hizo, desde qué sucursal y si corrió. No se edita ni se borra.
+    question: Pregunta
+    ran: corrió
+    failure: falló
+    no_queries: Nadie le ha preguntado nada todavía.
+    title: REPL de solo lectura
+    help: Pregúntale cosas a los datos en vivo con el mismo Lisp de las reglas. Las consultas devuelven listas de mapas que se filtran, ordenan y suman; una lista de mapas sale como tabla. No se puede cambiar nada desde aquí. Fechas como "2026-10-03"; sin fechas, hoy.
+    evaluate: Evaluar
+    history: Lo último que preguntaste
+    reports: Informes de los plugins
+    queries: Consultas
+    tools: Para trabajar las listas
+    read_only: el REPL solo lee; eso intentó escribir en la base
+    cut: 'se muestran las primeras %{n}'
+    rows:
       one: 1 fila
       other: '%{count} filas'
-    errores:
-      no_es_mapa: 'esperaba un mapa y recibió %{valor}'
-      fecha: 'no entiendo la fecha %{valor} (va así: "2026-10-03")'
-      texto: '%{quien} espera texto y recibió %{valor}'
-    funciones:
+    errors:
+      not_to_map: 'esperaba un mapa y recibió %{value}'
+      date: 'no entiendo la fecha %{value} (va así: "2026-10-03")'
+      text: '%{who} espera texto y recibió %{value}'
+    functions:
       today: la fecha de hoy
       days_ago: la fecha de hace n días
       sales: ventas (folio, fecha, sucursal, cajero, cliente, total…)
@@ -1191,133 +1203,133 @@ es:
       pluck: solo esa columna
       take: las primeras n
   plugins:
-    titulo: Plugins en Lisp
-    ayuda: Un plugin es un archivo .lisp que trae lo que Sakuya no trae de fábrica. Puede traer funciones que luego usan todas las reglas, el tablero y el REPL, informes para el REPL y un idioma nuevo para la interfaz. Solo declara; al instalarlo se lee pero no se ejecuta, y llega apagado. Si quitas uno que usan tus reglas, esas reglas fallan y decide la de fábrica.
-    encendido: encendido
-    apagado: apagado
-    encender: Encender
-    apagar: Apagar
-    quitar: Quitar
-    subido: 'subido %{fecha} por %{quien}'
-    no_se_lee: Este plugin ya no se puede leer; súbelo de nuevo o quítalo.
-    sin_plugins: Todavía no hay plugins instalados.
-    subir: Instalar o poner al día un plugin
-    subir_ayuda: Si ya hay uno con el mismo identificador, se pone al día y conserva si estaba encendido.
-    instalar: Instalar
-    trae:
-      funciones:
+    title: Plugins en Lisp
+    help: Un plugin es un archivo .lisp que trae lo que Sakuya no trae de fábrica. Puede traer funciones que luego usan todas las reglas, el tablero y el REPL, informes para el REPL y un idioma nuevo para la interfaz. Solo declara; al instalarlo se lee pero no se ejecuta, y llega apagado. Si quitas uno que usan tus reglas, esas reglas fallan y decide la de fábrica.
+    enabled: encendido
+    disabled: apagado
+    switch_on: Encender
+    switch_off: Apagar
+    remove: Quitar
+    uploaded: 'subido %{date} por %{who}'
+    unreadable: Este plugin ya no se puede leer; súbelo de nuevo o quítalo.
+    no_plugins: Todavía no hay plugins instalados.
+    upload: Instalar o poner al día un plugin
+    upload_help: Si ya hay uno con el mismo identificador, se pone al día y conserva si estaba encendido.
+    install: Instalar
+    brings:
+      functions:
         one: 1 función
         other: '%{count} funciones'
-      informes:
+      reports:
         one: 1 informe
         other: '%{count} informes'
-      traducciones:
+      translations:
         one: 1 idioma
         other: '%{count} idiomas'
-    avisos:
-      instalado: 'Plugin %{nombre} instalado. Llega apagado: enciéndelo para usarlo.'
-      actualizado: Plugin %{nombre} puesto al día.
-      encendido: Plugin %{nombre} encendido.
-      apagado: Plugin %{nombre} apagado.
-      quitado: Plugin %{nombre} quitado.
-      no_se_instalo: 'No se instaló: %{error}'
-    errores:
-      cabecera: 'el archivo tiene que empezar con (plugin "identificador" …)'
-      identificador: 'el identificador %{id} no sirve: minúsculas, números y guiones, de 2 a 31'
-      dato: 'no entiendo %{dato} en la cabecera; van (name "…"), y también %{datos}'
-      forma: 'un plugin solo declara define, report y translation; esto no: %{forma}'
-      prefijo: '%{nombre} tiene que llevar el prefijo del plugin: %{id}/…'
-      informe: 'un informe va así: (report "Título" (consulta …))'
-      traduccion: 'una traducción va así: (translation "fr" "Français" ("clave" "texto") …)'
-      par: 'cada texto va así: ("clave" "texto"), y esto no: %{par}'
-      claves: 'no existen estas claves de texto: %{claves}'
-      html: 'estos textos llevan HTML y un plugin no los puede cambiar: %{claves}'
-  reglas:
-    archivo:
-      ayuda: Todas las reglas del negocio en un solo archivo .lisp, para respaldarlas o llevarlas a otra instalación. Es texto que se puede leer y editar a mano; cada regla va debajo de su cabecera.
-      exportar: Bajar las reglas vigentes
-      bajar: Bajar el archivo
-      todas_de_fabrica: Todavía no hay reglas propias; todo usa lo de fábrica.
-      importar: Subir un archivo
-      importar_ayuda: Cada regla que cambie se asienta como versión nueva, con la versión de contrato que traiga. Si alguna no se puede leer, no se importa ninguna.
-      subir: Importar
-      sin_archivo: Elige un archivo.
-      vacio: el archivo no trae ninguna regla (cada una va debajo de ";;; hook:")
-      gancho: 'no conozco el gancho %{gancho}'
-      repetido: 'el gancho %{gancho} viene dos veces'
-      no_se_importo: 'No se importó nada: %{error}'
-      importadas: 'Importadas: %{ganchos}.'
-      sin_cambios: El archivo trae las mismas reglas que ya están; no cambió nada.
-    por_permiso: 'La regla lo frena, pero quien lo hace tiene permiso: pasa y queda por revisar.'
-    con_corte_real: Con el corte abierto de verdad
-    con_corte_inventado: Con uno inventado
-    sin_corte_real: 'No hay corte abierto en esta sucursal: se prueba con uno inventado.'
-    contrato: 'contrato v%{n}'
-    contrato_ayuda: La versión del gancho para la que se escribió
-    vieja: 'Esta regla se escribió para la versión %{suya} del gancho y Sakuya ya va en la %{actual}: revisa que lea y conteste lo de ahora y vuelve a guardarla.'
-    errores:
-      sin_decision: 'la regla tiene que terminar en (allow), (to-review "motivo") o (reject "motivo"), y terminó en %{valor}'
-      motivo: to-review y reject piden el motivo, como cadena o palabra clave
-      motivo_desconocido: 'no conozco el motivo :%{motivo}; los que sé decir: :%{motivos}'
-    versiones: Versiones
-    vigente: vigente
-    restaurar: Volver a esta
-    sin_versiones: 'Todavía no hay versiones: se usa la regla de fábrica.'
-    avisos:
-      guardado: Regla guardada.
-      restaurado: Se volvió a la versión del %{fecha}.
-    caso: Caso de prueba
-    lee: Lo que lee (en pesos)
-    contesta: Lo que contesta
-    ejemplo: Ejemplo
-  regla_recepcion:
-    titulo: Recepciones en Lisp
-    ayuda: Antes de que la mercancía del proveedor entre al inventario, esta regla mira qué llega, de quién y con qué papeles, y decide si entra, si queda por revisar o si se frena. De fábrica no frena nada. Probar no guarda nada.
-    fallo: 'La regla de recepciones falló y decidió la de fábrica: %{error}'
-    motivos: {}
-    caso:
-      llegan: Lo que llega (CLAVE cantidad, …)
-      remision: Remisión
-      facturada: Va con factura
-      autorizado: Recibe alguien con permiso para forzar recepciones
-    veredictos:
+    notices:
+      installed: 'Plugin %{name} instalado. Llega apagado: enciéndelo para usarlo.'
+      updated: Plugin %{name} puesto al día.
+      enabled: Plugin %{name} encendido.
+      disabled: Plugin %{name} apagado.
+      removed: Plugin %{name} quitado.
+      not_installed: 'No se instaló: %{error}'
+    errors:
+      header: 'el archivo tiene que empezar con (plugin "identificador" …)'
+      identifier: 'el identificador %{id} no sirve: minúsculas, números y guiones, de 2 a 31'
+      datum: 'no entiendo %{datum} en la cabecera; van (name "…"), y también %{data}'
+      form: 'un plugin solo declara define, report y translation; esto no: %{form}'
+      prefix: '%{name} tiene que llevar el prefijo del plugin: %{id}/…'
+      report: 'un informe va así: (report "Título" (consulta …))'
+      translation: 'una traducción va así: (translation "fr" "Français" ("clave" "texto") …)'
+      pair: 'cada texto va así: ("clave" "texto"), y esto no: %{pair}'
+      keys: 'no existen estas claves de texto: %{keys}'
+      html: 'estos textos llevan HTML y un plugin no los puede cambiar: %{keys}'
+  rules:
+    file:
+      help: Todas las reglas del negocio en un solo archivo .lisp, para respaldarlas o llevarlas a otra instalación. Es texto que se puede leer y editar a mano; cada regla va debajo de su cabecera.
+      export: Bajar las reglas vigentes
+      download: Bajar el archivo
+      all_default: Todavía no hay reglas propias; todo usa lo de fábrica.
+      import: Subir un archivo
+      import_help: Cada regla que cambie se asienta como versión nueva, con la versión de contrato que traiga. Si alguna no se puede leer, no se importa ninguna.
+      upload: Importar
+      no_file: Elige un archivo.
+      empty: el archivo no trae ninguna regla (cada una va debajo de ";;; hook:")
+      hook: 'no conozco el gancho %{hook}'
+      repeated: 'el gancho %{hook} viene dos veces'
+      not_imported: 'No se importó nada: %{error}'
+      imported: 'Importadas: %{hooks}.'
+      no_changes: El archivo trae las mismas reglas que ya están; no cambió nada.
+    by_permission: 'La regla lo frena, pero quien lo hace tiene permiso: pasa y queda por revisar.'
+    with_shift_real: Con el corte abierto de verdad
+    with_shift_made_up: Con uno inventado
+    no_shift_real: 'No hay corte abierto en esta sucursal: se prueba con uno inventado.'
+    contract: 'contrato v%{n}'
+    contract_help: La versión del gancho para la que se escribió
+    old: 'Esta regla se escribió para la versión %{rule_version} del gancho y Sakuya ya va en la %{current_version}: revisa que lea y conteste lo de ahora y vuelve a guardarla.'
+    errors:
+      no_decision: 'la regla tiene que terminar en (allow), (to-review "motivo") o (reject "motivo"), y terminó en %{value}'
+      reason: to-review y reject piden el motivo, como cadena o palabra clave
+      unknown_reason: 'no conozco el motivo :%{reason}; los que sé decir: :%{reasons}'
+    versions: Versiones
+    current: vigente
+    restore: Volver a esta
+    no_versions: 'Todavía no hay versiones: se usa la regla de fábrica.'
+    notices:
+      saved: Regla guardada.
+      restored: Se volvió a la versión del %{date}.
+    scenario: Caso de prueba
+    reads: Lo que lee (en pesos)
+    answers: Lo que contesta
+    example: Ejemplo
+  receipt_rule:
+    title: Recepciones en Lisp
+    help: Antes de que la mercancía del proveedor entre al inventario, esta regla mira qué llega, de quién y con qué papeles, y decide si entra, si queda por revisar o si se frena. De fábrica no frena nada. Probar no guarda nada.
+    failure: 'La regla de recepciones falló y decidió la de fábrica: %{error}'
+    reasons: {}
+    scenario:
+      arriving: Lo que llega (CLAVE cantidad, …)
+      delivery_note: Remisión
+      invoiced: Va con factura
+      authorized: Recibe alguien con permiso para forzar recepciones
+    verdicts:
       allow: Entra
       review: Entra y queda por revisar
       reject: Se frena
-    funciones:
+    functions:
       supplier: el nombre del proveedor
       lines: cuántos renglones
       products: la lista de claves
       quantity_of: '(quantity-of "CLAVE"): cuánto llega de ese producto'
       value: lo que vale a precio de catálogo
-      remission: 'la remisión escrita ("" si no hay)'
+      delivery_note: 'la remisión escrita ("" si no hay)'
       invoiced: si va ligada a una factura
       authorized: si quien recibe tiene permiso para forzar recepciones
     allow: entra
     to_review: entra y queda por revisar
     reject: no entra y deja reportado el intento
-    nucleo: Quien tiene permiso para forzar recepciones nunca se queda sin poder recibir; para esa persona, frenar es revisar.
-  regla_factura:
-    factura_no_existe: 'no hay una factura %{folio}'
-    titulo: Facturas en Lisp
-    ayuda: Antes de registrar una factura de proveedor, esta regla compara lo facturado con lo recibido en las recepciones que se ligan, y decide si se registra, si queda por revisar o si se frena. Probar no guarda nada.
-    fallo: 'La regla de facturas falló y decidió la de fábrica: %{error}'
-    motivos:
-      over_received: 'se factura más de lo recibido (%{detalle})'
-    caso:
-      factura: O una factura de verdad (folio)
-      factura_ayuda: La compara con las recepciones que tiene ligadas, como al registrarla.
-      productos_de_mas: Productos de más
-      valor_de_mas: Valor de lo de más
+    core: Quien tiene permiso para forzar recepciones nunca se queda sin poder recibir; para esa persona, frenar es revisar.
+  invoice_rule:
+    invoice_not_found: 'no hay una factura %{folio}'
+    title: Facturas en Lisp
+    help: Antes de registrar una factura de proveedor, esta regla compara lo facturado con lo recibido en las recepciones que se ligan, y decide si se registra, si queda por revisar o si se frena. Probar no guarda nada.
+    failure: 'La regla de facturas falló y decidió la de fábrica: %{error}'
+    reasons:
+      over_received: 'se factura más de lo recibido (%{detail})'
+    scenario:
+      invoice: O una factura de verdad (folio)
+      invoice_help: La compara con las recepciones que tiene ligadas, como al registrarla.
+      excess_items: Productos de más
+      excess_value: Valor de lo de más
       total: Total de la factura
-      candado_puesto: El candado de Ajustes › Compras está puesto.
-      candado_quitado: El candado de Ajustes › Compras está quitado.
-      autorizado: Factura alguien con permiso para exceder
-    veredictos:
+      lock_set: El candado de Ajustes › Compras está puesto.
+      lock_removed: El candado de Ajustes › Compras está quitado.
+      authorized: Factura alguien con permiso para exceder
+    verdicts:
       allow: Se registra
       review: Se registra y queda por revisar
       reject: Se frena
-    funciones:
+    functions:
       excess_items: cuántos productos vienen de más
       excess_value: lo que vale lo de más
       total: el total de la factura
@@ -1328,22 +1340,22 @@ es:
     allow: se registra
     to_review: pide motivo y queda por revisar
     reject: no se registra y deja reportado el intento
-    nucleo: Quien tiene permiso para exceder nunca se queda sin poder registrarla; para esa persona, frenar es revisar con motivo.
-  regla_movimiento:
-    titulo: Inventario en Lisp
-    ayuda: Antes de una entrada suelta, un ajuste o una merma, esta regla mira qué, cuánto y por qué, y decide si se mueve, si queda por revisar o si se frena. Que haya motivo y existencias lo exige Sakuya antes de preguntar. Probar no guarda nada.
-    fallo: 'La regla de inventario falló y decidió la de fábrica: %{error}'
-    motivos:
+    core: Quien tiene permiso para exceder nunca se queda sin poder registrarla; para esa persona, frenar es revisar con motivo.
+  movement_rule:
+    title: Inventario en Lisp
+    help: Antes de una entrada suelta, un ajuste o una merma, esta regla mira qué, cuánto y por qué, y decide si se mueve, si queda por revisar o si se frena. Que haya motivo y existencias lo exige Sakuya antes de preguntar. Probar no guarda nada.
+    failure: 'La regla de inventario falló y decidió la de fábrica: %{error}'
+    reasons:
       needs_permission: hace falta permiso para ajustar
-    caso:
-      tipo: Movimiento
-      motivo_ejemplo: se echó a perder
-      autorizado: Lo hace alguien con permiso para ajustar
-    veredictos:
+    scenario:
+      kind: Movimiento
+      reason_example: se echó a perder
+      authorized: Lo hace alguien con permiso para ajustar
+    verdicts:
       allow: Se mueve
       review: Se mueve y queda por revisar
       reject: Se frena
-    funciones:
+    functions:
       kind: ':in entrada, :adjust-in ajuste (+), :adjust-out ajuste (−), :waste merma'
       quantity: la cantidad
       stock: lo que hay antes de moverlo
@@ -1354,24 +1366,24 @@ es:
     allow: se mueve
     to_review: se mueve y queda por revisar
     reject: no se mueve y deja reportado el intento
-    nucleo: Quien tiene permiso para ajustar nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
-  regla_retiro:
-    titulo: Retiros en Lisp
-    ayuda: Antes de sacar efectivo de la gaveta, esta regla mira cuánto y para qué, y decide si sale, si queda por revisar o si se frena. Que haya motivo y efectivo suficiente lo exige Sakuya antes de preguntar. Probar no guarda nada.
-    fallo: 'La regla de retiros falló y decidió la de fábrica: %{error}'
-    motivos:
+    core: Quien tiene permiso para ajustar nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
+  withdrawal_rule:
+    title: Retiros en Lisp
+    help: Antes de sacar efectivo de la gaveta, esta regla mira cuánto y para qué, y decide si sale, si queda por revisar o si se frena. Que haya motivo y efectivo suficiente lo exige Sakuya antes de preguntar. Probar no guarda nada.
+    failure: 'La regla de retiros falló y decidió la de fábrica: %{error}'
+    reasons:
       needs_permission: hace falta permiso para retirar
-    caso:
-      monto: Monto
-      en_gaveta: En gaveta
-      motivo: Motivo
-      motivo_ejemplo: caja fuerte
-      autorizado: Retira alguien con permiso para retirar
-    veredictos:
+    scenario:
+      amount: Monto
+      in_drawer: En gaveta
+      reason: Motivo
+      reason_example: caja fuerte
+      authorized: Retira alguien con permiso para retirar
+    verdicts:
       allow: Sale
       review: Sale y queda por revisar
       reject: Se frena
-    funciones:
+    functions:
       amount: lo que sale
       cash: lo que hay en la gaveta
       withdrawn: lo ya retirado en el corte
@@ -1381,27 +1393,27 @@ es:
     allow: sale
     to_review: sale y queda por revisar
     reject: no sale y deja reportado el intento
-    nucleo: Quien tiene permiso para retirar nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
-  regla_credito:
-    titulo: Crédito en Lisp
-    ayuda: Cuando una venta va a cuenta de un cliente, esta regla mira su cuenta (saldo, límite, atrasos, último abono) y decide si se fía, si queda por revisar o si se frena. De fábrica no se fía a nadie. Probar no guarda nada.
-    fallo: 'La regla de crédito falló y decidió la de fábrica: %{error}'
-    motivos:
+    core: Quien tiene permiso para retirar nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
+  credit_rule:
+    title: Crédito en Lisp
+    help: Cuando una venta va a cuenta de un cliente, esta regla mira su cuenta (saldo, límite, atrasos, último abono) y decide si se fía, si queda por revisar o si se frena. De fábrica no se fía a nadie. Probar no guarda nada.
+    failure: 'La regla de crédito falló y decidió la de fábrica: %{error}'
+    reasons:
       no_credit: este negocio no vende a cuenta
-      over_limit: 'con esta venta pasa su límite (debe %{saldo}, límite %{limite})'
-    caso:
-      cliente: Cliente
-      inventado: — uno inventado —
-      monto: A cuenta
-      saldo: Debe
-      limite: Límite
-      cuenta: 'Debe %{saldo} · límite %{limite}'
-      autorizado: Cobra alguien con permiso para forzar el crédito
-    veredictos:
+      over_limit: 'con esta venta pasa su límite (debe %{balance}, límite %{limit})'
+    scenario:
+      customer: Cliente
+      made_up: — uno inventado —
+      amount: A cuenta
+      balance: Debe
+      limit: Límite
+      account: 'Debe %{balance} · límite %{limit}'
+      authorized: Cobra alguien con permiso para forzar el crédito
+    verdicts:
       allow: Se fía
       review: Se fía y queda por revisar
       reject: Se frena
-    funciones:
+    functions:
       amount: lo que va a cuenta
       total: el total de la venta
       balance: lo que debe antes de esta venta
@@ -1413,24 +1425,24 @@ es:
     allow: se fía
     to_review: se fía y queda por revisar
     reject: no se fía y deja reportado el intento
-    nucleo: Quien tiene permiso para forzar el crédito nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
-  regla_venta:
-    titulo: Ventas en Lisp
-    ayuda: Con el ticket completo, justo antes de cobrar, esta regla mira la venta entera (total, productos, formas de pago, hora) y decide si se cobra, si queda por revisar o si se frena. De fábrica no frena nada; los precios ya los juzga su propia regla. Probar no guarda nada.
-    fallo: 'La regla de ventas falló y decidió la de fábrica: %{error}'
-    forma: 'paid-with recibe una forma de pago: :%{formas}'
-    motivos: {}
-    caso:
-      claves: Claves (separadas por coma)
+    core: Quien tiene permiso para forzar el crédito nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
+  sale_rule:
+    title: Ventas en Lisp
+    help: Con el ticket completo, justo antes de cobrar, esta regla mira la venta entera (total, productos, formas de pago, hora) y decide si se cobra, si queda por revisar o si se frena. De fábrica no frena nada; los precios ya los juzga su propia regla. Probar no guarda nada.
+    failure: 'La regla de ventas falló y decidió la de fábrica: %{error}'
+    payment_method: 'paid-with recibe una forma de pago: :%{payment_methods}'
+    reasons: {}
+    scenario:
+      keys: Claves (separadas por coma)
       total: Total
-      forma: Forma de pago
-      hora: Hora
-      autorizado: Cobra alguien con permiso para forzar ventas
-    veredictos:
+      payment_method: Forma de pago
+      hour: Hora
+      authorized: Cobra alguien con permiso para forzar ventas
+    verdicts:
       allow: Se cobra
       review: Se cobra y queda por revisar
       reject: Se frena
-    funciones:
+    functions:
       total: el total
       change: el cambio
       paid_with: '(paid-with :cash), :transfer o :deposit: lo pagado de esa forma'
@@ -1443,28 +1455,28 @@ es:
     allow: se cobra
     to_review: se cobra y queda por revisar
     reject: no se cobra y deja reportado el intento
-    nucleo: Quien tiene permiso para forzar ventas nunca se queda sin poder cobrar; para esa persona, frenar es revisar.
-  regla_precio:
-    venta_no_existe: 'no hay una venta %{folio} en esta sucursal'
-    titulo: Precio en Lisp
-    ayuda: Cada renglón que se cobra pasa por esta regla, que mira el precio y decide si se cobra, si queda por revisar o si se frena. El piso de Ajustes › Caja no lo cruza ninguna regla. Probar no guarda nada.
-    sin_productos: no hay productos con precio para probar
-    fallo: 'La regla del precio falló y decidió la de fábrica: %{error}'
-    motivos:
+    core: Quien tiene permiso para forzar ventas nunca se queda sin poder cobrar; para esa persona, frenar es revisar.
+  price_rule:
+    sale_not_found: 'no hay una venta %{folio} en esta sucursal'
+    title: Precio en Lisp
+    help: Cada renglón que se cobra pasa por esta regla, que mira el precio y decide si se cobra, si queda por revisar o si se frena. El piso de Ajustes › Caja no lo cruza ninguna regla. Probar no guarda nada.
+    no_products: no hay productos con precio para probar
+    failure: 'La regla del precio falló y decidió la de fábrica: %{error}'
+    reasons:
       below_price: por debajo del precio que toca
-    caso:
-      venta: O una venta de verdad (folio)
-      venta_ayuda: Repasa sus renglones tal como se cobraron; lo que tocaba sale del catálogo de entonces y las promociones de hoy.
-      producto: Clave del producto
-      cantidad: Cantidad
-      precio: Precio que se cobra
-      toca: 'Toca: %{regular} (catálogo %{catalogo})'
-      autorizado: Cobra alguien con permiso para bajar precios
-    veredictos:
+    scenario:
+      sale: O una venta de verdad (folio)
+      sale_help: Repasa sus renglones tal como se cobraron; lo que tocaba sale del catálogo de entonces y las promociones de hoy.
+      product: Clave del producto
+      quantity: Cantidad
+      price: Precio que se cobra
+      regular: 'Toca: %{regular} (catálogo %{catalog})'
+      authorized: Cobra alguien con permiso para bajar precios
+    verdicts:
       allow: Se cobra
       review: Se cobra y queda por revisar
       reject: Se frena
-    funciones:
+    functions:
       price: lo que se cobra
       list_price: el catálogo de la sucursal
       regular_price: lo que toca (promoción o catálogo)
@@ -1475,22 +1487,22 @@ es:
     allow: se cobra
     to_review: se cobra y queda por revisar
     reject: no se cobra y deja reportado el intento
-    nucleo: Quien tiene permiso para bajar precios nunca se queda sin poder cobrar; para esa persona, frenar es revisar.
-  regla_corte:
-    titulo: Cierre de caja en Lisp
-    ayuda: Al cerrar el corte, esta regla mira cómo salió el conteo y decide si se cierra, si queda por revisar o si se frena. Probar no guarda nada; al guardar, cada versión queda en la lista de abajo.
-    fallo: 'La regla del corte falló y decidió la de fábrica: %{error}'
-    motivos:
-      over_limit: la diferencia (%{diferencia}) pasa del tope (%{tope})
-    caso:
-      esperado: Esperado en gaveta
-      contado: Contado
-      autorizado: Cierra alguien con permiso para diferencias
-    veredictos:
+    core: Quien tiene permiso para bajar precios nunca se queda sin poder cobrar; para esa persona, frenar es revisar.
+  shift_rule:
+    title: Cierre de caja en Lisp
+    help: Al cerrar el corte, esta regla mira cómo salió el conteo y decide si se cierra, si queda por revisar o si se frena. Probar no guarda nada; al guardar, cada versión queda en la lista de abajo.
+    failure: 'La regla del corte falló y decidió la de fábrica: %{error}'
+    reasons:
+      over_limit: la diferencia (%{difference}) pasa del tope (%{cap})
+    scenario:
+      expected: Esperado en gaveta
+      counted: Contado
+      authorized: Cierra alguien con permiso para diferencias
+    verdicts:
       allow: Se cierra
       review: Se cierra y queda por revisar
       reject: Se frena
-    funciones:
+    functions:
       difference: contado − esperado; negativo = falta
       counted: lo contado
       expected: lo que debía haber
@@ -1505,45 +1517,73 @@ es:
     allow: se cierra
     to_review: pide motivo y queda por revisar
     reject: frena y deja reportado el intento
-    nucleo: Quien tiene permiso para diferencias nunca se queda sin poder cerrar; para esa persona, frenar es revisar.
-  tablero:
-    titulo: Tablero en Lisp
-    ayuda: El tablero de Inicio es un programa. Cambia qué cifras salen y en qué orden, calcula las tuyas y elige las listas de abajo. Probar no guarda nada; al guardar, cada versión queda en la lista de abajo.
-    personalizar: Personalizar
-    arreglar: Arreglarlo
+    core: Quien tiene permiso para diferencias nunca se queda sin poder cerrar; para esa persona, frenar es revisar.
+  dashboard:
+    title: Tablero en Lisp
+    help: El tablero de Inicio es un programa. Cambia qué cifras salen y en qué orden, calcula las tuyas y elige las listas de abajo. Probar no guarda nada; al guardar, cada versión queda en la lista de abajo.
+    customize: Personalizar
+    fix: Arreglarlo
     error_html: 'Tu tablero tiene un error y se muestra el de fábrica: %{error}'
-    programa: Programa
-    probar: Probar
-    guardar: Guardar
-    vista_previa: Así queda
-    vista_previa_ayuda: Con los datos de hoy de tu sucursal.
-    versiones: Versiones
-    vigente: vigente
-    restaurar: Volver a esta
-    sin_versiones: 'Todavía no hay versiones: se usa el tablero de fábrica.'
-    avisos:
-      guardado: Tablero guardado.
-      restaurado: Se volvió a la versión del %{fecha}.
-    referencia:
-      titulo: Qué se puede escribir
-      cifras: Cifras de fábrica
-      propias: Cifras propias
-      propias_ayuda: 'Cada cifra de fábrica también se lee como función: (sales), (tickets)… Además (days) y, por clave de producto, (sold "CLAVE") y (sales-of "CLAVE"). El formato va al final: :money, :number o :percent.'
-      paneles: Listas
-      paneles_ayuda: 'Un número después dice cuántos renglones: (panel :top-products 5).'
-      lenguaje: El lenguaje
-      lenguaje_ayuda: Hay let, if, cond, when, define, lambda, map, filter, reduce, +, -, *, /, round y comparaciones. (when (> (returns) 0) (tile :returns)) enseña una cifra solo si hace falta. El dinero va en pesos con decimales exactos.
-    errores:
-      sin_dashboard: el programa tiene que terminar en (dashboard …)
-      cifra_desconocida: no hay cifra :%{cifra}; las de fábrica son :%{cifras}
-      titulo: tile va con una cifra de fábrica (:sales) o con un título entre comillas
-      valor: a «%{titulo}» le falta un valor que sea número o texto
-      formato: el formato es uno de :%{formatos}
-      panel: no hay lista :%{panel}; hay :%{paneles}
-      limite: los renglones de una lista van de 1 a 50
-      pieza: dashboard solo lleva (tile …) y (panel …), y recibió %{valor}
-      clave: la clave del producto va entre comillas
-      producto: no hay producto con clave %{clave}
-    muestra: Cargar datos de prueba
-    muestra_ayuda: Probar con cifras inventadas, para ver el tablero lleno aunque hoy no haya ventas. No toca nada.
-    vista_previa_muestra: 'Datos de prueba inventados: no son las ventas de tu negocio.'
+    program: Programa
+    trial: Probar
+    save: Guardar
+    preview: Así queda
+    preview_help: Con los datos de hoy de tu sucursal.
+    versions: Versiones
+    current: vigente
+    restore: Volver a esta
+    no_versions: 'Todavía no hay versiones: se usa el tablero de fábrica.'
+    notices:
+      saved: Tablero guardado.
+      restored: Se volvió a la versión del %{date}.
+    reference:
+      title: Qué se puede escribir
+      figures: Cifras de fábrica
+      own: Cifras propias
+      own_help: 'Cada cifra de fábrica también se lee como función: (sales), (tickets)… Además (days) y, por clave de producto, (sold "CLAVE") y (sales-of "CLAVE"). El formato va al final: :money, :number o :percent.'
+      panels: Listas
+      panels_help: 'Un número después dice cuántos renglones: (panel :top-products 5).'
+      language: El lenguaje
+      language_help: Hay let, if, cond, when, define, lambda, map, filter, reduce, +, -, *, /, round y comparaciones. (when (> (returns) 0) (tile :returns)) enseña una cifra solo si hace falta. El dinero va en pesos con decimales exactos.
+    errors:
+      missing_dashboard: el programa tiene que terminar en (dashboard …)
+      unknown_figure: no hay cifra :%{figure}; las de fábrica son :%{figures}
+      title: tile va con una cifra de fábrica (:sales) o con un título entre comillas
+      value: a «%{title}» le falta un valor que sea número o texto
+      format: el formato es uno de :%{formats}
+      panel: no hay lista :%{panel}; hay :%{panels}
+      limit: los renglones de una lista van de 1 a 50
+      piece: dashboard solo lleva (tile …) y (panel …), y recibió %{value}
+      key: la clave del producto va entre comillas
+      product: no hay producto con clave %{key}
+    sample: Cargar datos de prueba
+    sample_help: Probar con cifras inventadas, para ver el tablero lleno aunque hoy no haya ventas. No toca nada.
+    preview_sample: 'Datos de prueba inventados: no son las ventas de tu negocio.'
+  lisp:
+    anonymous: anónima
+    errors:
+      expects_numbers: "%{who} espera números y recibió %{value}"
+      expects_list: "%{who} espera una lista y recibió %{value}"
+      division_by_zero: no se puede dividir entre cero
+      get_expects_map: get espera un mapa
+      unknown_name: no conozco «%{name}»
+      arity: "%{name} recibe %{expected} y le diste %{given}"
+      the_function: la función
+      at_least: al menos %{count}
+      between: de %{from} a %{to}
+      not_a_function: "%{value} no es una función"
+      cond_clause: cada cláusula de cond es (prueba valor…)
+      let_syntax: 'let va así: (let ((nombre valor) …) cuerpo…)'
+      define_syntax: 'define va así: (define nombre valor) o (define (nombre args…) cuerpo…)'
+      lambda_syntax: '%{name} va así: (%{name} (args…) cuerpo…)'
+      parameter_names: los parámetros van como nombres
+      too_many_steps: el programa se pasó de pasos (¿un ciclo sin fin?)
+      too_deep: el programa se metió demasiado hondo (¿una recursión sin fin?)
+      too_long: el programa pasa de %{max} caracteres
+      unreadable: no entiendo lo que sigue en la línea %{line}
+      too_nested: demasiados paréntesis anidados en la línea %{line}
+      extra_close: sobra un ) en la línea %{line}
+      quote_before_close: falta qué citar antes del ) en la línea %{line}
+      unclosed_string: una cadena sin cerrar en la línea %{line}
+      unclosed_parens: falta cerrar %{count} paréntesis
+      quote_at_end: falta qué citar al final

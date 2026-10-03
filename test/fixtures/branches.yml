@@ -1,0 +1,9 @@
+head_office:
+  code: MTZ
+  name: Head office
+  kind: head_office
+
+store:
+  code: T01
+  name: Store 1
+  kind: store

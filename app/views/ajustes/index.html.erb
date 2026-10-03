@@ -1,9 +1,0 @@
-<%# Ajustes con barra lateral: cada sección en su página, como en cualquier panel de preferencias. %>
-<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
-  <%= render "ajustes/menu", actual: @seccion %>
-  <section class="min-w-0">
-    <h2 class="mb-1 text-xl font-bold"><%= t("ajustes.secciones.#{@seccion}") %></h2>
-    <p class="mb-4 text-sm text-stone-600"><%= t("ajustes.secciones_ayuda.#{@seccion}") %></p>
-    <%= render "ajustes/#{@seccion}" %>
-  </section>
-</div>

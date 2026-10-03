@@ -1,115 +1,115 @@
 @import "tailwindcss";
 
-/* La paleta sale de Sakuya Izayoi: el azul de su vestido de sirvienta (marca), el plateado del
-   pelo en los neutros y el delantal blanco (fondo). corbata queda para el rojo de peligro. */
+/* The palette comes from Sakuya Izayoi: the blue of her maid dress (brand), the silver of her
+   hair in the neutrals and the white apron (background). accent is kept for the danger red. */
 @theme {
-  /* Las cifras van en la letra de siempre con dígitos de ancho fijo: alinean en columna sin la
-     monoespaciada de máquina de escribir. */
+  /* Figures use the regular font with fixed-width digits: they line up in columns without the
+     typewriter monospace. */
   --font-mono: ui-sans-serif, system-ui, sans-serif;
-  --color-marca-50: #f2f5fc;
-  --color-marca-100: #e3e9f8;
-  --color-marca-200: #c8d3f0;
-  --color-marca-300: #a2b3e3;
-  --color-marca-400: #7a90d2;
-  --color-marca-500: #5b71c0;
-  --color-marca-600: #4659a8;
-  --color-marca-700: #3a498a;
-  --color-marca-800: #323e70;
-  --color-marca-900: #2c355b;
-  --color-marca-950: #1c2139;
-  --color-corbata-600: #a3323a;
-  --color-corbata-700: #8a2830;
-  --color-corbata-800: #6e1f26;
-  --color-piel: #fce4d0;
-  /* Blanco de verdad para texto sobre azul: el tema oscuro redefine white (las superficies) y
-     esto no lo toca. */
-  --color-claro: #ffffff;
-  --color-fondo: #f4f5f8;
-  --color-pared: #e6e9ef;
+  --color-brand-50: #f2f5fc;
+  --color-brand-100: #e3e9f8;
+  --color-brand-200: #c8d3f0;
+  --color-brand-300: #a2b3e3;
+  --color-brand-400: #7a90d2;
+  --color-brand-500: #5b71c0;
+  --color-brand-600: #4659a8;
+  --color-brand-700: #3a498a;
+  --color-brand-800: #323e70;
+  --color-brand-900: #2c355b;
+  --color-brand-950: #1c2139;
+  --color-accent-600: #a3323a;
+  --color-accent-700: #8a2830;
+  --color-accent-800: #6e1f26;
+  --color-peach: #fce4d0;
+  /* True white for text on blue: the dark theme redefines white (the surfaces) and does not
+     touch this. */
+  --color-light: #ffffff;
+  --color-surface: #f4f5f8;
+  --color-wall: #e6e9ef;
 }
 
 @layer base {
-  /* Campos: esquinas suaves, borde que se aclara al pasar y un halo azul al enfocar. */
+  /* Fields: soft corners, a border that lightens on hover and a blue halo on focus. */
   input[type="text"], input[type="number"], input[type="password"], input[type="date"], input[type="search"], input[type="email"], select, textarea {
-    @apply rounded-lg border border-stone-300 bg-white text-stone-900 shadow-[0_1px_1px_rgb(28_33_57/0.04)] outline-none transition placeholder:text-stone-400 hover:border-stone-400 focus:border-marca-500 focus:ring-4 focus:ring-marca-500/15 disabled:cursor-not-allowed disabled:bg-stone-100 disabled:text-stone-500;
+    @apply rounded-lg border border-stone-300 bg-white text-stone-900 shadow-[0_1px_1px_rgb(28_33_57/0.04)] outline-none transition placeholder:text-stone-400 hover:border-stone-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15 disabled:cursor-not-allowed disabled:bg-stone-100 disabled:text-stone-500;
   }
-  input[type="checkbox"], input[type="radio"] { @apply size-4 cursor-pointer; accent-color: var(--color-marca-600); }
+  input[type="checkbox"], input[type="radio"] { @apply size-4 cursor-pointer; accent-color: var(--color-brand-600); }
   summary { @apply select-none; }
   .font-mono, table { font-variant-numeric: tabular-nums; }
   dialog::backdrop { @apply bg-stone-900/40; }
 }
 
 @layer components {
-  /* Botones: siempre con forma de botón, nunca un enlace pelón. Esquinas suaves, texto medio y un
-     contorno azul al llegar con el teclado. */
+  /* Buttons: always shaped like a button, never a bare link. Soft corners, medium-weight text and a
+     blue outline when reached with the keyboard. */
   .btn {
-    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent px-3.5 py-2 text-sm font-medium leading-5 whitespace-nowrap shadow-[0_1px_2px_rgb(28_33_57/0.06)] transition select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-marca-500 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-transparent px-3.5 py-2 text-sm font-medium leading-5 whitespace-nowrap shadow-[0_1px_2px_rgb(28_33_57/0.06)] transition select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50;
   }
   .btn-xs { @apply gap-1 rounded-md px-2 py-0.5 text-xs shadow-none; }
   .btn-sm { @apply px-2.5 py-1 text-xs; }
   .btn-lg { @apply px-5 py-2.5 text-base; }
-  .btn-primary { @apply bg-marca-600 text-claro shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_1px_2px_rgb(28_33_57/0.15)] hover:bg-marca-700 active:bg-marca-800; }
+  .btn-primary { @apply bg-brand-600 text-light shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_1px_2px_rgb(28_33_57/0.15)] hover:bg-brand-700 active:bg-brand-800; }
   .btn-secondary { @apply border-stone-300 bg-white text-stone-800 hover:border-stone-400 hover:bg-stone-50 active:bg-stone-100; }
-  .btn-success { @apply bg-emerald-700 text-claro hover:bg-emerald-800; }
-  .btn-danger { @apply bg-corbata-700 text-claro hover:bg-corbata-800; }
-  .btn-outline-danger { @apply border-corbata-700/40 bg-white text-corbata-700 hover:border-corbata-700 hover:bg-red-50; }
+  .btn-success { @apply bg-emerald-700 text-light hover:bg-emerald-800; }
+  .btn-danger { @apply bg-accent-700 text-light hover:bg-accent-800; }
+  .btn-outline-danger { @apply border-accent-700/40 bg-white text-accent-700 hover:border-accent-700 hover:bg-red-50; }
   .btn-outline-success { @apply border-emerald-700/40 bg-white text-emerald-800 hover:border-emerald-700 hover:bg-emerald-50; }
   .btn-warning { @apply border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100; }
   .btn-ghost { @apply border-transparent bg-transparent text-stone-600 shadow-none hover:bg-stone-100 hover:text-stone-900; }
-  .btn-ghost-danger { @apply border-transparent bg-transparent text-corbata-700 shadow-none hover:bg-red-50; }
+  .btn-ghost-danger { @apply border-transparent bg-transparent text-accent-700 shadow-none hover:bg-red-50; }
   .btn-light { @apply border-white/60 bg-white/90 text-stone-900 hover:bg-white; }
 
-  /* Referencias a otros documentos (folios, productos): chip con fondo, se ve que se puede tocar. */
-  .enlace { @apply inline-flex items-center gap-1 rounded-md bg-marca-50 px-1.5 py-0.5 font-medium text-marca-800 transition-colors hover:bg-marca-100 hover:text-marca-900; }
-  .chip-folio { @apply inline-flex items-center gap-1 rounded-md bg-marca-50 px-1.5 py-0.5 font-mono font-medium text-marca-800 transition-colors hover:bg-marca-100 hover:text-marca-900; }
+  /* References to other documents (folios, products): a chip with a background, so it looks clickable. */
+  .link { @apply inline-flex items-center gap-1 rounded-md bg-brand-50 px-1.5 py-0.5 font-medium text-brand-800 transition-colors hover:bg-brand-100 hover:text-brand-900; }
+  .chip-folio { @apply inline-flex items-center gap-1 rounded-md bg-brand-50 px-1.5 py-0.5 font-mono font-medium text-brand-800 transition-colors hover:bg-brand-100 hover:text-brand-900; }
 
-  /* Tarjetas: blancas, borde fino y sombra apenas; el título lleva una rayita azul, la firma de Sakuya. */
+  /* Cards: white, thin border and barely any shadow; the title gets a little blue bar, Sakuya's signature. */
   .card { @apply rounded-xl bg-white p-5 shadow-[0_1px_2px_rgb(28_33_57/0.05)] ring-1 ring-stone-200/80; }
-  .card > h2:first-child { @apply mb-3 flex items-center gap-2 text-sm font-semibold text-stone-800 before:h-4 before:w-1 before:shrink-0 before:rounded-full before:bg-marca-500; }
+  .card > h2:first-child { @apply mb-3 flex items-center gap-2 text-sm font-semibold text-stone-800 before:h-4 before:w-1 before:shrink-0 before:rounded-full before:bg-brand-500; }
   .card table tr { @apply border-stone-100; }
   .card table td { @apply py-1.5; }
-  /* Código en el Lisp de Sakuya: aquí sí monoespaciada de verdad, que las cifras usan la otra. */
-  .codigo { font-family: ui-monospace, "JetBrains Mono", "Cascadia Code", "DejaVu Sans Mono", monospace; font-size: 0.875rem; line-height: 1.6; tab-size: 2; font-variant-numeric: normal; }
-  textarea.codigo { @apply bg-stone-50 focus:bg-white; min-height: 22rem; }
-  /* Un dato suelto: etiqueta chica arriba y la cifra grande abajo. */
-  .etiqueta-dato { @apply text-[0.8125rem] font-medium text-stone-500; }
-  .valor-dato { @apply mt-1 font-semibold tracking-tight text-stone-900; font-variant-numeric: tabular-nums; }
+  /* Code in Sakuya's Lisp: real monospace here, since figures use the other one. */
+  .code { font-family: ui-monospace, "JetBrains Mono", "Cascadia Code", "DejaVu Sans Mono", monospace; font-size: 0.875rem; line-height: 1.6; tab-size: 2; font-variant-numeric: normal; }
+  textarea.code { @apply bg-stone-50 focus:bg-white; min-height: 22rem; }
+  /* A standalone figure: small label on top and the big number below. */
+  .stat-label { @apply text-[0.8125rem] font-medium text-stone-500; }
+  .stat-value { @apply mt-1 font-semibold tracking-tight text-stone-900; font-variant-numeric: tabular-nums; }
   .badge { @apply inline-flex items-center gap-1 rounded-full bg-stone-100 px-2 py-0.5 text-xs font-medium text-stone-700 ring-1 ring-stone-200 ring-inset; }
 
-  /* Formularios: a todo lo ancho, campos en rejilla (1 col en móvil, 2 en tableta, 3 en escritorio),
-     con la misma piel que las tarjetas. */
-  .formulario { @apply w-full space-y-6 rounded-xl bg-white p-6 shadow-[0_1px_2px_rgb(28_33_57/0.05)] ring-1 ring-stone-200/80 xl:p-8; }
-  .campos { @apply grid gap-x-5 gap-y-4 md:grid-cols-2 xl:grid-cols-3; }
-  .campos-2 { @apply grid gap-x-5 gap-y-4 md:grid-cols-2; }
-  .campos-4 { @apply grid gap-x-5 gap-y-4 md:grid-cols-2 xl:grid-cols-4; }
-  .etiqueta-campo { @apply block text-sm font-medium text-stone-700; }
-  .entrada { @apply mt-1.5 w-full px-3 py-2 text-base; }
+  /* Forms: full width, fields in a grid (1 col on mobile, 2 on tablet, 3 on desktop),
+     with the same look as the cards. */
+  .form { @apply w-full space-y-6 rounded-xl bg-white p-6 shadow-[0_1px_2px_rgb(28_33_57/0.05)] ring-1 ring-stone-200/80 xl:p-8; }
+  .fields { @apply grid gap-x-5 gap-y-4 md:grid-cols-2 xl:grid-cols-3; }
+  .fields-2 { @apply grid gap-x-5 gap-y-4 md:grid-cols-2; }
+  .fields-4 { @apply grid gap-x-5 gap-y-4 md:grid-cols-2 xl:grid-cols-4; }
+  .field-label { @apply block text-sm font-medium text-stone-700; }
+  .input { @apply mt-1.5 w-full px-3 py-2 text-base; }
 
-  /* Opción grande y amigable (radio escondido dentro): arranque y ajustes. */
-  .opcion { @apply flex cursor-pointer items-center gap-3 rounded-xl border border-stone-300 bg-white px-4 py-3.5 text-base font-medium transition hover:border-marca-400 hover:bg-marca-50/40; }
-  .opcion:has(:checked) { @apply border-marca-500 bg-marca-50 text-marca-900 ring-4 ring-marca-500/15; }
-  .opcion-check { @apply ml-auto text-marca-600 invisible; }
-  .opcion:has(:checked) .opcion-check { @apply visible; }
+  /* Big, friendly option (radio hidden inside): setup and settings. */
+  .option { @apply flex cursor-pointer items-center gap-3 rounded-xl border border-stone-300 bg-white px-4 py-3.5 text-base font-medium transition hover:border-brand-400 hover:bg-brand-50/40; }
+  .option:has(:checked) { @apply border-brand-500 bg-brand-50 text-brand-900 ring-4 ring-brand-500/15; }
+  .option-check { @apply ml-auto text-brand-600 invisible; }
+  .option:has(:checked) .option-check { @apply visible; }
 
-  /* Tablas: contenedor redondeado, encabezado discreto, filas separadas por una línea fina. */
-  .tabla { @apply w-full border-separate border-spacing-0 overflow-hidden rounded-xl bg-white text-sm shadow-[0_1px_2px_rgb(28_33_57/0.05)] ring-1 ring-stone-200/80; }
-  .tabla thead th { @apply border-b border-stone-200 bg-stone-50 px-3 py-2.5 text-left text-[0.6875rem] font-semibold tracking-wider text-stone-500 uppercase; }
-  .tabla tbody td { @apply border-t border-stone-100; }
-  .tabla tbody tr:first-child td { @apply border-t-0; }
-  .tabla tbody tr { @apply transition-colors; }
-  .tabla tbody tr:hover { @apply bg-marca-50/50; }
-  .tabla tfoot td { @apply border-t border-stone-200 bg-stone-50 font-semibold; }
+  /* Tables: rounded container, understated header, rows separated by a thin line. */
+  .table { @apply w-full border-separate border-spacing-0 overflow-hidden rounded-xl bg-white text-sm shadow-[0_1px_2px_rgb(28_33_57/0.05)] ring-1 ring-stone-200/80; }
+  .table thead th { @apply border-b border-stone-200 bg-stone-50 px-3 py-2.5 text-left text-[0.6875rem] font-semibold tracking-wider text-stone-500 uppercase; }
+  .table tbody td { @apply border-t border-stone-100; }
+  .table tbody tr:first-child td { @apply border-t-0; }
+  .table tbody tr { @apply transition-colors; }
+  .table tbody tr:hover { @apply bg-brand-50/50; }
+  .table tfoot td { @apply border-t border-stone-200 bg-stone-50 font-semibold; }
 }
 
-/* Tema oscuro: los mismos tokens, volteados. Se elige por usuario (data-theme) o sigue al sistema. */
-:root[data-theme="oscuro"] { color-scheme: dark; }
-@media (prefers-color-scheme: dark) { :root[data-theme="sistema"] { color-scheme: dark; } }
+/* Dark theme: the same tokens, flipped. Chosen per user (data-theme) or follows the system. */
+:root[data-theme="dark"] { color-scheme: dark; }
+@media (prefers-color-scheme: dark) { :root[data-theme="system"] { color-scheme: dark; } }
 
 @layer theme {
-  :root[data-theme="oscuro"] {
+  :root[data-theme="dark"] {
     --color-white: #1b1d23;
-    --color-fondo: #121318;
-    --color-pared: #17191e;
+    --color-surface: #121318;
+    --color-wall: #17191e;
     --color-stone-50: #22252c;
     --color-stone-100: #262a31;
     --color-stone-200: #343842;
@@ -120,45 +120,45 @@
     --color-stone-700: #d4d8df;
     --color-stone-800: #e4e7ec;
     --color-stone-900: #f1f3f6;
-    --color-marca-50: #1f2540;
-    --color-marca-100: #262e50;
-    --color-marca-200: #34406e;
-    --color-marca-800: #b7c4f0;
-    --color-marca-900: #d0daf6;
-    --color-marca-950: #e6ecfb;
+    --color-brand-50: #1f2540;
+    --color-brand-100: #262e50;
+    --color-brand-200: #34406e;
+    --color-brand-800: #b7c4f0;
+    --color-brand-900: #d0daf6;
+    --color-brand-950: #e6ecfb;
     --color-green-50: #14261b; --color-green-100: #1b3524; --color-green-800: #a7e3b9;
     --color-emerald-50: #10271d; --color-emerald-100: #143826; --color-emerald-800: #9de3bf;
     --color-red-50: #2e1618; --color-red-100: #3f1d20; --color-red-800: #f0a8ac;
     --color-amber-50: #2c2210; --color-amber-100: #3d2f12; --color-amber-800: #f3cf7a; --color-amber-900: #f7dc98;
     --color-sky-50: #10222c; --color-sky-100: #143040; --color-sky-800: #9ed3f0;
     --color-blue-50: #131f33; --color-blue-800: #a9c4f5;
-    --color-corbata-700: #f0a8ac;
+    --color-accent-700: #f0a8ac;
   }
 }
 @media (prefers-color-scheme: dark) {
   @layer theme {
-    :root[data-theme="sistema"] {
-      --color-white: #1b1d23; --color-fondo: #121318; --color-pared: #17191e;
+    :root[data-theme="system"] {
+      --color-white: #1b1d23; --color-surface: #121318; --color-wall: #17191e;
       --color-stone-50: #22252c; --color-stone-100: #262a31; --color-stone-200: #343842; --color-stone-300: #444955;
       --color-stone-400: #767c89; --color-stone-500: #9ca2ad; --color-stone-600: #bec3cc; --color-stone-700: #d4d8df;
       --color-stone-800: #e4e7ec; --color-stone-900: #f1f3f6;
-      --color-marca-50: #1f2540; --color-marca-100: #262e50; --color-marca-200: #34406e;
-      --color-marca-800: #b7c4f0; --color-marca-900: #d0daf6; --color-marca-950: #e6ecfb;
+      --color-brand-50: #1f2540; --color-brand-100: #262e50; --color-brand-200: #34406e;
+      --color-brand-800: #b7c4f0; --color-brand-900: #d0daf6; --color-brand-950: #e6ecfb;
       --color-green-50: #14261b; --color-green-100: #1b3524; --color-green-800: #a7e3b9;
       --color-emerald-50: #10271d; --color-emerald-100: #143826; --color-emerald-800: #9de3bf;
       --color-red-50: #2e1618; --color-red-100: #3f1d20; --color-red-800: #f0a8ac;
       --color-amber-50: #2c2210; --color-amber-100: #3d2f12; --color-amber-800: #f3cf7a; --color-amber-900: #f7dc98;
       --color-sky-50: #10222c; --color-sky-100: #143040; --color-sky-800: #9ed3f0;
       --color-blue-50: #131f33; --color-blue-800: #a9c4f5;
-      --color-corbata-700: #f0a8ac;
+      --color-accent-700: #f0a8ac;
     }
   }
 }
 
-/* Densidad y tamaño de letra, por usuario. Todo el espaciado de Tailwind sale de --spacing. */
-:root[data-densidad="compacta"] { --spacing: 0.2rem; }
-:root[data-letra="chica"] { font-size: 14px; }
-:root[data-letra="grande"] { font-size: 18px; }
+/* Density and text size, per user. All of Tailwind's spacing comes from --spacing. */
+:root[data-density="compact"] { --spacing: 0.2rem; }
+:root[data-text-size="small"] { font-size: 14px; }
+:root[data-text-size="large"] { font-size: 18px; }
 
-/* En compacto los comandos de la cinta se encogen un punto. */
-:root[data-densidad="compacta"] .cinta-comando { padding: 0.25rem 0.5rem; font-size: 0.8125rem; }
+/* In compact mode the ribbon commands shrink a notch. */
+:root[data-density="compact"] .ribbon-command { padding: 0.25rem 0.5rem; font-size: 0.8125rem; }

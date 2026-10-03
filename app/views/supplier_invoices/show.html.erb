@@ -1,0 +1,89 @@
+<% x = @invoice %>
+<div class="mb-2 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("purchases.invoice") %> <span class="font-mono"><%= x.folio %></span><%= tag.span(" · #{t("purchases.statuses.cancelled")}", class: "text-red-700") if x.cancelled? %></h1>
+  <%= link_to icon("arrow-left", t("purchases.invoices")), invoices_path, class: "btn btn-ghost btn-sm" %>
+</div>
+<p class="mb-4 text-sm text-stone-600"><%= link_to x.supplier.name, account_path(x.supplier), class: "link" %> · <%= l x.date %><%= " · #{t("purchases.due").downcase} #{l x.due}" if x.due %> · <%= x.user %><%= " · #{x.concept}" if x.concept.present? %><%= " · #{x.cancellation_reason}" if x.cancelled? %></p>
+<div class="mb-4 grid gap-4 md:grid-cols-3">
+  <div class="card"><div class="stat-label"><%= t("till.amount") %></div><div class="stat-value text-3xl"><%= format_money(x.amount_cents) %></div></div>
+  <div class="card"><div class="stat-label"><%= t("purchases.paid") %></div><div class="stat-value text-3xl"><%= format_money(x.paid_cents) %></div></div>
+  <div class="card"><div class="stat-label"><%= t("purchases.remaining") %></div><div class="stat-value text-3xl <%= 'text-red-700' if x.overdue? %>"><%= format_money(x.remaining_cents) %></div>
+    <% if x.open? && !x.paid? && can?("purchases.pay") %><%= link_to icon("cash-coin", t("purchases.pay")), account_path(x.supplier, invoice: x.id), class: "btn btn-success btn-sm mt-2" %><% end %></div>
+</div>
+<div class="grid gap-4 lg:grid-cols-2">
+  <div class="card">
+    <h2 class="mb-2 font-semibold"><%= t("purchases.invoiced_vs_received") %> <% unless x.cancelled? %><% rs = x.receipt_status %><span class="rounded px-2 py-0.5 text-xs font-semibold <%= { 'complete' => 'bg-green-100 text-green-800', 'partial' => 'bg-amber-100 text-amber-800', 'no_receipt' => 'bg-red-100 text-red-800' }[rs] %>"><%= t("purchases.receipt_status.#{rs}") %></span><% end %></h2>
+    <p class="mb-2 text-xs text-stone-500"><%= t("purchases.comparison_help") %></p>
+    <% if @comparison.empty? %>
+      <p class="text-sm text-stone-500"><%= t("purchases.no_rows_nor_receipts") %></p>
+    <% else %>
+      <table class="w-full text-sm">
+        <thead><tr class="text-left text-stone-500"><th class="py-1"><%= t("common.product") %></th><th class="py-1 text-right"><%= t("purchases.invoiced") %></th><th class="py-1 text-right"><%= t("purchases.received") %></th><th class="py-1 text-right"><%= t("purchases.difference") %></th></tr></thead>
+        <tbody>
+          <% @comparison.each do |c| %>
+            <tr class="border-t border-stone-100 <%= { 'shortage' => 'text-red-700', 'not_received' => 'text-red-700', 'surplus' => 'text-amber-700', 'no_invoice' => 'text-amber-700' }[c.status] %>">
+              <td class="py-1"><%= c.product.name %></td>
+              <td class="py-1 text-right font-mono"><%= quantity(c.invoiced, c.product) %></td>
+              <td class="py-1 text-right font-mono"><%= quantity(c.received, c.product) %></td>
+              <td class="py-1 text-right font-mono"><%= c.status == "matches" ? "✓" : "#{c.difference.positive? ? "+" : ""}#{quantity(c.difference, c.product)}" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+    <% if x.lines.any? %>
+      <h3 class="mt-4 mb-1 text-sm font-semibold"><%= t("purchases.rows") %></h3>
+      <table class="w-full text-sm">
+        <% x.lines.each do |l| %>
+          <tr class="border-t border-stone-100"><td class="py-1"><%= l.product.name %></td><td class="py-1 text-right font-mono"><%= quantity(l.quantity, l.product) %></td><td class="py-1 text-right font-mono"><%= format_money(l.price_cents) %></td><td class="py-1 text-right font-mono"><%= format_money(l.amount_cents) %></td></tr>
+        <% end %>
+      </table>
+    <% end %>
+  </div>
+  <div class="space-y-4">
+    <div class="card">
+      <h2 class="mb-2 font-semibold"><%= t("purchases.receipts_linked") %></h2>
+      <% if x.receipts.any? %>
+        <ul class="text-sm">
+          <% x.receipts.each do |r| %>
+            <li class="flex items-center justify-between border-t border-stone-100 py-1"><span><%= link_to r.folio, receipt_path(r), class: "chip-folio" %> · <%= l r.date %> · <%= r.branch %></span>
+              <% if x.open? && can?("purchases.invoice") %><%= button_to t("purchases.unlink"), invoice_receipt_path(r), method: :patch, params: { supplier_invoice_id: "" }, class: "btn btn-ghost btn-xs" %><% end %></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-sm text-stone-500"><%= t("purchases.no_receipt") %></p>
+      <% end %>
+      <% if x.open? && @loose.any? && can?("purchases.invoice") %>
+        <h3 class="mt-3 mb-1 text-xs uppercase text-stone-500"><%= t("purchases.receipts_loose") %></h3>
+        <ul class="text-sm">
+          <% @loose.each do |r| %>
+            <li class="flex items-center justify-between border-t border-stone-100 py-1"><span><%= link_to r.folio, receipt_path(r), class: "chip-folio" %> · <%= l r.date %><%= " · #{r.delivery_note}" if r.delivery_note.present? %></span>
+              <%= button_to t("purchases.link"), invoice_receipt_path(r), method: :patch, params: { supplier_invoice_id: x.id }, class: "btn btn-secondary btn-xs" %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+    <div class="card">
+      <h2 class="mb-2 font-semibold"><%= t("purchases.payments") %></h2>
+      <% if x.payments.any? %>
+        <table class="w-full text-sm">
+          <% x.payments.each do |p| %>
+            <tr class="border-t border-stone-100 <%= 'text-stone-400 line-through' unless p.current? %>"><td class="py-1"><%= l p.created_at, format: :short %></td><td class="py-1"><%= t("payment_methods.#{p.payment_method}") %><%= " · #{p.reference}" if p.reference.present? %></td><td class="py-1"><%= p.user %></td><td class="py-1 text-right font-mono"><%= format_money(p.amount_cents) %></td></tr>
+          <% end %>
+        </table>
+      <% else %>
+        <p class="text-sm text-stone-500"><%= t("purchases.no_payments") %></p>
+      <% end %>
+    </div>
+    <% if x.open? && can?("purchases.invoice") %>
+      <div class="card">
+        <h2 class="mb-2 font-semibold"><%= t("purchases.cancel_invoice") %></h2>
+        <p class="mb-2 text-xs text-stone-500"><%= t("purchases.cancel_invoice_help") %></p>
+        <%= form_with url: cancel_invoice_path(x), class: "flex flex-wrap gap-2 text-sm", data: { turbo_confirm: t("purchases.confirm_cancel", folio: x.folio) } do |f| %>
+          <%= f.text_field :reason, placeholder: t("common.reason").downcase, required: true, class: "input mt-0 flex-1" %>
+          <%= f.submit t("common.cancel"), class: "btn btn-ghost-danger btn-sm" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

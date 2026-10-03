@@ -4,10 +4,10 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem "sqlite3"
 #
-# SQLite de fábrica: una tienda o unas pocas sucursales sin más. Para muchas sucursales pegando a la
-# vez, PostgreSQL: basta con DATABASE_URL=postgres://usuario:clave@servidor/base (manda sobre lo de
-# aquí). Las pruebas corren contra las dos en la CI. Para mudar los datos de una a otra:
-# bin/rails "sakuya:copiar_base[postgres://…]" (con el esquema ya cargado en el destino).
+# SQLite by default: one store or a few branches, nothing more. For many branches hitting it at
+# once, PostgreSQL: just set DATABASE_URL=postgres://user:password@server/database (it overrides
+# what is here). The tests run against both in CI. To move the data from one to the other:
+# bin/rails "sakuya:copy_database[postgres://…]" (with the schema already loaded in the destination).
 default: &default
   adapter: sqlite3
   max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>

@@ -1,7 +1,7 @@
 {
   "name": "Sakuya",
   "short_name": "Sakuya",
-  "description": "<%= t("acerca.pwa_descripcion") %>",
+  "description": "<%= t("about.pwa_description") %>",
   "lang": "<%= I18n.locale %>",
   "start_url": "/",
   "scope": "/",
@@ -10,9 +10,9 @@
   "theme_color": "#7a90d2",
   "background_color": "#f4f5f8",
   "shortcuts": [
-    { "name": "<%= t("cinta.botones.vender") %>", "url": "/caja", "icons": [ { "src": "/icon-192.png", "sizes": "192x192" } ] },
-    { "name": "<%= t("cinta.botones.recibir") %>", "url": "/recepciones/new", "icons": [ { "src": "/icon-192.png", "sizes": "192x192" } ] },
-    { "name": "<%= t("cinta.pestanas.inventario") %>", "url": "/inventario", "icons": [ { "src": "/icon-192.png", "sizes": "192x192" } ] }
+    { "name": "<%= t("ribbon.buttons.sell") %>", "url": "/till", "icons": [ { "src": "/icon-192.png", "sizes": "192x192" } ] },
+    { "name": "<%= t("ribbon.buttons.receive") %>", "url": "/receipts/new", "icons": [ { "src": "/icon-192.png", "sizes": "192x192" } ] },
+    { "name": "<%= t("ribbon.tabs.inventory") %>", "url": "/inventory", "icons": [ { "src": "/icon-192.png", "sizes": "192x192" } ] }
   ],
   "icons": [
     { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },

@@ -1,9 +1,0 @@
-<%# Corte de verdad o inventado, para los casos que leen la gaveta (cierre y retiros). %>
-<% if caso[:hay_real] %>
-  <div class="flex basis-full flex-wrap gap-4 text-sm">
-    <label class="flex items-center gap-2"><%= radio_button_tag :inventado, "0", caso[:real].present?, id: "inventado_no" %> <%= t("reglas.con_corte_real") %></label>
-    <label class="flex items-center gap-2"><%= radio_button_tag :inventado, "1", caso[:real].nil?, id: "inventado_si" %> <%= t("reglas.con_corte_inventado") %></label>
-  </div>
-<% else %>
-  <p class="basis-full text-sm text-stone-500"><%= t("reglas.sin_corte_real") %></p>
-<% end %>

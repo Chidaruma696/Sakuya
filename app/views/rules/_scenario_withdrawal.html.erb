@@ -1,0 +1,7 @@
+<%= render "rules/real_or_made_up", scenario: scenario %>
+<div><label for="amount" class="field-label"><%= t("#{texts}.scenario.amount") %></label>
+  <%= number_field_tag :amount, format("%.2f", scenario[:amount] / 100r), step: "0.01", min: 0, id: "amount", class: "w-32 font-mono" %></div>
+<div><label for="in_drawer" class="field-label"><%= t("#{texts}.scenario.in_drawer") %></label>
+  <%= number_field_tag :in_drawer, format("%.2f", scenario[:in_drawer] / 100r), step: "0.01", min: 0, id: "in_drawer", class: "w-32 font-mono", readonly: scenario[:real].present? %></div>
+<div><label for="reason" class="field-label"><%= t("#{texts}.scenario.reason") %></label>
+  <%= text_field_tag :reason, scenario[:reason], id: "reason", class: "w-56" %></div>

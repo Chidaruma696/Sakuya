@@ -1,0 +1,12 @@
+<div><label for="product" class="field-label"><%= t("#{texts}.scenario.product") %></label>
+  <%= text_field_tag :product, scenario[:product]&.key, id: "product", class: "w-32 font-mono uppercase" %></div>
+<div><label for="quantity" class="field-label"><%= t("#{texts}.scenario.quantity") %></label>
+  <%= number_field_tag :quantity, scenario[:quantity].to_s("F"), step: "0.001", min: 0, id: "quantity", class: "w-24 font-mono" %></div>
+<div><label for="price" class="field-label"><%= t("#{texts}.scenario.price") %></label>
+  <%= number_field_tag :price, format("%.2f", scenario[:price] / 100r), step: "0.01", min: 0, id: "price", class: "w-32 font-mono" %></div>
+<% if scenario[:product] %>
+  <p class="pb-2 text-stone-600"><%= scenario[:product].name %> · <%= t("#{texts}.scenario.regular", regular: format_money(scenario[:regular]), catalog: format_money(scenario[:catalog])) %></p>
+<% end %>
+<div class="basis-full border-t border-stone-100 pt-3"><label for="sale" class="field-label"><%= t("#{texts}.scenario.sale") %></label>
+  <%= text_field_tag :sale, scenario[:sale_folio], id: "sale", class: "w-40 font-mono uppercase", placeholder: "B-00012" %>
+  <p class="mt-1 text-xs text-stone-500"><%= t("#{texts}.scenario.sale_help") %></p></div>

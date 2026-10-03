@@ -1,0 +1,18 @@
+<%= form_with model: [ :admin, @promotion ], class: "form" do |f| %>
+  <div class="fields">
+    <%= render "admin/field", f: f, field: :name, label: t("admin.name_in_ticket"), kind: :text_field %>
+    <div><%= f.label :product_id, t("common.product"), class: "field-label" %><%= f.collection_select :product_id, Product.active.order(:name), :id, :name, {}, class: "input" %></div>
+    <div><%= f.label :branch_id, t("common.branch"), class: "field-label" %><%= f.collection_select :branch_id, Branch.active.order(:name), :id, :name, { include_blank: t("common.all").downcase }, class: "input" %></div>
+    <div><%= f.label :kind, t("admin.rule"), class: "field-label" %><%= f.select :kind, Promotion::KINDS.keys.map { |k| [ Promotion.kind_name(k), k ] }, {}, class: "input" %></div>
+    <div><%= f.label :price, t("common.price"), class: "field-label" %><%= f.number_field :price, value: (@promotion.price_cents && @promotion.price_cents / 100.0), step: "0.01", min: 0, class: "input" %></div>
+    <%= render "admin/field", f: f, field: :percentage, label: t("admin.discount_pct"), kind: :number_field, options: { step: "0.01", min: 0, max: 100 } %>
+    <%= render "admin/field", f: f, field: :minimum_quantity, label: t("admin.minimum_quantity"), kind: :number_field, options: { step: "0.001", min: 0 } %>
+    <%= render "admin/field", f: f, field: :from, label: t("admin.from_optional"), kind: :date_field %>
+    <%= render "admin/field", f: f, field: :to, label: t("admin.to_optional"), kind: :date_field %>
+  </div>
+  <p class="text-xs text-stone-500"><%= t("admin.promotion_help") %></p>
+  <div class="flex flex-wrap items-center gap-4">
+    <%= f.submit @promotion.new_record? ? t("common.create") : t("common.save"), class: "btn btn-primary btn-lg" %>
+    <label class="flex items-center gap-2 text-sm"><%= f.check_box :active %> <%= t("admin.active") %></label>
+  </div>
+<% end %>

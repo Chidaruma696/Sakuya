@@ -1,7 +1,0 @@
-<%= render "reglas/real_o_inventado", caso: caso %>
-<div><label for="monto" class="etiqueta-campo"><%= t("#{textos}.caso.monto") %></label>
-  <%= number_field_tag :monto, format("%.2f", caso[:monto] / 100r), step: "0.01", min: 0, id: "monto", class: "w-32 font-mono" %></div>
-<div><label for="en_gaveta" class="etiqueta-campo"><%= t("#{textos}.caso.en_gaveta") %></label>
-  <%= number_field_tag :en_gaveta, format("%.2f", caso[:en_gaveta] / 100r), step: "0.01", min: 0, id: "en_gaveta", class: "w-32 font-mono", readonly: caso[:real].present? %></div>
-<div><label for="motivo" class="etiqueta-campo"><%= t("#{textos}.caso.motivo") %></label>
-  <%= text_field_tag :motivo, caso[:motivo], id: "motivo", class: "w-56" %></div>

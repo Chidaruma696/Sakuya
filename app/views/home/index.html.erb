@@ -1,0 +1,13 @@
+<div class="mb-2 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("home.title") %> · <%= @all ? t("common.all_branches") : @branch %></h1>
+  <% if can?("rules.edit") %><%= link_to dashboard_edit_path, class: "btn btn-secondary btn-sm" do %><i class="bi bi-braces"></i> <%= t("dashboard.customize") %><% end %><% end %>
+</div>
+<%= render "filter" %>
+<%= render "pending_review" %>
+<% if @dashboard_error && can?("rules.edit") %>
+  <div class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">
+    <span><i class="bi bi-exclamation-triangle-fill text-accent-700"></i> <%= t("dashboard.error_html", error: content_tag(:code, @dashboard_error)) %></span>
+    <%= link_to t("dashboard.fix"), dashboard_edit_path, class: "btn btn-secondary btn-sm" %>
+  </div>
+<% end %>
+<%= render "dashboard" %>

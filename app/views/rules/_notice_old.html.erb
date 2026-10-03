@@ -1,0 +1,6 @@
+<%# The rule in force was written for an earlier contract of the hook: make it visible before it fails. %>
+<% if rule&.old? %>
+  <p class="mb-4 max-w-3xl rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900" id="notice_old">
+    <i class="bi bi-exclamation-triangle-fill"></i> <%= t("rules.old", rule_version: rule.version, current_version: Rule.contract(rule.hook)) %>
+  </p>
+<% end %>

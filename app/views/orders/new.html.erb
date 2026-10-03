@@ -1,0 +1,36 @@
+<h1 class="mb-1 text-2xl font-bold"><%= t("orders.new") %></h1>
+<p class="mb-4 text-sm text-stone-600"><%= t("orders.help") %></p>
+<%= form_with model: @order, url: orders_path, class: "form", data: { controller: "rows", rows_url_value: search_products_path } do |f| %>
+  <% if @order.errors.any? %><div class="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-800"><%= @order.errors.full_messages.join(". ") %></div><% end %>
+  <div class="fields">
+    <div>
+      <%= f.label :customer_id, t("till.customer"), class: "field-label" %>
+      <%= f.collection_select :customer_id, @customers, :id, :name, { include_blank: "—" }, required: true, class: "input" %>
+      <% if @customers.empty? %><p class="mt-1 text-xs text-amber-700"><%= link_to t("orders.first_customer"), new_customer_path, class: "link" %></p><% end %>
+    </div>
+    <div><%= f.label :delivery_date, t("orders.delivery"), class: "field-label" %><%= f.date_field :delivery_date, class: "input" %></div>
+    <div><%= f.label :notes, t("common.notes"), class: "field-label" %><%= f.text_field :notes, class: "input" %></div>
+    <label class="flex items-center gap-2 text-sm" title="<%= t("orders.reserve_help") %>"><%= f.check_box :reserve, class: "h-4 w-4" %> <%= t("orders.reserve") %></label>
+  </div>
+  <div class="rounded-lg border border-stone-200 p-4">
+    <div class="mb-3 flex flex-wrap items-center gap-3">
+      <label class="text-sm font-medium" for="scanner"><%= icon("upc-scan", t("purchases.scan")) %></label>
+      <input id="scanner" type="text" autocomplete="off" data-rows-target="scanner" data-action="keydown->rows#scan" placeholder="<%= t("purchases.scan_help") %>" class="input mt-0 max-w-md font-mono">
+      <span data-rows-target="notice" class="text-sm text-amber-700"></span>
+    </div>
+    <table class="w-full text-sm">
+      <thead><tr class="text-left text-stone-500"><th class="py-1"><%= t("common.product") %></th><th class="w-40 py-1"><%= t("common.quantity") %></th><th class="w-10"></th></tr></thead>
+      <tbody data-rows-target="body">
+        <%= f.fields_for :lines do |l| %>
+          <tr data-rows-target="row">
+            <td class="py-1 pr-2"><%= l.collection_select :product_id, @products, :id, ->(p) { "#{p.name} (#{p.short_unit})" }, { include_blank: "—" }, class: "input mt-0" %></td>
+            <td class="py-1 pr-2"><%= l.number_field :quantity, step: "0.001", min: "0.001", data: { field: "quantity" }, class: "input mt-0 font-mono" %></td>
+            <td class="py-1"><button type="button" data-action="rows#remove" class="btn btn-ghost-danger btn-sm"><i class="bi bi-x-lg"></i></button></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <button type="button" data-action="rows#new" class="btn btn-secondary mt-3">+ <%= t("common.row") %></button>
+  </div>
+  <%= f.submit t("orders.save"), class: "btn btn-primary btn-lg" %>
+<% end %>

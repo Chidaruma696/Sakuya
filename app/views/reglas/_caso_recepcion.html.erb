@@ -1,5 +1,0 @@
-<div><label for="llegan" class="etiqueta-campo"><%= t("#{textos}.caso.llegan") %></label>
-  <%= text_field_tag :llegan, caso[:llegan], id: "llegan", class: "w-64 font-mono uppercase" %></div>
-<div><label for="remision" class="etiqueta-campo"><%= t("#{textos}.caso.remision") %></label>
-  <%= text_field_tag :remision, caso[:remision], id: "remision", class: "w-32 font-mono" %></div>
-<label class="flex items-center gap-2 pb-2"><%= check_box_tag :facturada, "1", caso[:facturada], id: "facturada" %> <%= t("#{textos}.caso.facturada") %></label>

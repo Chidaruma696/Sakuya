@@ -1,9 +1,9 @@
-// Service worker de Sakuya: que la app se pueda instalar, que los archivos estáticos (CSS, JS,
-// fuentes, iconos) salgan de la caché y que la caja abra sin conexión (la página de caja se guarda
-// cada vez que se abre con red; sin red sale la guardada, y la caja vende con el catálogo del
-// equipo). Para lo demás hace falta el servidor: sin red, se enseña /offline.html. Los navegadores
-// solo dejan usar service workers en HTTPS o en localhost.
-// La caché lleva el commit: cada versión nueva estrena caché y tira la vieja al activarse.
+// Sakuya's service worker: makes the app installable, serves static files (CSS, JS, fonts,
+// icons) from the cache and lets the till open offline (the till page is cached every time it
+// is opened with a network; without one the cached copy is served, and the till sells with the
+// catalog on the device). Everything else needs the server: offline, /offline.html is shown.
+// Browsers only allow service workers on HTTPS or on localhost.
+// The cache name carries the commit: every new version gets a fresh cache and drops the old one on activation.
 const CACHE = "sakuya-<%= Sakuya::COMMIT %>"
 const OFFLINE = "/offline.html"
 
@@ -12,27 +12,27 @@ self.addEventListener("install", (event) => {
 })
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil(caches.keys().then((claves) => Promise.all(claves.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim()))
+  event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim()))
 })
 
 self.addEventListener("fetch", (event) => {
   const { request } = event
   if (request.method !== "GET") return
   const url = new URL(request.url)
-  // Assets con huella en el nombre: no cambian nunca, de la caché primero.
+  // Fingerprinted assets: they never change, cache first.
   if (url.pathname.startsWith("/assets/") || /\.(png|ico|woff2?)$/.test(url.pathname)) {
     event.respondWith(caches.open(CACHE).then(async (c) => (await c.match(request)) || fetch(request).then((r) => { if (r.ok) c.put(request, r.clone()); return r })))
     return
   }
-  // La caja: a la red y se guarda; sin red, la guardada.
-  if (url.pathname === "/caja" && (request.mode === "navigate" || request.headers.get("Accept")?.includes("text/html"))) {
+  // The till: network first and cache it; offline, the cached copy.
+  if (url.pathname === "/till" && (request.mode === "navigate" || request.headers.get("Accept")?.includes("text/html"))) {
     event.respondWith(fetch(request).then((r) => {
-      if (r.ok && !r.redirected && !url.search) { const copia = r.clone(); caches.open(CACHE).then((c) => c.put("/caja", copia)) }
+      if (r.ok && !r.redirected && !url.search) { const copy = r.clone(); caches.open(CACHE).then((c) => c.put("/till", copy)) }
       return r
-    }).catch(async () => (await caches.match("/caja")) || caches.match(OFFLINE)))
+    }).catch(async () => (await caches.match("/till")) || caches.match(OFFLINE)))
     return
   }
-  // Páginas: siempre a la red; sin red, la página de "sin conexión".
+  // Pages: always from the network; offline, the "no connection" page.
   if (request.mode === "navigate") {
     event.respondWith(fetch(request).catch(() => caches.match(OFFLINE)))
   }

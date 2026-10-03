@@ -1,0 +1,45 @@
+<% r = @receipt %>
+<div class="mb-2 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("purchases.receipt") %> <span class="font-mono"><%= r.folio %></span><%= tag.span(" · #{t("purchases.statuses.cancelled")}", class: "text-red-700") if r.cancelled? %></h1>
+  <%= link_to icon("arrow-left", t("purchases.receipts")), receipts_path, class: "btn btn-ghost btn-sm" %>
+</div>
+<p class="mb-4 text-sm text-stone-600"><%= r.supplier %> · <%= l r.date %> · <%= r.branch %> · <%= r.user %><%= " · #{t("purchases.delivery_note").downcase} #{r.delivery_note}" if r.delivery_note.present? %><%= " · #{r.notes}" if r.notes.present? %><%= " · #{r.cancellation_reason}" if r.cancelled? %></p>
+<div class="grid gap-4 lg:grid-cols-3">
+  <div class="card lg:col-span-2">
+    <table class="w-full text-sm">
+      <thead><tr class="text-left text-stone-500"><th class="py-1"><%= t("common.product") %></th><th class="py-1 text-right"><%= t("common.quantity") %></th><th class="py-1 text-right"><%= t("purchases.boxes") %></th></tr></thead>
+      <tbody>
+        <% r.lines.each do |l| %>
+          <tr class="border-t border-stone-100"><td class="py-1"><%= l.product.name %></td><td class="py-1 text-right font-mono"><%= quantity(l.quantity, l.product) %></td><td class="py-1 text-right font-mono"><%= l.boxes unless l.boxes.zero? %></td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="space-y-4">
+    <div class="card">
+      <h2 class="mb-2 font-semibold"><%= t("purchases.invoice") %></h2>
+      <% if r.invoice %>
+        <p class="text-sm"><%= link_to r.invoice.folio, invoice_path(r.invoice), class: "chip-folio" %> · <%= format_money(r.invoice.amount_cents) %></p>
+      <% else %>
+        <p class="text-sm text-amber-700"><%= t("purchases.no_invoice_still") %></p>
+      <% end %>
+      <% if r.registered? && can?("purchases.invoice") %>
+        <%= form_with url: invoice_receipt_path(r), method: :patch, class: "mt-3 flex flex-wrap gap-2 text-sm" do |f| %>
+          <%= f.select :supplier_invoice_id, @invoices.map { |x| [ "#{x.folio} · #{format_money(x.amount_cents)} · #{l x.date}", x.id ] }, { include_blank: t("purchases.none"), selected: r.supplier_invoice_id }, class: "input mt-0 flex-1" %>
+          <%= f.submit t("purchases.link"), class: "btn btn-secondary btn-sm" %>
+        <% end %>
+        <%= link_to icon("file-earmark-plus", t("purchases.capture_invoice")), new_invoice_path(supplier_id: r.supplier_id), class: "btn btn-ghost btn-sm mt-2" %>
+      <% end %>
+    </div>
+    <% if r.registered? && can?("purchases.receive") %>
+      <div class="card">
+        <h2 class="mb-2 font-semibold"><%= t("purchases.cancel_receipt") %></h2>
+        <p class="mb-2 text-xs text-stone-500"><%= t("purchases.cancel_receipt_help") %></p>
+        <%= form_with url: cancel_receipt_path(r), class: "flex flex-wrap gap-2 text-sm", data: { turbo_confirm: t("purchases.confirm_cancel", folio: r.folio) } do |f| %>
+          <%= f.text_field :reason, placeholder: t("common.reason").downcase, required: true, class: "input mt-0 flex-1" %>
+          <%= f.submit t("common.cancel"), class: "btn btn-ghost-danger btn-sm" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

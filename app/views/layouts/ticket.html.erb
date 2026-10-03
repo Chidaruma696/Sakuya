@@ -2,20 +2,20 @@
 <html lang="<%= I18n.locale %>">
   <head>
     <meta charset="utf-8">
-    <title><%= @venta&.folio || @titulo %></title>
+    <title><%= @sale&.folio || @title %></title>
     <style>
-      /* Ticket térmico: puro negro (los grises se ven sucios), letra chica y densa, ancho según el
-         papel (80 mm → 72 imprimibles, 58 → 48). */
-      @page { size: <%= Ajuste.entero("ticket.ancho") == 58 ? 58 : 80 %>mm auto; margin: 2mm; }
+      /* Thermal ticket: pure black (greys look dirty), small dense type, width according to the
+         paper (80 mm → 72 printable, 58 → 48). */
+      @page { size: <%= Setting.integer("ticket.width") == 58 ? 58 : 80 %>mm auto; margin: 2mm; }
       * { box-sizing: border-box; }
       body { margin: 0; font-family: "DejaVu Sans", Arial, sans-serif; font-size: 8pt; color: #000; }
-      .ticket { width: <%= Ajuste.ancho_ticket_mm %>mm; padding: 2mm; }
-      .centro { text-align: center; }
-      .der { text-align: right; white-space: nowrap; }
-      .neg { font-weight: bold; }
+      .ticket { width: <%= Setting.ticket_width_mm %>mm; padding: 2mm; }
+      .center { text-align: center; }
+      .right { text-align: right; white-space: nowrap; }
+      .bold { font-weight: bold; }
       .mono { font-family: "DejaVu Sans Mono", monospace; }
-      .cursiva { font-style: italic; }
-      .oculto { display: none; }
+      .italic { font-style: italic; }
+      .hidden { display: none; }
       .logo { text-align: center; margin-bottom: 1.5mm; }
       .logo img { max-width: 30mm; max-height: 20mm; }
       table { width: 100%; border-collapse: collapse; }
@@ -23,73 +23,72 @@
       th:first-child, td:first-child { padding-left: 0; }
       th:last-child, td:last-child { padding-right: 0; }
       th { font-size: 7.5pt; border-bottom: 1px solid #000; text-align: left; }
-      .linea { border-top: 1px solid #000; margin: 1.5mm 0; }
-      .linea-punteada { border-top: 1px dashed #000; margin: 1.5mm 0; }
+      .line { border-top: 1px solid #000; margin: 1.5mm 0; }
+      .line-dotted { border-top: 1px dashed #000; margin: 1.5mm 0; }
       .total { font-size: 11.5pt; }
-      .tanto { text-align: center; font-weight: bold; border: 1px solid #000; padding: 0.6mm 1mm; margin: 1mm 0; }
-      .cancelado { color: #000; font-weight: bold; font-size: 16pt; text-align: center; margin: 2mm 0; letter-spacing: 2px; }
-      .recuadro { border: 1px dashed #000; padding: 1.2mm 1.6mm; margin: 1.5mm 0; }
+      .cancelled { color: #000; font-weight: bold; font-size: 16pt; text-align: center; margin: 2mm 0; letter-spacing: 2px; }
+      .box { border: 1px dashed #000; padding: 1.2mm 1.6mm; margin: 1.5mm 0; }
       svg { width: 100%; height: auto; }
-      /* Hojas de trabajo: letra un punto más grande que el ticket. */
-      .hoja { font-size: 9.5pt; }
-      .hoja th { font-size: 9pt; }
-      /* En pantalla el papel se ve al doble y centrado; al imprimir sale a su tamaño real. */
+      /* Work sheets: type one point larger than the ticket. */
+      .sheet { font-size: 9.5pt; }
+      .sheet th { font-size: 9pt; }
+      /* On screen the paper shows at double size and centered; when printed it comes out at its real size. */
       @media screen {
         body { background: #e7e5e4; padding: 24px 16px 48px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
         .ticket { background: white; box-shadow: 0 2px 12px rgba(0,0,0,.18); zoom: 1.9; }
-        .acciones { display: flex; gap: 10px; font-family: system-ui, sans-serif; }
-        .acciones button, .acciones a { font: 600 15px/1 system-ui, sans-serif; padding: 10px 18px; border-radius: 8px; border: 1px solid #4659a8; background: #4659a8; color: white; text-decoration: none; cursor: pointer; }
-        .acciones a { background: white; color: #4659a8; }
+        .actions { display: flex; gap: 10px; font-family: system-ui, sans-serif; }
+        .actions button, .actions a { font: 600 15px/1 system-ui, sans-serif; padding: 10px 18px; border-radius: 8px; border: 1px solid #4659a8; background: #4659a8; color: white; text-decoration: none; cursor: pointer; }
+        .actions a { background: white; color: #4659a8; }
       }
-      /* Dentro del diseñador el zoom lo manejan los botones de la página, no este layout. */
-      @media screen { body.previa { padding: 12px; gap: 0; } body.previa .ticket { zoom: 1; } body.previa .acciones { display: none; } }
-      @media print { .acciones { display: none; } }
+      /* Inside the designer the zoom is handled by the page's buttons, not this layout. */
+      @media screen { body.preview { padding: 12px; gap: 0; } body.preview .ticket { zoom: 1; } body.preview .actions { display: none; } }
+      @media print { .actions { display: none; } }
     </style>
   </head>
-  <body class="<%= "previa" if @previa %>">
+  <body class="<%= "preview" if @preview %>">
     <%= yield %>
-    <div class="acciones" <%= "hidden" if @previa %>>
-      <button onclick="window.print()"><%= t("comun.imprimir") %></button>
-      <% if @termica && @termica[:modo] != "navegador" %><button type="button" id="termica"><%= t("caja.imprimir_termica") %></button><% end %>
-      <% if @termica %><a href="<%= @termica[:escpos] %>?bajar=1" title="<%= t("caja.escpos_ayuda") %>"><%= t("caja.bajar_escpos") %></a><% end %>
-      <% if @venta&.persisted? %>
-        <a href="<%= caja_path %>"><%= t("caja.nueva_venta") %></a>
+    <div class="actions" <%= "hidden" if @preview %>>
+      <button onclick="window.print()"><%= t("common.print") %></button>
+      <% if @thermal && @thermal[:mode] != "browser" %><button type="button" id="thermal"><%= t("till.print_thermal") %></button><% end %>
+      <% if @thermal %><a href="<%= @thermal[:escpos] %>?download=1" title="<%= t("till.escpos_help") %>"><%= t("till.download_escpos") %></a><% end %>
+      <% if @sale&.persisted? %>
+        <a href="<%= till_path %>"><%= t("till.new_sale") %></a>
       <% end %>
     </div>
-    <% if @termica && @termica[:modo] != "navegador" %>
-      <p id="estado_impresion" class="acciones" style="font: 14px system-ui, sans-serif;"></p>
-      <%# La térmica: por red la manda el servidor; por cable, el navegador con Web Serial. La primera
-          vez por cable hay que elegir el puerto con un clic; luego el navegador lo recuerda. %>
+    <% if @thermal && @thermal[:mode] != "browser" %>
+      <p id="print_status" class="actions" style="font: 14px system-ui, sans-serif;"></p>
+      <%# The thermal printer: over the network the server sends it; over a cable, the browser with Web Serial.
+          The first time over a cable the port has to be picked with a click; after that the browser remembers it. %>
       <script>
         (() => {
-          const modo = <%= raw @termica[:modo].to_json %>
-          const estado = document.getElementById("estado_impresion")
-          const textos = <%= raw({ impreso: t("caja.impreso"), sin_serial: t("caja.sin_serial"), elige: t("caja.elige_impresora") }.to_json) %>
-          const porRed = async () => {
-            const r = await fetch(<%= raw @termica[:imprimir].to_json %>, { method: "POST", headers: { Accept: "application/json", "X-CSRF-Token": <%= raw form_authenticity_token.to_json %> } })
-            const datos = await r.json()
-            estado.textContent = datos.aviso || datos.error
+          const mode = <%= raw @thermal[:mode].to_json %>
+          const status = document.getElementById("print_status")
+          const texts = <%= raw({ printed: t("till.printed"), no_serial: t("till.no_serial"), choose: t("till.choose_printer") }.to_json) %>
+          const overNetwork = async () => {
+            const r = await fetch(<%= raw @thermal[:print].to_json %>, { method: "POST", headers: { Accept: "application/json", "X-CSRF-Token": <%= raw form_authenticity_token.to_json %> } })
+            const data = await r.json()
+            status.textContent = data.notice || data.error
           }
-          const porCable = async (elegir) => {
-            if (!("serial" in navigator)) { estado.textContent = textos.sin_serial; return }
-            let [puerto] = await navigator.serial.getPorts()
-            if (!puerto) {
-              if (!elegir) { estado.textContent = textos.elige; return }
-              puerto = await navigator.serial.requestPort()
+          const overCable = async (choose) => {
+            if (!("serial" in navigator)) { status.textContent = texts.no_serial; return }
+            let [port] = await navigator.serial.getPorts()
+            if (!port) {
+              if (!choose) { status.textContent = texts.choose; return }
+              port = await navigator.serial.requestPort()
             }
-            const bytes = new Uint8Array(await (await fetch(<%= raw @termica[:escpos].to_json %>)).arrayBuffer())
-            await puerto.open({ baudRate: 9600 })
-            const escritor = puerto.writable.getWriter()
-            await escritor.write(bytes)
-            escritor.releaseLock()
-            await puerto.close()
-            estado.textContent = textos.impreso
+            const bytes = new Uint8Array(await (await fetch(<%= raw @thermal[:escpos].to_json %>)).arrayBuffer())
+            await port.open({ baudRate: 9600 })
+            const writer = port.writable.getWriter()
+            await writer.write(bytes)
+            writer.releaseLock()
+            await port.close()
+            status.textContent = texts.printed
           }
-          const imprimir = (elegir) => (modo === "red" ? porRed() : porCable(elegir)).catch((e) => { estado.textContent = e.message })
-          document.getElementById("termica").addEventListener("click", () => imprimir(true))
-          <% if params[:imprimir] %>window.addEventListener("load", () => imprimir(false))<% end %>
+          const print = (choose) => (mode === "network" ? overNetwork() : overCable(choose)).catch((e) => { status.textContent = e.message })
+          document.getElementById("thermal").addEventListener("click", () => print(true))
+          <% if params[:print] %>window.addEventListener("load", () => print(false))<% end %>
         })()
       </script>
-    <% elsif params[:imprimir] %><script>window.addEventListener("load", () => window.print());</script><% end %>
+    <% elsif params[:print] %><script>window.addEventListener("load", () => window.print());</script><% end %>
   </body>
 </html>

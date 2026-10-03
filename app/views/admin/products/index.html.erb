@@ -1,0 +1,28 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("admin.products") %></h1>
+  <div class="flex gap-3">
+    <%= form_with url: admin_products_path, method: :get, class: "flex gap-2" do |f| %>
+      <%= f.text_field :q, value: params[:q], placeholder: t("common.search").downcase, class: "btn btn-secondary btn-sm" %>
+      <%= f.submit t("common.search"), class: "btn btn-secondary btn-sm" %>
+    <% end %>
+    <%= link_to t("admin.new_product"), new_admin_product_path, class: "btn btn-primary btn-sm" %>
+  </div>
+</div>
+<table class="table">
+  <thead><tr><th class="px-3 py-2"><%= t("common.key") %></th><th class="px-3 py-2"><%= t("common.name") %></th><th class="px-3 py-2"><%= t("admin.line") %></th><th class="px-3 py-2"><%= t("common.unit") %></th><th class="px-3 py-2 text-right"><%= t("common.price") %></th><th class="px-3 py-2">PLU</th><th class="px-3 py-2"><%= t("admin.codes") %></th><th class="px-3 py-2"><%= t("common.active") %></th><th></th></tr></thead>
+  <tbody>
+    <% @products.each do |p| %>
+      <tr class="border-t border-stone-100 <%= 'text-stone-400' unless p.active %>">
+        <td class="px-3 py-2 font-mono"><%= p.key %></td>
+        <td class="px-3 py-2"><%= p.name %></td>
+        <td class="px-3 py-2"><%= p.line %></td>
+        <td class="px-3 py-2"><%= p.unit %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= format_money(p.price_cents) %></td>
+        <td class="px-3 py-2 font-mono"><%= p.plu %></td>
+        <td class="px-3 py-2"><%= p.product_barcodes.size %></td>
+        <td class="px-3 py-2"><%= p.active ? t("common.yes") : t("common.no") %></td>
+        <td class="px-3 py-2 text-right"><%= link_to t("common.edit"), edit_admin_product_path(p), class: "btn btn-secondary btn-xs" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

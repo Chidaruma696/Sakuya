@@ -1,0 +1,74 @@
+<div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(400px,520px)]" data-controller="ticket-design">
+  <%= form_with url: settings_ticket_path, method: :patch, class: "form", data: { turbo: false } do |f| %>
+    <div class="space-y-3">
+      <h3 class="text-xs font-bold uppercase tracking-wide text-stone-500"><%= t("settings.ticket.header") %></h3>
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="flex h-20 w-28 items-center justify-center rounded border border-dashed border-stone-300 bg-white">
+          <img src="<%= @settings["ticket.logo"].presence || "data:," %>" alt="" class="max-h-16 max-w-24 <%= 'hidden' if @settings["ticket.logo"].blank? %>" data-ticket-design-target="logoMini">
+          <span class="text-xs text-stone-400 <%= 'hidden' if @settings["ticket.logo"].present? %>" data-ticket-design-target="noLogo"><%= t("settings.ticket.no_logo") %></span>
+        </div>
+        <div class="space-y-1 text-sm">
+          <label class="btn btn-secondary btn-sm cursor-pointer"><i class="bi bi-upload"></i> <%= t("settings.ticket.upload_logo") %><input type="file" accept="image/png,image/jpeg,image/webp" class="sr-only" data-action="change->ticket-design#logo"></label>
+          <button type="button" class="btn btn-ghost btn-sm" data-action="ticket-design#removeLogo"><i class="bi bi-x-lg"></i> <%= t("settings.ticket.remove_logo") %></button>
+          <p class="text-xs text-stone-500"><%= t("settings.ticket.logo_help") %></p>
+          <%= f.hidden_field "setting[ticket.logo]", value: @settings["ticket.logo"], data: { ticket_design_target: "logo" } %>
+        </div>
+      </div>
+      <div class="fields-2">
+        <% { "business.name" => current_branch.name, "ticket.tagline" => nil, "business.address" => nil, "business.phone" => nil, "ticket.tax_id" => nil }.each do |key, ph| %>
+          <label class="block text-sm <%= 'md:col-span-2' if key == 'business.address' %>"><%= t("settings.keys.#{key}") %>
+            <%= f.text_field "setting[#{key}]", value: @settings[key], placeholder: ph, class: "input", data: { key: key, action: "input->ticket-design#text" } %>
+          </label>
+        <% end %>
+      </div>
+    </div>
+    <div class="space-y-3">
+      <h3 class="text-xs font-bold uppercase tracking-wide text-stone-500"><%= t("settings.ticket.body") %></h3>
+      <div class="fields">
+        <label class="flex items-center gap-2 rounded-md border border-stone-200 px-3 py-2.5 text-sm"><%= hidden_field_tag "setting[ticket.show_cashier]", "0", id: nil %><%= check_box_tag "setting[ticket.show_cashier]", "1", @settings["ticket.show_cashier"] == "1", data: { key: "ticket.show_cashier", action: "change->ticket-design#show" } %> <%= t("settings.keys.ticket.show_cashier") %></label>
+        <label class="flex items-center gap-2 rounded-md border border-stone-200 px-3 py-2.5 text-sm"><%= hidden_field_tag "setting[ticket.show_code]", "0", id: nil %><%= check_box_tag "setting[ticket.show_code]", "1", @settings["ticket.show_code"] == "1", data: { key: "ticket.show_code", action: "change->ticket-design#show" } %> <%= t("settings.keys.ticket.show_code") %></label>
+        <label class="block text-sm"><%= t("settings.keys.ticket.width") %>
+          <%= f.select "setting[ticket.width]", [ [ "80 mm", "80" ], [ "58 mm", "58" ] ], { selected: @settings["ticket.width"] }, class: "input", data: { action: "change->ticket-design#width" } %>
+        </label>
+      </div>
+    </div>
+    <div class="space-y-3">
+      <h3 class="text-xs font-bold uppercase tracking-wide text-stone-500"><%= t("settings.ticket.footer") %></h3>
+      <div class="fields-2">
+        <label class="block text-sm"><%= t("settings.keys.ticket.returns_legend") %>
+          <%= f.text_field "setting[ticket.returns_legend]", value: @settings["ticket.returns_legend"], placeholder: t("till.refunds_only_with_ticket"), class: "input", data: { key: "ticket.returns_legend", action: "input->ticket-design#text" } %>
+        </label>
+        <label class="block text-sm"><%= t("settings.keys.business.ticket_footer") %>
+          <%= f.text_field "setting[business.ticket_footer]", value: @settings["business.ticket_footer"], class: "input", data: { key: "business.ticket_footer", action: "input->ticket-design#text" } %>
+        </label>
+      </div>
+    </div>
+    <div class="space-y-3">
+      <h3 class="text-xs font-bold uppercase tracking-wide text-stone-500"><%= t("settings.currency") %></h3>
+      <div class="fields-2">
+        <label class="block text-sm"><%= t("settings.keys.business.currency") %>
+          <%= f.text_field "setting[business.currency]", value: @settings["business.currency"], maxlength: 3, class: "input font-mono uppercase" %>
+        </label>
+        <label class="block text-sm"><%= t("settings.keys.business.symbol") %>
+          <%= f.text_field "setting[business.symbol]", value: @settings["business.symbol"], maxlength: 4, class: "input font-mono" %>
+        </label>
+      </div>
+      <p class="text-xs text-stone-500"><%= t("settings.currency_help") %></p>
+    </div>
+    <%= f.submit t("settings.save"), class: "btn btn-primary btn-lg" %>
+  <% end %>
+
+  <div class="xl:sticky xl:top-[calc(var(--ribbon-height,0px)+1rem)] xl:self-start">
+    <div class="mb-2 flex items-center justify-between gap-2">
+      <span class="text-xs font-bold uppercase tracking-wide text-stone-500"><%= t("settings.ticket.preview") %></span>
+      <span class="flex items-center gap-1">
+        <button type="button" class="btn btn-secondary btn-sm" data-action="ticket-design#zoomMinus" title="<%= t("settings.ticket.zoom_minus") %>"><i class="bi bi-zoom-out"></i></button>
+        <button type="button" class="btn btn-ghost btn-sm w-16 font-mono" data-action="ticket-design#zoomFit" data-ticket-design-target="zoom" title="<%= t("settings.ticket.zoom_fit") %>">100 %</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-action="ticket-design#zoomPlus" title="<%= t("settings.ticket.zoom_in") %>"><i class="bi bi-zoom-in"></i></button>
+        <button type="button" class="btn btn-primary btn-sm ml-2" data-action="ticket-design#print" title="<%= t("settings.ticket.print_test_help") %>"><i class="bi bi-printer"></i> <%= t("settings.ticket.print_test") %></button>
+      </span>
+    </div>
+    <%# The preview is the real ticket, with its own stylesheet, inside an iframe %>
+    <iframe title="<%= t("settings.ticket.preview") %>" class="h-[75vh] min-h-[560px] w-full rounded border border-stone-300 bg-stone-200" data-action="load->ticket-design#zoomFit" srcdoc="<%= ERB::Util.html_escape(render(template: "settings/ticket_preview", layout: "layouts/ticket", formats: [ :html ]).to_str) %>" data-ticket-design-target="frame"></iframe>
+  </div>
+</div>

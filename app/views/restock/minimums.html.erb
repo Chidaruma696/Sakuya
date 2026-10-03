@@ -1,0 +1,22 @@
+<h1 class="mb-1 text-2xl font-bold"><%= t("restock.minimums_of", branch: @branch.name) %></h1>
+<p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("restock.minimums_help") %></p>
+<%= form_with url: restock_minimums_path(branch_id: @branch.id), method: :patch, class: "form" do |f| %>
+  <table class="table">
+    <thead><tr><th><%= t("common.product") %></th><th class="text-right"><%= t("restock.on_hand") %></th><th class="w-36"><%= t("restock.minimum") %></th><th class="w-36"><%= t("restock.maximum") %></th></tr></thead>
+    <tbody>
+      <% @products.each do |p| %>
+        <% m = @minimums[p.id] %>
+        <tr>
+          <td class="px-3 py-1.5"><%= p.name %> <span class="text-xs text-stone-500"><%= p.short_unit %></span></td>
+          <td class="px-3 py-1.5 text-right font-mono"><%= quantity(@stock_levels.fetch(p.id, 0), p) %></td>
+          <td class="px-3 py-1.5"><%= number_field_tag "minimums[#{p.id}][minimum]", m&.minimum&.to_s("F"), step: "0.001", min: 0, class: "input mt-0 font-mono" %></td>
+          <td class="px-3 py-1.5"><%= number_field_tag "minimums[#{p.id}][maximum]", m&.maximum&.to_s("F"), step: "0.001", min: 0, class: "input mt-0 font-mono" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="flex gap-2">
+    <%= f.submit t("common.save"), class: "btn btn-primary btn-lg" %>
+    <%= link_to t("common.cancel"), restock_path, class: "btn btn-ghost btn-lg" %>
+  </div>
+<% end %>

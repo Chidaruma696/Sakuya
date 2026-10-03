@@ -1,0 +1,20 @@
+<h1 class="mb-4 text-2xl font-bold"><%= t("stock_counts.stock_counts") %> · <%= current_branch %></h1>
+<% if @overdue %><p class="mb-4 rounded bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-800"><%= t("stock_counts.count_due", each: current_branch.count_interval_days) %> <%= link_to t("stock_counts.open"), new_stock_count_path, class: "link" %></p><% end %>
+<table class="table">
+  <thead><tr><th class="px-3 py-2"><%= t("common.folio") %></th><th class="px-3 py-2"><%= t("common.date") %></th><th class="px-3 py-2"><%= t("stock_counts.supervisor") %></th><th class="px-3 py-2"><%= t("stock_counts.responsible") %></th><th class="px-3 py-2"><%= t("common.status") %></th><th class="px-3 py-2 text-right"><%= t("stock_counts.shortage") %></th><th class="px-3 py-2 text-right"><%= t("stock_counts.surplus") %></th><th></th></tr></thead>
+  <tbody>
+    <% @stock_counts.each do |c| %>
+      <tr class="border-t border-stone-100">
+        <td class="px-3 py-2 font-mono"><%= c.folio %></td>
+        <td class="px-3 py-2"><%= l c.created_at, format: :short %></td>
+        <td class="px-3 py-2"><%= c.user %></td>
+        <td class="px-3 py-2"><%= c.responsible %></td>
+        <td class="px-3 py-2"><%= t("statuses.#{c.status}") %><%= " · #{t("stock_counts.partial_badge", count: c.lines.size)}" if c.partial? %></td>
+        <td class="px-3 py-2 text-right font-mono text-red-700"><%= format_money(c.shortage_cents) if c.shortage_cents %></td>
+        <td class="px-3 py-2 text-right font-mono text-green-700"><%= format_money(c.surplus_cents) if c.surplus_cents %></td>
+        <td class="px-3 py-2 text-right"><%= link_to t("common.open"), stock_count_path(c), class: "btn btn-primary btn-sm" %></td>
+      </tr>
+    <% end %>
+    <% if @stock_counts.empty? %><tr><td colspan="8" class="px-3 py-6 text-center text-stone-500"><%= t("stock_counts.no_stock_counts") %></td></tr><% end %>
+  </tbody>
+</table>

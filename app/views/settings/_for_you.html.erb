@@ -1,0 +1,17 @@
+<%= form_with url: settings_preferences_path, method: :patch, class: "form" do |f| %>
+  <% options = { language: Languages.all, theme: User::THEMES, density: User::DENSITIES, text_size: User::TEXT_SIZES } %>
+  <% options.each do |field, values| %>
+    <fieldset>
+      <legend class="mb-2 text-sm font-medium"><%= t("settings.#{field}") %></legend>
+      <div class="grid gap-2 sm:grid-cols-3">
+        <% values.each do |v| %>
+          <label class="option py-3 text-base">
+            <%= f.radio_button field, v, checked: current_user.public_send(field) == v, class: "sr-only", name: "user[#{field}]", onchange: "this.form.requestSubmit()" %>
+            <%= field == :language ? Languages.name(v) : t("settings.#{field}_options.#{v}") %>
+            <i class="bi bi-check-circle-fill option-check"></i>
+          </label>
+        <% end %>
+      </div>
+    </fieldset>
+  <% end %>
+<% end %>

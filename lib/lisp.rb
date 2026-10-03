@@ -1,58 +1,58 @@
-# El Lisp de Sakuya: un dialecto chico, escrito aquí, para las reglas de cada negocio.
+# Sakuya's Lisp: a small dialect, written here, for each business's rules.
 #
-# Solo sabe hacer lo que Sakuya le registra: no hay archivos, ni red, ni procesos, ni acceso a
-# Ruby. Cada evaluación lleva un contador de pasos y un límite de profundidad, así que un bucle
-# o una recursión sin fin se cortan con un error en vez de congelar la caja. El dinero va en
-# BigDecimal, nunca en flotante. Los nombres del lenguaje van en inglés, como en Emacs.
+# It can only do what Sakuya registers for it: no files, no network, no processes, no access to
+# Ruby. Every evaluation carries a step counter and a depth limit, so an endless loop or
+# recursion is cut off with an error instead of freezing the till. Money is BigDecimal, never
+# float. The language's names are in English, as in Emacs.
 #
-#   Lisp.ejecutar("(+ 1 2.50)")                    # => 0.35e1
-#   Lisp.ejecutar("(total)", funciones: { "total" => -> { 10 } })
+#   Lisp.run("(+ 1 2.50)")                    # => 0.35e1
+#   Lisp.run("(total)", functions: { "total" => -> { 10 } })
 module Lisp
   class Error < StandardError; end
-  # El texto no se puede leer: paréntesis sin cerrar, una cadena sin comillas de cierre…
-  class ErrorDeLectura < Error; end
-  # Se acabaron los pasos o la profundidad.
-  class Agotado < Error; end
+  # The text cannot be read: unclosed parentheses, a string with no closing quote…
+  class ReadError < Error; end
+  # Ran out of steps or depth.
+  class Exhausted < Error; end
 
-  LARGO_MAXIMO = 20_000
+  MAX_LENGTH = 20_000
 
-  # Un símbolo del programa (un nombre), distinto de una cadena y de una palabra clave (:x).
-  Simbolo = Data.define(:nombre) do
-    def to_s = nombre
+  # A symbol in the program (a name), distinct from a string and from a keyword (:x).
+  Sym = Data.define(:name) do
+    def to_s = name
   end
 
-  # Una función escrita en el programa: (lambda (x) …) o (define (f x) …).
-  Procedimiento = Data.define(:parametros, :cuerpo, :entorno, :nombre)
+  # A function written in the program: (lambda (x) …) or (define (f x) …).
+  Procedure = Data.define(:parameters, :body, :environment, :name)
 
-  # Una función de Sakuya, escrita en Ruby. `aridad` es un Range; `bloque` recibe los argumentos
-  # ya evaluados y, si lo pide, el evaluador (para las que llaman a otras funciones, como map).
-  Nativa = Data.define(:nombre, :aridad, :bloque, :con_evaluador)
+  # A Sakuya function, written in Ruby. `arity` is a Range; `block` gets the already evaluated
+  # arguments and, if it asks for it, the evaluator (for those that call other functions, like map).
+  Native = Data.define(:name, :arity, :block, :with_evaluator)
 
-  # Lee y evalúa todo el texto; devuelve el valor de la última expresión. `preludio` son formas ya
-  # leídas que se evalúan antes, en el mismo entorno (las funciones de los plugins).
-  def self.ejecutar(texto, funciones: {}, pasos: 10_000, profundidad: 100, preludio: [])
-    entorno = Entorno.new(Base.entorno)
-    funciones.each { |nombre, f| entorno.definir(nombre.to_s, f.is_a?(Nativa) ? f : Base.nativa(nombre.to_s, f)) }
-    evaluador = Evaluador.new(pasos: pasos, profundidad: profundidad)
-    preludio.each { |forma| evaluador.evaluar(forma, entorno) }
-    Lector.leer(texto).reduce(nil) { |_, forma| evaluador.evaluar(forma, entorno) }
+  # Reads and evaluates the whole text; returns the value of the last expression. `prelude` holds
+  # already read forms evaluated first, in the same environment (the plugins' functions).
+  def self.run(text, functions: {}, steps: 10_000, depth: 100, prelude: [])
+    environment = Environment.new(Base.environment)
+    functions.each { |name, f| environment.define(name.to_s, f.is_a?(Native) ? f : Base.native(name.to_s, f)) }
+    evaluator = Evaluator.new(steps: steps, depth: depth)
+    prelude.each { |form| evaluator.evaluate(form, environment) }
+    Reader.read(text).reduce(nil) { |_, form| evaluator.evaluate(form, environment) }
   end
 
-  # El valor escrito como se escribiría en el programa, para mensajes y para el REPL.
-  def self.a_texto(valor)
-    case valor
+  # The value written the way it would be written in the program, for messages and the REPL.
+  def self.to_text(value)
+    case value
     when nil then "nil"
     when true then "true"
     when false then "false"
-    when Simbolo then valor.nombre
-    when Symbol then ":#{valor}"
-    when String then valor.inspect
-    when BigDecimal then valor.to_s("F")
-    when Array then "(#{valor.map { |v| a_texto(v) }.join(" ")})"
-    when Hash then "{#{valor.map { |k, v| "#{a_texto(k)} #{a_texto(v)}" }.join(" ")}}"
-    when Procedimiento then "#<fn #{valor.nombre || "anónima"}>"
-    when Nativa then "#<fn #{valor.nombre}>"
-    else valor.to_s
+    when Sym then value.name
+    when Symbol then ":#{value}"
+    when String then value.inspect
+    when BigDecimal then value.to_s("F")
+    when Array then "(#{value.map { |v| to_text(v) }.join(" ")})"
+    when Hash then "{#{value.map { |k, v| "#{to_text(k)} #{to_text(v)}" }.join(" ")}}"
+    when Procedure then "#<fn #{value.name || I18n.t("lisp.anonymous")}>"
+    when Native then "#<fn #{value.name}>"
+    else value.to_s
     end
   end
 end

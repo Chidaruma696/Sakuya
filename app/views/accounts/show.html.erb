@@ -1,0 +1,82 @@
+<% p = @supplier %>
+<div class="mb-2 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= p.name %></h1>
+  <%= link_to icon("arrow-left", t("purchases.accounts_payable")), accounts_path, class: "btn btn-ghost btn-sm" %>
+</div>
+<p class="mb-4 text-sm text-stone-600"><%= [ p.contact, p.phone, p.tax_id ].compact_blank.join(" · ") %><%= " · #{t("purchases.credit_days").downcase}: #{p.credit_days}" %> · <%= link_to t("common.edit").downcase, edit_supplier_path(p), class: "link" if can?("purchases.invoice") %></p>
+<div class="mb-4 grid gap-4 md:grid-cols-3">
+  <div class="card">
+    <div class="stat-label"><%= t("purchases.owed") %></div>
+    <div class="stat-value text-3xl"><%= format_money(p.balance_cents) %></div>
+
+    <div class="mt-2 flex flex-wrap gap-2">
+      <%= link_to icon("file-earmark-plus", t("purchases.new_invoice")), new_invoice_path(supplier_id: p), class: "btn btn-secondary btn-xs" if can?("purchases.invoice") %>
+      <%= link_to icon("list-ul", t("purchases.invoices")), invoices_path(supplier_id: p), class: "btn btn-ghost btn-xs" %>
+    </div>
+  </div>
+  <% if can?("purchases.pay") %>
+    <div class="card md:col-span-2">
+      <h2 class="mb-1 font-semibold"><%= t("purchases.pay") %></h2>
+      <p class="mb-2 text-xs text-stone-500"><%= @shift ? t("purchases.payment_leaves_till", branch: current_branch) : t("purchases.payment_no_till", branch: current_branch) %></p>
+      <%= form_with url: pay_account_path(p), class: "fields-4 text-sm" do |f| %>
+        <div><%= f.label :supplier_invoice_id, t("purchases.invoice"), class: "block text-xs text-stone-500" %>
+          <%= f.select :supplier_invoice_id, @invoices.map { |x| [ "#{x.folio} · #{t("purchases.remaining").downcase} #{format_money(x.remaining_cents)}", x.id ] }, { include_blank: t("purchases.on_account"), selected: params[:invoice] }, class: "input mt-0" %></div>
+        <div><%= f.label :amount, t("till.amount"), class: "block text-xs text-stone-500" %><%= f.number_field :amount, step: "0.01", min: "0.01", required: true, class: "input mt-0 font-mono" %></div>
+        <div><%= f.label :payment_method, t("purchases.payment_method"), class: "block text-xs text-stone-500" %><%= f.select :payment_method, Payment::PAYMENT_METHODS.map { |x| [ t("payment_methods.#{x}"), x ] }, {}, class: "input mt-0" %></div>
+        <div><%= f.label :reference, t("purchases.reference"), class: "block text-xs text-stone-500" %><%= f.text_field :reference, class: "input mt-0" %></div>
+        <div class="md:col-span-2 xl:col-span-4"><%= f.submit t("purchases.register_payment"), class: "btn btn-success" %></div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<div class="grid gap-4 lg:grid-cols-2">
+  <div>
+    <h2 class="mb-2 font-semibold"><%= t("purchases.invoices_open") %></h2>
+    <table class="table">
+      <thead><tr><th><%= t("common.folio") %></th><th><%= t("common.date") %></th><th><%= t("purchases.due") %></th><th class="text-right"><%= t("till.amount") %></th><th class="text-right"><%= t("purchases.remaining") %></th></tr></thead>
+      <tbody>
+        <% @invoices.each do |x| %>
+          <tr class="<%= 'text-red-700' if x.overdue? %>"><td class="px-3 py-2"><%= link_to x.folio, invoice_path(x), class: "chip-folio" %></td><td class="px-3 py-2 whitespace-nowrap"><%= l x.date %></td><td class="px-3 py-2 whitespace-nowrap"><%= l x.due if x.due %></td><td class="px-3 py-2 text-right font-mono"><%= format_money(x.amount_cents) %></td><td class="px-3 py-2 text-right font-mono"><%= format_money(x.remaining_cents) %></td></tr>
+        <% end %>
+        <% if @invoices.empty? %><tr><td colspan="5" class="px-3 py-6 text-center text-stone-500"><%= t("purchases.no_invoices_open") %></td></tr><% end %>
+      </tbody>
+    </table>
+    <h2 class="mt-4 mb-2 font-semibold"><%= t("purchases.payments") %></h2>
+    <table class="table">
+      <thead><tr><th><%= t("common.date") %></th><th><%= t("purchases.invoice") %></th><th><%= t("purchases.payment_method") %></th><th><%= t("common.who") %></th><th class="text-right"><%= t("till.amount") %></th><th></th></tr></thead>
+      <tbody>
+        <% @payments.each do |g| %>
+          <tr class="<%= 'text-stone-400' unless g.current? %>">
+            <td class="px-3 py-2 whitespace-nowrap"><%= l g.created_at, format: :short %></td>
+            <td class="px-3 py-2"><%= g.invoice ? link_to(g.invoice.folio, invoice_path(g.invoice), class: "chip-folio") : t("purchases.on_account") %></td>
+            <td class="px-3 py-2"><%= t("payment_methods.#{g.payment_method}") %><%= " · #{g.reference}" if g.reference.present? %></td>
+            <td class="px-3 py-2"><%= g.user %></td>
+            <td class="px-3 py-2 text-right font-mono <%= 'line-through' unless g.current? %>"><%= format_money(g.amount_cents) %></td>
+            <td class="px-3 py-2 text-right">
+              <% if g.current? && can?("purchases.pay") && (g.withdrawal.nil? || g.shift&.open?) %>
+                <%= form_with url: void_payment_path(g), class: "flex gap-1", data: { turbo_confirm: t("purchases.confirm_void", amount: format_money(g.amount_cents)) } do |f| %>
+                  <%= f.text_field :reason, placeholder: t("common.reason").downcase, required: true, class: "input mt-0 w-32 text-xs" %>
+                  <%= f.submit t("purchases.void"), class: "btn btn-ghost-danger btn-xs" %>
+                <% end %>
+              <% elsif !g.current? %><span class="text-xs"><%= g.void_reason %></span><% end %>
+            </td>
+          </tr>
+        <% end %>
+        <% if @payments.empty? %><tr><td colspan="6" class="px-3 py-6 text-center text-stone-500"><%= t("purchases.no_payments") %></td></tr><% end %>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h2 class="mb-2 font-semibold"><%= t("purchases.book") %></h2>
+    <table class="table">
+      <thead><tr><th><%= t("common.date") %></th><th><%= t("common.kind") %></th><th><%= t("common.concept") %></th><th class="text-right">±</th><th class="text-right"><%= t("purchases.balance") %></th></tr></thead>
+      <tbody>
+        <% @movements.each do |m| %>
+          <tr><td class="px-3 py-1 whitespace-nowrap"><%= l m.date %></td><td class="px-3 py-1"><%= t("purchases.movements.#{m.kind}") %></td><td class="px-3 py-1 text-stone-600"><%= m.concept %> <span class="text-xs">(<%= m.user %>)</span></td>
+            <td class="px-3 py-1 text-right font-mono <%= m.delta_cents.negative? ? 'text-emerald-700' : '' %>"><%= format_money(m.delta_cents) %></td><td class="px-3 py-1 text-right font-mono"><%= format_money(m.balance_cents) %></td></tr>
+        <% end %>
+        <% if @movements.empty? %><tr><td colspan="5" class="px-3 py-6 text-center text-stone-500"><%= t("inventory.no_movements") %></td></tr><% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

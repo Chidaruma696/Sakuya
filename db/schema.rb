@@ -10,752 +10,752 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_000012) do
-  create_table "abonos", force: :cascade do |t|
-    t.integer "cliente_id", null: false
-    t.integer "corte_id", null: false
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_100000) do
+  create_table "account_payments", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.integer "branch_id", null: false
     t.datetime "created_at", null: false
+    t.integer "customer_id", null: false
     t.string "folio", null: false
-    t.string "forma", null: false
-    t.integer "monto_centavos", null: false
-    t.string "notas"
-    t.integer "sucursal_id", null: false
-    t.integer "usuario_id", null: false
-    t.index ["cliente_id"], name: "index_abonos_on_cliente_id"
-    t.index ["corte_id"], name: "index_abonos_on_corte_id"
-    t.index ["sucursal_id", "folio"], name: "index_abonos_on_sucursal_id_and_folio", unique: true
-    t.index ["sucursal_id"], name: "index_abonos_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_abonos_on_usuario_id"
-    t.check_constraint "forma IN ('efectivo', 'transferencia', 'deposito')", name: "abonos_forma"
-    t.check_constraint "monto_centavos > 0", name: "abonos_monto"
+    t.string "notes"
+    t.string "payment_method", null: false
+    t.integer "shift_id", null: false
+    t.integer "user_id", null: false
+    t.index ["branch_id", "folio"], name: "index_account_payments_on_branch_id_and_folio", unique: true
+    t.index ["branch_id"], name: "index_account_payments_on_branch_id"
+    t.index ["customer_id"], name: "index_account_payments_on_customer_id"
+    t.index ["shift_id"], name: "index_account_payments_on_shift_id"
+    t.index ["user_id"], name: "index_account_payments_on_user_id"
+    t.check_constraint "amount_cents > 0", name: "account_payments_amount"
+    t.check_constraint "payment_method IN ('cash', 'transfer', 'deposit')", name: "account_payments_payment_method"
   end
 
-  create_table "ajustes", force: :cascade do |t|
-    t.string "clave", null: false
+  create_table "branch_prices", force: :cascade do |t|
+    t.integer "branch_id", null: false
     t.datetime "created_at", null: false
+    t.integer "price_cents", null: false
+    t.integer "product_id", null: false
     t.datetime "updated_at", null: false
-    t.text "valor"
-    t.index ["clave"], name: "index_ajustes_on_clave", unique: true
+    t.index ["branch_id"], name: "index_branch_prices_on_branch_id"
+    t.index ["product_id", "branch_id"], name: "index_branch_prices_on_product_id_and_branch_id", unique: true
+    t.index ["product_id"], name: "index_branch_prices_on_product_id"
+    t.check_constraint "price_cents >= 0", name: "branch_prices_no_negative"
   end
 
-  create_table "cargos", force: :cascade do |t|
-    t.integer "conteo_id"
+  create_table "branches", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.integer "cash_limit_cents", default: 300000, null: false
+    t.string "code", null: false
+    t.integer "count_interval_days"
     t.datetime "created_at", null: false
-    t.text "detalle"
-    t.string "estado", default: "pendiente", null: false
-    t.integer "monto_centavos", null: false
-    t.datetime "resuelto_en"
-    t.integer "resuelto_por_id"
-    t.integer "revision_id"
-    t.integer "sucursal_id", null: false
+    t.string "kind", default: "store", null: false
+    t.string "name", null: false
+    t.string "network_printer"
+    t.string "printer", default: "browser", null: false
     t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.index ["conteo_id"], name: "index_cargos_on_conteo_id"
-    t.index ["resuelto_por_id"], name: "index_cargos_on_resuelto_por_id"
-    t.index ["revision_id"], name: "index_cargos_on_revision_id"
-    t.index ["sucursal_id"], name: "index_cargos_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_cargos_on_usuario_id"
-    t.check_constraint "estado IN ('pendiente', 'cobrado', 'perdonado')", name: "cargos_estado"
-    t.check_constraint "monto_centavos > 0", name: "cargos_monto"
+    t.index ["code"], name: "index_branches_on_code", unique: true
+    t.check_constraint "kind IN ('head_office', 'store', 'warehouse')", name: "branches_kind"
   end
 
-  create_table "clientes", force: :cascade do |t|
-    t.boolean "activo", default: true, null: false
+  create_table "charges", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.integer "branch_id", null: false
     t.datetime "created_at", null: false
-    t.string "direccion"
-    t.integer "limite_credito_centavos", default: 0, null: false
-    t.string "nombre", null: false
-    t.string "notas"
-    t.string "rfc"
-    t.string "telefono"
+    t.text "detail"
+    t.datetime "resolved_at"
+    t.integer "resolved_by_id"
+    t.integer "review_id"
+    t.string "status", default: "pending", null: false
+    t.integer "stock_count_id"
     t.datetime "updated_at", null: false
-    t.index ["nombre"], name: "index_clientes_on_nombre"
+    t.integer "user_id", null: false
+    t.index ["branch_id"], name: "index_charges_on_branch_id"
+    t.index ["resolved_by_id"], name: "index_charges_on_resolved_by_id"
+    t.index ["review_id"], name: "index_charges_on_review_id"
+    t.index ["stock_count_id"], name: "index_charges_on_stock_count_id"
+    t.index ["user_id"], name: "index_charges_on_user_id"
+    t.check_constraint "amount_cents > 0", name: "charges_amount"
+    t.check_constraint "status IN ('pending', 'paid', 'forgiven')", name: "charges_status"
   end
 
-  create_table "codigos_barras", force: :cascade do |t|
-    t.string "codigo", null: false
+  create_table "counters", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.integer "producto_id", null: false
+    t.string "key", null: false
+    t.integer "last", default: 0, null: false
     t.datetime "updated_at", null: false
-    t.index ["codigo"], name: "index_codigos_barras_on_codigo", unique: true
-    t.index ["producto_id"], name: "index_codigos_barras_on_producto_id"
+    t.index ["key"], name: "index_counters_on_key", unique: true
   end
 
-  create_table "consultas_repl", force: :cascade do |t|
+  create_table "credit_movements", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.integer "branch_id", null: false
     t.datetime "created_at", null: false
-    t.boolean "ok", null: false
-    t.integer "sucursal_id", null: false
-    t.text "texto", null: false
-    t.integer "usuario_id", null: false
-    t.index ["created_at"], name: "index_consultas_repl_on_created_at"
-    t.index ["sucursal_id"], name: "index_consultas_repl_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_consultas_repl_on_usuario_id"
+    t.integer "customer_id", null: false
+    t.date "date", null: false
+    t.string "kind", null: false
+    t.string "reason"
+    t.integer "reference_id"
+    t.string "reference_type"
+    t.integer "user_id", null: false
+    t.index ["branch_id"], name: "index_credit_movements_on_branch_id"
+    t.index ["customer_id", "date", "id"], name: "index_credit_movements_on_customer_id_and_date_and_id"
+    t.index ["customer_id"], name: "index_credit_movements_on_customer_id"
+    t.index ["reference_type", "reference_id"], name: "index_credit_movements_on_reference"
+    t.index ["user_id"], name: "index_credit_movements_on_user_id"
+    t.check_constraint "kind IN ('charge', 'account_payment', 'refund')", name: "credit_movements_kind"
   end
 
-  create_table "contadores", force: :cascade do |t|
-    t.string "clave", null: false
+  create_table "customers", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.string "address"
     t.datetime "created_at", null: false
-    t.integer "ultimo", default: 0, null: false
+    t.integer "credit_limit_cents", default: 0, null: false
+    t.string "name", null: false
+    t.string "notes"
+    t.string "phone"
+    t.string "tax_id"
     t.datetime "updated_at", null: false
-    t.index ["clave"], name: "index_contadores_on_clave", unique: true
-  end
-
-  create_table "conteo_lineas", force: :cascade do |t|
-    t.integer "conteo_id", null: false
-    t.datetime "created_at", null: false
-    t.decimal "diferencia", precision: 12, scale: 3
-    t.integer "diferencia_centavos"
-    t.decimal "escaneado", precision: 12, scale: 3, default: "0.0", null: false
-    t.decimal "manual", precision: 12, scale: 3, default: "0.0", null: false
-    t.integer "producto_id", null: false
-    t.decimal "sistema", precision: 12, scale: 3, default: "0.0", null: false
-    t.datetime "updated_at", null: false
-    t.index ["conteo_id", "producto_id"], name: "index_conteo_lineas_on_conteo_id_and_producto_id", unique: true
-    t.index ["conteo_id"], name: "index_conteo_lineas_on_conteo_id"
-    t.index ["producto_id"], name: "index_conteo_lineas_on_producto_id"
-  end
-
-  create_table "conteos", force: :cascade do |t|
-    t.string "alcance", default: "total", null: false
-    t.datetime "cerrado_en"
-    t.datetime "created_at", null: false
-    t.string "estado", default: "abierto", null: false
-    t.integer "faltante_centavos"
-    t.string "folio", null: false
-    t.text "notas"
-    t.integer "responsable_id", null: false
-    t.integer "sobrante_centavos"
-    t.integer "sucursal_id", null: false
-    t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.index ["responsable_id"], name: "index_conteos_on_responsable_id"
-    t.index ["sucursal_id", "estado"], name: "index_conteos_on_sucursal_id_and_estado"
-    t.index ["sucursal_id", "folio"], name: "index_conteos_on_sucursal_y_folio", unique: true
-    t.index ["sucursal_id"], name: "index_conteos_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_conteos_on_usuario_id"
-    t.check_constraint "estado IN ('abierto', 'cerrado')", name: "conteos_estado"
-  end
-
-  create_table "cortes", force: :cascade do |t|
-    t.datetime "abierto_en", null: false
-    t.datetime "cerrado_en"
-    t.integer "cerrado_por_id"
-    t.integer "contado_centavos"
-    t.datetime "created_at", null: false
-    t.text "desglose"
-    t.integer "diferencia_centavos"
-    t.integer "esperado_centavos"
-    t.string "estado", default: "abierto", null: false
-    t.string "folio", null: false
-    t.integer "fondo_centavos", default: 0, null: false
-    t.integer "sucursal_id", null: false
-    t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.index ["cerrado_por_id"], name: "index_cortes_on_cerrado_por_id"
-    t.index ["sucursal_id", "estado"], name: "index_cortes_on_sucursal_id_and_estado"
-    t.index ["sucursal_id", "folio"], name: "index_cortes_on_sucursal_y_folio", unique: true
-    t.index ["sucursal_id"], name: "index_cortes_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_cortes_on_usuario_id"
-    t.check_constraint "estado IN ('abierto', 'cerrado')", name: "cortes_estado"
-    t.check_constraint "fondo_centavos >= 0", name: "cortes_fondo"
-  end
-
-  create_table "devolucion_lineas", force: :cascade do |t|
-    t.decimal "cantidad", precision: 12, scale: 3, null: false
-    t.datetime "created_at", null: false
-    t.integer "devolucion_id", null: false
-    t.integer "importe_centavos", null: false
-    t.datetime "updated_at", null: false
-    t.integer "venta_linea_id", null: false
-    t.index ["devolucion_id"], name: "index_devolucion_lineas_on_devolucion_id"
-    t.index ["venta_linea_id"], name: "index_devolucion_lineas_on_venta_linea_id"
-    t.check_constraint "cantidad > 0", name: "devolucion_lineas_cantidad"
-  end
-
-  create_table "devoluciones", force: :cascade do |t|
-    t.integer "a_cuenta_centavos", default: 0, null: false
-    t.integer "corte_id"
-    t.datetime "created_at", null: false
-    t.string "folio", null: false
-    t.string "motivo", null: false
-    t.integer "sucursal_id", null: false
-    t.integer "total_centavos", null: false
-    t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.integer "venta_id", null: false
-    t.index ["corte_id"], name: "index_devoluciones_on_corte_id"
-    t.index ["sucursal_id", "folio"], name: "index_devoluciones_on_sucursal_y_folio", unique: true
-    t.index ["sucursal_id"], name: "index_devoluciones_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_devoluciones_on_usuario_id"
-    t.index ["venta_id"], name: "index_devoluciones_on_venta_id"
-  end
-
-  create_table "existencias", force: :cascade do |t|
-    t.decimal "cantidad", precision: 12, scale: 3, default: "0.0", null: false
-    t.datetime "created_at", null: false
-    t.integer "producto_id", null: false
-    t.integer "sucursal_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["producto_id"], name: "index_existencias_on_producto_id"
-    t.index ["sucursal_id", "producto_id"], name: "index_existencias_on_sucursal_id_and_producto_id", unique: true
-    t.index ["sucursal_id"], name: "index_existencias_on_sucursal_id"
-    t.check_constraint "cantidad >= 0", name: "existencias_no_negativas"
-  end
-
-  create_table "factura_proveedor_lineas", force: :cascade do |t|
-    t.integer "cajas", default: 0, null: false
-    t.decimal "cantidad", precision: 12, scale: 3, null: false
-    t.datetime "created_at", null: false
-    t.integer "factura_proveedor_id", null: false
-    t.integer "importe_centavos", null: false
-    t.integer "precio_centavos", null: false
-    t.integer "producto_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["factura_proveedor_id"], name: "index_factura_proveedor_lineas_on_factura_proveedor_id"
-    t.index ["producto_id"], name: "index_factura_proveedor_lineas_on_producto_id"
-  end
-
-  create_table "facturas_proveedor", force: :cascade do |t|
-    t.string "concepto"
-    t.datetime "created_at", null: false
-    t.string "estado", default: "abierta", null: false
-    t.date "fecha", null: false
-    t.string "folio", null: false
-    t.integer "monto_centavos", default: 0, null: false
-    t.string "motivo_cancelacion"
-    t.integer "proveedor_id", null: false
-    t.integer "sucursal_id", null: false
-    t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.date "vence"
-    t.index ["proveedor_id", "folio"], name: "index_facturas_proveedor_on_proveedor_id_and_folio", unique: true
-    t.index ["proveedor_id"], name: "index_facturas_proveedor_on_proveedor_id"
-    t.index ["sucursal_id"], name: "index_facturas_proveedor_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_facturas_proveedor_on_usuario_id"
-    t.check_constraint "estado IN ('abierta', 'cancelada')", name: "facturas_proveedor_estado"
+    t.index ["name"], name: "index_customers_on_name"
   end
 
   create_table "folios", force: :cascade do |t|
+    t.integer "branch_id", null: false
     t.datetime "created_at", null: false
-    t.string "prefijo", null: false
-    t.integer "sucursal_id", null: false
-    t.integer "ultimo", default: 0, null: false
+    t.integer "last", default: 0, null: false
+    t.string "prefix", null: false
     t.datetime "updated_at", null: false
-    t.index ["sucursal_id", "prefijo"], name: "index_folios_on_sucursal_id_and_prefijo", unique: true
-    t.index ["sucursal_id"], name: "index_folios_on_sucursal_id"
+    t.index ["branch_id", "prefix"], name: "index_folios_on_branch_id_and_prefix", unique: true
+    t.index ["branch_id"], name: "index_folios_on_branch_id"
   end
 
-  create_table "minimos", force: :cascade do |t|
+  create_table "minimums", force: :cascade do |t|
+    t.integer "branch_id", null: false
     t.datetime "created_at", null: false
-    t.decimal "maximo", precision: 12, scale: 3
-    t.decimal "minimo", precision: 12, scale: 3, null: false
-    t.integer "producto_id", null: false
-    t.integer "sucursal_id", null: false
+    t.decimal "maximum", precision: 12, scale: 3
+    t.decimal "minimum", precision: 12, scale: 3, null: false
+    t.integer "product_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["producto_id"], name: "index_minimos_on_producto_id"
-    t.index ["sucursal_id", "producto_id"], name: "index_minimos_on_sucursal_id_and_producto_id", unique: true
-    t.index ["sucursal_id"], name: "index_minimos_on_sucursal_id"
-    t.check_constraint "maximo IS NULL OR maximo >= minimo", name: "minimos_maximo"
-    t.check_constraint "minimo >= 0", name: "minimos_minimo"
+    t.index ["branch_id", "product_id"], name: "index_minimums_on_branch_id_and_product_id", unique: true
+    t.index ["branch_id"], name: "index_minimums_on_branch_id"
+    t.index ["product_id"], name: "index_minimums_on_product_id"
+    t.check_constraint "maximum IS NULL OR maximum >= minimum", name: "minimums_maximum"
+    t.check_constraint "minimum >= 0", name: "minimums_minimum"
   end
 
-  create_table "movimientos", force: :cascade do |t|
-    t.decimal "cantidad", precision: 12, scale: 3, null: false
+  create_table "movements", force: :cascade do |t|
+    t.decimal "balance", precision: 12, scale: 3, null: false
+    t.integer "branch_id", null: false
+    t.date "business_date", null: false
     t.datetime "created_at", null: false
-    t.date "fecha_negocio", null: false
-    t.string "motivo"
-    t.integer "producto_id", null: false
-    t.integer "referencia_id"
-    t.string "referencia_type"
-    t.decimal "saldo", precision: 12, scale: 3, null: false
-    t.integer "sucursal_id", null: false
-    t.string "tipo", null: false
+    t.string "kind", null: false
+    t.integer "product_id", null: false
+    t.decimal "quantity", precision: 12, scale: 3, null: false
+    t.string "reason"
+    t.integer "reference_id"
+    t.string "reference_type"
     t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.index ["producto_id"], name: "index_movimientos_on_producto_id"
-    t.index ["referencia_type", "referencia_id"], name: "index_movimientos_on_referencia"
-    t.index ["sucursal_id", "fecha_negocio"], name: "index_movimientos_on_sucursal_id_and_fecha_negocio"
-    t.index ["sucursal_id", "producto_id", "created_at"], name: "idx_on_sucursal_id_producto_id_created_at_be784bb004"
-    t.index ["sucursal_id"], name: "index_movimientos_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_movimientos_on_usuario_id"
-    t.check_constraint "cantidad > 0", name: "movimientos_cantidad_positiva"
-    t.check_constraint "tipo IN ('entrada', 'recepcion', 'devolucion_cliente', 'ajuste_entrada', 'venta', 'salida', 'merma', 'ajuste_salida')", name: "movimientos_tipo"
+    t.integer "user_id", null: false
+    t.index ["branch_id", "business_date"], name: "index_movements_on_branch_id_and_business_date"
+    t.index ["branch_id", "product_id", "created_at"], name: "idx_on_branch_id_product_id_created_at_be784bb004"
+    t.index ["branch_id"], name: "index_movements_on_branch_id"
+    t.index ["product_id"], name: "index_movements_on_product_id"
+    t.index ["reference_type", "reference_id"], name: "index_movements_on_reference"
+    t.index ["user_id"], name: "index_movements_on_user_id"
+    t.check_constraint "kind IN ('inflow', 'receipt', 'customer_return', 'adjustment_inflow', 'sale', 'outflow', 'waste', 'adjustment_outflow')", name: "movements_kind"
+    t.check_constraint "quantity > 0", name: "movements_quantity_positive"
   end
 
-  create_table "movimientos_credito", force: :cascade do |t|
-    t.integer "cliente_id", null: false
+  create_table "order_lines", force: :cascade do |t|
+    t.integer "order_id", null: false
+    t.integer "product_id", null: false
+    t.decimal "quantity", precision: 12, scale: 3, null: false
+    t.index ["order_id"], name: "index_order_lines_on_order_id"
+    t.index ["product_id"], name: "index_order_lines_on_product_id"
+    t.check_constraint "quantity > 0", name: "order_lines_quantity"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "branch_id", null: false
+    t.string "cancellation_reason"
     t.datetime "created_at", null: false
-    t.date "fecha", null: false
-    t.integer "monto_centavos", null: false
-    t.string "motivo"
-    t.integer "referencia_id"
-    t.string "referencia_type"
-    t.integer "sucursal_id", null: false
-    t.string "tipo", null: false
-    t.integer "usuario_id", null: false
-    t.index ["cliente_id", "fecha", "id"], name: "index_movimientos_credito_on_cliente_id_and_fecha_and_id"
-    t.index ["cliente_id"], name: "index_movimientos_credito_on_cliente_id"
-    t.index ["referencia_type", "referencia_id"], name: "index_movimientos_credito_on_referencia"
-    t.index ["sucursal_id"], name: "index_movimientos_credito_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_movimientos_credito_on_usuario_id"
-    t.check_constraint "tipo IN ('cargo', 'abono', 'devolucion')", name: "movimientos_credito_tipo"
-  end
-
-  create_table "movimientos_proveedor", force: :cascade do |t|
-    t.string "concepto"
-    t.datetime "created_at", null: false
-    t.integer "delta_centavos", null: false
-    t.integer "factura_proveedor_id"
-    t.date "fecha", null: false
-    t.integer "monto_centavos", null: false
-    t.integer "pago_proveedor_id"
-    t.integer "proveedor_id", null: false
-    t.integer "saldo_centavos", null: false
-    t.integer "sucursal_id", null: false
-    t.string "tipo", null: false
-    t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.index ["factura_proveedor_id"], name: "index_movimientos_proveedor_on_factura_proveedor_id"
-    t.index ["pago_proveedor_id"], name: "index_movimientos_proveedor_on_pago_proveedor_id"
-    t.index ["proveedor_id"], name: "index_movimientos_proveedor_on_proveedor_id"
-    t.index ["sucursal_id"], name: "index_movimientos_proveedor_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_movimientos_proveedor_on_usuario_id"
-    t.check_constraint "tipo IN ('cargo', 'abono', 'ajuste')", name: "movimientos_proveedor_tipo"
-  end
-
-  create_table "pagos", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.string "forma", null: false
-    t.integer "monto_centavos", null: false
-    t.datetime "updated_at", null: false
-    t.integer "venta_id", null: false
-    t.index ["venta_id"], name: "index_pagos_on_venta_id"
-    t.check_constraint "forma IN ('efectivo', 'transferencia', 'deposito', 'credito')", name: "pagos_forma"
-    t.check_constraint "monto_centavos > 0", name: "pagos_monto"
-  end
-
-  create_table "pagos_proveedor", force: :cascade do |t|
-    t.integer "anulado_por_id"
-    t.integer "corte_id"
-    t.datetime "created_at", null: false
-    t.string "estado", default: "vigente", null: false
-    t.integer "factura_proveedor_id"
-    t.string "forma", default: "efectivo", null: false
-    t.integer "monto_centavos", null: false
-    t.string "motivo_anulacion"
-    t.integer "proveedor_id", null: false
-    t.string "referencia"
-    t.integer "retiro_id"
-    t.integer "sucursal_id", null: false
-    t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.index ["anulado_por_id"], name: "index_pagos_proveedor_on_anulado_por_id"
-    t.index ["corte_id"], name: "index_pagos_proveedor_on_corte_id"
-    t.index ["factura_proveedor_id"], name: "index_pagos_proveedor_on_factura_proveedor_id"
-    t.index ["proveedor_id"], name: "index_pagos_proveedor_on_proveedor_id"
-    t.index ["retiro_id"], name: "index_pagos_proveedor_on_retiro_id"
-    t.index ["sucursal_id"], name: "index_pagos_proveedor_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_pagos_proveedor_on_usuario_id"
-    t.check_constraint "estado IN ('vigente', 'anulado')", name: "pagos_proveedor_estado"
-  end
-
-  create_table "pedido_lineas", force: :cascade do |t|
-    t.decimal "cantidad", precision: 12, scale: 3, null: false
-    t.integer "pedido_id", null: false
-    t.integer "producto_id", null: false
-    t.index ["pedido_id"], name: "index_pedido_lineas_on_pedido_id"
-    t.index ["producto_id"], name: "index_pedido_lineas_on_producto_id"
-    t.check_constraint "cantidad > 0", name: "pedido_lineas_cantidad"
-  end
-
-  create_table "pedidos", force: :cascade do |t|
-    t.boolean "apartar", default: true, null: false
-    t.integer "cliente_id", null: false
-    t.datetime "created_at", null: false
-    t.string "estado", default: "abierto", null: false
-    t.date "fecha_entrega"
+    t.integer "customer_id", null: false
+    t.date "delivery_date"
     t.string "folio", null: false
-    t.string "motivo_cancelacion"
-    t.string "notas"
-    t.integer "sucursal_id", null: false
+    t.string "notes"
+    t.boolean "reserve", default: true, null: false
+    t.integer "sale_id"
+    t.string "status", default: "open", null: false
     t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.integer "venta_id"
-    t.index ["cliente_id"], name: "index_pedidos_on_cliente_id"
-    t.index ["sucursal_id", "folio"], name: "index_pedidos_on_sucursal_id_and_folio", unique: true
-    t.index ["sucursal_id"], name: "index_pedidos_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_pedidos_on_usuario_id"
-    t.index ["venta_id"], name: "index_pedidos_on_venta_id"
-    t.check_constraint "estado IN ('abierto', 'entregado', 'cancelado')", name: "pedidos_estado"
+    t.integer "user_id", null: false
+    t.index ["branch_id", "folio"], name: "index_orders_on_branch_id_and_folio", unique: true
+    t.index ["branch_id"], name: "index_orders_on_branch_id"
+    t.index ["customer_id"], name: "index_orders_on_customer_id"
+    t.index ["sale_id"], name: "index_orders_on_sale_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
+    t.check_constraint "status IN ('open', 'delivered', 'cancelled')", name: "orders_status"
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.datetime "created_at", null: false
+    t.string "payment_method", null: false
+    t.integer "sale_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sale_id"], name: "index_payments_on_sale_id"
+    t.check_constraint "amount_cents > 0", name: "payments_amount"
+    t.check_constraint "payment_method IN ('cash', 'transfer', 'deposit', 'credit')", name: "payments_payment_method"
   end
 
   create_table "plugins", force: :cascade do |t|
-    t.boolean "activo", default: false, null: false
-    t.string "autor"
-    t.text "codigo", null: false
+    t.boolean "active", default: false, null: false
+    t.string "author"
+    t.text "code", null: false
     t.datetime "created_at", null: false
-    t.string "descripcion"
-    t.string "identificador", null: false
-    t.string "nombre", null: false
+    t.string "description"
+    t.string "identifier", null: false
+    t.string "name", null: false
     t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
+    t.integer "user_id", null: false
     t.string "version"
-    t.index ["identificador"], name: "index_plugins_on_identificador", unique: true
-    t.index ["usuario_id"], name: "index_plugins_on_usuario_id"
+    t.index ["identifier"], name: "index_plugins_on_identifier", unique: true
+    t.index ["user_id"], name: "index_plugins_on_user_id"
   end
 
-  create_table "precios_sucursal", force: :cascade do |t|
+  create_table "product_barcodes", force: :cascade do |t|
+    t.string "code", null: false
     t.datetime "created_at", null: false
-    t.integer "precio_centavos", null: false
-    t.integer "producto_id", null: false
-    t.integer "sucursal_id", null: false
+    t.integer "product_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["producto_id", "sucursal_id"], name: "index_precios_sucursal_on_producto_id_and_sucursal_id", unique: true
-    t.index ["producto_id"], name: "index_precios_sucursal_on_producto_id"
-    t.index ["sucursal_id"], name: "index_precios_sucursal_on_sucursal_id"
-    t.check_constraint "precio_centavos >= 0", name: "precios_sucursal_no_negativo"
+    t.index ["code"], name: "index_product_barcodes_on_code", unique: true
+    t.index ["product_id"], name: "index_product_barcodes_on_product_id"
   end
 
-  create_table "productos", force: :cascade do |t|
-    t.boolean "activo", default: true, null: false
-    t.string "clave", null: false
+  create_table "products", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
-    t.string "linea"
-    t.string "nombre", null: false
+    t.string "key", null: false
+    t.string "line"
+    t.string "name", null: false
     t.integer "plu", null: false
-    t.integer "precio_centavos", default: 0, null: false
-    t.string "unidad", default: "kg", null: false
+    t.integer "price_cents", default: 0, null: false
+    t.string "unit", default: "kg", null: false
     t.datetime "updated_at", null: false
-    t.index ["clave"], name: "index_productos_on_clave", unique: true
-    t.index ["plu"], name: "index_productos_on_plu", unique: true
-    t.check_constraint "plu BETWEEN 1 AND 99999", name: "productos_plu_rango"
-    t.check_constraint "precio_centavos >= 0", name: "productos_precio_no_negativo"
-    t.check_constraint "unidad IN ('kg', 'pieza', 'litro', 'metro')", name: "productos_unidad"
+    t.index ["key"], name: "index_products_on_key", unique: true
+    t.index ["plu"], name: "index_products_on_plu", unique: true
+    t.check_constraint "plu BETWEEN 1 AND 99999", name: "products_plu_range"
+    t.check_constraint "price_cents >= 0", name: "products_price_no_negative"
+    t.check_constraint "unit IN ('kg', 'piece', 'liter', 'meter')", name: "products_unit"
   end
 
-  create_table "promociones", force: :cascade do |t|
-    t.boolean "activa", default: true, null: false
-    t.decimal "cantidad_minima", precision: 12, scale: 3, default: "0.0", null: false
+  create_table "promotions", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.integer "branch_id"
     t.datetime "created_at", null: false
-    t.date "desde"
-    t.date "hasta"
-    t.string "nombre", null: false
-    t.decimal "porcentaje", precision: 5, scale: 2
-    t.integer "precio_centavos"
-    t.integer "producto_id", null: false
-    t.integer "sucursal_id"
-    t.string "tipo", null: false
+    t.date "from"
+    t.string "kind", null: false
+    t.decimal "minimum_quantity", precision: 12, scale: 3, default: "0.0", null: false
+    t.string "name", null: false
+    t.decimal "percentage", precision: 5, scale: 2
+    t.integer "price_cents"
+    t.integer "product_id", null: false
+    t.date "to"
     t.datetime "updated_at", null: false
-    t.index ["producto_id", "activa"], name: "index_promociones_on_producto_id_and_activa"
-    t.index ["producto_id"], name: "index_promociones_on_producto_id"
-    t.index ["sucursal_id"], name: "index_promociones_on_sucursal_id"
-    t.check_constraint "tipo IN ('precio', 'porcentaje', 'por_cantidad')", name: "promociones_tipo"
+    t.index ["branch_id"], name: "index_promotions_on_branch_id"
+    t.index ["product_id", "active"], name: "index_promotions_on_product_id_and_active"
+    t.index ["product_id"], name: "index_promotions_on_product_id"
+    t.check_constraint "kind IN ('price', 'percentage', 'by_quantity')", name: "promotions_kind"
   end
 
-  create_table "proveedores", force: :cascade do |t|
-    t.boolean "activo", default: true, null: false
-    t.string "contacto"
+  create_table "receipt_lines", force: :cascade do |t|
+    t.integer "boxes", default: 0, null: false
     t.datetime "created_at", null: false
-    t.integer "dias_credito", default: 0, null: false
-    t.string "nombre", null: false
-    t.string "notas"
-    t.string "rfc"
-    t.string "telefono"
+    t.integer "product_id", null: false
+    t.decimal "quantity", precision: 12, scale: 3, null: false
+    t.integer "receipt_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["nombre"], name: "index_proveedores_on_nombre", unique: true
+    t.index ["product_id"], name: "index_receipt_lines_on_product_id"
+    t.index ["receipt_id"], name: "index_receipt_lines_on_receipt_id"
   end
 
-  create_table "recepcion_lineas", force: :cascade do |t|
-    t.integer "cajas", default: 0, null: false
-    t.decimal "cantidad", precision: 12, scale: 3, null: false
+  create_table "receipts", force: :cascade do |t|
+    t.integer "branch_id", null: false
+    t.string "cancellation_reason"
     t.datetime "created_at", null: false
-    t.integer "producto_id", null: false
-    t.integer "recepcion_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["producto_id"], name: "index_recepcion_lineas_on_producto_id"
-    t.index ["recepcion_id"], name: "index_recepcion_lineas_on_recepcion_id"
-  end
-
-  create_table "recepciones", force: :cascade do |t|
-    t.string "clave"
-    t.datetime "created_at", null: false
-    t.string "estado", default: "registrada", null: false
-    t.integer "factura_proveedor_id"
-    t.date "fecha", null: false
+    t.date "date", null: false
+    t.string "delivery_note"
     t.string "folio", null: false
-    t.string "motivo_cancelacion"
-    t.string "notas"
-    t.integer "proveedor_id", null: false
-    t.string "remision"
-    t.integer "sucursal_id", null: false
+    t.string "key"
+    t.string "notes"
+    t.string "status", default: "registered", null: false
+    t.integer "supplier_id", null: false
+    t.integer "supplier_invoice_id"
     t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.index ["factura_proveedor_id"], name: "index_recepciones_on_factura_proveedor_id"
-    t.index ["proveedor_id"], name: "index_recepciones_on_proveedor_id"
-    t.index ["sucursal_id", "clave"], name: "index_recepciones_on_sucursal_id_and_clave", unique: true, where: "clave IS NOT NULL"
-    t.index ["sucursal_id", "folio"], name: "index_recepciones_on_sucursal_id_and_folio", unique: true
-    t.index ["sucursal_id"], name: "index_recepciones_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_recepciones_on_usuario_id"
-    t.check_constraint "estado IN ('registrada', 'cancelada')", name: "recepciones_estado"
+    t.integer "user_id", null: false
+    t.index ["branch_id", "folio"], name: "index_receipts_on_branch_id_and_folio", unique: true
+    t.index ["branch_id", "key"], name: "index_receipts_on_branch_id_and_key", unique: true, where: "key IS NOT NULL"
+    t.index ["branch_id"], name: "index_receipts_on_branch_id"
+    t.index ["supplier_id"], name: "index_receipts_on_supplier_id"
+    t.index ["supplier_invoice_id"], name: "index_receipts_on_supplier_invoice_id"
+    t.index ["user_id"], name: "index_receipts_on_user_id"
+    t.check_constraint "status IN ('registered', 'cancelled')", name: "receipts_status"
   end
 
-  create_table "reglas", force: :cascade do |t|
-    t.text "codigo", null: false
+  create_table "refund_lines", force: :cascade do |t|
+    t.integer "amount_cents", null: false
     t.datetime "created_at", null: false
-    t.string "gancho", null: false
-    t.integer "usuario_id", null: false
-    t.integer "version", default: 1, null: false
-    t.index ["gancho", "id"], name: "index_reglas_on_gancho_and_id"
-    t.index ["usuario_id"], name: "index_reglas_on_usuario_id"
+    t.decimal "quantity", precision: 12, scale: 3, null: false
+    t.integer "refund_id", null: false
+    t.integer "sale_line_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["refund_id"], name: "index_refund_lines_on_refund_id"
+    t.index ["sale_line_id"], name: "index_refund_lines_on_sale_line_id"
+    t.check_constraint "quantity > 0", name: "refund_lines_quantity"
   end
 
-  create_table "retiros", force: :cascade do |t|
-    t.integer "autorizado_por_id"
-    t.integer "corte_id", null: false
+  create_table "refunds", force: :cascade do |t|
+    t.integer "branch_id", null: false
     t.datetime "created_at", null: false
-    t.integer "monto_centavos", null: false
-    t.string "motivo", null: false
+    t.string "folio", null: false
+    t.integer "on_account_cents", default: 0, null: false
+    t.string "reason", null: false
+    t.integer "sale_id", null: false
+    t.integer "shift_id"
+    t.integer "total_cents", null: false
     t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.index ["autorizado_por_id"], name: "index_retiros_on_autorizado_por_id"
-    t.index ["corte_id"], name: "index_retiros_on_corte_id"
-    t.index ["usuario_id"], name: "index_retiros_on_usuario_id"
-    t.check_constraint "monto_centavos > 0", name: "retiros_monto"
+    t.integer "user_id", null: false
+    t.index ["branch_id", "folio"], name: "index_refunds_on_branch_and_folio", unique: true
+    t.index ["branch_id"], name: "index_refunds_on_branch_id"
+    t.index ["sale_id"], name: "index_refunds_on_sale_id"
+    t.index ["shift_id"], name: "index_refunds_on_shift_id"
+    t.index ["user_id"], name: "index_refunds_on_user_id"
   end
 
-  create_table "revisiones", force: :cascade do |t|
+  create_table "repl_queries", force: :cascade do |t|
+    t.integer "branch_id", null: false
     t.datetime "created_at", null: false
-    t.string "estado", default: "pendiente", null: false
-    t.boolean "frenado", default: false, null: false
-    t.string "motivo", null: false
-    t.string "nota"
-    t.integer "revisable_id", null: false
-    t.string "revisable_type", null: false
-    t.datetime "revisado_en"
-    t.integer "revisado_por_id"
-    t.integer "sucursal_id", null: false
+    t.boolean "ok", null: false
+    t.text "text", null: false
+    t.integer "user_id", null: false
+    t.index ["branch_id"], name: "index_repl_queries_on_branch_id"
+    t.index ["created_at"], name: "index_repl_queries_on_created_at"
+    t.index ["user_id"], name: "index_repl_queries_on_user_id"
+  end
+
+  create_table "reviews", force: :cascade do |t|
+    t.integer "branch_id", null: false
+    t.datetime "created_at", null: false
+    t.string "note"
+    t.string "reason", null: false
+    t.integer "reviewable_id", null: false
+    t.string "reviewable_type", null: false
+    t.datetime "reviewed_at"
+    t.integer "reviewed_by_id"
+    t.string "status", default: "pending", null: false
+    t.boolean "stopped", default: false, null: false
     t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.integer "valor_centavos", default: 0, null: false
-    t.index ["revisable_type", "revisable_id"], name: "index_revisiones_on_revisable"
-    t.index ["revisado_por_id"], name: "index_revisiones_on_revisado_por_id"
-    t.index ["sucursal_id", "estado"], name: "index_revisiones_on_sucursal_id_and_estado"
-    t.index ["sucursal_id"], name: "index_revisiones_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_revisiones_on_usuario_id"
-    t.check_constraint "estado IN ('pendiente', 'aprobada', 'observada')", name: "revisiones_estado"
+    t.integer "user_id", null: false
+    t.integer "value_cents", default: 0, null: false
+    t.index ["branch_id", "status"], name: "index_reviews_on_branch_id_and_status"
+    t.index ["branch_id"], name: "index_reviews_on_branch_id"
+    t.index ["reviewable_type", "reviewable_id"], name: "index_reviews_on_reviewable"
+    t.index ["reviewed_by_id"], name: "index_reviews_on_reviewed_by_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
+    t.check_constraint "status IN ('pending', 'approved', 'flagged')", name: "reviews_status"
   end
 
   create_table "roles", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "nombre", null: false
-    t.json "permisos", default: [], null: false
+    t.string "name", null: false
+    t.json "permissions", default: [], null: false
     t.datetime "updated_at", null: false
-    t.index ["nombre"], name: "index_roles_on_nombre", unique: true
+    t.index ["name"], name: "index_roles_on_name", unique: true
   end
 
-  create_table "sucursales", force: :cascade do |t|
-    t.boolean "activa", default: true, null: false
-    t.string "codigo", null: false
+  create_table "rules", force: :cascade do |t|
+    t.text "code", null: false
     t.datetime "created_at", null: false
-    t.integer "dias_conteo"
-    t.string "impresora", default: "navegador", null: false
-    t.string "impresora_red"
-    t.integer "limite_efectivo_centavos", default: 300000, null: false
-    t.string "nombre", null: false
-    t.string "tipo", default: "tienda", null: false
-    t.datetime "updated_at", null: false
-    t.index ["codigo"], name: "index_sucursales_on_codigo", unique: true
-    t.check_constraint "tipo IN ('matriz', 'tienda', 'almacen')", name: "sucursales_tipo"
+    t.string "hook", null: false
+    t.integer "user_id", null: false
+    t.integer "version", default: 1, null: false
+    t.index ["hook", "id"], name: "index_rules_on_hook_and_id"
+    t.index ["user_id"], name: "index_rules_on_user_id"
   end
 
-  create_table "traspaso_lineas", force: :cascade do |t|
-    t.integer "cajas", default: 0, null: false
-    t.decimal "cantidad", precision: 12, scale: 3, null: false
+  create_table "sale_lines", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.integer "authorized_by_id"
+    t.integer "catalog_cents", null: false
     t.datetime "created_at", null: false
-    t.integer "producto_id", null: false
-    t.integer "traspaso_id", null: false
+    t.integer "price_cents", null: false
+    t.integer "product_id", null: false
+    t.integer "promotion_id"
+    t.decimal "quantity", precision: 12, scale: 3, null: false
+    t.integer "sale_id", null: false
     t.datetime "updated_at", null: false
-    t.index ["producto_id"], name: "index_traspaso_lineas_on_producto_id"
-    t.index ["traspaso_id"], name: "index_traspaso_lineas_on_traspaso_id"
+    t.index ["authorized_by_id"], name: "index_sale_lines_on_authorized_by_id"
+    t.index ["product_id"], name: "index_sale_lines_on_product_id"
+    t.index ["promotion_id"], name: "index_sale_lines_on_promotion_id"
+    t.index ["sale_id"], name: "index_sale_lines_on_sale_id"
+    t.check_constraint "price_cents >= 0 AND amount_cents >= 0", name: "sale_lines_money"
+    t.check_constraint "quantity > 0", name: "sale_lines_quantity"
   end
 
-  create_table "traspasos", force: :cascade do |t|
-    t.string "clave"
+  create_table "sales", force: :cascade do |t|
+    t.integer "branch_id", null: false
+    t.date "business_date", null: false
+    t.integer "change_cents", default: 0, null: false
+    t.string "code", limit: 13, null: false
     t.datetime "created_at", null: false
-    t.string "estado", default: "registrado", null: false
-    t.date "fecha", null: false
+    t.integer "customer_id"
     t.string "folio", null: false
-    t.string "motivo_cancelacion"
-    t.string "notas"
-    t.integer "sucursal_destino_id", null: false
-    t.integer "sucursal_origen_id", null: false
+    t.string "key", null: false
+    t.boolean "offline", default: false, null: false
+    t.integer "shift_id", null: false
+    t.datetime "sold_at"
+    t.string "status", default: "paid", null: false
+    t.integer "total_cents", null: false
     t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.index ["sucursal_destino_id"], name: "index_traspasos_on_sucursal_destino_id"
-    t.index ["sucursal_origen_id", "clave"], name: "index_traspasos_on_sucursal_origen_id_and_clave", unique: true, where: "clave IS NOT NULL"
-    t.index ["sucursal_origen_id", "folio"], name: "index_traspasos_on_sucursal_origen_id_and_folio", unique: true
-    t.index ["sucursal_origen_id"], name: "index_traspasos_on_sucursal_origen_id"
-    t.index ["usuario_id"], name: "index_traspasos_on_usuario_id"
-    t.check_constraint "estado IN ('registrado', 'cancelado')", name: "traspasos_estado"
+    t.integer "user_id", null: false
+    t.index ["branch_id", "folio"], name: "index_sales_on_branch_and_folio", unique: true
+    t.index ["branch_id"], name: "index_sales_on_branch_id"
+    t.index ["code"], name: "index_sales_on_code", unique: true
+    t.index ["customer_id"], name: "index_sales_on_customer_id"
+    t.index ["key"], name: "index_sales_on_key", unique: true
+    t.index ["shift_id", "status"], name: "index_sales_on_shift_id_and_status"
+    t.index ["shift_id"], name: "index_sales_on_shift_id"
+    t.index ["user_id"], name: "index_sales_on_user_id"
+    t.check_constraint "status IN ('paid', 'refunded')", name: "sales_status"
+    t.check_constraint "total_cents >= 0", name: "sales_total"
   end
 
-  create_table "usuarios", force: :cascade do |t|
-    t.boolean "activo", default: true, null: false
+  create_table "settings", force: :cascade do |t|
     t.datetime "created_at", null: false
-    t.string "densidad", default: "normal", null: false
-    t.string "idioma", default: "en", null: false
-    t.string "letra", default: "normal", null: false
-    t.string "nombre", null: false
+    t.string "key", null: false
+    t.datetime "updated_at", null: false
+    t.text "value"
+    t.index ["key"], name: "index_settings_on_key", unique: true
+  end
+
+  create_table "shifts", force: :cascade do |t|
+    t.integer "branch_id", null: false
+    t.text "breakdown"
+    t.datetime "closed_at"
+    t.integer "closed_by_id"
+    t.integer "counted_cents"
+    t.datetime "created_at", null: false
+    t.integer "difference_cents"
+    t.integer "expected_cents"
+    t.integer "float_cents", default: 0, null: false
+    t.string "folio", null: false
+    t.datetime "opened_at", null: false
+    t.string "status", default: "open", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["branch_id", "folio"], name: "index_shifts_on_branch_and_folio", unique: true
+    t.index ["branch_id", "status"], name: "index_shifts_on_branch_id_and_status"
+    t.index ["branch_id"], name: "index_shifts_on_branch_id"
+    t.index ["closed_by_id"], name: "index_shifts_on_closed_by_id"
+    t.index ["user_id"], name: "index_shifts_on_user_id"
+    t.check_constraint "float_cents >= 0", name: "shifts_float"
+    t.check_constraint "status IN ('open', 'closed')", name: "shifts_status"
+  end
+
+  create_table "stock_count_lines", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.decimal "difference", precision: 12, scale: 3
+    t.integer "difference_cents"
+    t.decimal "manual", precision: 12, scale: 3, default: "0.0", null: false
+    t.integer "product_id", null: false
+    t.decimal "scanned", precision: 12, scale: 3, default: "0.0", null: false
+    t.integer "stock_count_id", null: false
+    t.decimal "system", precision: 12, scale: 3, default: "0.0", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_stock_count_lines_on_product_id"
+    t.index ["stock_count_id", "product_id"], name: "index_stock_count_lines_on_stock_count_id_and_product_id", unique: true
+    t.index ["stock_count_id"], name: "index_stock_count_lines_on_stock_count_id"
+  end
+
+  create_table "stock_counts", force: :cascade do |t|
+    t.integer "branch_id", null: false
+    t.datetime "closed_at"
+    t.datetime "created_at", null: false
+    t.string "folio", null: false
+    t.text "notes"
+    t.integer "responsible_id", null: false
+    t.string "scope", default: "total", null: false
+    t.integer "shortage_cents"
+    t.string "status", default: "open", null: false
+    t.integer "surplus_cents"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["branch_id", "folio"], name: "index_stock_counts_on_branch_and_folio", unique: true
+    t.index ["branch_id", "status"], name: "index_stock_counts_on_branch_id_and_status"
+    t.index ["branch_id"], name: "index_stock_counts_on_branch_id"
+    t.index ["responsible_id"], name: "index_stock_counts_on_responsible_id"
+    t.index ["user_id"], name: "index_stock_counts_on_user_id"
+    t.check_constraint "status IN ('open', 'closed')", name: "stock_counts_status"
+  end
+
+  create_table "stock_levels", force: :cascade do |t|
+    t.integer "branch_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "product_id", null: false
+    t.decimal "quantity", precision: 12, scale: 3, default: "0.0", null: false
+    t.datetime "updated_at", null: false
+    t.index ["branch_id", "product_id"], name: "index_stock_levels_on_branch_id_and_product_id", unique: true
+    t.index ["branch_id"], name: "index_stock_levels_on_branch_id"
+    t.index ["product_id"], name: "index_stock_levels_on_product_id"
+    t.check_constraint "quantity >= 0", name: "stock_levels_no_negative"
+  end
+
+  create_table "stock_transfer_lines", force: :cascade do |t|
+    t.integer "boxes", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.integer "product_id", null: false
+    t.decimal "quantity", precision: 12, scale: 3, null: false
+    t.integer "stock_transfer_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_stock_transfer_lines_on_product_id"
+    t.index ["stock_transfer_id"], name: "index_stock_transfer_lines_on_stock_transfer_id"
+  end
+
+  create_table "stock_transfers", force: :cascade do |t|
+    t.string "cancellation_reason"
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.integer "destination_branch_id", null: false
+    t.string "folio", null: false
+    t.string "key"
+    t.string "notes"
+    t.integer "origin_branch_id", null: false
+    t.string "status", default: "registered", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["destination_branch_id"], name: "index_stock_transfers_on_destination_branch_id"
+    t.index ["origin_branch_id", "folio"], name: "index_stock_transfers_on_origin_branch_id_and_folio", unique: true
+    t.index ["origin_branch_id", "key"], name: "index_stock_transfers_on_origin_branch_id_and_key", unique: true, where: "key IS NOT NULL"
+    t.index ["origin_branch_id"], name: "index_stock_transfers_on_origin_branch_id"
+    t.index ["user_id"], name: "index_stock_transfers_on_user_id"
+    t.check_constraint "status IN ('registered', 'cancelled')", name: "stock_transfers_status"
+  end
+
+  create_table "supplier_invoice_lines", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.integer "boxes", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.integer "price_cents", null: false
+    t.integer "product_id", null: false
+    t.decimal "quantity", precision: 12, scale: 3, null: false
+    t.integer "supplier_invoice_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_supplier_invoice_lines_on_product_id"
+    t.index ["supplier_invoice_id"], name: "index_supplier_invoice_lines_on_supplier_invoice_id"
+  end
+
+  create_table "supplier_invoices", force: :cascade do |t|
+    t.integer "amount_cents", default: 0, null: false
+    t.integer "branch_id", null: false
+    t.string "cancellation_reason"
+    t.string "concept"
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.date "due"
+    t.string "folio", null: false
+    t.string "status", default: "open", null: false
+    t.integer "supplier_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["branch_id"], name: "index_supplier_invoices_on_branch_id"
+    t.index ["supplier_id", "folio"], name: "index_supplier_invoices_on_supplier_id_and_folio", unique: true
+    t.index ["supplier_id"], name: "index_supplier_invoices_on_supplier_id"
+    t.index ["user_id"], name: "index_supplier_invoices_on_user_id"
+    t.check_constraint "status IN ('open', 'cancelled')", name: "supplier_invoices_status"
+  end
+
+  create_table "supplier_movements", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.integer "balance_cents", null: false
+    t.integer "branch_id", null: false
+    t.string "concept"
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.integer "delta_cents", null: false
+    t.string "kind", null: false
+    t.integer "supplier_id", null: false
+    t.integer "supplier_invoice_id"
+    t.integer "supplier_payment_id"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["branch_id"], name: "index_supplier_movements_on_branch_id"
+    t.index ["supplier_id"], name: "index_supplier_movements_on_supplier_id"
+    t.index ["supplier_invoice_id"], name: "index_supplier_movements_on_supplier_invoice_id"
+    t.index ["supplier_payment_id"], name: "index_supplier_movements_on_supplier_payment_id"
+    t.index ["user_id"], name: "index_supplier_movements_on_user_id"
+    t.check_constraint "kind IN ('charge', 'payment', 'adjustment')", name: "supplier_movements_kind"
+  end
+
+  create_table "supplier_payments", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.integer "branch_id", null: false
+    t.datetime "created_at", null: false
+    t.string "payment_method", default: "cash", null: false
+    t.string "reference"
+    t.integer "shift_id"
+    t.string "status", default: "current", null: false
+    t.integer "supplier_id", null: false
+    t.integer "supplier_invoice_id"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.string "void_reason"
+    t.integer "voided_by_id"
+    t.integer "withdrawal_id"
+    t.index ["branch_id"], name: "index_supplier_payments_on_branch_id"
+    t.index ["shift_id"], name: "index_supplier_payments_on_shift_id"
+    t.index ["supplier_id"], name: "index_supplier_payments_on_supplier_id"
+    t.index ["supplier_invoice_id"], name: "index_supplier_payments_on_supplier_invoice_id"
+    t.index ["user_id"], name: "index_supplier_payments_on_user_id"
+    t.index ["voided_by_id"], name: "index_supplier_payments_on_voided_by_id"
+    t.index ["withdrawal_id"], name: "index_supplier_payments_on_withdrawal_id"
+    t.check_constraint "status IN ('current', 'voided')", name: "supplier_payments_status"
+  end
+
+  create_table "suppliers", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.string "contact"
+    t.datetime "created_at", null: false
+    t.integer "credit_days", default: 0, null: false
+    t.string "name", null: false
+    t.string "notes"
+    t.string "phone"
+    t.string "tax_id"
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_suppliers_on_name", unique: true
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.integer "branch_id", null: false
+    t.datetime "created_at", null: false
+    t.string "density", default: "normal", null: false
+    t.string "language", default: "en", null: false
+    t.string "name", null: false
     t.string "password_digest", null: false
-    t.integer "rol_id", null: false
-    t.integer "sucursal_id", null: false
-    t.string "tema", default: "claro", null: false
+    t.integer "role_id", null: false
+    t.string "text_size", default: "normal", null: false
+    t.string "theme", default: "light", null: false
     t.datetime "updated_at", null: false
-    t.string "usuario", null: false
-    t.index ["rol_id"], name: "index_usuarios_on_rol_id"
-    t.index ["sucursal_id"], name: "index_usuarios_on_sucursal_id"
-    t.index ["usuario"], name: "index_usuarios_on_usuario", unique: true
+    t.string "user", null: false
+    t.index ["branch_id"], name: "index_users_on_branch_id"
+    t.index ["role_id"], name: "index_users_on_role_id"
+    t.index ["user"], name: "index_users_on_user", unique: true
   end
 
-  create_table "venta_lineas", force: :cascade do |t|
-    t.integer "autorizado_por_id"
-    t.decimal "cantidad", precision: 12, scale: 3, null: false
-    t.integer "catalogo_centavos", null: false
+  create_table "withdrawals", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.integer "authorized_by_id"
     t.datetime "created_at", null: false
-    t.integer "importe_centavos", null: false
-    t.integer "precio_centavos", null: false
-    t.integer "producto_id", null: false
-    t.integer "promocion_id"
+    t.string "reason", null: false
+    t.integer "shift_id", null: false
     t.datetime "updated_at", null: false
-    t.integer "venta_id", null: false
-    t.index ["autorizado_por_id"], name: "index_venta_lineas_on_autorizado_por_id"
-    t.index ["producto_id"], name: "index_venta_lineas_on_producto_id"
-    t.index ["promocion_id"], name: "index_venta_lineas_on_promocion_id"
-    t.index ["venta_id"], name: "index_venta_lineas_on_venta_id"
-    t.check_constraint "cantidad > 0", name: "venta_lineas_cantidad"
-    t.check_constraint "precio_centavos >= 0 AND importe_centavos >= 0", name: "venta_lineas_dinero"
+    t.integer "user_id", null: false
+    t.index ["authorized_by_id"], name: "index_withdrawals_on_authorized_by_id"
+    t.index ["shift_id"], name: "index_withdrawals_on_shift_id"
+    t.index ["user_id"], name: "index_withdrawals_on_user_id"
+    t.check_constraint "amount_cents > 0", name: "withdrawals_amount"
   end
 
-  create_table "ventas", force: :cascade do |t|
-    t.integer "cambio_centavos", default: 0, null: false
-    t.string "clave", null: false
-    t.integer "cliente_id"
-    t.string "codigo", limit: 13, null: false
-    t.integer "corte_id", null: false
-    t.datetime "created_at", null: false
-    t.string "estado", default: "cobrada", null: false
-    t.date "fecha_negocio", null: false
-    t.string "folio", null: false
-    t.boolean "fuera_de_linea", default: false, null: false
-    t.integer "sucursal_id", null: false
-    t.integer "total_centavos", null: false
-    t.datetime "updated_at", null: false
-    t.integer "usuario_id", null: false
-    t.datetime "vendida_en"
-    t.index ["clave"], name: "index_ventas_on_clave", unique: true
-    t.index ["cliente_id"], name: "index_ventas_on_cliente_id"
-    t.index ["codigo"], name: "index_ventas_on_codigo", unique: true
-    t.index ["corte_id", "estado"], name: "index_ventas_on_corte_id_and_estado"
-    t.index ["corte_id"], name: "index_ventas_on_corte_id"
-    t.index ["sucursal_id", "folio"], name: "index_ventas_on_sucursal_y_folio", unique: true
-    t.index ["sucursal_id"], name: "index_ventas_on_sucursal_id"
-    t.index ["usuario_id"], name: "index_ventas_on_usuario_id"
-    t.check_constraint "estado IN ('cobrada', 'devuelta')", name: "ventas_estado"
-    t.check_constraint "total_centavos >= 0", name: "ventas_total"
-  end
-
-  add_foreign_key "abonos", "clientes"
-  add_foreign_key "abonos", "cortes"
-  add_foreign_key "abonos", "sucursales"
-  add_foreign_key "abonos", "usuarios"
-  add_foreign_key "cargos", "conteos"
-  add_foreign_key "cargos", "revisiones"
-  add_foreign_key "cargos", "sucursales"
-  add_foreign_key "cargos", "usuarios"
-  add_foreign_key "cargos", "usuarios", column: "resuelto_por_id"
-  add_foreign_key "codigos_barras", "productos"
-  add_foreign_key "consultas_repl", "sucursales"
-  add_foreign_key "consultas_repl", "usuarios"
-  add_foreign_key "conteo_lineas", "conteos"
-  add_foreign_key "conteo_lineas", "productos"
-  add_foreign_key "conteos", "sucursales"
-  add_foreign_key "conteos", "usuarios"
-  add_foreign_key "conteos", "usuarios", column: "responsable_id"
-  add_foreign_key "cortes", "sucursales"
-  add_foreign_key "cortes", "usuarios"
-  add_foreign_key "cortes", "usuarios", column: "cerrado_por_id"
-  add_foreign_key "devolucion_lineas", "devoluciones"
-  add_foreign_key "devolucion_lineas", "venta_lineas"
-  add_foreign_key "devoluciones", "cortes"
-  add_foreign_key "devoluciones", "sucursales"
-  add_foreign_key "devoluciones", "usuarios"
-  add_foreign_key "devoluciones", "ventas"
-  add_foreign_key "existencias", "productos"
-  add_foreign_key "existencias", "sucursales"
-  add_foreign_key "factura_proveedor_lineas", "facturas_proveedor", column: "factura_proveedor_id"
-  add_foreign_key "factura_proveedor_lineas", "productos"
-  add_foreign_key "facturas_proveedor", "proveedores"
-  add_foreign_key "facturas_proveedor", "sucursales"
-  add_foreign_key "facturas_proveedor", "usuarios"
-  add_foreign_key "folios", "sucursales"
-  add_foreign_key "minimos", "productos"
-  add_foreign_key "minimos", "sucursales"
-  add_foreign_key "movimientos", "productos"
-  add_foreign_key "movimientos", "sucursales"
-  add_foreign_key "movimientos", "usuarios"
-  add_foreign_key "movimientos_credito", "clientes"
-  add_foreign_key "movimientos_credito", "sucursales"
-  add_foreign_key "movimientos_credito", "usuarios"
-  add_foreign_key "movimientos_proveedor", "facturas_proveedor", column: "factura_proveedor_id"
-  add_foreign_key "movimientos_proveedor", "pagos_proveedor", column: "pago_proveedor_id"
-  add_foreign_key "movimientos_proveedor", "proveedores"
-  add_foreign_key "movimientos_proveedor", "sucursales"
-  add_foreign_key "movimientos_proveedor", "usuarios"
-  add_foreign_key "pagos", "ventas"
-  add_foreign_key "pagos_proveedor", "cortes"
-  add_foreign_key "pagos_proveedor", "facturas_proveedor", column: "factura_proveedor_id"
-  add_foreign_key "pagos_proveedor", "proveedores"
-  add_foreign_key "pagos_proveedor", "retiros"
-  add_foreign_key "pagos_proveedor", "sucursales"
-  add_foreign_key "pagos_proveedor", "usuarios"
-  add_foreign_key "pagos_proveedor", "usuarios", column: "anulado_por_id"
-  add_foreign_key "pedido_lineas", "pedidos"
-  add_foreign_key "pedido_lineas", "productos"
-  add_foreign_key "pedidos", "clientes"
-  add_foreign_key "pedidos", "sucursales"
-  add_foreign_key "pedidos", "usuarios"
-  add_foreign_key "pedidos", "ventas"
-  add_foreign_key "plugins", "usuarios"
-  add_foreign_key "precios_sucursal", "productos"
-  add_foreign_key "precios_sucursal", "sucursales"
-  add_foreign_key "promociones", "productos"
-  add_foreign_key "promociones", "sucursales"
-  add_foreign_key "recepcion_lineas", "productos"
-  add_foreign_key "recepcion_lineas", "recepciones"
-  add_foreign_key "recepciones", "facturas_proveedor", column: "factura_proveedor_id"
-  add_foreign_key "recepciones", "proveedores"
-  add_foreign_key "recepciones", "sucursales"
-  add_foreign_key "recepciones", "usuarios"
-  add_foreign_key "reglas", "usuarios"
-  add_foreign_key "retiros", "cortes"
-  add_foreign_key "retiros", "usuarios"
-  add_foreign_key "retiros", "usuarios", column: "autorizado_por_id"
-  add_foreign_key "revisiones", "sucursales"
-  add_foreign_key "revisiones", "usuarios"
-  add_foreign_key "revisiones", "usuarios", column: "revisado_por_id"
-  add_foreign_key "traspaso_lineas", "productos"
-  add_foreign_key "traspaso_lineas", "traspasos"
-  add_foreign_key "traspasos", "sucursales", column: "sucursal_destino_id"
-  add_foreign_key "traspasos", "sucursales", column: "sucursal_origen_id"
-  add_foreign_key "traspasos", "usuarios"
-  add_foreign_key "usuarios", "roles"
-  add_foreign_key "usuarios", "sucursales"
-  add_foreign_key "venta_lineas", "productos"
-  add_foreign_key "venta_lineas", "promociones"
-  add_foreign_key "venta_lineas", "usuarios", column: "autorizado_por_id"
-  add_foreign_key "venta_lineas", "ventas"
-  add_foreign_key "ventas", "clientes"
-  add_foreign_key "ventas", "cortes"
-  add_foreign_key "ventas", "sucursales"
-  add_foreign_key "ventas", "usuarios"
+  add_foreign_key "account_payments", "branches"
+  add_foreign_key "account_payments", "customers"
+  add_foreign_key "account_payments", "shifts"
+  add_foreign_key "account_payments", "users"
+  add_foreign_key "branch_prices", "branches"
+  add_foreign_key "branch_prices", "products"
+  add_foreign_key "charges", "branches"
+  add_foreign_key "charges", "reviews"
+  add_foreign_key "charges", "stock_counts"
+  add_foreign_key "charges", "users"
+  add_foreign_key "charges", "users", column: "resolved_by_id"
+  add_foreign_key "credit_movements", "branches"
+  add_foreign_key "credit_movements", "customers"
+  add_foreign_key "credit_movements", "users"
+  add_foreign_key "folios", "branches"
+  add_foreign_key "minimums", "branches"
+  add_foreign_key "minimums", "products"
+  add_foreign_key "movements", "branches"
+  add_foreign_key "movements", "products"
+  add_foreign_key "movements", "users"
+  add_foreign_key "order_lines", "orders"
+  add_foreign_key "order_lines", "products"
+  add_foreign_key "orders", "branches"
+  add_foreign_key "orders", "customers"
+  add_foreign_key "orders", "sales"
+  add_foreign_key "orders", "users"
+  add_foreign_key "payments", "sales"
+  add_foreign_key "plugins", "users"
+  add_foreign_key "product_barcodes", "products"
+  add_foreign_key "promotions", "branches"
+  add_foreign_key "promotions", "products"
+  add_foreign_key "receipt_lines", "products"
+  add_foreign_key "receipt_lines", "receipts"
+  add_foreign_key "receipts", "branches"
+  add_foreign_key "receipts", "supplier_invoices"
+  add_foreign_key "receipts", "suppliers"
+  add_foreign_key "receipts", "users"
+  add_foreign_key "refund_lines", "refunds"
+  add_foreign_key "refund_lines", "sale_lines"
+  add_foreign_key "refunds", "branches"
+  add_foreign_key "refunds", "sales"
+  add_foreign_key "refunds", "shifts"
+  add_foreign_key "refunds", "users"
+  add_foreign_key "repl_queries", "branches"
+  add_foreign_key "repl_queries", "users"
+  add_foreign_key "reviews", "branches"
+  add_foreign_key "reviews", "users"
+  add_foreign_key "reviews", "users", column: "reviewed_by_id"
+  add_foreign_key "rules", "users"
+  add_foreign_key "sale_lines", "products"
+  add_foreign_key "sale_lines", "promotions"
+  add_foreign_key "sale_lines", "sales"
+  add_foreign_key "sale_lines", "users", column: "authorized_by_id"
+  add_foreign_key "sales", "branches"
+  add_foreign_key "sales", "customers"
+  add_foreign_key "sales", "shifts"
+  add_foreign_key "sales", "users"
+  add_foreign_key "shifts", "branches"
+  add_foreign_key "shifts", "users"
+  add_foreign_key "shifts", "users", column: "closed_by_id"
+  add_foreign_key "stock_count_lines", "products"
+  add_foreign_key "stock_count_lines", "stock_counts"
+  add_foreign_key "stock_counts", "branches"
+  add_foreign_key "stock_counts", "users"
+  add_foreign_key "stock_counts", "users", column: "responsible_id"
+  add_foreign_key "stock_levels", "branches"
+  add_foreign_key "stock_levels", "products"
+  add_foreign_key "stock_transfer_lines", "products"
+  add_foreign_key "stock_transfer_lines", "stock_transfers"
+  add_foreign_key "stock_transfers", "branches", column: "destination_branch_id"
+  add_foreign_key "stock_transfers", "branches", column: "origin_branch_id"
+  add_foreign_key "stock_transfers", "users"
+  add_foreign_key "supplier_invoice_lines", "products"
+  add_foreign_key "supplier_invoice_lines", "supplier_invoices"
+  add_foreign_key "supplier_invoices", "branches"
+  add_foreign_key "supplier_invoices", "suppliers"
+  add_foreign_key "supplier_invoices", "users"
+  add_foreign_key "supplier_movements", "branches"
+  add_foreign_key "supplier_movements", "supplier_invoices"
+  add_foreign_key "supplier_movements", "supplier_payments"
+  add_foreign_key "supplier_movements", "suppliers"
+  add_foreign_key "supplier_movements", "users"
+  add_foreign_key "supplier_payments", "branches"
+  add_foreign_key "supplier_payments", "shifts"
+  add_foreign_key "supplier_payments", "supplier_invoices"
+  add_foreign_key "supplier_payments", "suppliers"
+  add_foreign_key "supplier_payments", "users"
+  add_foreign_key "supplier_payments", "users", column: "voided_by_id"
+  add_foreign_key "supplier_payments", "withdrawals"
+  add_foreign_key "users", "branches"
+  add_foreign_key "users", "roles"
+  add_foreign_key "withdrawals", "shifts"
+  add_foreign_key "withdrawals", "users"
+  add_foreign_key "withdrawals", "users", column: "authorized_by_id"
 end

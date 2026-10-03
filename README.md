@@ -114,7 +114,7 @@ The Lisp is Sakuya's own, written in Ruby (`lib/lisp*.rb`): a reader, an evaluat
 - **Hooks are a contract.** Closing a sale, the price of a line, the till difference, receiving goods: each hook has a version, so updating Sakuya does not break a business's rules.
 - **One transaction per operation, money in integer cents, ledgers that are only appended to.** Voiding compensates; nothing is edited in place.
 
-`docs/decisiones.md` has the reasons behind each choice; `docs/arquitectura.md`, the map of modules.
+`docs/decisions.md` has the reasons behind each choice; `docs/architecture.md`, the map of features.
 
 <br/>
 
@@ -133,7 +133,7 @@ bin/dev          # http://localhost:3000
 
 The seeds only create the base roles; the rest comes from the first run. Tests (199 today): `bin/rails test`.
 
-- **PostgreSQL:** with `DATABASE_URL=postgres://user:password@server/sakuya` it runs the same; CI tests both databases. To move an installation that has data: load the schema into the empty PostgreSQL and run `bin/rails "sakuya:copiar_base[postgres://…]"`.
+- **PostgreSQL:** with `DATABASE_URL=postgres://user:password@server/sakuya` it runs the same; CI tests both databases. To move an installation that has data: load the schema into the empty PostgreSQL and run `bin/rails "sakuya:copy_database[postgres://…]"`.
 - **Printer:** each branch chooses in Admin › Branches whether it prints with the browser, on a network thermal printer (address:port, almost always 9100) or on a cable one from Chrome. The receipt can also be downloaded as ESC/POS.
 - **Offline:** the till keeps its page and the catalogue on the device and queues the sales; reloading it with no network needs it served over HTTPS (or on localhost).
 

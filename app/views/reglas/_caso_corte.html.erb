@@ -1,5 +1,0 @@
-<%= render "reglas/real_o_inventado", caso: caso %>
-<div><label for="esperado" class="etiqueta-campo"><%= t("#{textos}.caso.esperado") %></label>
-  <%= number_field_tag :esperado, format("%.2f", caso[:esperado] / 100r), step: "0.01", min: 0, id: "esperado", class: "w-32 font-mono", readonly: caso[:real].present? %></div>
-<div><label for="contado" class="etiqueta-campo"><%= t("#{textos}.caso.contado") %></label>
-  <%= number_field_tag :contado, format("%.2f", caso[:contado] / 100r), step: "0.01", min: 0, id: "contado", class: "w-32 font-mono" %></div>

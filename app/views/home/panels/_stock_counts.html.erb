@@ -1,0 +1,12 @@
+<% if Features.active?("stock_counts") %>
+  <div class="card">
+    <h2 class="mb-2 font-semibold"><%= t("home.stock_counts") %></h2>
+    <% @count_due.each do |s| %><p class="mb-1 rounded bg-amber-50 px-2 py-1 text-sm font-semibold text-amber-800"><%= s.name %>: <%= t("stock_counts.count_due", each: s.count_interval_days) %></p><% end %>
+    <table class="w-full text-sm">
+      <% @stock_counts.first(piece.limit).each do |c| %>
+        <tr class="border-t border-stone-100"><td class="py-1 font-mono"><%= c.folio %></td><td class="py-1"><%= c.branch %> · <%= c.responsible %></td><td class="py-1 text-right font-mono text-red-700"><%= format_money(c.shortage_cents) %></td><td class="py-1 text-right font-mono text-green-700"><%= format_money(c.surplus_cents) %></td></tr>
+      <% end %>
+      <% if @stock_counts.empty? %><tr><td class="py-3 text-center text-stone-500"><%= t("home.no_stock_counts") %></td></tr><% end %>
+    </table>
+  </div>
+<% end %>

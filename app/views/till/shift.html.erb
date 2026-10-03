@@ -1,0 +1,81 @@
+<h1 class="mb-4 text-2xl font-bold"><%= t("till.till_shift") %> · <%= current_branch %></h1>
+<% if @shift.nil? %>
+  <%= render "no_till" %>
+<% else %>
+  <p class="mb-2 text-sm"><%= link_to t("till.view_summary_open"), till_summary_path(@shift), target: "_blank", class: "link" %></p>
+  <div class="grid gap-4 sm:grid-cols-4">
+    <% [ [ t("till.float"), @shift.float_cents ], [ t("till.sales"), @shift.sales_total_cents ], [ t("till.cash_from_sales"), @shift.cash_sales_cents ], [ t("till.refunds"), -@shift.refunds_cents ], *([ [ t("till.account_payments"), @shift.cash_account_payments_cents ] ] if @shift.account_payments.any?), [ t("till.withdrawals"), -@shift.withdrawals_cents ], [ t("till.in_drawer"), @shift.expected_cash_cents ] ].each do |name, amount| %>
+      <div class="card"><div class="stat-label"><%= name %></div><div class="stat-value text-2xl"><%= format_money(amount) %></div></div>
+    <% end %>
+  </div>
+  <p class="mt-2 text-sm text-stone-600"><%= t("till.shift_opened_by", folio: @shift.folio, who: @shift.user, date: l(@shift.opened_at, format: :short)) %> · <%= t("till.n_sales", count: @shift.sales.count) %></p>
+  <div class="mt-6 grid gap-6 md:grid-cols-2">
+    <div class="card">
+      <h2 class="mb-2 font-semibold"><%= t("till.safe_drop") %></h2>
+      <%= form_with url: till_withdraw_path, class: "space-y-2 text-sm" do |f| %>
+        <%= f.number_field :amount, step: "0.01", min: "0.01", placeholder: t("till.amount"), required: true, class: "w-full rounded border border-stone-300 px-3 py-2 font-mono" %>
+        <%= f.text_field :reason, placeholder: t("common.reason"), required: true, class: "w-full rounded border border-stone-300 px-3 py-2" %>
+        <% unless can?("till.withdraw") || Rule.current("withdrawal") %><p class="text-xs text-stone-600"><%= t("till.withdrawal_pending_review") %></p><% end %>
+        <%= f.submit t("till.withdraw"), class: "btn btn-primary" %>
+      <% end %>
+      <% if @shift.withdrawals.any? %>
+        <ul class="mt-3 text-sm">
+          <% @shift.withdrawals.includes(:user, :authorized_by).each do |r| %>
+            <li class="border-t border-stone-100 py-1"><%= l r.created_at, format: :short %> · <span class="font-mono"><%= format_money(r.amount_cents) %></span> · <%= r.reason %> · <%= t("common.authorized") %> <%= r.authorized_by %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+    <div hidden id="pending_sales" data-controller="pending-sales" class="rounded border-l-4 border-amber-500 bg-amber-50 p-3 text-sm text-amber-900"></div>
+    <div class="card" data-controller="drawer" data-drawer-expected-value="<%= @shift.expected_cash_cents %>" data-drawer-cap-value="<%= Shift.difference_cap_cents %>" data-drawer-symbol-value="<%= Setting.symbol %>">
+      <h2 class="mb-2 font-semibold"><%= t("till.close_shift") %></h2>
+      <p class="mb-2 text-sm text-stone-600"><%= t("till.close_shift_help") %></p>
+      <%= form_with url: till_close_path, class: "space-y-3 text-sm", data: { turbo_confirm: t("till.confirm_close_shift", folio: @shift.folio) } do |f| %>
+        <div class="grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-3">
+          <% Shift.denominations.each do |value| %>
+            <label class="flex items-center justify-between gap-2"><span class="font-mono text-stone-700"><%= format_money(value) %></span>
+              <%= number_field_tag "denomination[#{value}]", nil, min: 0, step: 1, inputmode: "numeric", class: "w-20 rounded border border-stone-300 px-2 py-1 text-right font-mono", data: { drawer_target: "quantity", value: value, action: "input->drawer#add_up" } %></label>
+          <% end %>
+        </div>
+        <div class="flex flex-wrap items-end gap-4 border-t border-stone-100 pt-3">
+          <div><%= f.label :counted, t("till.counted_cash"), class: "block" %><%= f.number_field :counted, step: "0.01", min: 0, required: true, class: "rounded border border-stone-300 px-3 py-2 font-mono", data: { drawer_target: "counted", action: "input->drawer#typed" } %></div>
+          <div><div class="stat-label"><%= t("till.sum") %></div><div class="stat-value text-lg" data-drawer-target="sum"><%= format_money(0) %></div></div>
+          <div><div class="stat-label"><%= t("till.difference") %></div><div class="stat-value text-lg" data-drawer-target="difference"><%= format_money(-@shift.expected_cash_cents) %></div></div>
+        </div>
+        <%# With a custom rule the screen cannot know what it will ask for: the reason is always shown and optional. %>
+        <% if Rule.current("shift") %>
+          <div>
+            <p class="mb-1 text-xs text-stone-600"><%= t("till.custom_rule_notice") %></p>
+            <%= f.text_field :reason, placeholder: t("till.reason_difference"), class: "w-full rounded border border-stone-300 px-3 py-2" %>
+          </div>
+        <% elsif Shift.difference_cap_cents.positive? %>
+          <div class="hidden" data-drawer-target="reason">
+            <p class="mb-1 text-xs text-amber-700"><%= t("till.difference_cap_notice", amount: format_money(Shift.difference_cap_cents)) %> <%= can?("till.difference") ? t("till.cap_remains_pending_review") : t("till.cap_stops") %></p>
+            <%= f.text_field :reason, placeholder: t("till.reason_difference"), class: "w-full rounded border border-stone-300 px-3 py-2" if can?("till.difference") %>
+          </div>
+        <% end %>
+        <%= f.submit t("till.close_shift"), class: "btn btn-danger" %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<% if @shifts.any? %>
+  <h2 class="mb-2 mt-8 font-semibold"><%= t("till.closed_shifts") %></h2>
+  <table class="table">
+    <thead><tr><th class="px-3 py-2"><%= t("common.folio") %></th><th class="px-3 py-2"><%= t("till.open") %></th><th class="px-3 py-2"><%= t("till.closed") %></th><th class="px-3 py-2"><%= t("till.cashier") %></th><th class="px-3 py-2 text-right"><%= t("till.expected") %></th><th class="px-3 py-2 text-right"><%= t("till.counted") %></th><th class="px-3 py-2 text-right"><%= t("till.difference") %></th><th></th></tr></thead>
+    <tbody>
+      <% @shifts.each do |c| %>
+        <tr class="border-t border-stone-100">
+          <td class="px-3 py-2 font-mono"><%= c.folio %></td>
+          <td class="px-3 py-2"><%= l c.opened_at, format: :short %></td>
+          <td class="px-3 py-2"><%= l(c.closed_at, format: :short) if c.closed_at %></td>
+          <td class="px-3 py-2"><%= c.user %></td>
+          <td class="px-3 py-2 text-right font-mono"><%= format_money(c.expected_cents) %></td>
+          <td class="px-3 py-2 text-right font-mono" title="<%= c.breakdown_text %>"><%= format_money(c.counted_cents) %></td>
+          <td class="px-3 py-2 text-right font-mono <%= c.difference_cents.to_i.negative? ? 'text-red-700' : 'text-green-700' %>"><%= format_money(c.difference_cents) %></td>
+          <td class="px-3 py-2 text-right"><%= link_to t("till.view_summary"), till_summary_path(c), target: "_blank", class: "btn btn-secondary btn-sm" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

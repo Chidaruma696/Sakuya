@@ -2,93 +2,94 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
   stale_when_importmap_changes
 
-  class SinPermiso < StandardError; end
+  class NotAllowed < StandardError; end
 
-  # Pestaña de la cinta que corresponde a este controlador (ver RibbonHelper).
-  class_attribute :pestana_ribbon, default: :inicio
-  def self.pestana(id) = self.pestana_ribbon = id
+  # Ribbon tab this controller belongs to (see RibbonHelper).
+  class_attribute :ribbon_tab, default: :home
+  def self.tab(id) = self.ribbon_tab = id
 
-  # Módulos opcionales de los que depende este controlador (ver Modulo); vacío = siempre disponible.
-  class_attribute :modulos_requeridos, default: []
-  def self.modulo(*claves) = self.modulos_requeridos = claves.map(&:to_s)
+  # Optional features this controller depends on (see Features); empty = always available.
+  class_attribute :required_features, default: []
+  def self.feature(*keys) = self.required_features = keys.map(&:to_s)
 
-  before_action :exigir_instalacion, :exigir_sesion, :exigir_modulo
-  around_action :con_idioma
-  helper_method :usuario_actual, :sucursal_actual, :puede?
+  before_action :require_setup, :require_session, :require_feature
+  around_action :with_language
+  helper_method :current_user, :current_branch, :can?
 
-  rescue_from SinPermiso do |e|
-    render "errores/sin_permiso", status: :forbidden, locals: { clave: e.message }
+  rescue_from NotAllowed do |e|
+    render "errors/not_allowed", status: :forbidden, locals: { key: e.message }
   end
 
   private
 
-  # Cada quien ve el sistema en su idioma; sin sesión, el que pida (?idioma=, se recuerda en una
-  # cookie) o el del navegador si lo tenemos.
-  def con_idioma(&)
-    Idiomas.sincronizar!
-    idiomas = I18n.available_locales.map(&:to_s)
-    cookies[:idioma] = params[:idioma] if params[:idioma].presence_in(idiomas)
-    # Un idioma de un plugin que ya se apagó cae a lo de fábrica.
-    idioma = usuario_actual&.idioma.presence_in(idiomas) || cookies[:idioma].presence_in(idiomas) || http_accept_language_preferido
-    I18n.with_locale(idioma, &)
+  # Everyone sees the system in their own language; without a session, the one requested (?language=,
+  # remembered in a cookie) or the browser's if we have it.
+  def with_language(&)
+    Languages.sync!
+    languages = I18n.available_locales.map(&:to_s)
+    cookies[:language] = params[:language] if params[:language].presence_in(languages)
+    # A language from a plugin that has been turned off falls back to the default.
+    language = current_user&.language.presence_in(languages) || cookies[:language].presence_in(languages) || http_accept_language_preferred
+    I18n.with_locale(language, &)
   end
 
-  def http_accept_language_preferido
+  def http_accept_language_preferred
     request.env["HTTP_ACCEPT_LANGUAGE"].to_s.scan(/[a-z]{2}/).find { |l| I18n.available_locales.map(&:to_s).include?(l) } || I18n.default_locale
   end
 
-  def usuario_actual
-    Current.usuario ||= Usuario.activos.includes(:rol, :sucursal).find_by(id: cookies.signed[:usuario_id])
+  def current_user
+    Current.user ||= User.active.includes(:role, :branch).find_by(id: cookies.signed[:user_id])
   end
 
-  def sucursal_actual
-    Current.sucursal ||= usuario_actual&.sucursal
+  def current_branch
+    Current.branch ||= current_user&.branch
   end
 
-  # Sin ningún usuario activo el sistema está recién instalado (o sin nadie que pueda entrar):
-  # primero se crea el administrador.
-  def exigir_instalacion
-    redirect_to instalar_path if Usuario.activos.none?
+  # With no active user the system is freshly installed (or nobody can sign in):
+  # the administrator is created first.
+  def require_setup
+    redirect_to install_path if User.active.none?
   end
 
-  # Un módulo apagado no existe: sus pantallas lo dicen en vez de dar un 404 pelón.
-  def exigir_modulo
-    apagado = modulos_requeridos.find { |m| !Modulo.activo?(m) } or return
-    render "errores/modulo_apagado", status: :not_found, locals: { modulo: apagado }
+  # A feature that is turned off does not exist: its screens say so instead of a bare 404.
+  def require_feature
+    off = required_features.find { |m| !Features.active?(m) } or return
+    render "errors/feature_off", status: :not_found, locals: { feature: off }
   end
 
-  def exigir_sesion
-    redirect_to entrar_path, alert: t("sesion.inicia_para_continuar") unless usuario_actual
+  def require_session
+    redirect_to login_path, alert: t("session.sign_in_to_continue") unless current_user
   end
 
-  def puede?(clave)
-    usuario_actual&.puede?(clave) || false
+  def can?(key)
+    current_user&.can?(key) || false
   end
 
-  # Corta la petición si el usuario no tiene el permiso.
-  def autorizar!(clave)
-    raise SinPermiso, clave unless puede?(clave)
+  # Stops the request if the user lacks the permission.
+  def authorize!(key)
+    raise NotAllowed, key unless can?(key)
   end
 
-  # Autorización diferida (no hay PIN): si quien opera tiene el permiso, queda a su nombre; si no,
-  # la operación sigue igual y queda por revisar (ver Revision). Devuelve quien autoriza o nil.
-  def autorizador_o_revision(clave)
-    puede?(clave) ? usuario_actual : nil
+  # Deferred authorization (there is no PIN): if the operator has the permission, it goes on record
+  # under their name; if not, the operation goes ahead anyway and is left for review (see Review).
+  # Returns the authorizer or nil.
+  def authorizer_or_review(key)
+    can?(key) ? current_user : nil
   end
 
-  # Deja la operación en la bandeja de revisión si nadie la autorizó.
-  def revisar_si_hace_falta(registro, autoriza, motivo:, valor_centavos: 0, sucursal: sucursal_actual)
-    return if autoriza
-    Revision.abrir!(registro, usuario: usuario_actual, sucursal: sucursal, motivo: motivo, valor_centavos: valor_centavos)
+  # Puts the operation in the review inbox if nobody authorized it.
+  def review_if_needed(record, authorizes, reason:, value_cents: 0, branch: current_branch)
+    return if authorizes
+    Review.open!(record, user: current_user, branch: branch, reason: reason, value_cents: value_cents)
   end
 
-  def iniciar_sesion(usuario)
-    cookies.signed.permanent[:usuario_id] = { value: usuario.id, httponly: true, same_site: :lax }
-    Current.usuario = usuario
+  def start_session(user)
+    cookies.signed.permanent[:user_id] = { value: user.id, httponly: true, same_site: :lax }
+    Current.user = user
   end
 
-  def cerrar_sesion
-    cookies.delete(:usuario_id)
+  def close_session
+    cookies.delete(:user_id)
     Current.reset
   end
 end

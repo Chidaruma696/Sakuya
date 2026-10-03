@@ -1,0 +1,11 @@
+<%# What "Try" returns: the program error, or the dashboard as it would look. %>
+<% if @program_error %>
+  <p class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><i class="bi bi-exclamation-triangle-fill text-accent-700"></i> <%= @program_error %></p>
+<% else %>
+  <% if @sample %>
+    <p class="mb-3 flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900"><i class="bi bi-eyedropper"></i> <%= t("dashboard.preview_sample") %></p>
+  <% else %>
+    <p class="mb-3 text-sm text-stone-600"><%= t("dashboard.preview_help") %></p>
+  <% end %>
+  <%= render "home/dashboard" %>
+<% end %>

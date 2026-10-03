@@ -1,1177 +1,1189 @@
 de:
-  ajustes:
-    titulo: Einstellungen
-    guardado: Einstellungen gespeichert
-    guardar: Speichern
-    para_ti: Für dich
-    para_ti_ayuda: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
-    idioma: Sprache
-    tema: Design
-    densidad: Dichte
-    letra: Schriftgröße
-    idiomas:
+  settings:
+    defaults:
+      ticket_footer: "Vielen Dank für Ihren Einkauf!"
+    title: Einstellungen
+    saved: Einstellungen gespeichert
+    save: Speichern
+    for_you: Für dich
+    for_you_help: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
+    language: Sprache
+    theme: Design
+    density: Dichte
+    text_size: Schriftgröße
+    languages:
       es: Español
       en: English
       de: Deutsch
-    tema_opciones:
-      sistema: Wie das System
-      claro: Hell
-      oscuro: Dunkel
-    densidad_opciones:
+    theme_options:
+      system: Wie das System
+      light: Hell
+      dark: Dunkel
+    density_options:
       normal: Normal
-      compacta: Kompakt
-    letra_opciones:
+      compact: Kompakt
+    text_size_options:
       normal: Normal
-      grande: Groß
-      chica: Klein
-    sistema: System
-    negocio: Geschäft
-    negocio_ayuda: Steht im Kopf und Fuß des Kassenbons. Bleibt der Name leer, wird der Name der Filiale verwendet.
-    caja: Kasse
-    caja_ayuda: Das Bargeldlimit der Kassenlade wird pro Filiale festgelegt.
-    candado_recibido_ayuda: Mit Sperre (Standard) wird eine Rechnung mit mehr Menge als die verknüpften Wareneingänge nicht erfasst und der Versuch gemeldet; wer die Berechtigung zum Überschreiten hat, erfasst sie mit Grund und sie geht mit dem bewerteten Überschuss zur Prüfung. Ohne Sperre wird nur die Differenz angezeigt.
-    compras_apagado: Das Einkaufsmodul ist aus; einschalten unter
-    ir_sucursales: Filialen ansehen
-    claves:
-      negocio:
-        nombre: Name des Geschäfts
-        direccion: Adresse
-        telefono: Telefon
-        pie_ticket: Fußzeile des Kassenbons
-        moneda: Währung (ISO-Code)
-        simbolo: Symbol
-      caja:
-        piso_precio: Preisuntergrenze (% des Listenpreises)
-        limite_gaveta: Ladenlimit für neue Filialen ($)
-        denominaciones: Scheine und Münzen zum Zählen der Lade (durch Komma getrennt)
-        tope_diferencia: Maximale Differenz beim Abschluss ($; 0 = ohne Grenze)
-      compras:
-        candado_recibido: Mehr als erhalten nicht ohne Grund abrechnen lassen
+      large: Groß
+      small: Klein
+    system: System
+    business: Geschäft
+    business_help: Steht im Kopf und Fuß des Kassenbons. Bleibt der Name leer, wird der Name der Filiale verwendet.
+    till: Kasse
+    till_help: Das Bargeldlimit der Kassenlade wird pro Filiale festgelegt.
+    lock_received_help: Mit Sperre (Standard) wird eine Rechnung mit mehr Menge als die verknüpften Wareneingänge nicht erfasst und der Versuch gemeldet; wer die Berechtigung zum Überschreiten hat, erfasst sie mit Grund und sie geht mit dem bewerteten Überschuss zur Prüfung. Ohne Sperre wird nur die Differenz angezeigt.
+    purchases_off: Das Einkaufsmodul ist aus; einschalten unter
+    go_branches: Filialen ansehen
+    keys:
+      business:
+        name: Name des Geschäfts
+        address: Adresse
+        phone: Telefon
+        ticket_footer: Fußzeile des Kassenbons
+        currency: Währung (ISO-Code)
+        symbol: Symbol
+      till:
+        price_floor: Preisuntergrenze (% des Listenpreises)
+        drawer_limit: Ladenlimit für neue Filialen ($)
+        denominations: Scheine und Münzen zum Zählen der Lade (durch Komma getrennt)
+        difference_cap: Maximale Differenz beim Abschluss ($; 0 = ohne Grenze)
+      purchases:
+        lock_received: Mehr als erhalten nicht ohne Grund abrechnen lassen
       ticket:
-        lema: Slogan oder Zeile unter dem Namen
-        rfc: Steuernummer (RFC, USt-IdNr. …)
-        leyenda_devoluciones: Hinweis zu Rückgaben
-        mostrar_cajero: Bedienung anzeigen
-        mostrar_codigo: Barcode des Tickets drucken
-        ancho: Papierbreite
-    modulos: Module
-    modulos_ayuda: Was aus ist, verschwindet aus dem Menüband, den Rollen und seinen Seiten; die Daten bleiben. Ein Modul mit offener Arbeit lässt sich nicht ausschalten.
+        tagline: Slogan oder Zeile unter dem Namen
+        tax_id: Steuernummer (RFC, USt-IdNr. …)
+        returns_legend: Hinweis zu Rückgaben
+        show_cashier: Bedienung anzeigen
+        show_code: Barcode des Tickets drucken
+        width: Papierbreite
+    features: Module
+    features_help: Was aus ist, verschwindet aus dem Menüband, den Rollen und seinen Seiten; die Daten bleiben. Ein Modul mit offener Arbeit lässt sich nicht ausschalten.
     ticket:
-      titulo: Ticket-Design
+      title: Ticket-Design
       intro: Was du links ausfüllst, erscheint sofort im Ticket rechts, genau so, wie es aus dem Drucker kommt. Gilt für alle Filialen.
-      ir: Ticket gestalten
-      ir_ayuda: 'Logo, Name, Adresse, Telefon, Steuernummer und Fußzeile: mit Live-Vorschau bearbeiten.'
-      encabezado: Kopf
-      cuerpo: Inhalt
-      pie: Fuß
-      vista_previa: So sieht es aus
-      sin_logo: Kein Logo
-      subir_logo: Logo hochladen
-      quitar_logo: Entfernen
-      logo_ayuda: PNG oder JPG, schwarz auf weiß, unter 300 KB; wird 30 mm breit gedruckt. Grautöne wirken auf Thermopapier schmutzig.
-      muestra:
-        producto_kg: Produkt nach Kilo
-        producto_pieza: Produkt nach Stück
-      zoom_mas: Vergrößern
-      zoom_menos: Verkleinern
-      zoom_ajustar: An Breite anpassen
-      imprimir_prueba: Testdruck
-      imprimir_prueba_ayuda: Schickt diese Vorschau so wie sie ist an den Drucker, um Papier und Breite zu prüfen
-    moneda_ayuda: 'Das Symbol steht im ganzen System und auf dem Ticket vor jedem Betrag ($, €, Q, S/…). Keine Umrechnung: eine Währung je Installation.'
-    moneda: Währung
-    secciones:
-      para_ti: Für dich
-      negocio: Betrieb und Ticket
-      modulos: Module
-      caja: Kasse
+      go: Ticket gestalten
+      go_help: 'Logo, Name, Adresse, Telefon, Steuernummer und Fußzeile: mit Live-Vorschau bearbeiten.'
+      header: Kopf
+      body: Inhalt
+      footer: Fuß
+      preview: So sieht es aus
+      no_logo: Kein Logo
+      upload_logo: Logo hochladen
+      remove_logo: Entfernen
+      logo_help: PNG oder JPG, schwarz auf weiß, unter 300 KB; wird 30 mm breit gedruckt. Grautöne wirken auf Thermopapier schmutzig.
+      sample:
+        product_kg: Produkt nach Kilo
+        product_piece: Produkt nach Stück
+      zoom_in: Vergrößern
+      zoom_minus: Verkleinern
+      zoom_fit: An Breite anpassen
+      print_test: Testdruck
+      print_test_help: Schickt diese Vorschau so wie sie ist an den Drucker, um Papier und Breite zu prüfen
+    currency_help: 'Das Symbol steht im ganzen System und auf dem Ticket vor jedem Betrag ($, €, Q, S/…). Keine Umrechnung: eine Währung je Installation.'
+    currency: Währung
+    sections:
+      for_you: Für dich
+      business: Betrieb und Ticket
+      features: Module
+      till: Kasse
       folios: Nummerierung
-      compras: Einkauf
-      tablero: Übersicht in Lisp
-      regla_corte: Kassenabschluss in Lisp
-      regla_precio: Preis in Lisp
-      regla_venta: Verkäufe in Lisp
-      regla_credito: Kredit in Lisp
-      regla_retiro: Entnahmen in Lisp
-      regla_movimiento: Bestand in Lisp
-      regla_recepcion: Wareneingänge in Lisp
-      regla_factura: Rechnungen in Lisp
-      archivo_reglas: Exportieren und importieren
+      purchases: Einkauf
+      dashboard: Übersicht in Lisp
+      shift_rule: Kassenabschluss in Lisp
+      price_rule: Preis in Lisp
+      sale_rule: Verkäufe in Lisp
+      credit_rule: Kredit in Lisp
+      withdrawal_rule: Entnahmen in Lisp
+      movement_rule: Bestand in Lisp
+      receipt_rule: Wareneingänge in Lisp
+      invoice_rule: Rechnungen in Lisp
+      rules_file: Exportieren und importieren
       repl: REPL
       plugins: Plugins
-    secciones_ayuda:
-      para_ti: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
-      negocio: Die Betriebsdaten, wie sie auf dem Ticket stehen, mit dem Ticket daneben genau so, wie es gedruckt wird. Gilt für alle Filialen.
-      modulos: Was aus ist, verschwindet aus dem Menüband, den Rollen und seinen Seiten; die Daten bleiben. Ein Modul mit offener Arbeit lässt sich nicht ausschalten.
-      caja: Kassenregeln für alle Filialen.
+    sections_help:
+      for_you: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
+      business: Die Betriebsdaten, wie sie auf dem Ticket stehen, mit dem Ticket daneben genau so, wie es gedruckt wird. Gilt für alle Filialen.
+      features: Was aus ist, verschwindet aus dem Menüband, den Rollen und seinen Seiten; die Daten bleiben. Ein Modul mit offener Arbeit lässt sich nicht ausschalten.
+      till: Kassenregeln für alle Filialen.
       folios: 'Wie Belege nummeriert werden: die Buchstaben vor der Nummer wählt der Betrieb, oder eine fortlaufende Nummer für alles. Die Buchstaben zu ändern setzt den Zähler nicht zurück; nummeriert wird je Filiale.'
-      compras: Einkaufsregeln für alle Filialen.
+      purchases: Einkaufsregeln für alle Filialen.
     folios:
-      modos:
-        por_documento: Ein Zähler je Beleg
-        por_documento_ayuda: 'Jeder Beleg hat eigene Nummerierung und eigenes Präfix: B-00001 für Verkäufe, C-00001 für Kassenabschlüsse…'
-        unico: Eine fortlaufende Nummer
-        unico_ayuda: 'Alle Belege teilen eine Zählung und ein Präfix: F-00001 Verkauf, F-00002 Kassenabschluss, F-00003 Wareneingang…'
-      unico: Präfix der fortlaufenden Nummer
-      ejemplo: 'Beispiel: %{folio}'
-      por_documento: Präfix je Beleg
-      ayuda: Bis zu 4 Buchstaben oder Ziffern; leer = nur die Nummer. Gilt nur bei Nummerierung je Beleg.
-      documentos:
-        venta: Verkauf (Bon)
-        corte: Kassenabschluss
-        devolucion: Rückgabe
-        conteo: Zählung
-        recepcion: Wareneingang
-        traspaso: Umbuchung
-        abono: Kundenzahlung
-        pedido: Kundenbestellung
-      sucursal: Filialkürzel voranstellen
-    avanzadas: Erweitert
-  comun:
-    monto: Betrag
-    cerrar: Schließen
-    guardar: Speichern
-    editar: Bearbeiten
-    ver: Ansehen
-    buscar: Suchen
-    si: ja
+      modes:
+        per_document: Ein Zähler je Beleg
+        per_document_help: 'Jeder Beleg hat eigene Nummerierung und eigenes Präfix: B-00001 für Verkäufe, C-00001 für Kassenabschlüsse…'
+        single: Eine fortlaufende Nummer
+        single_help: 'Alle Belege teilen eine Zählung und ein Präfix: F-00001 Verkauf, F-00002 Kassenabschluss, F-00003 Wareneingang…'
+      single: Präfix der fortlaufenden Nummer
+      example: 'Beispiel: %{folio}'
+      per_document: Präfix je Beleg
+      help: Bis zu 4 Buchstaben oder Ziffern; leer = nur die Nummer. Gilt nur bei Nummerierung je Beleg.
+      documents:
+        sale: Verkauf (Bon)
+        shift: Kassenabschluss
+        refund: Rückgabe
+        stock_count: Zählung
+        receipt: Wareneingang
+        stock_transfer: Umbuchung
+        account_payment: Kundenzahlung
+        order: Kundenbestellung
+      branch: Filialkürzel voranstellen
+    advanced: Erweitert
+  common:
+    amount: Betrag
+    close: Schließen
+    save: Speichern
+    edit: Bearbeiten
+    view: Ansehen
+    search: Suchen
+    'yes': ja
     'no': nein
     folio: Nummer
-    producto: Produkt
-    cantidad: Menge
-    estado: Status
-    notas: Notizen
-    nota: Notiz
-    motivo: Grund
-    importe: Betrag
-    clave: Kürzel
-    sucursal: Filiale
-    matriz: Zentrale
-    desde: Von
-    hasta: Bis
-    todas: Alle
-    todas_las_sucursales: alle Filialen
-    de: von
-    fecha: Datum
-    cancelar: Abbrechen
-    volver: Zurück
-    nombre: Name
-    unidad: Einheit
-    precio: Preis
+    product: Produkt
+    quantity: Menge
+    status: Status
+    notes: Notizen
+    note: Notiz
+    reason: Grund
+    line_amount: Betrag
+    key: Kürzel
+    branch: Filiale
+    head_office: Zentrale
+    from: Von
+    to: Bis
+    all: Alle
+    all_branches: alle Filialen
+    of: von
+    date: Datum
+    cancel: Abbrechen
+    back: Zurück
+    name: Name
+    unit: Einheit
+    price: Preis
     total: Gesamt
-    acciones: Aktionen
+    actions: Aktionen
     kg: kg
-    pieza: Stück
-    piezas: Stück
-    abrir: Öffnen
-    imprimir: Drucken
-    nada: Nichts.
-    activo: Aktiv
-    quien: Wer
-    cuando: Wann
-    codigo: Code
-    kg_cada_una: kg je Stück
-    crear: Anlegen
-    tipo: Art
-    renglon: Zeile
-    autorizo: genehmigt von
-    por_revisar: zur Prüfung
-    origen: Herkunft
-    saldo: Saldo
-    detalle: Detail
-    concepto: Vorgang
-    agregar: Hinzufügen
-    quitar: Entfernen
-  cinta:
+    piece: Stück
+    pieces: Stück
+    open: Öffnen
+    print: Drucken
+    nothing: Nichts.
+    active: Aktiv
+    who: Wer
+    when: Wann
+    code: Code
+    kg_each_one: kg je Stück
+    create: Anlegen
+    kind: Art
+    row: Zeile
+    authorized: genehmigt von
+    pending_review: zur Prüfung
+    origin: Herkunft
+    balance: Saldo
+    detail: Detail
+    concept: Vorgang
+    add: Hinzufügen
+    remove: Entfernen
+  ribbon:
     menu: Menü
-    salir: Abmelden
-    pestanas:
-      inicio: Start
-      caja: Kasse
-      conteos: Zählungen
-      inventario: Bestand
+    logout: Abmelden
+    tabs:
+      home: Start
+      till: Kasse
+      stock_counts: Zählungen
+      inventory: Bestand
       admin: Verwaltung
-      ajustes: Einstellungen
-      compras: Einkauf
-      almacenes: Lager
-      clientes: Kunden
-    grupos:
-      ver: Ansehen
-      revisar: Prüfen
-      ajustes: Einstellungen
-      vender: Verkaufen
-      corte: Kassenabschluss
-      recibir: Annehmen
-      contar: Zählen
-      cargos: Belastungen
-      consultar: Nachsehen
-      capturar: Erfassen
-      catalogo: Katalog
-      gente: Personen
-      facturas: Rechnungen
-      proveedores: Lieferanten
-      granel: Umbuchungen
-      reabasto: Nachschub
-      clientes: Kunden
-      pedidos: Bestellungen
-    botones:
-      inicio: Start
-      reabastecer: Nachfüllen
-      clientes: Kunden
-      nuevo_cliente: Neuer Kunde
-      nuevo_pedido: Neue Bestellung
-      pedidos: Bestellungen
-      ventas_por_producto: Verkäufe je Produkt
-      por_revisar: Zu prüfen
-      ajustes: Einstellungen
-      vender: Verkaufen
-      ventas: Verkäufe
-      devolucion: Rückgabe
-      corte: Kassenabschluss
-      nuevo_conteo: Neue Zählung
-      conteos: Zählungen
-      cargos: Belastungen
-      existencias: Bestände
+      settings: Einstellungen
+      purchases: Einkauf
+      warehouses: Lager
+      customers: Kunden
+    groups:
+      view: Ansehen
+      review: Prüfen
+      settings: Einstellungen
+      sell: Verkaufen
+      shift: Kassenabschluss
+      receive: Annehmen
+      count: Zählen
+      charges: Belastungen
+      query: Nachsehen
+      capture: Erfassen
+      catalog: Katalog
+      people: Personen
+      invoices: Rechnungen
+      suppliers: Lieferanten
+      bulk: Umbuchungen
+      restock: Nachschub
+      customers: Kunden
+      orders: Bestellungen
+    buttons:
+      home: Start
+      restock: Nachfüllen
+      customers: Kunden
+      new_customer: Neuer Kunde
+      new_order: Neue Bestellung
+      orders: Bestellungen
+      sales_by_product: Verkäufe je Produkt
+      pending_review: Zu prüfen
+      settings: Einstellungen
+      sell: Verkaufen
+      sales: Verkäufe
+      refund: Rückgabe
+      shift: Kassenabschluss
+      new_stock_count: Neue Zählung
+      stock_counts: Zählungen
+      charges: Belastungen
+      stock_levels: Bestände
       kardex: Bewegungen
-      entrada_ajuste: Eingang / Korrektur
-      productos: Produkte
-      promociones: Aktionen
-      usuarios: Benutzer
+      inflow_adjustment: Eingang / Korrektur
+      products: Produkte
+      promotions: Aktionen
+      users: Benutzer
       roles: Rollen
-      sucursales: Filialen
-      recibir: Annehmen
-      recepciones: Wareneingänge
-      nueva_factura: Neue Rechnung
-      cuentas_por_pagar: Verbindlichkeiten
-      proveedores: Lieferanten
-      traspaso_granel: Neue Umbuchung
-      traspasos: Umlagerungen
-  acerca:
-    titulo: Über Sakuya
-    lema: Kasse und Backoffice für die Zentrale und ihre Läden
+      branches: Filialen
+      receive: Annehmen
+      receipts: Wareneingänge
+      new_invoice: Neue Rechnung
+      accounts_payable: Verbindlichkeiten
+      suppliers: Lieferanten
+      stock_transfer_bulk: Neue Umbuchung
+      stock_transfers: Umlagerungen
+  about:
+    title: Über Sakuya
+    tagline: Kasse und Backoffice für die Zentrale und ihre Läden
     version: Version
-    motor: Technik
-    sesion: Sitzung
-    servidor: Server
-    creditos_html: Sakuya Izayoi und Touhou Project gehören Team Shanghai Alice (ZUN). Der Name ist eine inoffizielle Fan-Hommage ohne Verbindung, gemäß deren Richtlinien für abgeleitete Werke.
-    tecnologia: Gebaut mit Rails, Hotwire und Tailwind. Open Source unter der Apache-2.0-Lizenz.
-    codigo: Code auf GitHub
-    reportar: Problem melden
-    pwa_descripcion: Kasse und Warenwirtschaft in Modulen, mit Regeln, die jedes Geschäft anpasst.
-    instalar: App installieren
-  sesion:
-    usuario: Benutzer
-    contrasena: Passwort
-    entrar: Anmelden
-    hola: Hallo, %{nombre}
-    incorrectos: Benutzer oder Passwort falsch
-    cerrada: Abgemeldet
-    inicia_para_continuar: Zum Fortfahren anmelden
-  errores:
-    apartado:
-      no_alcanza: '%{producto}: es gibt %{hay}, aber %{apartado} ist für Bestellungen reserviert; verfügbar %{disponible}'
-    impresora:
-      sin_direccion: die Filiale hat keine Adresse für ihren Netzwerk-Thermodrucker
-      no_contesta: 'der Thermodrucker %{direccion} antwortet nicht (%{error})'
-    pedido:
-      sin_renglones: die Bestellung hat keine Zeilen
-      no_abierto: die Bestellung %{folio} ist nicht mehr offen
-      no_alcanza: '%{producto}: du bestellst %{pide} und %{disponible} ist zum Reservieren verfügbar (oder ohne Reservierung speichern)'
-    abono:
-      mayor_que_cero: die Zahlung muss größer als null sein
-      sin_caja: in %{sucursal} ist keine Kasse offen, um die Zahlung anzunehmen
-    sin_permiso:
-      titulo: Keine Berechtigung
-      texto_html: Deine Rolle enthält %{clave} nicht. Bitte jemanden mit Berechtigung, es zu tun oder dich freizugeben.
-    hace_falta_motivo: ein Grund ist nötig
-    minimo:
-      maximo_menor: das Maximum darf nicht unter dem Minimum liegen
-    mayor_que_cero: muss größer als null sein
+    engine: Technik
+    session: Sitzung
+    server: Server
+    credits_html: Sakuya Izayoi und Touhou Project gehören Team Shanghai Alice (ZUN). Der Name ist eine inoffizielle Fan-Hommage ohne Verbindung, gemäß deren Richtlinien für abgeleitete Werke.
+    technology: Gebaut mit Rails, Hotwire und Tailwind. Open Source unter der Apache-2.0-Lizenz.
+    code: Code auf GitHub
+    report: Problem melden
+    pwa_description: Kasse und Warenwirtschaft in Modulen, mit Regeln, die jedes Geschäft anpasst.
+    install: App installieren
+  session:
+    user: Benutzer
+    password: Passwort
+    login: Anmelden
+    welcome: Hallo, %{name}
+    wrong: Benutzer oder Passwort falsch
+    closed: Abgemeldet
+    sign_in_to_continue: Zum Fortfahren anmelden
+  errors:
+    reserved:
+      not_enough: '%{product}: es gibt %{on_hand}, aber %{reserved} ist für Bestellungen reserviert; verfügbar %{available}'
+    printer:
+      no_address: die Filiale hat keine Adresse für ihren Netzwerk-Thermodrucker
+      no_answer: 'der Thermodrucker %{address} antwortet nicht (%{error})'
+    order:
+      no_rows: die Bestellung hat keine Zeilen
+      not_open: die Bestellung %{folio} ist nicht mehr offen
+      not_enough: '%{product}: du bestellst %{asks} und %{available} ist zum Reservieren verfügbar (oder ohne Reservierung speichern)'
+    account_payment:
+      greater_than_zero: die Zahlung muss größer als null sein
+      no_till: in %{branch} ist keine Kasse offen, um die Zahlung anzunehmen
+    not_allowed:
+      title: Keine Berechtigung
+      text_html: Deine Rolle enthält %{key} nicht. Bitte jemanden mit Berechtigung, es zu tun oder dich freizugeben.
+    reason_required: ein Grund ist nötig
+    minimum:
+      maximum_below_minimum: das Maximum darf nicht unter dem Minimum liegen
+    greater_than_zero: muss größer als null sein
     barcode:
-      doce_digitos: 12 Ziffern erwartet
-      plu_rango: PLU außerhalb des Bereichs
-      secuencia_rango: Laufnummer außerhalb des Bereichs
-    corte:
-      ya_abierto: in %{sucursal} ist bereits ein Kassenabschnitt offen
-      cerrado: der Kassenabschnitt ist geschlossen
-      sin_efectivo: so viel Bargeld ist nicht in der Lade (%{monto})
-      ya_cerrado: der Kassenabschnitt ist bereits geschlossen
-      falta_motivo: '%{motivo}: Grund angeben'
-      rechazado: '%{motivo}. So kann nicht abgeschlossen werden: neu zählen oder jemanden mit Berechtigung für Differenzen abschließen lassen. Es wurde gemeldet.'
-      sin_caja_en_almacen: "%{sucursal} ist ein Lager: dort gibt es keine Kasse"
-    caja:
-      clave_ticket: der Ticketschlüssel fehlt
-      sin_caja: 'keine Kasse offen in %{sucursal}: mit Wechselgeld öffnen'
-      sin_caja_simple: keine Kasse offen
-      excede_limite: 'mehr als %{monto} in der Lade: erst Abschöpfung in den Tresor'
-      ticket_vacio: das Ticket ist leer
-      no_se_vende_sin: "%{mensaje}. Was nicht da ist, wird nicht verkauft: erst den Transfer empfangen."
-      sin_caja_en: keine Kasse offen in %{sucursal}
-      forma_desconocida: 'unbekannte Zahlungsart: %{forma}'
-      ya_devuelta: der Verkauf ist bereits komplett erstattet
-      sin_caja_devolver: keine Kasse offen, um das Geld zurückzugeben
-      nada_devuelto: nichts zurückgegeben
-      max_devolver: "%{producto}: höchstens %{max} können zurückgegeben werden"
-      cantidad_invalida: "%{producto}: ungültige Menge"
-      piezas_enteras: "%{producto} geht nur in ganzen Stücken"
-      sin_precio: "%{producto}: kein Preis in %{sucursal}; vor dem Verkauf bei der Zentrale anfragen"
-      piso_precio: "%{producto}: der Preis darf nicht unter %{piso} % des Katalogs fallen (%{monto})"
-      precio_frenado: '%{cobro}: %{motivo}. So kann nicht kassiert werden: regulären Preis lassen oder jemanden mit Berechtigung für Preissenkungen kassieren lassen. Es wurde gemeldet.'
-      retiro_frenado: '%{motivo}. So kann nicht entnommen werden: jemand mit Berechtigung für Entnahmen muss es tun. Es wurde gemeldet.'
-      venta_frenada: '%{motivo}. So kann nicht kassiert werden: jemand mit Berechtigung muss kassieren. Es wurde gemeldet.'
-      credito_frenado: '%{motivo}. So gibt es keinen Kredit: jemand mit Berechtigung muss es freigeben, oder anders bezahlen. Es wurde gemeldet.'
-      a_cuenta_sin_cliente: für einen Verkauf auf Rechnung muss der Kunde gewählt werden
-      a_cuenta_sin_conexion: Verkauf auf Rechnung braucht eine Verbindung
-      vendida_en_rara: die Zeit des Offline-Verkaufs passt nicht (mehr als 7 Tage oder in der Zukunft)
-      falta_dinero: 'Geld fehlt: das Ticket ist %{total} und gezahlt werden %{pago}'
-      no_efectivo_excede: Überweisung oder Einzahlung dürfen die Summe nicht übersteigen
-      sin_ticket_devolucion: 'Ohne Beleg keine Rückgabe: „%{codigo}“ nicht gefunden'
-    escribe_motivo: Grund angeben
-    conteo:
-      ya_abierto: in %{sucursal} ist bereits eine Zählung offen
-      cerrado: die Zählung ist geschlossen
-      fuera_de_alcance: "%{producto} gehört nicht zu dieser Teilzählung"
-      parcial_vacio: eine Linie oder mindestens ein Produkt wählen
-      cantidad_invalida: ungültige Menge
-      ya_cerrado: die Zählung ist bereits geschlossen
-      se_teclea: "%{producto} wird in Bruchteilen verkauft: von Hand eintippen"
-      no_encontrado: "„%{codigo}“ nicht gefunden"
-    cargo:
-      sin_origen: eine Belastung stammt aus einer Zählung, einer Prüfung oder einer Fahrt
-      ya_esta: die Belastung ist bereits %{estado}
-    inventario:
-      movimiento_frenado: '%{motivo}. So kann nicht gebucht werden: jemand mit Berechtigung für Korrekturen muss es tun. Es wurde gemeldet.'
-      cantidad_cero: die Menge muss größer als null sein
-      insuficiente: 'Nicht genug Bestand von %{producto} in %{sucursal}: vorhanden %{hay}, angefragt %{piden}'
-    revision:
-      ya_esta: die Prüfung ist bereits %{estado}
-    promocion:
-      hasta_antes: darf nicht vor „von“ liegen
-    rol:
-      lista: muss eine Liste sein
-      desconocidos: 'unbekannt: %{claves}'
-    ajuste:
-      entero: "%{clave}: muss eine ganze Zahl sein"
+      twelve_digits: 12 Ziffern erwartet
+      plu_range: PLU außerhalb des Bereichs
+      sequence_range: Laufnummer außerhalb des Bereichs
+    shift:
+      already_open: in %{branch} ist bereits ein Kassenabschnitt offen
+      closed: der Kassenabschnitt ist geschlossen
+      no_cash: so viel Bargeld ist nicht in der Lade (%{amount})
+      already_closed: der Kassenabschnitt ist bereits geschlossen
+      missing_reason: '%{reason}: Grund angeben'
+      rejected: '%{reason}. So kann nicht abgeschlossen werden: neu zählen oder jemanden mit Berechtigung für Differenzen abschließen lassen. Es wurde gemeldet.'
+      no_till_in_warehouse: "%{branch} ist ein Lager: dort gibt es keine Kasse"
+    till:
+      key_ticket: der Ticketschlüssel fehlt
+      no_till: 'keine Kasse offen in %{branch}: mit Wechselgeld öffnen'
+      no_till_simple: keine Kasse offen
+      exceeds_limit: 'mehr als %{amount} in der Lade: erst Abschöpfung in den Tresor'
+      ticket_empty: das Ticket ist leer
+      cannot_sell_without: "%{message}. Was nicht da ist, wird nicht verkauft: erst den Transfer empfangen."
+      no_till_in: keine Kasse offen in %{branch}
+      unknown_payment_method: 'unbekannte Zahlungsart: %{payment_method}'
+      already_refunded: der Verkauf ist bereits komplett erstattet
+      no_till_refund: keine Kasse offen, um das Geld zurückzugeben
+      nothing_refunded: nichts zurückgegeben
+      max_refund: "%{product}: höchstens %{max} können zurückgegeben werden"
+      invalid_quantity: "%{product}: ungültige Menge"
+      whole_pieces: "%{product} geht nur in ganzen Stücken"
+      not_found: "„%{code}“ nicht gefunden"
+      no_price: "%{product}: kein Preis in %{branch}; vor dem Verkauf bei der Zentrale anfragen"
+      price_floor: "%{product}: der Preis darf nicht unter %{floor} % des Katalogs fallen (%{amount})"
+      price_stopped: '%{line}: %{reason}. So kann nicht kassiert werden: regulären Preis lassen oder jemanden mit Berechtigung für Preissenkungen kassieren lassen. Es wurde gemeldet.'
+      withdrawal_stopped: '%{reason}. So kann nicht entnommen werden: jemand mit Berechtigung für Entnahmen muss es tun. Es wurde gemeldet.'
+      sale_stopped: '%{reason}. So kann nicht kassiert werden: jemand mit Berechtigung muss kassieren. Es wurde gemeldet.'
+      credit_stopped: '%{reason}. So gibt es keinen Kredit: jemand mit Berechtigung muss es freigeben, oder anders bezahlen. Es wurde gemeldet.'
+      on_account_no_customer: für einen Verkauf auf Rechnung muss der Kunde gewählt werden
+      on_account_offline: Verkauf auf Rechnung braucht eine Verbindung
+      sold_at_odd: die Zeit des Offline-Verkaufs passt nicht (mehr als 7 Tage oder in der Zukunft)
+      missing_money: 'Geld fehlt: das Ticket ist %{total} und gezahlt werden %{payment}'
+      non_cash_exceeds: Überweisung oder Einzahlung dürfen die Summe nicht übersteigen
+      no_ticket_refund: 'Ohne Beleg keine Rückgabe: „%{code}“ nicht gefunden'
+    writes_reason: Grund angeben
+    stock_count:
+      already_open: in %{branch} ist bereits eine Zählung offen
+      closed: die Zählung ist geschlossen
+      out_of_scope: "%{product} gehört nicht zu dieser Teilzählung"
+      partial_empty: eine Linie oder mindestens ein Produkt wählen
+      invalid_quantity: ungültige Menge
+      already_closed: die Zählung ist bereits geschlossen
+      is_typed: "%{product} wird in Bruchteilen verkauft: von Hand eintippen"
+      not_found: "„%{code}“ nicht gefunden"
+    charge:
+      no_origin: eine Belastung stammt aus einer Zählung, einer Prüfung oder einer Fahrt
+      already: die Belastung ist bereits %{status}
+    inventory:
+      movement_stopped: '%{reason}. So kann nicht gebucht werden: jemand mit Berechtigung für Korrekturen muss es tun. Es wurde gemeldet.'
+      zero_quantity: die Menge muss größer als null sein
+      insufficient: 'Nicht genug Bestand von %{product} in %{branch}: vorhanden %{on_hand}, angefragt %{requested}'
+    review:
+      already: die Prüfung ist bereits %{status}
+    promotion:
+      to_before: darf nicht vor „von“ liegen
+    role:
+      list: muss eine Liste sein
+      unknown: 'unbekannt: %{keys}'
+    setting:
+      integer: "%{key}: muss eine ganze Zahl sein"
       logo: das Logo muss ein PNG-, JPG- oder WebP-Bild unter 300 KB sein
-      prefijo: "%{clave}: das Präfix hat bis zu 4 Buchstaben oder Ziffern, ohne Bindestrich"
-      modo_folios: unbekannter Nummerierungsmodus
-      denominaciones: Stückelungen durch Komma getrennt, z. B. 500,200,100,50,20,10,5,2,1,0.5
-    movimiento:
-      tipo_desconocido: 'unbekannte Bewegungsart: %{tipo}'
-    usuario:
-      formato: nur Kleinbuchstaben, Ziffern, Punkt und Bindestrich
-    modulo_apagado:
-      titulo: Das Modul %{modulo} ist aus
-      texto: Dieser Betrieb nutzt es nicht. Wer Benutzer verwaltet, kann es unter Einstellungen › System einschalten.
-    modulo:
-      con_trabajo_abierto: "%{modulo} lässt sich nicht ausschalten: es gibt offene Arbeit; erst abschließen"
-      con_dependientes: "%{modulo} lässt sich nicht ausschalten: %{dependientes} benötigt es; ebenfalls ausschalten oder eingeschaltet lassen"
-    compras:
-      factura_de_otro: diese Rechnung gehört zu einem anderen Lieferanten
-      factura_cancelada: diese Rechnung ist storniert
-      sin_renglones: 'keine Positionen: mindestens ein Produkt scannen oder wählen'
-      recepcion_cancelada: der Wareneingang ist bereits storniert
-      folio_obligatorio: die Rechnungsnummer fehlt
-      folio_repetido: Rechnung %{folio} dieses Lieferanten ist schon erfasst
-      monto_cero: der Betrag muss größer als null sein
-      falta_motivo: '%{motivo}: Grund angeben'
-      factura_frenada: '%{motivo}. So kann sie nicht erfasst werden: fehlende Wareneingänge verknüpfen oder jemanden mit Berechtigung zum Überschreiten erfassen lassen. Es wurde gemeldet.'
-      recepcion_frenada: '%{motivo}. So kommt sie nicht herein: jemand mit Berechtigung muss sie annehmen. Es wurde gemeldet.'
-      factura_ya_cancelada: die Rechnung ist bereits storniert
-      factura_con_pagos: 'die Rechnung hat Zahlungen: erst stornieren'
-      pago_excede: die Zahlung übersteigt den Rest der Rechnung (%{resta})
-      anticipo_excede: die Zahlung übersteigt die Schuld (%{saldo}); bei Anzahlung eine Rechnung verknüpfen
-      pago_ya_anulado: die Zahlung ist bereits storniert
-      corte_cerrado: 'der Kassenabschluss dieser Zahlung ist geschlossen: das Bargeld kann nicht zurück in die Lade'
-      envases_insuficientes: so viele %{envase} schulden wir nicht (Saldo %{saldo})
-    traspaso:
-      mismo_lugar: Herkunft und Ziel sind derselbe Ort
-      externo_solo_a_matriz: von %{almacen} geht Ware nur zur Zentrale; von dort in die Filialen
-      ya_cancelado: die Umlagerung ist bereits storniert
-  inicio:
-    titulo: Start
-    ventas: Verkäufe
+      prefix: "%{key}: das Präfix hat bis zu 4 Buchstaben oder Ziffern, ohne Bindestrich"
+      mode_folios: unbekannter Nummerierungsmodus
+      denominations: Stückelungen durch Komma getrennt, z. B. 500,200,100,50,20,10,5,2,1,0.5
+    movement:
+      unknown_kind: 'unbekannte Bewegungsart: %{kind}'
+    user:
+      format: nur Kleinbuchstaben, Ziffern, Punkt und Bindestrich
+    feature_off:
+      title: Das Modul %{feature} ist aus
+      text: Dieser Betrieb nutzt es nicht. Wer Benutzer verwaltet, kann es unter Einstellungen › System einschalten.
+    feature:
+      with_work_open: "%{feature} lässt sich nicht ausschalten: es gibt offene Arbeit; erst abschließen"
+      with_dependents: "%{feature} lässt sich nicht ausschalten: %{dependents} benötigt es; ebenfalls ausschalten oder eingeschaltet lassen"
+    purchases:
+      invoice_of_other: diese Rechnung gehört zu einem anderen Lieferanten
+      invoice_cancelled: diese Rechnung ist storniert
+      no_rows: 'keine Positionen: mindestens ein Produkt scannen oder wählen'
+      receipt_cancelled: der Wareneingang ist bereits storniert
+      folio_required: die Rechnungsnummer fehlt
+      folio_repeated: Rechnung %{folio} dieses Lieferanten ist schon erfasst
+      zero_amount: der Betrag muss größer als null sein
+      missing_reason: '%{reason}: Grund angeben'
+      invoice_stopped: '%{reason}. So kann sie nicht erfasst werden: fehlende Wareneingänge verknüpfen oder jemanden mit Berechtigung zum Überschreiten erfassen lassen. Es wurde gemeldet.'
+      receipt_stopped: '%{reason}. So kommt sie nicht herein: jemand mit Berechtigung muss sie annehmen. Es wurde gemeldet.'
+      invoice_already_cancelled: die Rechnung ist bereits storniert
+      invoice_with_payments: 'die Rechnung hat Zahlungen: erst stornieren'
+      payment_exceeds: die Zahlung übersteigt den Rest der Rechnung (%{remaining})
+      advance_exceeds: die Zahlung übersteigt die Schuld (%{balance}); bei Anzahlung eine Rechnung verknüpfen
+      payment_already_voided: die Zahlung ist bereits storniert
+      closed_shift: 'der Kassenabschluss dieser Zahlung ist geschlossen: das Bargeld kann nicht zurück in die Lade'
+    stock_transfer:
+      same_place: Herkunft und Ziel sind derselbe Ort
+      external_only_to_head_office: von %{warehouse} geht Ware nur zur Zentrale; von dort in die Filialen
+      already_cancelled: die Umlagerung ist bereits storniert
+  home:
+    title: Start
+    sales: Verkäufe
     tickets: Bons
-    ticket_promedio: Durchschnittsbon
-    devoluciones: Rückgaben
-    efectivo: Bargeld
-    transferencias: Überweisungen
-    depositos: Einzahlungen
-    inventario_valorizado: Bestandswert
-    lo_mas_vendido: Meistverkauft
-    sin_ventas: Keine Verkäufe im Zeitraum.
-    cortes_cerrados: Abgeschlossene Kassen
-    sin_cortes: Keine Abschlüsse im Zeitraum.
-    conteos: Zählungen
-    sin_conteos: Keine Zählungen im Zeitraum.
-    ventas_por_producto: Verkäufe je Produkt
-    descargar_csv: CSV herunterladen
-    lineas: Zeilen
-    revisar: Prüfen
-    por_revisar_html:
+    average_ticket: Durchschnittsbon
+    refunds: Rückgaben
+    cash: Bargeld
+    transfers: Überweisungen
+    deposits: Einzahlungen
+    inventory_valued: Bestandswert
+    best_sellers: Meistverkauft
+    no_sales: Keine Verkäufe im Zeitraum.
+    closed_shifts: Abgeschlossene Kassen
+    no_shifts: Keine Abschlüsse im Zeitraum.
+    stock_counts: Zählungen
+    no_stock_counts: Keine Zählungen im Zeitraum.
+    sales_by_product: Verkäufe je Produkt
+    download_csv: CSV herunterladen
+    lines: Zeilen
+    review: Prüfen
+    pending_review_html:
       one: "%{n} Vorgang ohne Freigabe wartet auf Prüfung."
       other: "%{n} Vorgänge ohne Freigabe warten auf Prüfung."
     csv:
-      clave: schluessel
-      producto: produkt
-      unidad: einheit
-      cantidad: menge
-      importe: betrag
-      lineas: zeilen
-  revisiones:
-    titulo: Zu prüfen
-    solo_esta: Nur %{sucursal}
-    explicacion: Vorgänge, die jemand ausgeführt hat, ohne dass gerade jemand sie freigeben konnte. Sie wurden durchgeführt und auf seinen Namen verbucht; hier entscheidest du, was mit jedem passiert. Beim Beanstanden kannst du den Betrag dem Verantwortlichen belasten.
-    cuando: Wann
-    quien: Wer
-    que: Was
-    vale: Wert
-    decidir: Entscheiden
-    aprobar: Freigeben
-    observar_y_cargar: Beanstanden und belasten
-    nada: Nichts zu prüfen.
-    sin_cargar: Um ohne Belastung zu beanstanden, lass den Betrag auf 0.
-    revisadas: Geprüft
-    cargo: Belastung
-    aprobada: Freigegeben
-    observada_sin_cargo: Beanstandet, ohne Belastung
-    observada_cargada: 'Beanstandet und %{quien} belastet: %{monto}'
+      key: schluessel
+      product: produkt
+      unit: einheit
+      quantity: menge
+      amount: betrag
+      lines: zeilen
+  reviews:
+    title: Zu prüfen
+    only_this: Nur %{branch}
+    explanation: Vorgänge, die jemand ausgeführt hat, ohne dass gerade jemand sie freigeben konnte. Sie wurden durchgeführt und auf seinen Namen verbucht; hier entscheidest du, was mit jedem passiert. Beim Beanstanden kannst du den Betrag dem Verantwortlichen belasten.
+    when: Wann
+    who: Wer
+    what: Was
+    worth: Wert
+    decide: Entscheiden
+    approve: Freigeben
+    flag_and_charge: Beanstanden und belasten
+    nothing: Nichts zu prüfen.
+    no_load: Um ohne Belastung zu beanstanden, lass den Betrag auf 0.
+    reviewed: Geprüft
+    charge: Belastung
+    approved: Freigegeben
+    flagged_no_charge: Beanstandet, ohne Belastung
+    flagged_loaded: 'Beanstandet und %{who} belastet: %{amount}'
     desc:
-      movimiento: "%{tipo} über %{cantidad}"
-      retiro: Abschöpfung von %{monto} aus Abschnitt %{folio}
-      venta_linea: 'Preis gesenkt in %{folio}: %{producto} auf %{precio} (Katalog %{catalogo})'
-      factura_proveedor: Rechnung %{folio} von %{proveedor} mit mehr als erhalten
-      corte: Abschnitt %{folio} mit einer Differenz von %{diferencia} geschlossen
-      frenado: Versuch im Kassenabschnitt %{folio} gestoppt
-      frenado_producto: 'Bewegung gestoppt: %{producto}'
-      frenado_proveedor: 'Rechnung gestoppt von %{proveedor}'
-      venta: 'Verkauf %{folio} über %{total}'
-      recepcion: 'Wareneingang %{folio} von %{proveedor}'
-      corte_abierto: Kassenabschnitt %{folio}, offen
-  estados:
-    pendiente: offen
-    aprobada: freigegeben
-    observada: beanstandet
-    cerrado: abgeschlossen
-    cancelado: storniert
-    cancelada: storniert
-    abierta: offen
-    cerrada: geschlossen
-    abierto: offen
-    faltante: fehlend
-    sobrante: überzählig
-    cobrada: bezahlt
-    devuelta: zurückgegeben
-    perdonado: erlassen
-    cobrado: eingezogen
-  movimientos:
-    entrada: Eingang
-    recepcion: Annahme
-    devolucion_cliente: Kundenrückgabe
-    ajuste_entrada: Korrektur (+)
-    venta: Verkauf
-    salida: Lieferung
-    merma: Schwund
-    ajuste_salida: Korrektur (−)
-  permisos:
-    caja.vender: An der Kasse verkaufen
-    caja.abrir: Kasse öffnen und abschließen
-    caja.retirar: Bargeld in den Tresor legen
-    caja.diferencia: Abschluss mit einer Differenz über der Grenze
-    caja.bajar_precio: Preis unter Liste freigeben
-    caja.forzar_venta: Einen Verkauf kassieren, den die Verkaufsregel stoppt (geht zur Prüfung)
-    caja.devolver: Kundenrückgaben annehmen
-    inventario.ver: Bestände und Bewegungen sehen
-    inventario.ajustar: Bestände mit Begründung korrigieren
-    conteos.hacer: Inventuren durchführen und Fehlmengen belasten
-    conteos.cargos: Belastungen einziehen oder erlassen
-    reportes.ver: Übersicht und Berichte sehen
-    revisiones.resolver: Prüfen, was ohne Freigabe geschah (freigeben, beanstanden, belasten)
-    admin.catalogo: Produkte und Codes verwalten
-    admin.usuarios: Benutzer, Rollen und Filialen verwalten
-    compras.ver: Lieferanten, Verbindlichkeiten und Leergut sehen
-    compras.recibir: Ware vom Lieferanten annehmen
-    compras.facturar: Lieferantenrechnungen erfassen und stornieren
-    clientes.ver: Kunden ansehen
-    clientes.editar: Kunden anlegen und bearbeiten
-    clientes.pedidos: Kundenbestellungen aufnehmen und stornieren
-    clientes.abonar: Kundenzahlungen an der Kasse annehmen
-    clientes.forzar_credito: Auf Rechnung verkaufen, auch wenn die Kreditregel stoppt (geht zur Prüfung)
-    compras.forzar_recepcion: Ware annehmen, die die Eingangsregel stoppt (geht zur Prüfung)
-    compras.pagar: Lieferanten aus der Kasse bezahlen
-    compras.exceder: Eine Rechnung mit mehr als erhalten erfassen (mit Grund, geht zur Prüfung)
-    almacenes.traspasar: Umbuchungen zwischen Filialen und Lagern
-    reglas.editar: Die Lisp-Programme des Geschäfts schreiben (die Übersicht)
+      movement: "%{kind} über %{quantity}"
+      withdrawal: Abschöpfung von %{amount} aus Abschnitt %{folio}
+      sale_line: 'Preis gesenkt in %{folio}: %{product} auf %{price} (Katalog %{catalog})'
+      supplier_invoice: Rechnung %{folio} von %{supplier} mit mehr als erhalten
+      shift: Abschnitt %{folio} mit einer Differenz von %{difference} geschlossen
+      stopped: Versuch im Kassenabschnitt %{folio} gestoppt
+      stopped_product: 'Bewegung gestoppt: %{product}'
+      stopped_supplier: 'Rechnung gestoppt von %{supplier}'
+      sale: 'Verkauf %{folio} über %{total}'
+      receipt: 'Wareneingang %{folio} von %{supplier}'
+      open_shift: Kassenabschnitt %{folio}, offen
+  statuses:
+    pending: offen
+    approved: freigegeben
+    flagged: beanstandet
+    closed: abgeschlossen
+    cancelled: storniert
+    open: offen
+    shortage: fehlend
+    surplus: überzählig
+    forgiven: erlassen
+    paid: eingezogen
+  sale_statuses:
+    paid: bezahlt
+    cancelled: storniert
+    refunded: zurückgegeben
+  movements:
+    inflow: Eingang
+    receipt: Annahme
+    customer_return: Kundenrückgabe
+    adjustment_inflow: Korrektur (+)
+    sale: Verkauf
+    outflow: Lieferung
+    waste: Schwund
+    adjustment_outflow: Korrektur (−)
+  permissions:
+    till.sell: An der Kasse verkaufen
+    till.open: Kasse öffnen und abschließen
+    till.withdraw: Bargeld in den Tresor legen
+    till.difference: Abschluss mit einer Differenz über der Grenze
+    till.lower_price: Preis unter Liste freigeben
+    till.force_sale: Einen Verkauf kassieren, den die Verkaufsregel stoppt (geht zur Prüfung)
+    till.refund: Kundenrückgaben annehmen
+    inventory.view: Bestände und Bewegungen sehen
+    inventory.adjust: Bestände mit Begründung korrigieren
+    stock_counts.make: Inventuren durchführen und Fehlmengen belasten
+    stock_counts.charges: Belastungen einziehen oder erlassen
+    reports.view: Übersicht und Berichte sehen
+    reviews.resolve: Prüfen, was ohne Freigabe geschah (freigeben, beanstanden, belasten)
+    admin.catalog: Produkte und Codes verwalten
+    admin.users: Benutzer, Rollen und Filialen verwalten
+    purchases.view: Lieferanten, Verbindlichkeiten und Leergut sehen
+    purchases.receive: Ware vom Lieferanten annehmen
+    purchases.invoice: Lieferantenrechnungen erfassen und stornieren
+    customers.view: Kunden ansehen
+    customers.edit: Kunden anlegen und bearbeiten
+    customers.orders: Kundenbestellungen aufnehmen und stornieren
+    customers.pay_account: Kundenzahlungen an der Kasse annehmen
+    customers.force_credit: Auf Rechnung verkaufen, auch wenn die Kreditregel stoppt (geht zur Prüfung)
+    purchases.force_receipt: Ware annehmen, die die Eingangsregel stoppt (geht zur Prüfung)
+    purchases.pay: Lieferanten aus der Kasse bezahlen
+    purchases.exceed: Eine Rechnung mit mehr als erhalten erfassen (mit Grund, geht zur Prüfung)
+    warehouses.transfer_stock: Umbuchungen zwischen Filialen und Lagern
+    rules.edit: Die Lisp-Programme des Geschäfts schreiben (die Übersicht)
   js:
     pos:
-      no_en_catalogo: Es ist nicht im auf diesem Gerät gespeicherten Katalog
-      necesita_conexion: Offline kann nicht auf Rechnung verkauft oder eine Bestellung kassiert werden
-      guardada_sin_conexion: 'Verkauf offline gespeichert (%{total}, Wechselgeld %{cambio}). Er wird hochgeladen, sobald das Netz zurück ist; den Bon nach dem Hochladen unter Verkäufe drucken.'
-      sin_conexion: 'Offline: Verkauf mit dem gespeicherten Katalog'
-      por_subir: '%{n} Verkäufe zum Hochladen'
-      por_subir_una: 1 Verkauf zum Hochladen
-      corte_pendientes: 'Auf diesem Gerät gibt es %{n} offline gemachte Verkäufe, die noch nicht hochgeladen sind: vor dem Abschluss warten.'
-      corte_pendiente: 'Auf diesem Gerät gibt es 1 offline gemachten Verkauf, der noch nicht hochgeladen ist: vor dem Abschluss warten.'
-      ticket_vacio: Das Ticket ist leer
-      cantidad: Menge eintippen
-    unidades:
+      not_in_catalog: Es ist nicht im auf diesem Gerät gespeicherten Katalog
+      needs_connection: Offline kann nicht auf Rechnung verkauft oder eine Bestellung kassiert werden
+      saved_offline: 'Verkauf offline gespeichert (%{total}, Wechselgeld %{change}). Er wird hochgeladen, sobald das Netz zurück ist; den Bon nach dem Hochladen unter Verkäufe drucken.'
+      offline: 'Offline: Verkauf mit dem gespeicherten Katalog'
+      to_upload: '%{n} Verkäufe zum Hochladen'
+      to_upload_one: 1 Verkauf zum Hochladen
+      shift_pending_other: 'Auf diesem Gerät gibt es %{n} offline gemachte Verkäufe, die noch nicht hochgeladen sind: vor dem Abschluss warten.'
+      shift_pending_one: 'Auf diesem Gerät gibt es 1 offline gemachten Verkauf, der noch nicht hochgeladen ist: vor dem Abschluss warten.'
+      ticket_empty: Das Ticket ist leer
+      quantity: Menge eintippen
+    units:
       kg: kg
-      pieza: St.
-      litro: l
-      metro: m
+      piece: St.
+      liter: l
+      meter: m
     ticket:
-      logo_grande: Das Logo ist größer als 300 KB; nimm ein kleineres Bild.
+      logo_large: Das Logo ist größer als 300 KB; nimm ein kleineres Bild.
     pwa:
-      version_nueva: Eine neue Version von Sakuya ist bereit.
-      recargar: Neu laden
-    cargando: Lädt…
-    no_se_pudo: Konnte nicht laden. Prüfe die Verbindung.
-  caja:
-    nueva_venta: Neuer Verkauf
-    bajar_escpos: ESC/POS herunterladen
-    escpos_ayuda: Der Bon als Bytes für einen Thermodrucker
-    imprimir_termica: Auf dem Thermodrucker drucken
-    subir_ahora: Jetzt hochladen
-    impreso: Bon gedruckt.
-    sin_serial: 'Dieser Browser kann nicht mit einem Kabeldrucker sprechen; Chrome oder Edge nutzen oder als ESC/POS herunterladen.'
-    elige_impresora: 'Den Drucker mit «Auf dem Thermodrucker drucken» wählen; danach wird nicht mehr gefragt.'
-    corte_de_caja: Kassenabschnitt
-    corte: Abschnitt
-    fondo: Wechselgeld
-    ventas: Verkäufe
-    efectivo_de_ventas: Bargeld aus Verkäufen
-    devoluciones: Erstattungen
-    retiros: Abschöpfungen
-    en_gaveta: In der Lade
-    corte_abierto_por: Abschnitt %{folio} geöffnet von %{quien} am %{fecha}
-    n_ventas:
+      new_version: Eine neue Version von Sakuya ist bereit.
+      reload: Neu laden
+    loading: Lädt…
+    load_failed: Konnte nicht laden. Prüfe die Verbindung.
+  till:
+    new_sale: Neuer Verkauf
+    download_escpos: ESC/POS herunterladen
+    escpos_help: Der Bon als Bytes für einen Thermodrucker
+    print_thermal: Auf dem Thermodrucker drucken
+    upload_now: Jetzt hochladen
+    printed: Bon gedruckt.
+    no_serial: 'Dieser Browser kann nicht mit einem Kabeldrucker sprechen; Chrome oder Edge nutzen oder als ESC/POS herunterladen.'
+    choose_printer: 'Den Drucker mit «Auf dem Thermodrucker drucken» wählen; danach wird nicht mehr gefragt.'
+    till_shift: Kassenabschnitt
+    shift: Abschnitt
+    float: Wechselgeld
+    sales: Verkäufe
+    cash_from_sales: Bargeld aus Verkäufen
+    refunds: Erstattungen
+    withdrawals: Abschöpfungen
+    in_drawer: In der Lade
+    shift_opened_by: Abschnitt %{folio} geöffnet von %{who} am %{date}
+    n_sales:
       one: 1 Verkauf
       other: "%{count} Verkäufe"
-    retiro_caja_fuerte: Abschöpfung in den Tresor
-    monto: Betrag
-    retiro_por_revisar: Ohne Berechtigung für Entnahmen wird die Entnahme gestoppt und gemeldet.
-    retirar: Abschöpfen
-    cerrar_corte: Abschnitt schließen
-    cerrar_corte_ayuda: Zähle, wie viele Scheine und Münzen von jeder Sorte da sind (mit Wechselgeld) oder gib die Summe ein. Das System speichert Soll, Aufschlüsselung und Differenz.
-    confirmar_cerrar_corte: Abschnitt %{folio} schließen?
-    efectivo_contado: Gezähltes Bargeld
-    suma: Summe
-    tope_diferencia_aviso: Die Differenz übersteigt %{monto}.
-    tope_frena: 'So kann nicht abgeschlossen werden: neu zählen oder jemanden mit Berechtigung für Differenzen rufen. Der Versuch wird gemeldet.'
-    tope_queda_por_revisar: Wird mit deinem Grund abgeschlossen und geht zur Prüfung.
-    cierre_frenado: 'Abschlussversuch gestoppt: gezählt %{contado}, Differenz von %{diferencia} (%{motivo})'
-    cobro: '%{producto} zu %{precio} (regulär %{regular})'
-    retiro_frenado: 'Entnahme von %{monto} gestoppt (%{motivo}): %{regla}'
-    venta_frenada: 'Verkauf von %{total} gestoppt: %{motivo}'
-    cliente: Kunde
-    sin_cliente: — ohne Kunde —
-    abonos: Kundenzahlungen
-    credito_frenado: 'Auf Rechnung für %{cliente}, %{monto}, gestoppt: %{motivo}'
-    sin_conexion_aviso: 'Offline-Verkauf, der sonst gestoppt worden wäre: %{aviso}'
-    sin_conexion_excede_limite: die Lade war schon über der Bargeldgrenze
-    motivo_diferencia: Grund der Differenz
-    regla_propia_aviso: 'Dieses Geschäft hat eine eigene Abschlussregel: wenn die Differenz einen Grund braucht, hier eintragen.'
-    cortes_cerrados: Geschlossene Abschnitte
-    resumen: Tagesübersicht
-    ver_resumen: Übersicht
-    ver_resumen_abierto: Tagesübersicht bis jetzt ansehen
-    compartir: Teilen
-    copiado: Übersicht kopiert
-    cargos: Belastungen
-    en_total: insgesamt
-    por_revisar_n:
+    safe_drop: Abschöpfung in den Tresor
+    amount: Betrag
+    withdrawal_pending_review: Ohne Berechtigung für Entnahmen wird die Entnahme gestoppt und gemeldet.
+    withdraw: Abschöpfen
+    close_shift: Abschnitt schließen
+    close_shift_help: Zähle, wie viele Scheine und Münzen von jeder Sorte da sind (mit Wechselgeld) oder gib die Summe ein. Das System speichert Soll, Aufschlüsselung und Differenz.
+    confirm_close_shift: Abschnitt %{folio} schließen?
+    counted_cash: Gezähltes Bargeld
+    sum: Summe
+    difference_cap_notice: Die Differenz übersteigt %{amount}.
+    cap_stops: 'So kann nicht abgeschlossen werden: neu zählen oder jemanden mit Berechtigung für Differenzen rufen. Der Versuch wird gemeldet.'
+    cap_remains_pending_review: Wird mit deinem Grund abgeschlossen und geht zur Prüfung.
+    closing_stopped: 'Abschlussversuch gestoppt: gezählt %{counted}, Differenz von %{difference} (%{reason})'
+    price_line: '%{product} zu %{price} (regulär %{regular})'
+    withdrawal_stopped: 'Entnahme von %{amount} gestoppt (%{reason}): %{rule}'
+    sale_stopped: 'Verkauf von %{total} gestoppt: %{reason}'
+    customer: Kunde
+    no_customer: — ohne Kunde —
+    account_payments: Kundenzahlungen
+    credit_stopped: 'Auf Rechnung für %{customer}, %{amount}, gestoppt: %{reason}'
+    offline_notice: 'Offline-Verkauf, der sonst gestoppt worden wäre: %{notice}'
+    offline_exceeds_limit: die Lade war schon über der Bargeldgrenze
+    reason_difference: Grund der Differenz
+    custom_rule_notice: 'Dieses Geschäft hat eine eigene Abschlussregel: wenn die Differenz einen Grund braucht, hier eintragen.'
+    closed_shifts: Geschlossene Abschnitte
+    summary: Tagesübersicht
+    view_summary: Übersicht
+    view_summary_open: Tagesübersicht bis jetzt ansehen
+    share: Teilen
+    copied: Übersicht kopiert
+    charges: Belastungen
+    in_total: insgesamt
+    pending_review_n:
       one: 1 offene Prüfung
       other: "%{count} offene Prüfungen"
-    resumen_texto: Abschnitt %{folio} · %{sucursal} · Umsatz %{ventas} (%{tickets}) · in der Lade %{efectivo} · Differenz %{diferencia}
-    abierto: Geöffnet
-    cerrado: Geschlossen
-    cajero: Kassierer
-    esperado: Soll
-    contado: Gezählt
-    diferencia: Differenz
-    devolucion: Erstattung
+    summary_text: Abschnitt %{folio} · %{branch} · Umsatz %{sales} (%{tickets}) · in der Lade %{cash} · Differenz %{difference}
+    open: Geöffnet
+    closed: Geschlossen
+    cashier: Kassierer
+    expected: Soll
+    counted: Gezählt
+    difference: Differenz
+    refund: Erstattung
     ticket: Ticket
-    vendido: Verkauft
-    ya_devuelto: Schon zurück
-    devolver: Zurückgeben
-    devolver_y_regresar: Zurückgeben und Geld erstatten
-    excede_limite_html: 'Mehr als %{monto} in der Lade: %{enlace}, bevor weiter verkauft wird.'
-    haz_un_retiro: Abschöpfung in den Tresor machen
-    escanea_o_teclea: Barcode scannen oder PLU / Kürzel eintippen und Enter
-    cambio: Rückgeld
-    cobrar: Kassieren
-    vaciar_ticket: Ticket leeren
-    sin_caja_en: Keine Kasse offen in %{sucursal}.
-    fondo_inicial: Anfangs-Wechselgeld
-    abrir_caja: Kasse öffnen
-    pide_que_la_abran: Bitte jemanden mit Berechtigung, sie zu öffnen.
-    le_atendio: Bedient von
-    devoluciones_solo_con_ticket: Erstattungen nur mit diesem Ticket
-    hora: Uhrzeit
-    lineas: Zeilen
-    pago: Zahlung
-    sin_ventas: Keine Verkäufe.
-    avisos:
-      abierta: Kasse geöffnet mit Wechselgeld %{fondo}
-      corte_cerrado: 'Abschnitt %{folio} geschlossen: Soll %{esperado}, gezählt %{contado}, Differenz %{diferencia}'
-      retiro: Abschöpfung von %{monto} erfasst
-      queda_por_revisar: "; geht zur Prüfung"
-      devolucion: Erstattung %{folio} über %{monto} auf %{venta}
-    escanea_ticket: Beleg scannen oder eintippen
-  formas_pago:
-    efectivo: Bar
-    transferencia: Überweisung
-    deposito: Einzahlung
-    credito: Auf Rechnung
-  conteos:
-    conteos: Zählungen
-    conteo: Zählung
+    sold: Verkauft
+    already_refunded: Schon zurück
+    do_refund: Zurückgeben
+    refund_and_back: Zurückgeben und Geld erstatten
+    exceeds_limit_html: 'Mehr als %{amount} in der Lade: %{link}, bevor weiter verkauft wird.'
+    make_to_withdrawal: Abschöpfung in den Tresor machen
+    scans_or_types: Barcode scannen oder PLU / Kürzel eintippen und Enter
+    change: Rückgeld
+    checkout: Kassieren
+    clear_ticket: Ticket leeren
+    no_till_in: Keine Kasse offen in %{branch}.
+    initial_float: Anfangs-Wechselgeld
+    open_till: Kasse öffnen
+    ask_to_open_it: Bitte jemanden mit Berechtigung, sie zu öffnen.
+    served_by: Bedient von
+    refunds_only_with_ticket: Erstattungen nur mit diesem Ticket
+    hour: Uhrzeit
+    lines: Zeilen
+    payment: Zahlung
+    no_sales: Keine Verkäufe.
+    notices:
+      open: Kasse geöffnet mit Wechselgeld %{float}
+      closed_shift: 'Abschnitt %{folio} geschlossen: Soll %{expected}, gezählt %{counted}, Differenz %{difference}'
+      withdrawal: Abschöpfung von %{amount} erfasst
+      remains_pending_review: "; geht zur Prüfung"
+      refund: Erstattung %{folio} über %{amount} auf %{sale}
+    scans_ticket: Beleg scannen oder eintippen
+  payment_methods:
+    cash: Bar
+    transfer: Überweisung
+    deposit: Einzahlung
+    credit: Auf Rechnung
+  stock_counts:
+    stock_counts: Zählungen
+    stock_count: Zählung
     supervisor: Aufsicht
-    responsable: Verantwortlich
-    faltante: Fehlbestand
-    sobrante: Überschuss
-    sin_conteos: Keine Zählungen.
-    nuevo: Neue Zählung
-    ya_hay_abierto: 'Es ist bereits eine Zählung offen:'
-    cierralo_antes: Erst schließen, dann eine neue öffnen.
-    responsable_ayuda: Verantwortlich für den Bestand (dem der Fehlbestand belastet wird)
-    alcance: Umfang
-    alcance_total: Der ganze Bestand
-    alcance_parcial: Nur eine Linie oder einige Produkte
-    o_estos_productos: Oder diese Produkte
-    parcial_ayuda: Eine Teilzählung berichtigt nur das Gewählte; der Rest bleibt unberührt. Bei gewählter Linie werden die Produkte ignoriert.
-    parcial_badge:
+    responsible: Verantwortlich
+    shortage: Fehlbestand
+    surplus: Überschuss
+    no_stock_counts: Keine Zählungen.
+    new: Neue Zählung
+    already_open: 'Es ist bereits eine Zählung offen:'
+    close_it_before: Erst schließen, dann eine neue öffnen.
+    responsible_help: Verantwortlich für den Bestand (dem der Fehlbestand belastet wird)
+    scope: Umfang
+    scope_total: Der ganze Bestand
+    scope_partial: Nur eine Linie oder einige Produkte
+    or_these_products: Oder diese Produkte
+    partial_help: Eine Teilzählung berichtigt nur das Gewählte; der Rest bleibt unberührt. Bei gewählter Linie werden die Produkte ignoriert.
+    partial_badge:
       one: teilweise · 1 Produkt
       other: teilweise · %{count} Produkte
-    toca_contar: 'Zählung fällig: gezählt wird alle %{cada} Tage und die letzte abgeschlossene Zählung ist älter (oder es gibt keine).'
-    nuevo_ayuda: 'Beim Öffnen wird der Systembestand übernommen. Stücke scannen; was nach Kilo, Liter oder Meter geht, wird eingetippt. Beim Schließen gilt die Zählung: der Bestand wird angepasst und der Fehlbetrag dem Verantwortlichen belastet.'
-    abrir: Zählung öffnen
-    escanear: Scannen
-    contar: Zählen
-    contar_a_mano: Von Hand zählen
-    cerrar: Zählung schließen
-    confirmar_cerrar: 'Die Zählung gilt: der Bestand wird angepasst und der Fehlbetrag %{responsable} belastet. Schließen?'
-    sistema: System
-    escaneado: Gescannt
-    a_mano: Von Hand
-    contado: Gezählt
-    avisos:
-      abierto: 'Zählung %{folio} geöffnet: alles scannen, was da ist'
-      contado: "%{producto}: ein Stück mehr"
-    codigo_placeholder: Barcode, PLU oder Kürzel
-    escanear_ayuda: Jeder Scan zählt ein Stück. Was nach Kilo, Liter oder Meter verkauft wird, wird von Hand eingetippt.
-  cargos:
-    cargos: Belastungen
-    revision: Prüfung
-    cobrado: Eingezogen
-    perdonar: Erlassen
-    sin_cargos: Keine Belastungen.
-    avisos:
-      marcado: Belastung von %{quien} als %{estado} markiert
-  inventario:
-    apartado: Reserviert
-    disponible: Verfügbar
-    movimiento_frenado: '%{tipo} von %{cantidad} gestoppt (%{motivo}): %{regla}'
-    existencias: Bestand
+    count_due: 'Zählung fällig: gezählt wird alle %{each} Tage und die letzte abgeschlossene Zählung ist älter (oder es gibt keine).'
+    new_help: 'Beim Öffnen wird der Systembestand übernommen. Stücke scannen; was nach Kilo, Liter oder Meter geht, wird eingetippt. Beim Schließen gilt die Zählung: der Bestand wird angepasst und der Fehlbetrag dem Verantwortlichen belastet.'
+    open: Zählung öffnen
+    scan: Scannen
+    count: Zählen
+    count_by_hand: Von Hand zählen
+    close: Zählung schließen
+    confirm_close: 'Die Zählung gilt: der Bestand wird angepasst und der Fehlbetrag %{responsible} belastet. Schließen?'
+    system: System
+    scanned: Gescannt
+    by_hand: Von Hand
+    counted: Gezählt
+    notices:
+      open: 'Zählung %{folio} geöffnet: alles scannen, was da ist'
+      counted: "%{product}: ein Stück mehr"
+      counted_manual: "%{product}: %{quantity} von Hand gezählt"
+      closed: 'Zählung %{folio} geschlossen: Fehlmenge %{shortage}, Überschuss %{surplus}'
+      charge_to: " · belastet an %{responsible}"
+      kardex_reason: Zählung %{folio}
+      shortage_line: "%{product}: es fehlen %{quantity} %{unit} (%{amount})"
+    code_placeholder: Barcode, PLU oder Kürzel
+    scan_help: Jeder Scan zählt ein Stück. Was nach Kilo, Liter oder Meter verkauft wird, wird von Hand eingetippt.
+  charges:
+    charges: Belastungen
+    review: Prüfung
+    paid: Eingezogen
+    forgive: Erlassen
+    no_charges: Keine Belastungen.
+    notices:
+      marked: Belastung von %{who} als %{status} markiert
+  inventory:
+    reserved: Reserviert
+    available: Verfügbar
+    movement_stopped: '%{kind} von %{quantity} gestoppt (%{reason}): %{rule}'
+    movement_recorded: '%{kind} von %{product} erfasst'
+    stock_levels: Bestand
     kardex: Lagerbuch
-    sin_existencias: Noch kein Bestand.
-    sin_movimientos: Keine Bewegungen.
-    entrada_o_ajuste: Eingang oder Korrektur
-    queda_por_revisar: Ohne Berechtigung für Korrekturen wird die Bewegung gestoppt und gemeldet.
-    registrar: Erfassen
-  promociones:
-    tipos:
-      precio: Sonderpreis
-      porcentaje: Rabatt %
-      por_cantidad: Preis ab einer Menge
+    no_stock_levels: Noch kein Bestand.
+    no_movements: Keine Bewegungen.
+    inflow_or_adjustment: Eingang oder Korrektur
+    remains_pending_review: Ohne Berechtigung für Korrekturen wird die Bewegung gestoppt und gemeldet.
+    register: Erfassen
+  promotions:
+    kinds:
+      price: Sonderpreis
+      percentage: Rabatt %
+      by_quantity: Preis ab einer Menge
     desc:
-      precio: "%{precio} fest"
-      porcentaje: "%{pct} % Rabatt"
-      por_cantidad: "%{precio} ab %{desde} %{unidad}"
+      price: "%{price} fest"
+      percentage: "%{pct} % Rabatt"
+      by_quantity: "%{price} ab %{from} %{unit}"
   admin:
-    impresora: Bondrucker
-    impresora_red: Netzwerk-Thermodrucker (Adresse:Port)
-    impresora_ayuda: 'Nur bei einem Netzwerk-Thermodrucker; fast immer Port 9100.'
-    impresoras:
-      navegador: Mit dem Browser
-      red: Netzwerk-Thermodrucker
+    printer: Bondrucker
+    network_printer: Netzwerk-Thermodrucker (Adresse:Port)
+    printer_help: 'Nur bei einem Netzwerk-Thermodrucker; fast immer Port 9100.'
+    printers:
+      browser: Mit dem Browser
+      network: Netzwerk-Thermodrucker
       serial: Thermodrucker per Kabel (Chrome)
-    modelos:
-      producto: Produkt
-      promocion: Aktion
-      rol: Rolle
-      sucursal: Filiale
-      usuario: Benutzer
-    modulos:
+    models:
+      product: Produkt
+      promotion: Aktion
+      role: Rolle
+      branch: Filiale
+      user: Benutzer
+    features:
       admin: Verwaltung
-      caja: Kasse
-      conteos: Zählungen
-      inventario: Bestand
-      reportes: Berichte
-      revisiones: Prüfungen
-      reglas: Lisp-Regeln
-    avisos:
-      creado: "%{que} angelegt"
-      guardado: "%{que} gespeichert"
-      borrado: "%{que} gelöscht"
-      ya_usado: "%{que} wird bereits verwendet: deaktivieren statt löschen"
-      codigo_agregado: Code %{codigo} hinzugefügt
-      codigo_quitado: Code entfernt
-    borrar: löschen
-    precio_por_sucursal: Preis je Filiale
-    precio_por_sucursal_ayuda: Leer = erbt den allgemeinen Preis (%{precio}). Wird mit der Schaltfläche %{boton} des Produkts gespeichert.
+      till: Kasse
+      stock_counts: Zählungen
+      inventory: Bestand
+      reports: Berichte
+      reviews: Prüfungen
+      rules: Lisp-Regeln
+    notices:
+      created: "%{what} angelegt"
+      saved: "%{what} gespeichert"
+      deleted: "%{what} gelöscht"
+      already_used: "%{what} wird bereits verwendet: deaktivieren statt löschen"
+      code_added: Code %{code} hinzugefügt
+      code_removed: Code entfernt
+    delete: löschen
+    price_by_branch: Preis je Filiale
+    price_by_branch_help: Leer = erbt den allgemeinen Preis (%{price}). Wird mit der Schaltfläche %{button} des Produkts gespeichert.
     general: allgemein
-    codigos_proveedor: Lieferantencodes
-    escanea_o_teclea_codigo: Code scannen oder eintippen
-    plu_automatico: PLU (leer = automatisch)
-    linea: Linie
-    productos: Produkte
-    nuevo_producto: Neues Produkt
-    codigos: Codes
-    nombre_en_ticket: Name (erscheint auf dem Ticket)
-    regla: Regel
-    descuento_pct: Rabatt %
-    cantidad_minima: Mindestmenge
-    desde_opcional: Von (optional)
-    hasta_opcional: Bis (optional)
-    activa: Aktiv
-    promocion_ayuda: Sonderpreis und Preis ab einer Menge nutzen das Feld Preis; der Rabatt nutzt den Prozentsatz auf den Filialpreis. Gelten mehrere, wendet die Kasse die günstigste an.
-    promociones: Aktionen
-    nueva_promocion: Neue Aktion
-    vigencia: Gültigkeit
-    siempre: immer
-    confirmar_borrar: "%{nombre} löschen?"
-    sin_promociones: Keine Aktionen.
-    rol: Rolle
-    nuevo_rol: Neue Rolle
+    supplier_codes: Lieferantencodes
+    scans_or_types_code: Code scannen oder eintippen
+    plu_automatic: PLU (leer = automatisch)
+    line: Linie
+    products: Produkte
+    new_product: Neues Produkt
+    codes: Codes
+    name_in_ticket: Name (erscheint auf dem Ticket)
+    rule: Regel
+    discount_pct: Rabatt %
+    minimum_quantity: Mindestmenge
+    from_optional: Von (optional)
+    to_optional: Bis (optional)
+    active: Aktiv
+    promotion_help: Sonderpreis und Preis ab einer Menge nutzen das Feld Preis; der Rabatt nutzt den Prozentsatz auf den Filialpreis. Gelten mehrere, wendet die Kasse die günstigste an.
+    promotions: Aktionen
+    new_promotion: Neue Aktion
+    validity: Gültigkeit
+    always: immer
+    confirm_delete: "%{name} löschen?"
+    no_promotions: Keine Aktionen.
+    role: Rolle
+    new_role: Neue Rolle
     roles: Rollen
-    permisos: Berechtigungen
-    usuarios: Benutzer
-    todo_administrador: Alles (Administrator)
-    todo_el_modulo: ganzes Modul
-    nueva_sucursal: Neue Filiale
-    sucursales: Filialen
-    tienda: Laden
-    limite_efectivo: Maximales Bargeld in der Lade, bevor eine Abschöpfung nötig ist
-    dias_conteo: Zählen alle (Tage; leer = keine Erinnerung)
-    limite_en_gaveta: Ladenlimit
-    nuevo_usuario: Neuer Benutzer
-    usuario: Benutzername
-    usuario_minusculas: Benutzername (Kleinbuchstaben)
-    nueva_contrasena: Neues Passwort (leer = unverändert)
-    almacen: Lager (nur Lagerung, keine Kasse)
-    almacen_corto: Lager
-  instalacion:
-    titulo: Erster Start
+    permissions: Berechtigungen
+    users: Benutzer
+    all_administrator: Alles (Administrator)
+    all_feature: ganzes Modul
+    new_branch: Neue Filiale
+    branches: Filialen
+    store: Laden
+    cash_limit: Maximales Bargeld in der Lade, bevor eine Abschöpfung nötig ist
+    count_interval_days: Zählen alle (Tage; leer = keine Erinnerung)
+    limit_in_drawer: Ladenlimit
+    new_user: Neuer Benutzer
+    user: Benutzername
+    user_lowercase: Benutzername (Kleinbuchstaben)
+    new_password: Neues Passwort (leer = unverändert)
+    warehouse: Lager (nur Lagerung, keine Kasse)
+    warehouse_short: Lager
+  setup:
+    head_office_name: Zentrale
+    title: Erster Start
     intro: Die Datenbank ist leer. Gib dem Betrieb einen Namen und lege den ersten Administrator an; damit meldest du dich an und richtest den Rest ein (Produkte, Filialen, Benutzer).
-    negocio: Betrieb
-    nombre_negocio: Name des Betriebs
-    nombre_negocio_ayuda: Steht auf den Tickets. Lässt sich später in den Einstellungen ändern.
-    matriz: Zentrale (von hier geht alles aus)
-    matriz_ayuda: Das Kürzel steht in den Belegnummern. Filialen werden später angelegt.
-    administrador: Administrator
-    crear: Anlegen und anmelden
-    lista: 'Fertig. Sakuya gehört dir: fang in der Verwaltung mit Produkten, Filialen und Benutzern an.'
-    giro: Art des Betriebs
-    giro_ayuda: 'Wähle, was deinem Betrieb am nächsten kommt. Es legt nur fest, welche Module eingeschaltet starten: die durchgestrichenen lassen sich später in den Einstellungen einschalten, die eingeschalteten ausschalten.'
-    sucursal_detalle: Name und Code der Hauptfiliale (sonst der Betriebsname und MTZ)
-    bienvenida: Willkommen bei Sakuya
-    apariencia_ayuda: 'Jetzt mach es dir bequem: helles oder dunkles Thema, Schriftgröße und Dichte. Gilt sofort, bleibt bei deinem Benutzer, und jeder wählt seins in den Einstellungen.'
-    pasos:
-      apariencia: Darstellung
-      negocio: Betrieb
-      sucursal: Hauptfiliale
-      administrador: Administrator
-      resumen: Prüfen und anlegen
-      idioma: Sprache
+    business: Betrieb
+    business_name: Name des Betriebs
+    business_name_help: Steht auf den Tickets. Lässt sich später in den Einstellungen ändern.
+    head_office: Zentrale (von hier geht alles aus)
+    head_office_help: Das Kürzel steht in den Belegnummern. Filialen werden später angelegt.
+    administrator: Administrator
+    create: Anlegen und anmelden
+    list: 'Fertig. Sakuya gehört dir: fang in der Verwaltung mit Produkten, Filialen und Benutzern an.'
+    business_type: Art des Betriebs
+    business_type_help: 'Wähle, was deinem Betrieb am nächsten kommt. Es legt nur fest, welche Module eingeschaltet starten: die durchgestrichenen lassen sich später in den Einstellungen einschalten, die eingeschalteten ausschalten.'
+    branch_detail: Name und Code der Hauptfiliale (sonst der Betriebsname und MTZ)
+    welcome: Willkommen bei Sakuya
+    appearance_help: 'Jetzt mach es dir bequem: helles oder dunkles Thema, Schriftgröße und Dichte. Gilt sofort, bleibt bei deinem Benutzer, und jeder wählt seins in den Einstellungen.'
+    steps:
+      appearance: Darstellung
+      business: Betrieb
+      branch: Hauptfiliale
+      administrator: Administrator
+      summary: Prüfen und anlegen
+      language: Sprache
       folios: Nummerierung
-    matriz_placeholder: der Betriebsname
-    administrador_ayuda: Der erste Benutzer darf alles. Die übrigen legst du danach mit ihren Rollen an.
-    contrasena_ayuda: Mindestens 8 Zeichen.
-    resumen_ayuda: Prüfen; mit Zurück lässt sich alles korrigieren. Beim Anlegen bist du direkt angemeldet.
-    anterior: Zurück
-    siguiente: Weiter
-    idioma_ayuda: Fangen wir mit der Sprache an. Du wählst sie jetzt für diese Installation, kannst sie aber später in den Einstellungen ändern, und jeder Benutzer, den du anlegst, wählt seine eigene.
-    idioma_nota: Bei der Auswahl lädt die Seite in dieser Sprache neu; deshalb ist es der erste Schritt, bevor du etwas eintippst.
-    siempre_incluye: Kasse, Bestand, Einstellungen und Verwaltung (immer)
+    head_office_placeholder: der Betriebsname
+    administrator_help: Der erste Benutzer darf alles. Die übrigen legst du danach mit ihren Rollen an.
+    password_help: Mindestens 8 Zeichen.
+    summary_help: Prüfen; mit Zurück lässt sich alles korrigieren. Beim Anlegen bist du direkt angemeldet.
+    previous: Zurück
+    next_step: Weiter
+    language_help: Fangen wir mit der Sprache an. Du wählst sie jetzt für diese Installation, kannst sie aber später in den Einstellungen ändern, und jeder Benutzer, den du anlegst, wählt seine eigene.
+    language_note: Bei der Auswahl lädt die Seite in dieser Sprache neu; deshalb ist es der erste Schritt, bevor du etwas eintippst.
+    always_includes: Kasse, Bestand, Einstellungen und Verwaltung (immer)
     folios:
-      ayuda: Wie Bons und die anderen Belege nummeriert werden. Später in Einstellungen › Nummerierung änderbar, ohne dass der Zähler neu beginnt.
-      modo: Ein Zähler je Beleg oder einer für alles?
-      letra: Was steht vor der Nummer?
-      letras:
-        sucursal: Das Filialkürzel
-        sucursal_ayuda: 'Aus dem Filialkürzel: MTZ-00001. Jede Filiale unterscheidet sich von selbst.'
-        propia: Eigene Buchstaben
-        propia_ayuda: Du wählst die Buchstaben der Bons (B, NV, TK…). Der Rest in den Einstellungen.
-        ninguna: Keine
-        ninguna_ayuda: 'Nur die Nummer: 00001.'
-      venta: Buchstaben der Bons
-      ejemplo: 'Dein erster Bon wäre:'
-      despues: Die übrigen Belege (Abschlüsse, Wareneingänge, Umbuchungen…) nutzen ihren Standardbuchstaben; änderbar unter Einstellungen › Nummern.
-  modulos:
-    necesita_alguno: Benötigt mindestens %{lista}
-    necesita: Benötigt %{lista}
-    lo_necesita: Benötigt von %{lista}
-    conteos:
-      nombre: Zählungen
-      que: Inventur per Scan; der Fehlbestand wird dem Verantwortlichen belastet.
-    compras:
-      nombre: Einkauf
-      que: Lieferanten, Wareneingang, Lieferantenrechnungen, Verbindlichkeiten und Leergut.
-    almacenes:
-      nombre: Lager
-      que: Lager (reine Lagerorte) und Umbuchungen zwischen Filialen.
-    clientes:
-      nombre: Kunden
-      que: Kunden, ihr Kreditkonto und Zahlungen, und Bestellungen.
-  giros:
-    todo:
-      nombre: Alles an
-      que: 'alle Module: Einkauf, Lager, Inventur und Kunden.'
-    tienda:
-      nombre: Ein Laden
-      que: Kasse, Bestand, Einkauf und Inventur.
-    varias_sucursales:
-      nombre: Mehrere Filialen
-      que: Alles für einen Laden, dazu Lager und Umbuchungen zwischen Filialen.
-  unidades:
+      help: Wie Bons und die anderen Belege nummeriert werden. Später in Einstellungen › Nummerierung änderbar, ohne dass der Zähler neu beginnt.
+      mode: Ein Zähler je Beleg oder einer für alles?
+      prefix: Was steht vor der Nummer?
+      prefixes:
+        branch: Das Filialkürzel
+        branch_help: 'Aus dem Filialkürzel: MTZ-00001. Jede Filiale unterscheidet sich von selbst.'
+        own: Eigene Buchstaben
+        own_help: Du wählst die Buchstaben der Bons (B, NV, TK…). Der Rest in den Einstellungen.
+        none: Keine
+        none_help: 'Nur die Nummer: 00001.'
+      sale: Buchstaben der Bons
+      example: 'Dein erster Bon wäre:'
+      after: Die übrigen Belege (Abschlüsse, Wareneingänge, Umbuchungen…) nutzen ihren Standardbuchstaben; änderbar unter Einstellungen › Nummern.
+  features:
+    needs_any: Benötigt mindestens %{list}
+    needs: Benötigt %{list}
+    needed_by: Benötigt von %{list}
+    stock_counts:
+      name: Zählungen
+      what: Inventur per Scan; der Fehlbestand wird dem Verantwortlichen belastet.
+    purchases:
+      name: Einkauf
+      what: Lieferanten, Wareneingang, Lieferantenrechnungen, Verbindlichkeiten und Leergut.
+    warehouses:
+      name: Lager
+      what: Lager (reine Lagerorte) und Umbuchungen zwischen Filialen.
+    customers:
+      name: Kunden
+      what: Kunden, ihr Kreditkonto und Zahlungen, und Bestellungen.
+  business_types:
+    all:
+      name: Alles an
+      what: 'alle Module: Einkauf, Lager, Inventur und Kunden.'
+    store:
+      name: Ein Laden
+      what: Kasse, Bestand, Einkauf und Inventur.
+    several_branches:
+      name: Mehrere Filialen
+      what: Alles für einen Laden, dazu Lager und Umbuchungen zwischen Filialen.
+  short_units:
+    kg: kg
+    piece: Stk
+    liter: l
+    meter: m
+  units:
     kg: Kilo
-    pieza: Stück
-    litro: Liter
-    metro: Meter
+    piece: Stück
+    liter: Liter
+    meter: Meter
   activerecord:
     attributes:
-      producto:
-        clave: Schlüssel
-        nombre: Name
-        linea: Linie
-        unidad: Einheit
-        precio: Preis
-        precio_centavos: Preis
+      product:
+        key: Schlüssel
+        name: Name
+        line: Linie
+        unit: Einheit
+        price: Preis
+        price_cents: Preis
         plu: PLU
-        activo: Aktiv
-        codigo: Code
-      usuario:
-        nombre: Name
-        usuario: Benutzername
+        active: Aktiv
+        code: Code
+      user:
+        name: Name
+        user: Benutzername
         password: Passwort
-        rol: Rolle
-        sucursal: Filiale
-        idioma: Sprache
-        tema: Thema
-        densidad: Dichte
-        letra: Schriftgröße
-        activo: Aktiv
-      sucursal:
-        codigo: Code
-        nombre: Name
-        tipo: Art
-        limite_efectivo: Bargeldlimit in der Lade
-        limite_efectivo_centavos: Bargeldlimit in der Lade
-        activa: Aktiv
-      promocion:
-        nombre: Name
-        producto: Produkt
-        sucursal: Filiale
-        tipo: Regel
-        precio: Preis
-        precio_centavos: Preis
-        porcentaje: Rabatt %
-        cantidad_minima: Mindestmenge
-        desde: Von
-        hasta: Bis
-        activa: Aktiv
-      rol:
-        nombre: Name
-        permisos: Berechtigungen
-      codigo_barras:
-        codigo: Code
-      conteo:
-        responsable: Verantwortlich
-      ajuste:
-        clave: Schlüssel
-        valor: Wert
-      pedido:
-        cliente: Kunde
-        fecha_entrega: Lieferung
-        notas: Notizen
-      cliente:
-        nombre: Name
-        telefono: Telefon
-        rfc: Steuernummer
-        direccion: Adresse
-        notas: Notizen
-        limite_credito: Kreditlimit
-        activo: Aktiv
-      proveedor:
-        nombre: Name
-        rfc: Steuernummer
-        contacto: Kontakt
-        telefono: Telefon
-        dias_credito: Zahlungsziel (Tage)
-        notas: Notizen
-        activo: Aktiv
+        role: Rolle
+        branch: Filiale
+        language: Sprache
+        theme: Thema
+        density: Dichte
+        text_size: Schriftgröße
+        active: Aktiv
+      branch:
+        code: Code
+        name: Name
+        kind: Art
+        cash_limit: Bargeldlimit in der Lade
+        cash_limit_cents: Bargeldlimit in der Lade
+        active: Aktiv
+      promotion:
+        name: Name
+        product: Produkt
+        branch: Filiale
+        kind: Regel
+        price: Preis
+        price_cents: Preis
+        percentage: Rabatt %
+        minimum_quantity: Mindestmenge
+        from: Von
+        to: Bis
+        active: Aktiv
+      role:
+        name: Name
+        permissions: Berechtigungen
+      product_barcode:
+        code: Code
+      stock_count:
+        responsible: Verantwortlich
+      setting:
+        key: Schlüssel
+        value: Wert
+      order:
+        customer: Kunde
+        delivery_date: Lieferung
+        notes: Notizen
+      customer:
+        name: Name
+        phone: Telefon
+        tax_id: Steuernummer
+        address: Adresse
+        notes: Notizen
+        credit_limit: Kreditlimit
+        active: Aktiv
+      supplier:
+        name: Name
+        tax_id: Steuernummer
+        contact: Kontakt
+        phone: Telefon
+        credit_days: Zahlungsziel (Tage)
+        notes: Notizen
+        active: Aktiv
     models:
-      producto: Produkt
-      usuario: Benutzer
-      sucursal: Filiale
-      promocion: Aktion
-      rol: Rolle
-      conteo: Zählung
-      proveedor: Lieferant
-      cliente: Kunde
-      recepcion: Wareneingang
-      factura_proveedor: Lieferantenrechnung
-  pedidos:
-    titulo: Bestellungen
-    nuevo: Neue Bestellung
-    pedido: Bestellung %{folio}
-    ayuda: Was der Kunde will und bis wann. Sie reserviert keinen Bestand und hat keinen Preis; kassiert wird an der Kasse beim Abholen, mit den üblichen Regeln.
-    entrega: Lieferung
-    que: Was
-    guardar: Bestellung speichern
-    apartar: Bestand reservieren
-    apartar_ayuda: Was bestellt wird, bleibt reserviert und wird weder verkauft noch umgelagert, bis kassiert oder storniert wird. Ohne Reservierung für künftige Bestellungen.
-    apartado: reserviert Bestand
-    sin_apartar: ohne Reservierung
-    cobrar: An der Kasse kassieren
-    cancelar: Bestellung stornieren
-    cobrando: 'Bestellung %{folio} von %{cliente} wird kassiert.'
-    cobrado_en: Kassiert im Verkauf
-    cancelado_por: 'Storniert: %{motivo}'
-    primero_cliente: Zuerst den Kunden anlegen
-    sin_pedidos: Hier gibt es keine Bestellungen.
-    estados:
-      abierto: Offen
-      entregado: Geliefert
-      cancelado: Storniert
-    avisos:
-      creado: Bestellung %{folio} von %{cliente} gespeichert.
-      cancelado: Bestellung %{folio} storniert.
-  clientes:
-    cuenta:
-      abono: Zahlung %{folio} (%{forma})
-      titulo: Konto von %{nombre}
-      titulo_corto: Konto
-      dias: '%{rango} Tage'
-      abonar: Zahlung annehmen
-      registrar_abono: Zahlung erfassen
-      entra_al_corte: Sie geht in die Kasse, Abschnitt %{folio}.
-      sin_caja: In dieser Filiale ist keine Kasse offen; öffnen, um Zahlungen anzunehmen.
-      concepto: Vorgang
-      cargo: Belastung
-      abono_col: Zahlung
-      sin_movimientos: Noch keine Bewegungen.
-      cargo_venta: Verkauf %{folio}
-      devolucion: Rückgabe aus Verkauf %{folio}
-    titulo: Kunden
-    nuevo: Neuer Kunde
-    editar: Kunde bearbeiten
-    buscar: Nach Name suchen
-    telefono: Telefon
-    rfc: Steuernummer
-    limite_credito: Kreditlimit
-    debe: Schuldet
-    limite_ayuda: Die Kreditregel liest es als (limit). Standardmäßig bekommt niemand Kredit; die Regel entscheidet, ob es genutzt wird.
-    inactivo: inaktiv
-    sin_clientes: Noch keine Kunden.
-    avisos:
-      abono: 'Zahlung %{folio} über %{monto}; Schuld jetzt %{saldo}.'
-      creado: Kunde %{nombre} angelegt.
-      guardado: Kunde %{nombre} gespeichert.
-  compras:
-    proveedores: Lieferanten
-    proveedor: Lieferant
-    nuevo_proveedor: Neuer Lieferant
-    proveedores_ayuda: Wer uns beliefert. Der Saldo ist, was wir laut Rechnungen und Zahlungen schulden.
-    sin_proveedores: Noch keine Lieferanten.
-    contacto: Kontakt
-    telefono: Telefon
-    rfc: Steuernummer
-    dias_credito: Zahlungsziel
-    dias_credito_ayuda: 0 = bar. Mit Tagen sind Rechnungen am Datum + Tage fällig.
-    saldo: Saldo
-    cuenta: Konto
-    inactivo: inaktiv
-    primero_proveedor: Zuerst einen Lieferanten anlegen
-    recepciones: Wareneingänge
-    recepcion: Wareneingang
-    recibir: Annehmen
-    recibir_mercancia: Ware annehmen
-    recepciones_ayuda: Was vom Lieferanten in %{sucursal} eingegangen ist. Jeder Wareneingang ist eine Bestandsbuchung.
-    recibir_ayuda: Barcode des Lieferanten scannen oder Produkt wählen, Menge eintragen, und es geht in den Bestand von %{sucursal}. Die Rechnung wird später verknüpft, wenn sie kommt.
-    remision: Lieferschein
-    remision_ayuda: Nummer auf dem Papier des Fahrers
-    escanear: Scannen
-    escanear_ayuda: Lieferanten-Barcode, PLU, Kürzel oder Name + Enter
-    cajas: Kisten
-    registrar_entrada: Eingang buchen
-    renglones: Positionen
-    sin_factura: ohne Rechnung
-    sin_factura_aun: Noch keiner Rechnung zugeordnet.
-    sin_recepciones: Noch keine Wareneingänge.
-    ninguna: "— keine —"
-    ligar: Verknüpfen
-    desligar: Lösen
-    capturar_factura: Rechnung erfassen
-    cancelar_recepcion: Wareneingang stornieren
-    cancelar_recepcion_ayuda: Die Ware verlässt den Bestand und das Leergut wird abgezogen. Nur bei Fehleingabe.
-    confirmar_cancelar: "%{folio} stornieren?"
-    facturas: Rechnungen
-    factura: Rechnung
-    nueva_factura: Neue Rechnung
-    factura_ayuda: Die Lieferantenrechnung erzeugt die Schuld. Mit Positionen wird der Betrag berechnet; ohne (Fracht, Eis) den Betrag eintippen.
-    folio_proveedor: Rechnungsnummer des Lieferanten
-    folio_proveedor_ayuda: wie aufgedruckt
-    vence: Fällig
-    vence_ayuda: Leer = Datum + Zahlungsziel des Lieferanten.
-    monto_sin_renglones: Betrag (ohne Positionen)
-    monto_sin_renglones_ayuda: Zählt nur ohne Positionen.
-    concepto: Bezeichnung
-    precio_compra: Preis
-    registrar_factura: Rechnung buchen
-    todos_los_proveedores: Alle Lieferanten
-    pagado: Bezahlt
-    resta: Rest
-    sin_facturas: Keine Rechnungen.
-    facturado_vs_recibido: Berechnet vs. erhalten
-    recepcion_estado:
-      sin_recepcion: ohne Wareneingang
-      parcial: teilweise erhalten
-      completa: vollständig erhalten
-    recepciones_a_ligar: Wareneingänge, die diese Rechnung abdeckt
-    recepciones_a_ligar_ayuda: Wareneingänge ohne Rechnung dieses Lieferanten ankreuzen; sie werden beim Speichern verknüpft. Später auch aus der Rechnung möglich.
-    motivo_exceso: Grund, falls mehr als erhalten abgerechnet wird
-    candado_aviso: 'Sperre aktiv: hat eine Zeile mehr Menge als die angekreuzten Wareneingänge, wird die Rechnung nicht erfasst; mit Berechtigung zum Überschreiten ist ein Grund nötig und sie geht zur Prüfung.'
-    factura_frenada: 'Rechnung %{folio} gestoppt: %{regla}'
-    recepcion_frenada: 'Wareneingang gestoppt: %{motivo}'
-    comparativo_ayuda: 'Pro Produkt: was die Rechnung sagt und was in den verknüpften Wareneingängen ankam. Ein Hinweis, keine Sperre.'
-    sin_renglones_ni_recepciones: 'Keine Positionen und keine verknüpften Wareneingänge: nichts zu vergleichen.'
-    facturado: Berechnet
-    recibido: Erhalten
-    diferencia: Differenz
-    recepciones_ligadas: Verknüpfte Wareneingänge
-    ninguna_recepcion: Noch kein Wareneingang verknüpft.
-    recepciones_sueltas: Wareneingänge dieses Lieferanten ohne Rechnung
-    pagos: Zahlungen
-    sin_pagos: Keine Zahlungen.
-    cancelar_factura: Rechnung stornieren
-    cancelar_factura_ayuda: Die Schuld wird zurückgebucht und die Wareneingänge gelöst. Nicht möglich mit gültigen Zahlungen.
-    cuentas_por_pagar: Verbindlichkeiten
-    cuentas_ayuda: Was jedem Lieferanten geschuldet wird und welche Rechnungen fällig sind. Barzahlungen verlassen die offene Lade als Entnahme.
-    debemos: Wir schulden
-    vencidas: Überfällig
-    vencen_esta_semana: Diese Woche fällig
-    n_facturas:
+      product: Produkt
+      user: Benutzer
+      branch: Filiale
+      promotion: Aktion
+      role: Rolle
+      stock_count: Zählung
+      supplier: Lieferant
+      customer: Kunde
+      receipt: Wareneingang
+      supplier_invoice: Lieferantenrechnung
+  orders:
+    title: Bestellungen
+    new: Neue Bestellung
+    order: Bestellung %{folio}
+    help: Was der Kunde will und bis wann. Sie reserviert keinen Bestand und hat keinen Preis; kassiert wird an der Kasse beim Abholen, mit den üblichen Regeln.
+    delivery: Lieferung
+    what: Was
+    save: Bestellung speichern
+    reserve: Bestand reservieren
+    reserve_help: Was bestellt wird, bleibt reserviert und wird weder verkauft noch umgelagert, bis kassiert oder storniert wird. Ohne Reservierung für künftige Bestellungen.
+    reserved: reserviert Bestand
+    no_reserve: ohne Reservierung
+    checkout: An der Kasse kassieren
+    cancel: Bestellung stornieren
+    checking_out: 'Bestellung %{folio} von %{customer} wird kassiert.'
+    paid_in: Kassiert im Verkauf
+    cancelled_by: 'Storniert: %{reason}'
+    first_customer: Zuerst den Kunden anlegen
+    no_orders: Hier gibt es keine Bestellungen.
+    statuses:
+      open: Offen
+      delivered: Geliefert
+      cancelled: Storniert
+    notices:
+      created: Bestellung %{folio} von %{customer} gespeichert.
+      cancelled: Bestellung %{folio} storniert.
+  customers:
+    account:
+      account_payment: Zahlung %{folio} (%{payment_method})
+      title: Konto von %{name}
+      title_short: Konto
+      days: '%{range} Tage'
+      pay_account: Zahlung annehmen
+      register_account_payment: Zahlung erfassen
+      goes_into_shift: Sie geht in die Kasse, Abschnitt %{folio}.
+      no_till: In dieser Filiale ist keine Kasse offen; öffnen, um Zahlungen anzunehmen.
+      concept: Vorgang
+      charge: Belastung
+      account_payment_col: Zahlung
+      no_movements: Noch keine Bewegungen.
+      charge_sale: Verkauf %{folio}
+      refund: Rückgabe aus Verkauf %{folio}
+    title: Kunden
+    new: Neuer Kunde
+    edit: Kunde bearbeiten
+    search: Nach Name suchen
+    phone: Telefon
+    tax_id: Steuernummer
+    credit_limit: Kreditlimit
+    owes: Schuldet
+    limit_help: Die Kreditregel liest es als (limit). Standardmäßig bekommt niemand Kredit; die Regel entscheidet, ob es genutzt wird.
+    inactive: inaktiv
+    no_customers: Noch keine Kunden.
+    notices:
+      account_payment: 'Zahlung %{folio} über %{amount}; Schuld jetzt %{balance}.'
+      created: Kunde %{name} angelegt.
+      saved: Kunde %{name} gespeichert.
+  purchases:
+    suppliers: Lieferanten
+    supplier: Lieferant
+    new_supplier: Neuer Lieferant
+    suppliers_help: Wer uns beliefert. Der Saldo ist, was wir laut Rechnungen und Zahlungen schulden.
+    no_suppliers: Noch keine Lieferanten.
+    contact: Kontakt
+    phone: Telefon
+    tax_id: Steuernummer
+    credit_days: Zahlungsziel
+    credit_days_help: 0 = bar. Mit Tagen sind Rechnungen am Datum + Tage fällig.
+    balance: Saldo
+    account: Konto
+    inactive: inaktiv
+    first_supplier: Zuerst einen Lieferanten anlegen
+    receipts: Wareneingänge
+    receipt: Wareneingang
+    receive: Annehmen
+    receive_goods: Ware annehmen
+    receipts_help: Was vom Lieferanten in %{branch} eingegangen ist. Jeder Wareneingang ist eine Bestandsbuchung.
+    receive_help: Barcode des Lieferanten scannen oder Produkt wählen, Menge eintragen, und es geht in den Bestand von %{branch}. Die Rechnung wird später verknüpft, wenn sie kommt.
+    delivery_note: Lieferschein
+    delivery_note_help: Nummer auf dem Papier des Fahrers
+    scan: Scannen
+    scan_help: Lieferanten-Barcode, PLU, Kürzel oder Name + Enter
+    boxes: Kisten
+    register_inflow: Eingang buchen
+    rows: Positionen
+    no_invoice: ohne Rechnung
+    no_invoice_still: Noch keiner Rechnung zugeordnet.
+    no_receipts: Noch keine Wareneingänge.
+    none: "— keine —"
+    link: Verknüpfen
+    unlink: Lösen
+    capture_invoice: Rechnung erfassen
+    cancel_receipt: Wareneingang stornieren
+    cancel_receipt_help: Die Ware verlässt den Bestand und das Leergut wird abgezogen. Nur bei Fehleingabe.
+    confirm_cancel: "%{folio} stornieren?"
+    invoices: Rechnungen
+    invoice: Rechnung
+    new_invoice: Neue Rechnung
+    invoice_help: Die Lieferantenrechnung erzeugt die Schuld. Mit Positionen wird der Betrag berechnet; ohne (Fracht, Eis) den Betrag eintippen.
+    supplier_folio: Rechnungsnummer des Lieferanten
+    supplier_folio_help: wie aufgedruckt
+    due: Fällig
+    due_help: Leer = Datum + Zahlungsziel des Lieferanten.
+    amount_no_rows: Betrag (ohne Positionen)
+    amount_no_rows_help: Zählt nur ohne Positionen.
+    concept: Bezeichnung
+    purchase_price: Preis
+    register_invoice: Rechnung buchen
+    all_suppliers: Alle Lieferanten
+    paid: Bezahlt
+    remaining: Rest
+    no_invoices: Keine Rechnungen.
+    invoiced_vs_received: Berechnet vs. erhalten
+    receipt_status:
+      no_receipt: ohne Wareneingang
+      partial: teilweise erhalten
+      complete: vollständig erhalten
+    receipts_to_link: Wareneingänge, die diese Rechnung abdeckt
+    receipts_to_link_help: Wareneingänge ohne Rechnung dieses Lieferanten ankreuzen; sie werden beim Speichern verknüpft. Später auch aus der Rechnung möglich.
+    reason_excess: Grund, falls mehr als erhalten abgerechnet wird
+    lock_notice: 'Sperre aktiv: hat eine Zeile mehr Menge als die angekreuzten Wareneingänge, wird die Rechnung nicht erfasst; mit Berechtigung zum Überschreiten ist ein Grund nötig und sie geht zur Prüfung.'
+    invoice_stopped: 'Rechnung %{folio} gestoppt: %{rule}'
+    receipt_stopped: 'Wareneingang gestoppt: %{reason}'
+    comparison_help: 'Pro Produkt: was die Rechnung sagt und was in den verknüpften Wareneingängen ankam. Ein Hinweis, keine Sperre.'
+    no_rows_nor_receipts: 'Keine Positionen und keine verknüpften Wareneingänge: nichts zu vergleichen.'
+    invoiced: Berechnet
+    received: Erhalten
+    difference: Differenz
+    receipts_linked: Verknüpfte Wareneingänge
+    no_receipt: Noch kein Wareneingang verknüpft.
+    receipts_loose: Wareneingänge dieses Lieferanten ohne Rechnung
+    payments: Zahlungen
+    no_payments: Keine Zahlungen.
+    cancel_invoice: Rechnung stornieren
+    cancel_invoice_help: Die Schuld wird zurückgebucht und die Wareneingänge gelöst. Nicht möglich mit gültigen Zahlungen.
+    accounts_payable: Verbindlichkeiten
+    accounts_help: Was jedem Lieferanten geschuldet wird und welche Rechnungen fällig sind. Barzahlungen verlassen die offene Lade als Entnahme.
+    owed: Wir schulden
+    overdue: Überfällig
+    due_this_week: Diese Woche fällig
+    n_invoices:
       one: 1 Rechnung
       other: "%{count} Rechnungen"
-    por_proveedor: Nach Lieferant
-    sin_deuda: Nichts geschuldet.
-    vencimientos: Fälligkeiten
-    nada_vence: Nichts überfällig oder diese Woche fällig.
-    pagar: Bezahlen
-    pago_sale_de_caja: Bargeld verlässt die offene Lade von %{sucursal} als Entnahme; Überweisung und Einzahlung berühren die Kasse nicht.
-    pago_sin_caja: 'Keine Kasse offen in %{sucursal}: nur Überweisung oder Einzahlung möglich.'
-    a_cuenta: auf Konto (ohne Rechnung)
-    forma: Zahlungsart
-    referencia: Referenz
-    registrar_pago: Zahlung buchen
-    facturas_abiertas: Offene Rechnungen
-    sin_facturas_abiertas: Nichts offen.
-    anular: Stornieren
-    confirmar_anular: Zahlung über %{monto} stornieren?
-    libro: Lieferantenkonto
-    movimientos:
-      cargo: Belastung
-      abono: Zahlung
-      ajuste: Korrektur
-    estados:
-      registrada: gebucht
-      cancelada: storniert
-      abierta: offen
-      pagada: bezahlt
-      vencida: überfällig
-    avisos:
-      proveedor_creado: Lieferant %{nombre} angelegt
-      proveedor_guardado: Lieferant %{nombre} gespeichert
-      recibida: 'Wareneingang %{folio} gebucht: die Ware ist im Bestand'
-      recepcion_cancelada: Wareneingang %{folio} storniert
-      ligada: Mit Rechnung %{folio} verknüpft
-      desligada: Wareneingang ohne Rechnung
-      facturada: Rechnung %{folio} über %{monto} gebucht
-      factura_cancelada: Rechnung %{folio} storniert
-      pagado: Zahlung über %{monto} an %{proveedor} gebucht; Saldo %{saldo}
-      pago_anulado: Zahlung über %{monto} storniert
-      envases_movidos: Leergut gebucht
-      entrada_motivo: Wareneingang %{folio} von %{proveedor}
-      cancelacion_motivo: 'Storno von %{folio}: %{motivo}'
-      cargo_factura: Rechnung %{folio}
-      cancelacion_factura: 'Storno der Rechnung %{folio}: %{motivo}'
-      retiro_pago: Zahlung an %{proveedor} %{folio}
-      abono_pago: Zahlung %{folio} (%{forma})
-      anulacion_pago: 'Zahlung storniert: %{motivo}'
-  reabasto:
-    titulo: Filialen nachfüllen
-    ayuda: Was jeder Filiale laut Mindest- und Höchstbeständen fehlt. «Umlagerung anlegen» öffnet eine bereits ausgefüllte Umlagerung; sie wird geprüft, angepasst und wie jede andere erfasst.
-    minimos: Mindest- und Höchstbestände
-    minimos_de: Mindest- und Höchstbestände von %{sucursal}
-    minimos_ayuda: Unter dem Mindestbestand schlägt der Nachschub vor, was bis zum Höchstbestand fehlt (oder bis zum Mindestbestand, wenn es keinen Höchstbestand gibt). Ein leerer Mindestbestand entfernt das Produkt.
-    armar: Umlagerung anlegen
-    hay: Bestand
-    minimo: Minimum
-    maximo: Maximum
-    nota_traspaso: Nachschub nach Mindestbeständen
-    faltan:
+    by_supplier: Nach Lieferant
+    no_debt: Nichts geschuldet.
+    due_dates: Fälligkeiten
+    nothing_due: Nichts überfällig oder diese Woche fällig.
+    pay: Bezahlen
+    payment_leaves_till: Bargeld verlässt die offene Lade von %{branch} als Entnahme; Überweisung und Einzahlung berühren die Kasse nicht.
+    payment_no_till: 'Keine Kasse offen in %{branch}: nur Überweisung oder Einzahlung möglich.'
+    on_account: auf Konto (ohne Rechnung)
+    payment_method: Zahlungsart
+    reference: Referenz
+    register_payment: Zahlung buchen
+    invoices_open: Offene Rechnungen
+    no_invoices_open: Nichts offen.
+    void: Stornieren
+    confirm_void: Zahlung über %{amount} stornieren?
+    book: Lieferantenkonto
+    movements:
+      charge: Belastung
+      account_payment: Zahlung
+      setting: Korrektur
+    statuses:
+      registered: gebucht
+      cancelled: storniert
+      open: offen
+      paid: bezahlt
+      overdue: überfällig
+    notices:
+      supplier_created: Lieferant %{name} angelegt
+      supplier_saved: Lieferant %{name} gespeichert
+      received: 'Wareneingang %{folio} gebucht: die Ware ist im Bestand'
+      receipt_cancelled: Wareneingang %{folio} storniert
+      linked: Mit Rechnung %{folio} verknüpft
+      unlinked: Wareneingang ohne Rechnung
+      invoiced: Rechnung %{folio} über %{amount} gebucht
+      invoice_cancelled: Rechnung %{folio} storniert
+      paid: Zahlung über %{amount} an %{supplier} gebucht; Saldo %{balance}
+      payment_voided: Zahlung über %{amount} storniert
+      inflow_reason: Wareneingang %{folio} von %{supplier}
+      cancellation_reason: 'Storno von %{folio}: %{reason}'
+      charge_invoice: Rechnung %{folio}
+      cancellation_invoice: 'Storno der Rechnung %{folio}: %{reason}'
+      withdrawal_payment: Zahlung an %{supplier} %{folio}
+      supplier_payment: Zahlung %{folio} (%{payment_method})
+      void_payment: 'Zahlung storniert: %{reason}'
+  restock:
+    title: Filialen nachfüllen
+    help: Was jeder Filiale laut Mindest- und Höchstbeständen fehlt. «Umlagerung anlegen» öffnet eine bereits ausgefüllte Umlagerung; sie wird geprüft, angepasst und wie jede andere erfasst.
+    minimums: Mindest- und Höchstbestände
+    minimums_of: Mindest- und Höchstbestände von %{branch}
+    minimums_help: Unter dem Mindestbestand schlägt der Nachschub vor, was bis zum Höchstbestand fehlt (oder bis zum Mindestbestand, wenn es keinen Höchstbestand gibt). Ein leerer Mindestbestand entfernt das Produkt.
+    build: Umlagerung anlegen
+    on_hand: Bestand
+    minimum: Minimum
+    maximum: Maximum
+    note_stock_transfer: Nachschub nach Mindestbeständen
+    missing:
       zero: es fehlt nichts
       one: 1 Produkt fehlt
       other: '%{count} Produkte fehlen'
-    avisos:
-      guardados: Mindestbestände von %{sucursal} gespeichert.
-  traspasos:
-    titulo: Umbuchungen
-    traspaso: Umlagerung
-    nuevo: Umbuchung
-    ayuda: 'Ware, die die Filiale wechselt: sie verlässt den Ursprung und kommt sofort am Ziel an.'
-    nuevo_ayuda: Verlässt den Ursprung und kommt sofort am Ziel an.
-    de: Von
+    notices:
+      saved: Mindestbestände von %{branch} gespeichert.
+  stock_transfers:
+    title: Umbuchungen
+    stock_transfer: Umlagerung
+    new: Umbuchung
+    help: 'Ware, die die Filiale wechselt: sie verlässt den Ursprung und kommt sofort am Ziel an.'
+    new_help: Verlässt den Ursprung und kommt sofort am Ziel an.
+    from: Von
     a: Nach
-    registrar: Umlagerung buchen
-    ninguno: Noch keine Umlagerungen.
-    cancelar: Umlagerung stornieren
-    cancelar_ayuda: Die Ware geht zurück, wenn das Ziel sie noch hat.
-    reglas: 'Regel: aus einem Lager geht Ware nur an die Zentrale.'
-    estados:
-      registrado: gebucht
-      cancelado: storniert
-    avisos:
-      registrado: 'Umlagerung %{folio} gebucht: die Ware ist jetzt in %{destino}'
-      cancelado: Umlagerung %{folio} storniert
-      motivo: 'Umlagerung %{folio}: %{origen} → %{destino}'
-      cancelacion: 'Storno von %{folio}: %{motivo}'
+    register: Umlagerung buchen
+    none: Noch keine Umlagerungen.
+    cancel: Umlagerung stornieren
+    cancel_help: Die Ware geht zurück, wenn das Ziel sie noch hat.
+    rules: 'Regel: aus einem Lager geht Ware nur an die Zentrale.'
+    statuses:
+      registered: gebucht
+      cancelled: storniert
+    notices:
+      registered: 'Umlagerung %{folio} gebucht: die Ware ist jetzt in %{destination}'
+      cancelled: Umlagerung %{folio} storniert
+      reason: 'Umlagerung %{folio}: %{origin} → %{destination}'
+      cancellation: 'Storno von %{folio}: %{reason}'
   repl:
-    ver_bitacora: Sehen, wer was gefragt hat.
-    bitacora: REPL-Protokoll
-    bitacora_ayuda: Jede Frage bleibt hier, mit wer sie gestellt hat, aus welcher Filiale und ob sie lief. Sie lässt sich weder bearbeiten noch löschen.
-    pregunta: Frage
-    corrio: lief
-    fallo: fehlgeschlagen
-    sin_consultas: Noch hat niemand etwas gefragt.
-    titulo: REPL nur zum Lesen
-    ayuda: Stell den Live-Daten Fragen mit demselben Lisp wie die Regeln. Abfragen liefern Listen von Maps, die man filtern, sortieren und summieren kann; eine Liste von Maps erscheint als Tabelle. Von hier aus lässt sich nichts ändern. Daten wie "2026-10-03"; ohne Datum heute.
-    evaluar: Auswerten
-    historial: Zuletzt gefragt
-    informes: Berichte der Plugins
-    consultas: Abfragen
-    herramientas: Zum Bearbeiten der Listen
-    solo_lectura: der REPL liest nur; das hat versucht, in die Datenbank zu schreiben
-    cortado: 'es werden die ersten %{n} gezeigt'
-    filas:
+    view_log: Sehen, wer was gefragt hat.
+    log: REPL-Protokoll
+    log_help: Jede Frage bleibt hier, mit wer sie gestellt hat, aus welcher Filiale und ob sie lief. Sie lässt sich weder bearbeiten noch löschen.
+    question: Frage
+    ran: lief
+    failure: fehlgeschlagen
+    no_queries: Noch hat niemand etwas gefragt.
+    title: REPL nur zum Lesen
+    help: Stell den Live-Daten Fragen mit demselben Lisp wie die Regeln. Abfragen liefern Listen von Maps, die man filtern, sortieren und summieren kann; eine Liste von Maps erscheint als Tabelle. Von hier aus lässt sich nichts ändern. Daten wie "2026-10-03"; ohne Datum heute.
+    evaluate: Auswerten
+    history: Zuletzt gefragt
+    reports: Berichte der Plugins
+    queries: Abfragen
+    tools: Zum Bearbeiten der Listen
+    read_only: der REPL liest nur; das hat versucht, in die Datenbank zu schreiben
+    cut: 'es werden die ersten %{n} gezeigt'
+    rows:
       one: 1 Zeile
       other: '%{count} Zeilen'
-    errores:
-      no_es_mapa: 'erwartete eine Map und bekam %{valor}'
-      fecha: 'das Datum %{valor} verstehe ich nicht (so: "2026-10-03")'
-      texto: '%{quien} erwartet Text und bekam %{valor}'
-    funciones:
+    errors:
+      not_to_map: 'erwartete eine Map und bekam %{value}'
+      date: 'das Datum %{value} verstehe ich nicht (so: "2026-10-03")'
+      text: '%{who} erwartet Text und bekam %{value}'
+    functions:
       today: das heutige Datum
       days_ago: das Datum vor n Tagen
       sales: Verkäufe (Nummer, Datum, Filiale, Kassierer, Kunde, Summe…)
@@ -1191,133 +1203,133 @@ de:
       pluck: nur diese Spalte
       take: die ersten n
   plugins:
-    titulo: Plugins in Lisp
-    ayuda: Ein Plugin ist eine .lisp-Datei, die bringt, was Sakuya standardmäßig nicht hat. Es kann Funktionen bringen, die alle Regeln, das Dashboard und der REPL nutzen, Berichte für den REPL und eine neue Sprache für die Oberfläche. Es deklariert nur; beim Installieren wird es gelesen, aber nichts ausgeführt, und es kommt ausgeschaltet. Entfernst du eines, das deine Regeln nutzen, schlagen diese fehl und die Standardregel entscheidet.
-    encendido: an
-    apagado: aus
-    encender: Einschalten
-    apagar: Ausschalten
-    quitar: Entfernen
-    subido: 'hochgeladen %{fecha} von %{quien}'
-    no_se_lee: Dieses Plugin lässt sich nicht mehr lesen; erneut hochladen oder entfernen.
-    sin_plugins: Noch keine Plugins installiert.
-    subir: Plugin installieren oder aktualisieren
-    subir_ayuda: Gibt es schon eines mit derselben Kennung, wird es aktualisiert und bleibt an oder aus wie zuvor.
-    instalar: Installieren
-    trae:
-      funciones:
+    title: Plugins in Lisp
+    help: Ein Plugin ist eine .lisp-Datei, die bringt, was Sakuya standardmäßig nicht hat. Es kann Funktionen bringen, die alle Regeln, das Dashboard und der REPL nutzen, Berichte für den REPL und eine neue Sprache für die Oberfläche. Es deklariert nur; beim Installieren wird es gelesen, aber nichts ausgeführt, und es kommt ausgeschaltet. Entfernst du eines, das deine Regeln nutzen, schlagen diese fehl und die Standardregel entscheidet.
+    enabled: an
+    disabled: aus
+    switch_on: Einschalten
+    switch_off: Ausschalten
+    remove: Entfernen
+    uploaded: 'hochgeladen %{date} von %{who}'
+    unreadable: Dieses Plugin lässt sich nicht mehr lesen; erneut hochladen oder entfernen.
+    no_plugins: Noch keine Plugins installiert.
+    upload: Plugin installieren oder aktualisieren
+    upload_help: Gibt es schon eines mit derselben Kennung, wird es aktualisiert und bleibt an oder aus wie zuvor.
+    install: Installieren
+    brings:
+      functions:
         one: 1 Funktion
         other: '%{count} Funktionen'
-      informes:
+      reports:
         one: 1 Bericht
         other: '%{count} Berichte'
-      traducciones:
+      translations:
         one: 1 Sprache
         other: '%{count} Sprachen'
-    avisos:
-      instalado: 'Plugin %{nombre} installiert. Es kommt ausgeschaltet: zum Nutzen einschalten.'
-      actualizado: Plugin %{nombre} aktualisiert.
-      encendido: Plugin %{nombre} eingeschaltet.
-      apagado: Plugin %{nombre} ausgeschaltet.
-      quitado: Plugin %{nombre} entfernt.
-      no_se_instalo: 'Nicht installiert: %{error}'
-    errores:
-      cabecera: 'die Datei muss mit (plugin "kennung" …) beginnen'
-      identificador: 'die Kennung %{id} taugt nicht: Kleinbuchstaben, Ziffern und Bindestriche, 2 bis 31'
-      dato: '%{dato} in der Überschrift verstehe ich nicht; erlaubt sind (name "…") und auch %{datos}'
-      forma: 'ein Plugin deklariert nur define, report und translation; das nicht: %{forma}'
-      prefijo: '%{nombre} muss das Präfix des Plugins tragen: %{id}/…'
-      informe: 'ein Bericht geht so: (report "Titel" (Abfrage …))'
-      traduccion: 'eine Übersetzung geht so: (translation "fr" "Français" ("schlüssel" "text") …)'
-      par: 'jeder Text geht so: ("schlüssel" "text"), und das nicht: %{par}'
-      claves: 'diese Textschlüssel gibt es nicht: %{claves}'
-      html: 'diese Texte enthalten HTML und ein Plugin darf sie nicht ändern: %{claves}'
-  reglas:
-    archivo:
-      ayuda: Alle Regeln des Geschäfts in einer einzigen .lisp-Datei, zum Sichern oder für eine andere Installation. Es ist Text, den man lesen und von Hand bearbeiten kann; jede Regel steht unter ihrer Überschrift.
-      exportar: Aktuelle Regeln herunterladen
-      bajar: Datei herunterladen
-      todas_de_fabrica: Noch keine eigenen Regeln; alles nutzt die Standardregeln.
-      importar: Datei hochladen
-      importar_ayuda: Jede geänderte Regel wird als neue Version gespeichert, mit der Vertragsversion, die sie mitbringt. Ist eine nicht lesbar, wird keine importiert.
-      subir: Importieren
-      sin_archivo: Datei auswählen.
-      vacio: die Datei enthält keine Regeln (jede steht unter ";;; hook:")
-      gancho: 'unbekannter Haken %{gancho}'
-      repetido: 'der Haken %{gancho} kommt zweimal vor'
-      no_se_importo: 'Nichts importiert: %{error}'
-      importadas: 'Importiert: %{ganchos}.'
-      sin_cambios: Die Datei enthält dieselben Regeln wie jetzt; nichts geändert.
-    por_permiso: 'Die Regel stoppt es, aber die Person hat die Berechtigung: es geht durch und zur Prüfung.'
-    con_corte_real: Mit dem echten offenen Abschnitt
-    con_corte_inventado: Mit einem erfundenen
-    sin_corte_real: 'In dieser Filiale ist kein Abschnitt offen: es wird ein erfundener verwendet.'
-    contrato: 'Vertrag v%{n}'
-    contrato_ayuda: Die Version des Hakens, für die sie geschrieben wurde
-    vieja: 'Diese Regel wurde für Version %{suya} des Hakens geschrieben, Sakuya ist bei %{actual}: prüfen, ob sie liest und antwortet, was der Haken jetzt erwartet, und erneut speichern.'
-    errores:
-      sin_decision: 'die Regel muss mit (allow), (to-review "Grund") oder (reject "Grund") enden und endete mit %{valor}'
-      motivo: to-review und reject brauchen den Grund, als Zeichenkette oder Schlüsselwort
-      motivo_desconocido: 'unbekannter Grund :%{motivo}; bekannt sind: :%{motivos}'
-    versiones: Versionen
-    vigente: aktuell
-    restaurar: Zu dieser zurück
-    sin_versiones: 'Noch keine Versionen: es gilt die Standardregel.'
-    avisos:
-      guardado: Regel gespeichert.
-      restaurado: Zur Version vom %{fecha} zurückgekehrt.
-    caso: Testfall
-    lee: Was sie liest (in Pesos)
-    contesta: Was sie antwortet
-    ejemplo: Beispiel
-  regla_recepcion:
-    titulo: Wareneingänge in Lisp
-    ayuda: Bevor die Ware des Lieferanten in den Bestand geht, prüft diese Regel was kommt, von wem und mit welchen Papieren, und entscheidet, ob sie hereinkommt, ob es zur Prüfung geht oder ob gestoppt wird. Standardmäßig stoppt sie nichts. Testen speichert nichts.
-    fallo: 'Die Eingangsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
-    motivos: {}
-    caso:
-      llegan: Was ankommt (CODE Menge, …)
-      remision: Lieferschein
-      facturada: Kommt mit Rechnung
-      autorizado: Angenommen von jemandem mit Berechtigung, Eingänge zu erzwingen
-    veredictos:
+    notices:
+      installed: 'Plugin %{name} installiert. Es kommt ausgeschaltet: zum Nutzen einschalten.'
+      updated: Plugin %{name} aktualisiert.
+      enabled: Plugin %{name} eingeschaltet.
+      disabled: Plugin %{name} ausgeschaltet.
+      removed: Plugin %{name} entfernt.
+      not_installed: 'Nicht installiert: %{error}'
+    errors:
+      header: 'die Datei muss mit (plugin "kennung" …) beginnen'
+      identifier: 'die Kennung %{id} taugt nicht: Kleinbuchstaben, Ziffern und Bindestriche, 2 bis 31'
+      datum: '%{datum} in der Überschrift verstehe ich nicht; erlaubt sind (name "…") und auch %{data}'
+      form: 'ein Plugin deklariert nur define, report und translation; das nicht: %{form}'
+      prefix: '%{name} muss das Präfix des Plugins tragen: %{id}/…'
+      report: 'ein Bericht geht so: (report "Titel" (Abfrage …))'
+      translation: 'eine Übersetzung geht so: (translation "fr" "Français" ("schlüssel" "text") …)'
+      pair: 'jeder Text geht so: ("schlüssel" "text"), und das nicht: %{pair}'
+      keys: 'diese Textschlüssel gibt es nicht: %{keys}'
+      html: 'diese Texte enthalten HTML und ein Plugin darf sie nicht ändern: %{keys}'
+  rules:
+    file:
+      help: Alle Regeln des Geschäfts in einer einzigen .lisp-Datei, zum Sichern oder für eine andere Installation. Es ist Text, den man lesen und von Hand bearbeiten kann; jede Regel steht unter ihrer Überschrift.
+      export: Aktuelle Regeln herunterladen
+      download: Datei herunterladen
+      all_default: Noch keine eigenen Regeln; alles nutzt die Standardregeln.
+      import: Datei hochladen
+      import_help: Jede geänderte Regel wird als neue Version gespeichert, mit der Vertragsversion, die sie mitbringt. Ist eine nicht lesbar, wird keine importiert.
+      upload: Importieren
+      no_file: Datei auswählen.
+      empty: die Datei enthält keine Regeln (jede steht unter ";;; hook:")
+      hook: 'unbekannter Haken %{hook}'
+      repeated: 'der Haken %{hook} kommt zweimal vor'
+      not_imported: 'Nichts importiert: %{error}'
+      imported: 'Importiert: %{hooks}.'
+      no_changes: Die Datei enthält dieselben Regeln wie jetzt; nichts geändert.
+    by_permission: 'Die Regel stoppt es, aber die Person hat die Berechtigung: es geht durch und zur Prüfung.'
+    with_shift_real: Mit dem echten offenen Abschnitt
+    with_shift_made_up: Mit einem erfundenen
+    no_shift_real: 'In dieser Filiale ist kein Abschnitt offen: es wird ein erfundener verwendet.'
+    contract: 'Vertrag v%{n}'
+    contract_help: Die Version des Hakens, für die sie geschrieben wurde
+    old: 'Diese Regel wurde für Version %{rule_version} des Hakens geschrieben, Sakuya ist bei %{current_version}: prüfen, ob sie liest und antwortet, was der Haken jetzt erwartet, und erneut speichern.'
+    errors:
+      no_decision: 'die Regel muss mit (allow), (to-review "Grund") oder (reject "Grund") enden und endete mit %{value}'
+      reason: to-review und reject brauchen den Grund, als Zeichenkette oder Schlüsselwort
+      unknown_reason: 'unbekannter Grund :%{reason}; bekannt sind: :%{reasons}'
+    versions: Versionen
+    current: aktuell
+    restore: Zu dieser zurück
+    no_versions: 'Noch keine Versionen: es gilt die Standardregel.'
+    notices:
+      saved: Regel gespeichert.
+      restored: Zur Version vom %{date} zurückgekehrt.
+    scenario: Testfall
+    reads: Was sie liest (in Pesos)
+    answers: Was sie antwortet
+    example: Beispiel
+  receipt_rule:
+    title: Wareneingänge in Lisp
+    help: Bevor die Ware des Lieferanten in den Bestand geht, prüft diese Regel was kommt, von wem und mit welchen Papieren, und entscheidet, ob sie hereinkommt, ob es zur Prüfung geht oder ob gestoppt wird. Standardmäßig stoppt sie nichts. Testen speichert nichts.
+    failure: 'Die Eingangsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    reasons: {}
+    scenario:
+      arriving: Was ankommt (CODE Menge, …)
+      delivery_note: Lieferschein
+      invoiced: Kommt mit Rechnung
+      authorized: Angenommen von jemandem mit Berechtigung, Eingänge zu erzwingen
+    verdicts:
       allow: Kommt herein
       review: Kommt herein und wird geprüft
       reject: Wird gestoppt
-    funciones:
+    functions:
       supplier: der Name des Lieferanten
       lines: wie viele Zeilen
       products: die Liste der Codes
       quantity_of: '(quantity-of "CODE"): wie viel von diesem Produkt ankommt'
       value: der Wert zum Listenpreis
-      remission: 'der geschriebene Lieferschein ("" wenn keiner)'
+      delivery_note: 'der geschriebene Lieferschein ("" wenn keiner)'
       invoiced: ob er mit einer Rechnung verknüpft ist
       authorized: ob die annehmende Person Eingänge erzwingen darf
     allow: kommt herein
     to_review: kommt herein und wird geprüft
     reject: kommt nicht herein und der Versuch wird gemeldet
-    nucleo: Wer Eingänge erzwingen darf, kann immer annehmen; für diese Person heißt Stoppen Prüfung.
-  regla_factura:
-    factura_no_existe: 'es gibt keine Rechnung %{folio}'
-    titulo: Rechnungen in Lisp
-    ayuda: Bevor eine Lieferantenrechnung erfasst wird, vergleicht diese Regel das Abgerechnete mit den verknüpften Wareneingängen und entscheidet, ob sie erfasst wird, ob sie zur Prüfung geht oder ob gestoppt wird. Testen speichert nichts.
-    fallo: 'Die Rechnungsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
-    motivos:
-      over_received: 'es wird mehr abgerechnet als erhalten (%{detalle})'
-    caso:
-      factura: Oder eine echte Rechnung (Nummer)
-      factura_ayuda: Vergleicht sie mit den verknüpften Wareneingängen, wie beim Erfassen.
-      productos_de_mas: Produkte zu viel
-      valor_de_mas: Wert des Überschusses
+    core: Wer Eingänge erzwingen darf, kann immer annehmen; für diese Person heißt Stoppen Prüfung.
+  invoice_rule:
+    invoice_not_found: 'es gibt keine Rechnung %{folio}'
+    title: Rechnungen in Lisp
+    help: Bevor eine Lieferantenrechnung erfasst wird, vergleicht diese Regel das Abgerechnete mit den verknüpften Wareneingängen und entscheidet, ob sie erfasst wird, ob sie zur Prüfung geht oder ob gestoppt wird. Testen speichert nichts.
+    failure: 'Die Rechnungsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    reasons:
+      over_received: 'es wird mehr abgerechnet als erhalten (%{detail})'
+    scenario:
+      invoice: Oder eine echte Rechnung (Nummer)
+      invoice_help: Vergleicht sie mit den verknüpften Wareneingängen, wie beim Erfassen.
+      excess_items: Produkte zu viel
+      excess_value: Wert des Überschusses
       total: Rechnungssumme
-      candado_puesto: Die Sperre in Einstellungen › Einkauf ist aktiv.
-      candado_quitado: Die Sperre in Einstellungen › Einkauf ist aus.
-      autorizado: Abgerechnet von jemandem mit Berechtigung zum Überschreiten
-    veredictos:
+      lock_set: Die Sperre in Einstellungen › Einkauf ist aktiv.
+      lock_removed: Die Sperre in Einstellungen › Einkauf ist aus.
+      authorized: Abgerechnet von jemandem mit Berechtigung zum Überschreiten
+    verdicts:
       allow: Wird erfasst
       review: Wird erfasst und geprüft
       reject: Wird gestoppt
-    funciones:
+    functions:
       excess_items: wie viele Produkte zu viel kommen
       excess_value: was der Überschuss wert ist
       total: die Rechnungssumme
@@ -1328,22 +1340,22 @@ de:
     allow: wird erfasst
     to_review: verlangt einen Grund und geht zur Prüfung
     reject: wird nicht erfasst und der Versuch gemeldet
-    nucleo: Wer überschreiten darf, kann sie immer erfassen; für diese Person heißt Stoppen Prüfung mit Grund.
-  regla_movimiento:
-    titulo: Bestand in Lisp
-    ayuda: Vor einem losen Zugang, einer Korrektur oder Schwund prüft diese Regel was, wie viel und warum und entscheidet, ob gebucht wird, ob es zur Prüfung geht oder ob gestoppt wird. Grund und genug Bestand verlangt Sakuya vorher. Testen speichert nichts.
-    fallo: 'Die Bestandsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
-    motivos:
+    core: Wer überschreiten darf, kann sie immer erfassen; für diese Person heißt Stoppen Prüfung mit Grund.
+  movement_rule:
+    title: Bestand in Lisp
+    help: Vor einem losen Zugang, einer Korrektur oder Schwund prüft diese Regel was, wie viel und warum und entscheidet, ob gebucht wird, ob es zur Prüfung geht oder ob gestoppt wird. Grund und genug Bestand verlangt Sakuya vorher. Testen speichert nichts.
+    failure: 'Die Bestandsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    reasons:
       needs_permission: es braucht eine Berechtigung für Korrekturen
-    caso:
-      tipo: Bewegung
-      motivo_ejemplo: verdorben
-      autorizado: Durch jemanden mit Berechtigung für Korrekturen
-    veredictos:
+    scenario:
+      kind: Bewegung
+      reason_example: verdorben
+      authorized: Durch jemanden mit Berechtigung für Korrekturen
+    verdicts:
       allow: Wird gebucht
       review: Wird gebucht und geprüft
       reject: Wird gestoppt
-    funciones:
+    functions:
       kind: ':in Zugang, :adjust-in Korrektur (+), :adjust-out Korrektur (−), :waste Schwund'
       quantity: die Menge
       stock: der Bestand vor der Buchung
@@ -1354,24 +1366,24 @@ de:
     allow: wird gebucht
     to_review: wird gebucht und geprüft
     reject: wird nicht gebucht und der Versuch gemeldet
-    nucleo: Wer korrigieren darf, kann es immer; für diese Person heißt Stoppen Prüfung.
-  regla_retiro:
-    titulo: Entnahmen in Lisp
-    ayuda: Bevor Bargeld die Lade verlässt, prüft diese Regel wie viel und wofür und entscheidet, ob es entnommen wird, ob es zur Prüfung geht oder ob gestoppt wird. Grund und genug Bargeld verlangt Sakuya vorher. Testen speichert nichts.
-    fallo: 'Die Entnahmeregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
-    motivos:
+    core: Wer korrigieren darf, kann es immer; für diese Person heißt Stoppen Prüfung.
+  withdrawal_rule:
+    title: Entnahmen in Lisp
+    help: Bevor Bargeld die Lade verlässt, prüft diese Regel wie viel und wofür und entscheidet, ob es entnommen wird, ob es zur Prüfung geht oder ob gestoppt wird. Grund und genug Bargeld verlangt Sakuya vorher. Testen speichert nichts.
+    failure: 'Die Entnahmeregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    reasons:
       needs_permission: es braucht eine Berechtigung für Entnahmen
-    caso:
-      monto: Betrag
-      en_gaveta: In der Lade
-      motivo: Grund
-      motivo_ejemplo: Tresor
-      autorizado: Entnahme durch jemanden mit Berechtigung
-    veredictos:
+    scenario:
+      amount: Betrag
+      in_drawer: In der Lade
+      reason: Grund
+      reason_example: Tresor
+      authorized: Entnahme durch jemanden mit Berechtigung
+    verdicts:
       allow: Wird entnommen
       review: Wird entnommen und geprüft
       reject: Wird gestoppt
-    funciones:
+    functions:
       amount: was entnommen wird
       cash: was in der Lade ist
       withdrawn: bereits im Abschnitt entnommen
@@ -1381,27 +1393,27 @@ de:
     allow: wird entnommen
     to_review: wird entnommen und geprüft
     reject: wird nicht entnommen und der Versuch gemeldet
-    nucleo: Wer entnehmen darf, kann es immer; für diese Person heißt Stoppen Prüfung.
-  regla_credito:
-    titulo: Kredit in Lisp
-    ayuda: Wenn ein Verkauf auf Rechnung eines Kunden geht, prüft diese Regel sein Konto (Saldo, Limit, Rückstände, letzte Zahlung) und entscheidet, ob Kredit gegeben wird, ob es zur Prüfung geht oder ob gestoppt wird. Standardmäßig bekommt niemand Kredit. Testen speichert nichts.
-    fallo: 'Die Kreditregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
-    motivos:
+    core: Wer entnehmen darf, kann es immer; für diese Person heißt Stoppen Prüfung.
+  credit_rule:
+    title: Kredit in Lisp
+    help: Wenn ein Verkauf auf Rechnung eines Kunden geht, prüft diese Regel sein Konto (Saldo, Limit, Rückstände, letzte Zahlung) und entscheidet, ob Kredit gegeben wird, ob es zur Prüfung geht oder ob gestoppt wird. Standardmäßig bekommt niemand Kredit. Testen speichert nichts.
+    failure: 'Die Kreditregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    reasons:
       no_credit: dieses Geschäft verkauft nicht auf Rechnung
-      over_limit: 'mit diesem Verkauf wird das Limit überschritten (Schuld %{saldo}, Limit %{limite})'
-    caso:
-      cliente: Kunde
-      inventado: — ein erfundener —
-      monto: Auf Rechnung
-      saldo: Schuld
-      limite: Limit
-      cuenta: 'Schuld %{saldo} · Limit %{limite}'
-      autorizado: Kassiert von jemandem mit Berechtigung, Kredit zu erzwingen
-    veredictos:
+      over_limit: 'mit diesem Verkauf wird das Limit überschritten (Schuld %{balance}, Limit %{limit})'
+    scenario:
+      customer: Kunde
+      made_up: — ein erfundener —
+      amount: Auf Rechnung
+      balance: Schuld
+      limit: Limit
+      account: 'Schuld %{balance} · Limit %{limit}'
+      authorized: Kassiert von jemandem mit Berechtigung, Kredit zu erzwingen
+    verdicts:
       allow: Kredit gegeben
       review: Kredit gegeben und geprüft
       reject: Wird gestoppt
-    funciones:
+    functions:
       amount: was auf Rechnung geht
       total: die Verkaufssumme
       balance: was er vor diesem Verkauf schuldet
@@ -1413,24 +1425,24 @@ de:
     allow: Kredit wird gegeben
     to_review: Kredit wird gegeben und geprüft
     reject: kein Kredit und der Versuch wird gemeldet
-    nucleo: Wer Kredit erzwingen darf, kann es immer; für diese Person heißt Stoppen Prüfung.
-  regla_venta:
-    titulo: Verkäufe in Lisp
-    ayuda: Mit dem ganzen Ticket, direkt vor dem Kassieren, prüft diese Regel den Verkauf (Summe, Produkte, Zahlungsarten, Uhrzeit) und entscheidet, ob kassiert wird, ob es zur Prüfung geht oder ob gestoppt wird. Standardmäßig stoppt sie nichts; Preise prüft ihre eigene Regel. Testen speichert nichts.
-    fallo: 'Die Verkaufsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
-    forma: 'paid-with erwartet eine Zahlungsart: :%{formas}'
-    motivos: {}
-    caso:
-      claves: Codes (durch Komma getrennt)
+    core: Wer Kredit erzwingen darf, kann es immer; für diese Person heißt Stoppen Prüfung.
+  sale_rule:
+    title: Verkäufe in Lisp
+    help: Mit dem ganzen Ticket, direkt vor dem Kassieren, prüft diese Regel den Verkauf (Summe, Produkte, Zahlungsarten, Uhrzeit) und entscheidet, ob kassiert wird, ob es zur Prüfung geht oder ob gestoppt wird. Standardmäßig stoppt sie nichts; Preise prüft ihre eigene Regel. Testen speichert nichts.
+    failure: 'Die Verkaufsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    payment_method: 'paid-with erwartet eine Zahlungsart: :%{payment_methods}'
+    reasons: {}
+    scenario:
+      keys: Codes (durch Komma getrennt)
       total: Summe
-      forma: Zahlungsart
-      hora: Stunde
-      autorizado: Kassiert von jemandem mit Berechtigung, Verkäufe zu erzwingen
-    veredictos:
+      payment_method: Zahlungsart
+      hour: Stunde
+      authorized: Kassiert von jemandem mit Berechtigung, Verkäufe zu erzwingen
+    verdicts:
       allow: Wird kassiert
       review: Wird kassiert und geprüft
       reject: Wird gestoppt
-    funciones:
+    functions:
       total: die Summe
       change: das Wechselgeld
       paid_with: '(paid-with :cash), :transfer oder :deposit: was so bezahlt wurde'
@@ -1443,28 +1455,28 @@ de:
     allow: wird kassiert
     to_review: wird kassiert und geprüft
     reject: wird nicht kassiert und der Versuch gemeldet
-    nucleo: Wer Verkäufe erzwingen darf, kann immer kassieren; für diese Person heißt Stoppen Prüfung.
-  regla_precio:
-    venta_no_existe: 'in dieser Filiale gibt es keinen Verkauf %{folio}'
-    titulo: Preis in Lisp
-    ayuda: Jede kassierte Zeile läuft durch diese Regel, die den Preis prüft und entscheidet, ob kassiert wird, ob es zur Prüfung geht oder ob gestoppt wird. Die Untergrenze aus Einstellungen › Kasse überschreitet keine Regel. Testen speichert nichts.
-    sin_productos: es gibt keine Produkte mit Preis zum Testen
-    fallo: 'Die Preisregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
-    motivos:
+    core: Wer Verkäufe erzwingen darf, kann immer kassieren; für diese Person heißt Stoppen Prüfung.
+  price_rule:
+    sale_not_found: 'in dieser Filiale gibt es keinen Verkauf %{folio}'
+    title: Preis in Lisp
+    help: Jede kassierte Zeile läuft durch diese Regel, die den Preis prüft und entscheidet, ob kassiert wird, ob es zur Prüfung geht oder ob gestoppt wird. Die Untergrenze aus Einstellungen › Kasse überschreitet keine Regel. Testen speichert nichts.
+    no_products: es gibt keine Produkte mit Preis zum Testen
+    failure: 'Die Preisregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    reasons:
       below_price: unter dem regulären Preis
-    caso:
-      venta: Oder ein echter Verkauf (Nummer)
-      venta_ayuda: Geht seine Zeilen so durch, wie sie kassiert wurden; der reguläre Preis kommt aus dem damaligen Listenpreis und den heutigen Aktionen.
-      producto: Produktcode
-      cantidad: Menge
-      precio: Kassierter Preis
-      toca: 'Regulär: %{regular} (Liste %{catalogo})'
-      autorizado: Kassiert von jemandem mit Berechtigung für Preissenkungen
-    veredictos:
+    scenario:
+      sale: Oder ein echter Verkauf (Nummer)
+      sale_help: Geht seine Zeilen so durch, wie sie kassiert wurden; der reguläre Preis kommt aus dem damaligen Listenpreis und den heutigen Aktionen.
+      product: Produktcode
+      quantity: Menge
+      price: Kassierter Preis
+      regular: 'Regulär: %{regular} (Liste %{catalog})'
+      authorized: Kassiert von jemandem mit Berechtigung für Preissenkungen
+    verdicts:
       allow: Wird kassiert
       review: Wird kassiert und geprüft
       reject: Wird gestoppt
-    funciones:
+    functions:
       price: was kassiert wird
       list_price: der Listenpreis der Filiale
       regular_price: der reguläre Preis (Aktion oder Liste)
@@ -1475,22 +1487,22 @@ de:
     allow: wird kassiert
     to_review: wird kassiert und geprüft
     reject: wird nicht kassiert und der Versuch gemeldet
-    nucleo: Wer Preise senken darf, kann immer kassieren; für diese Person heißt Stoppen Prüfung.
-  regla_corte:
-    titulo: Kassenabschluss in Lisp
-    ayuda: Beim Abschluss prüft diese Regel die Zählung und entscheidet, ob abgeschlossen wird, ob es zur Prüfung geht oder ob gestoppt wird. Testen speichert nichts; jede gespeicherte Version steht in der Liste unten.
-    fallo: 'Die Regel für den Kassenabschluss ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
-    motivos:
-      over_limit: die Differenz (%{diferencia}) übersteigt die Grenze (%{tope})
-    caso:
-      esperado: Erwartet in der Lade
-      contado: Gezählt
-      autorizado: Abschluss durch jemanden mit Berechtigung für Differenzen
-    veredictos:
+    core: Wer Preise senken darf, kann immer kassieren; für diese Person heißt Stoppen Prüfung.
+  shift_rule:
+    title: Kassenabschluss in Lisp
+    help: Beim Abschluss prüft diese Regel die Zählung und entscheidet, ob abgeschlossen wird, ob es zur Prüfung geht oder ob gestoppt wird. Testen speichert nichts; jede gespeicherte Version steht in der Liste unten.
+    failure: 'Die Regel für den Kassenabschluss ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    reasons:
+      over_limit: die Differenz (%{difference}) übersteigt die Grenze (%{cap})
+    scenario:
+      expected: Erwartet in der Lade
+      counted: Gezählt
+      authorized: Abschluss durch jemanden mit Berechtigung für Differenzen
+    verdicts:
       allow: Wird abgeschlossen
       review: Wird abgeschlossen und geprüft
       reject: Wird gestoppt
-    funciones:
+    functions:
       difference: gezählt − erwartet; negativ = fehlt
       counted: das Gezählte
       expected: was da sein sollte
@@ -1505,45 +1517,75 @@ de:
     allow: wird abgeschlossen
     to_review: verlangt einen Grund und geht zur Prüfung
     reject: stoppt und meldet den Versuch
-    nucleo: Wer Differenzen annehmen darf, kann immer abschließen; für diese Person heißt Stoppen Prüfung.
-  tablero:
-    titulo: Übersicht in Lisp
-    ayuda: Die Übersicht ist ein Programm. Ändere, welche Zahlen in welcher Reihenfolge erscheinen, berechne eigene und wähle die Listen darunter. Ausprobieren speichert nichts; jede gespeicherte Version bleibt unten in der Liste.
-    personalizar: Anpassen
-    arreglar: Beheben
+    core: Wer Differenzen annehmen darf, kann immer abschließen; für diese Person heißt Stoppen Prüfung.
+  dashboard:
+    title: Übersicht in Lisp
+    help: Die Übersicht ist ein Programm. Ändere, welche Zahlen in welcher Reihenfolge erscheinen, berechne eigene und wähle die Listen darunter. Ausprobieren speichert nichts; jede gespeicherte Version bleibt unten in der Liste.
+    customize: Anpassen
+    fix: Beheben
     error_html: 'Deine Übersicht hat einen Fehler, daher wird die Standardansicht gezeigt: %{error}'
-    programa: Programm
-    probar: Ausprobieren
-    guardar: Speichern
-    vista_previa: Vorschau
-    vista_previa_ayuda: Mit den heutigen Zahlen deiner Filiale.
-    versiones: Versionen
-    vigente: aktuell
-    restaurar: Wiederherstellen
-    sin_versiones: 'Noch keine Versionen: die Standardübersicht wird verwendet.'
-    avisos:
-      guardado: Übersicht gespeichert.
-      restaurado: Version vom %{fecha} wiederhergestellt.
-    referencia:
-      titulo: Was man schreiben kann
-      cifras: Eingebaute Zahlen
-      propias: Eigene Zahlen
-      propias_ayuda: 'Jede eingebaute Zahl lässt sich auch als Funktion lesen: (sales), (tickets)… Dazu (days) und, per Produktkürzel, (sold "KÜRZEL") und (sales-of "KÜRZEL"). Das Format kommt ans Ende: :money, :number oder :percent.'
-      paneles: Listen
-      paneles_ayuda: 'Eine Zahl danach legt die Zeilen fest: (panel :top-products 5).'
-      lenguaje: Die Sprache
-      lenguaje_ayuda: Es gibt let, if, cond, when, define, lambda, map, filter, reduce, +, -, *, /, round und Vergleiche. (when (> (returns) 0) (tile :returns)) zeigt eine Zahl nur, wenn sie zählt. Geld rechnet mit exakten Dezimalzahlen.
-    errores:
-      sin_dashboard: das Programm muss mit (dashboard …) enden
-      cifra_desconocida: es gibt keine Zahl :%{cifra}; eingebaut sind :%{cifras}
-      titulo: tile braucht eine eingebaute Zahl (:sales) oder einen Titel in Anführungszeichen
-      valor: "„%{titulo}“ braucht einen Wert, der Zahl oder Text ist"
-      formato: das Format ist eines von :%{formatos}
-      panel: es gibt keine Liste :%{panel}; es gibt :%{paneles}
-      limite: eine Liste zeigt 1 bis 50 Zeilen
-      pieza: dashboard nimmt nur (tile …) und (panel …), bekam aber %{valor}
-      clave: das Produktkürzel steht in Anführungszeichen
-      producto: kein Produkt mit dem Kürzel %{clave}
-    muestra: Beispieldaten laden
-    muestra_ayuda: Mit erfundenen Zahlen ausprobieren, um die Übersicht gefüllt zu sehen, auch ohne Verkäufe heute. Es wird nichts verändert.
-    vista_previa_muestra: 'Erfundene Beispieldaten: das sind nicht die Verkäufe deines Geschäfts.'
+    program: Programm
+    trial: Ausprobieren
+    save: Speichern
+    preview: Vorschau
+    preview_help: Mit den heutigen Zahlen deiner Filiale.
+    versions: Versionen
+    current: aktuell
+    restore: Wiederherstellen
+    no_versions: 'Noch keine Versionen: die Standardübersicht wird verwendet.'
+    notices:
+      saved: Übersicht gespeichert.
+      restored: Version vom %{date} wiederhergestellt.
+    reference:
+      title: Was man schreiben kann
+      figures: Eingebaute Zahlen
+      own: Eigene Zahlen
+      own_help: 'Jede eingebaute Zahl lässt sich auch als Funktion lesen: (sales), (tickets)… Dazu (days) und, per Produktkürzel, (sold "KÜRZEL") und (sales-of "KÜRZEL"). Das Format kommt ans Ende: :money, :number oder :percent.'
+      panels: Listen
+      panels_help: 'Eine Zahl danach legt die Zeilen fest: (panel :top-products 5).'
+      language: Die Sprache
+      language_help: Es gibt let, if, cond, when, define, lambda, map, filter, reduce, +, -, *, /, round und Vergleiche. (when (> (returns) 0) (tile :returns)) zeigt eine Zahl nur, wenn sie zählt. Geld rechnet mit exakten Dezimalzahlen.
+    errors:
+      missing_dashboard: das Programm muss mit (dashboard …) enden
+      unknown_figure: es gibt keine Zahl :%{figure}; eingebaut sind :%{figures}
+      title: tile braucht eine eingebaute Zahl (:sales) oder einen Titel in Anführungszeichen
+      value: "„%{title}“ braucht einen Wert, der Zahl oder Text ist"
+      format: das Format ist eines von :%{formats}
+      panel: es gibt keine Liste :%{panel}; es gibt :%{panels}
+      limit: eine Liste zeigt 1 bis 50 Zeilen
+      piece: dashboard nimmt nur (tile …) und (panel …), bekam aber %{value}
+      key: das Produktkürzel steht in Anführungszeichen
+      product: kein Produkt mit dem Kürzel %{key}
+    sample: Beispieldaten laden
+    sample_help: Mit erfundenen Zahlen ausprobieren, um die Übersicht gefüllt zu sehen, auch ohne Verkäufe heute. Es wird nichts verändert.
+    preview_sample: 'Erfundene Beispieldaten: das sind nicht die Verkäufe deines Geschäfts.'
+  lisp:
+    anonymous: anonym
+    errors:
+      expects_numbers: "%{who} erwartet Zahlen und bekam %{value}"
+      expects_list: "%{who} erwartet eine Liste und bekam %{value}"
+      division_by_zero: durch null kann man nicht teilen
+      get_expects_map: get erwartet eine Map
+      unknown_name: "„%{name}“ kenne ich nicht"
+      arity: "%{name} nimmt %{expected} und du hast %{given} übergeben"
+      the_function: die Funktion
+      at_least: mindestens %{count}
+      between: "%{from} bis %{to}"
+      not_a_function: "%{value} ist keine Funktion"
+      cond_clause: jede cond-Klausel ist (Test Wert…)
+      let_syntax: 'let geht so: (let ((Name Wert) …) Rumpf…)'
+      define_syntax: 'define geht so: (define Name Wert) oder (define (Name Args…) Rumpf…)'
+      lambda_syntax: '%{name} geht so: (%{name} (Args…) Rumpf…)'
+      parameter_names: Parameter müssen Namen sein
+      too_many_steps: das Programm hat zu viele Schritte gebraucht (eine Endlosschleife?)
+      too_deep: das Programm ist zu tief verschachtelt (eine Endlosrekursion?)
+      too_long: das Programm ist länger als %{max} Zeichen
+      unreadable: ich verstehe nicht, was in Zeile %{line} folgt
+      too_nested: zu viele verschachtelte Klammern in Zeile %{line}
+      extra_close: eine ) zu viel in Zeile %{line}
+      quote_before_close: vor der ) in Zeile %{line} fehlt, was zitiert werden soll
+      unclosed_string: eine nicht geschlossene Zeichenkette in Zeile %{line}
+      unclosed_parens:
+        one: es fehlt 1 schließende Klammer
+        other: es fehlen %{count} schließende Klammern
+      quote_at_end: am Ende fehlt, was zitiert werden soll

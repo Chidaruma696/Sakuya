@@ -1,0 +1,49 @@
+<% c = @stock_count %>
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("stock_counts.stock_count") %> <%= c.folio %> · <%= c.branch %></h1>
+  <span class="badge"><%= t("statuses.#{c.status}") %><%= " · #{t("stock_counts.partial_badge", count: @lines.size)}" if c.partial? %></span>
+</div>
+<p class="mb-4 text-sm text-stone-600"><%= t("stock_counts.supervisor") %> <%= c.user %> · <%= t("stock_counts.responsible").downcase %> <%= c.responsible %> · <%= l c.created_at, format: :short %><%= " · #{t("statuses.closed")} #{l c.closed_at, format: :short}" if c.closed_at %></p>
+<% if c.open? %>
+  <div class="mb-4 grid gap-4 md:grid-cols-2">
+    <div class="card">
+      <h2 class="mb-2 font-semibold"><%= t("stock_counts.scan") %></h2>
+      <%= form_with url: scan_stock_count_path(c), class: "flex gap-2" do |f| %>
+        <%= f.text_field :code, autofocus: true, autocomplete: "off", placeholder: t("stock_counts.code_placeholder"), class: "flex-1 rounded border border-stone-300 px-3 py-2 font-mono" %>
+        <%= f.submit t("stock_counts.count"), class: "btn btn-primary" %>
+      <% end %>
+      <p class="mt-2 text-sm text-stone-600"><%= t("stock_counts.scan_help") %></p>
+    </div>
+    <div class="card">
+      <h2 class="mb-2 font-semibold"><%= t("stock_counts.count_by_hand") %></h2>
+      <%= form_with url: manual_stock_count_path(c), class: "flex gap-2" do |f| %>
+        <%= f.select :product_id, @products.map { |p| [ "#{p.name} (#{p.unit})", p.id ] }, {}, class: "flex-1 rounded border border-stone-300 px-2 py-2" %>
+        <%= f.number_field :quantity, step: "0.001", min: 0, required: true, class: "w-28 rounded border border-stone-300 px-2 py-2 font-mono" %>
+        <%= f.submit t("common.save"), class: "btn btn-primary" %>
+      <% end %>
+      <%= button_to t("stock_counts.close"), close_stock_count_path(c), class: "mt-4 rounded bg-red-700 px-4 py-2 text-light", form: { data: { turbo_confirm: t("stock_counts.confirm_close", responsible: c.responsible) } } %>
+    </div>
+  </div>
+<% else %>
+  <div class="mb-4 grid gap-4 sm:grid-cols-2">
+    <div class="card"><div class="stat-label"><%= t("stock_counts.shortage") %></div><div class="stat-value text-2xl text-red-700"><%= format_money(c.shortage_cents) %></div></div>
+    <div class="card"><div class="stat-label"><%= t("stock_counts.surplus") %></div><div class="stat-value text-2xl text-green-700"><%= format_money(c.surplus_cents) %></div></div>
+  </div>
+<% end %>
+<table class="table">
+  <thead><tr><th class="px-3 py-2"><%= t("common.product") %></th><th class="px-3 py-2 text-right"><%= t("stock_counts.system") %></th><th class="px-3 py-2 text-right"><%= t("stock_counts.scanned") %></th><th class="px-3 py-2 text-right"><%= t("stock_counts.by_hand") %></th><th class="px-3 py-2 text-right"><%= t("stock_counts.counted") %></th><th class="px-3 py-2 text-right"><%= t("till.difference") %></th><th class="px-3 py-2 text-right">$</th></tr></thead>
+  <tbody>
+    <% @lines.each do |l| %>
+      <% diff = c.open? ? l.counted - l.system : l.difference %>
+      <tr class="border-t border-stone-100 <%= 'bg-red-50' if diff.negative? %> <%= 'bg-green-50' if diff.positive? %>">
+        <td class="px-3 py-2"><%= l.product.name %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= number_with_precision(l.system, precision: l.product.decimals) %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= number_with_precision(l.scanned, precision: l.product.decimals) %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= number_with_precision(l.manual, precision: l.product.decimals) %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= number_with_precision(l.counted, precision: l.product.decimals) %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= number_with_precision(diff, precision: l.product.decimals) %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= format_money(l.difference_cents) if l.difference_cents %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

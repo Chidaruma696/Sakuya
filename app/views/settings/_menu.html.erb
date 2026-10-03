@@ -1,0 +1,37 @@
+<%# The Settings menu. Below, the advanced options: everything programmed in Sakuya's Lisp. %>
+<% sections = [ [ "for_you", "person-gear" ] ] %>
+<% sections += [ [ "business", "receipt" ], [ "folios", "123" ], [ "features", "grid-1x2" ], [ "till", "cash-stack" ] ] if can?("admin.users") %>
+<% sections << [ "purchases", "truck" ] if can?("admin.users") && Features.active?("purchases") %>
+<% advanced = [] %>
+<% if can?("rules.edit") %>
+  <% advanced = [ [ "dashboard", "braces", dashboard_edit_path ], [ "shift_rule", "cash-coin", rule_edit_path("shift") ], [ "price_rule", "tag", rule_edit_path("price") ], [ "sale_rule", "cart-check", rule_edit_path("sale") ],
+                   [ "withdrawal_rule", "safe", rule_edit_path("withdrawal") ], [ "movement_rule", "box-seam", rule_edit_path("movement") ] ] %>
+  <% advanced += [ [ "receipt_rule", "truck", rule_edit_path("receipt") ], [ "invoice_rule", "receipt-cutoff", rule_edit_path("invoice") ] ] if Features.active?("purchases") %>
+  <% advanced << [ "credit_rule", "person-vcard", rule_edit_path("credit") ] if Features.active?("customers") %>
+  <% advanced << [ "repl", "terminal", repl_path ] %>
+  <% advanced << [ "plugins", "puzzle", plugins_path ] %>
+  <% advanced << [ "rules_file", "file-earmark-code", rules_file_path ] %>
+<% end %>
+<% link_class = ->(active) { "flex items-center gap-3 rounded-md px-3 py-2 text-sm whitespace-nowrap #{active ? 'bg-white font-semibold text-brand-900 shadow-sm ring-1 ring-brand-200' : 'text-stone-700 hover:bg-white'}" } %>
+<nav class="lg:sticky lg:top-[calc(var(--ribbon-height,0px)+1rem)] lg:self-start" aria-label="<%= t("settings.title") %>">
+  <h1 class="mb-3 px-2 text-2xl font-bold"><%= t("settings.title") %></h1>
+  <ul class="flex gap-1 overflow-x-auto lg:flex-col">
+    <% sections.each do |id, icon| %>
+      <li>
+        <%= link_to settings_section_path(id), class: link_class.(current == id) do %>
+          <i class="bi bi-<%= icon %> w-5 text-center text-lg leading-none text-stone-500"></i><span><%= t("settings.sections.#{id}") %></span>
+        <% end %>
+      </li>
+    <% end %>
+    <% if advanced.any? %>
+      <li class="mt-3 hidden px-3 pb-1 text-[0.6875rem] font-semibold tracking-wider text-stone-500 uppercase lg:block"><%= t("settings.advanced") %></li>
+      <% advanced.each do |id, icon, route| %>
+        <li>
+          <%= link_to route, class: link_class.(current == id) do %>
+            <i class="bi bi-<%= icon %> w-5 text-center text-lg leading-none text-stone-500"></i><span><%= t("settings.sections.#{id}") %></span>
+          <% end %>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</nav>

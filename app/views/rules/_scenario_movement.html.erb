@@ -1,0 +1,8 @@
+<div><label for="product" class="field-label"><%= t("price_rule.scenario.product") %></label>
+  <%= text_field_tag :product, scenario[:product]&.key, id: "product", class: "w-32 font-mono uppercase" %></div>
+<div><label for="kind" class="field-label"><%= t("#{texts}.scenario.kind") %></label>
+  <%= select_tag :kind, options_for_select(MovementRule::KINDS.keys.map { |k| [ t("movements.#{k}"), k ] }, scenario[:kind]), id: "kind" %></div>
+<div><label for="quantity" class="field-label"><%= t("price_rule.scenario.quantity") %></label>
+  <%= number_field_tag :quantity, scenario[:quantity].to_s("F"), step: "0.001", min: 0, id: "quantity", class: "w-24 font-mono" %></div>
+<div><label for="reason" class="field-label"><%= t("withdrawal_rule.scenario.reason") %></label>
+  <%= text_field_tag :reason, scenario[:reason], id: "reason", class: "w-56" %></div>

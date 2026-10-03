@@ -1,8 +1,0 @@
-<div><label for="producto" class="etiqueta-campo"><%= t("regla_precio.caso.producto") %></label>
-  <%= text_field_tag :producto, caso[:producto]&.clave, id: "producto", class: "w-32 font-mono uppercase" %></div>
-<div><label for="tipo" class="etiqueta-campo"><%= t("#{textos}.caso.tipo") %></label>
-  <%= select_tag :tipo, options_for_select(ReglaMovimiento::TIPOS.keys.map { |k| [ t("movimientos.#{k}"), k ] }, caso[:tipo]), id: "tipo" %></div>
-<div><label for="cantidad" class="etiqueta-campo"><%= t("regla_precio.caso.cantidad") %></label>
-  <%= number_field_tag :cantidad, caso[:cantidad].to_s("F"), step: "0.001", min: 0, id: "cantidad", class: "w-24 font-mono" %></div>
-<div><label for="motivo" class="etiqueta-campo"><%= t("regla_retiro.caso.motivo") %></label>
-  <%= text_field_tag :motivo, caso[:motivo], id: "motivo", class: "w-56" %></div>

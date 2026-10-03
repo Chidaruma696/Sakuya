@@ -1,0 +1,9 @@
+<%# Settings with a sidebar: each section on its own page, like any preferences panel. %>
+<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+  <%= render "settings/menu", current: @section %>
+  <section class="min-w-0">
+    <h2 class="mb-1 text-xl font-bold"><%= t("settings.sections.#{@section}") %></h2>
+    <p class="mb-4 text-sm text-stone-600"><%= t("settings.sections_help.#{@section}") %></p>
+    <%= render "settings/#{@section}" %>
+  </section>
+</div>

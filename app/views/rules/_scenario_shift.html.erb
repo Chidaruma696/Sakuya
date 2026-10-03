@@ -1,0 +1,5 @@
+<%= render "rules/real_or_made_up", scenario: scenario %>
+<div><label for="expected" class="field-label"><%= t("#{texts}.scenario.expected") %></label>
+  <%= number_field_tag :expected, format("%.2f", scenario[:expected] / 100r), step: "0.01", min: 0, id: "expected", class: "w-32 font-mono", readonly: scenario[:real].present? %></div>
+<div><label for="counted" class="field-label"><%= t("#{texts}.scenario.counted") %></label>
+  <%= number_field_tag :counted, format("%.2f", scenario[:counted] / 100r), step: "0.01", min: 0, id: "counted", class: "w-32 font-mono" %></div>

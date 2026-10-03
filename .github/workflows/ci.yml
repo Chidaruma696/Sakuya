@@ -94,7 +94,7 @@ jobs:
         run: bin/rails db:test:prepare test
 
 
-  # Las mismas pruebas contra PostgreSQL, para las instalaciones con muchas sucursales.
+  # The same tests against PostgreSQL, for installations with many branches.
   test_postgres:
     runs-on: ubuntu-latest
 
@@ -103,7 +103,7 @@ jobs:
         image: postgres:17-alpine
         env:
           POSTGRES_USER: sakuya
-          POSTGRES_PASSWORD: prueba
+          POSTGRES_PASSWORD: test
         ports:
           - 5432:5432
         options: --health-cmd "pg_isready -U sakuya" --health-interval 10s --health-timeout 5s --health-retries 5
@@ -123,5 +123,5 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://sakuya:prueba@localhost:5432/sakuya_test
+          DATABASE_URL: postgres://sakuya:test@localhost:5432/sakuya_test
         run: bin/rails db:test:prepare test

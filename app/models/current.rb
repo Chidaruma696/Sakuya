@@ -1,4 +1,4 @@
-# Quién está trabajando y desde qué sucursal, durante toda la petición.
+# Who is working and from which branch, for the whole request.
 class Current < ActiveSupport::CurrentAttributes
-  attribute :usuario, :sucursal, :modulos, :simbolo
+  attribute :user, :branch, :features, :symbol
 end

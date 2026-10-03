@@ -1,0 +1,75 @@
+<%# Lives inside Settings, under the advanced options. %>
+<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+<%= render "settings/menu", current: "dashboard" %>
+<section class="min-w-0">
+<h2 class="mb-1 text-xl font-bold"><%= t("dashboard.title") %></h2>
+<p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("dashboard.help") %></p>
+<%= render "rules/notice_old", rule: @versions.first %>
+
+<div class="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_22rem]" data-controller="preview">
+  <%= form_with url: dashboard_save_path, id: "form_dashboard", class: "form space-y-4" do |f| %>
+    <label for="code" class="field-label"><%= t("dashboard.program") %></label>
+    <%= text_area_tag :code, @code, id: "code", rows: 20, spellcheck: false, autocomplete: "off", class: "code w-full px-3 py-2" %>
+    <% if @program_error %>
+      <p class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><i class="bi bi-exclamation-triangle-fill text-accent-700"></i> <%= @program_error %></p>
+    <% end %>
+    <div class="flex flex-wrap items-center gap-2">
+      <%= f.button name: "dry_run", value: "1", class: "btn btn-secondary", data: { action: "preview#dryRun" } do %><i class="bi bi-play"></i> <%= t("dashboard.trial") %><% end %>
+      <%= f.button class: "btn btn-primary" do %><i class="bi bi-check2"></i> <%= t("dashboard.save") %><% end %>
+      <label class="ml-2 flex items-center gap-2 text-sm text-stone-700" title="<%= t("dashboard.sample_help") %>">
+        <%= check_box_tag :sample, "1", params[:sample] == "1", id: "sample" %> <%= t("dashboard.sample") %>
+      </label>
+    </div>
+  <% end %>
+
+  <%# The "Try" preview, on top of the editor so the program stays in view %>
+  <dialog class="m-auto w-[min(72rem,95vw)] rounded-xl bg-surface p-0 shadow-2xl" data-preview-target="dialog" data-action="click->preview#closeOutside">
+    <div class="flex items-center justify-between gap-4 border-b border-stone-200 bg-white px-6 py-4">
+      <h2 class="text-lg font-semibold"><%= t("dashboard.preview") %></h2>
+      <button type="button" class="btn btn-ghost btn-sm" data-action="preview#close" title="<%= t("common.close") %>"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="max-h-[75vh] overflow-y-auto px-6 py-5" data-preview-target="body"></div>
+  </dialog>
+
+  <aside class="card space-y-4 text-sm">
+    <h2 class="font-semibold"><%= t("dashboard.reference.title") %></h2>
+    <div>
+      <h3 class="stat-label mb-1"><%= t("dashboard.reference.figures") %></h3>
+      <ul class="space-y-0.5">
+        <% Dashboard::FIGURES.each do |key, (name, _, _)| %>
+          <li><code class="code text-brand-800">(tile :<%= key %>)</code> <span class="text-stone-500"><%= t(name) %></span></li>
+        <% end %>
+      </ul>
+    </div>
+    <div>
+      <h3 class="stat-label mb-1"><%= t("dashboard.reference.own") %></h3>
+      <p class="text-stone-600"><%= t("dashboard.reference.own_help") %></p>
+      <pre class="code mt-1 overflow-x-auto rounded-lg bg-stone-50 p-2 text-xs ring-1 ring-stone-200">(tile "Margin" (- (sales) (returns)) :money)
+(tile "Per day" (/ (sales) (days)) :money)
+(tile "Ketchup sold" (sold "CATS"))</pre>
+    </div>
+    <div>
+      <h3 class="stat-label mb-1"><%= t("dashboard.reference.panels") %></h3>
+      <ul class="space-y-0.5">
+        <% Dashboard::PANELS.each do |panel| %><li><code class="code text-brand-800">(panel :<%= panel %>)</code></li><% end %>
+      </ul>
+      <p class="mt-1 text-stone-600"><%= t("dashboard.reference.panels_help") %></p>
+    </div>
+    <div>
+      <h3 class="stat-label mb-1"><%= t("dashboard.reference.language") %></h3>
+      <p class="text-stone-600"><%= t("dashboard.reference.language_help") %></p>
+    </div>
+  </aside>
+</div>
+
+<% if params[:dry_run].present? %>
+  <%# Without JavaScript, "Try" arrives here as a normal submit and the preview shows on the page. %>
+  <section class="mt-8">
+    <h2 class="mb-1 text-lg font-semibold"><%= t("dashboard.preview") %></h2>
+    <%= render "dashboard/preview" %>
+  </section>
+<% end %>
+
+<%= render "rules/versions", versions: @versions, scope: "dashboard", restore: ->(v) { dashboard_restore_path(v) } %>
+</section>
+</div>

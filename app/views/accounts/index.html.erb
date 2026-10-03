@@ -1,0 +1,33 @@
+<h1 class="mb-1 text-2xl font-bold"><%= t("purchases.accounts_payable") %></h1>
+<p class="mb-4 text-sm text-stone-600"><%= t("purchases.accounts_help") %></p>
+<div class="mb-4 grid gap-4 md:grid-cols-3">
+  <div class="card"><div class="stat-label"><%= t("purchases.owed") %></div><div class="stat-value text-3xl"><%= format_money(@total) %></div></div>
+  <div class="card"><div class="stat-label"><%= t("purchases.overdue") %></div><div class="stat-value text-3xl <%= 'text-red-700' if @overdue.any? %>"><%= format_money(@overdue.sum(&:remaining_cents)) %></div><div class="text-xs text-stone-500"><%= t("purchases.n_invoices", count: @overdue.size) %></div></div>
+  <div class="card"><div class="stat-label"><%= t("purchases.due_this_week") %></div><div class="stat-value text-3xl"><%= format_money(@due_soon.sum(&:remaining_cents)) %></div><div class="text-xs text-stone-500"><%= t("purchases.n_invoices", count: @due_soon.size) %></div></div>
+</div>
+<div class="grid gap-4 lg:grid-cols-2">
+  <div>
+    <h2 class="mb-2 font-semibold"><%= t("purchases.by_supplier") %></h2>
+    <table class="table">
+      <thead><tr><th><%= t("purchases.supplier") %></th><th class="text-right"><%= t("purchases.balance") %></th><th></th></tr></thead>
+      <tbody>
+        <% @suppliers.each do |p, s| %>
+          <tr><td class="px-3 py-2"><%= p.name %></td><td class="px-3 py-2 text-right font-mono"><%= format_money(s) %></td><td class="px-3 py-2 text-right"><%= link_to icon("wallet2", t("purchases.account")), account_path(p), class: "btn btn-secondary btn-xs" %></td></tr>
+        <% end %>
+        <% if @suppliers.empty? %><tr><td colspan="3" class="px-3 py-6 text-center text-stone-500"><%= t("purchases.no_debt") %></td></tr><% end %>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h2 class="mb-2 font-semibold"><%= t("purchases.due_dates") %></h2>
+    <table class="table">
+      <thead><tr><th><%= t("purchases.due") %></th><th><%= t("common.folio") %></th><th><%= t("purchases.supplier") %></th><th class="text-right"><%= t("purchases.remaining") %></th></tr></thead>
+      <tbody>
+        <% (@overdue + @due_soon).each do |x| %>
+          <tr class="<%= 'text-red-700' if x.overdue? %>"><td class="px-3 py-2 whitespace-nowrap"><%= l x.due %></td><td class="px-3 py-2"><%= link_to x.folio, invoice_path(x), class: "chip-folio" %></td><td class="px-3 py-2"><%= x.supplier %></td><td class="px-3 py-2 text-right font-mono"><%= format_money(x.remaining_cents) %></td></tr>
+        <% end %>
+        <% if @overdue.empty? && @due_soon.empty? %><tr><td colspan="4" class="px-3 py-6 text-center text-stone-500"><%= t("purchases.nothing_due") %></td></tr><% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

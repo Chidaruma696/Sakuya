@@ -1,108 +1,108 @@
-# La cinta tipo Office: pestañas por módulo y, debajo, botones grandes con las acciones.
-# Cada botón lleva su clave de texto (cinta.botones.*), el permiso que hace falta y el nombre de
-# su icono (Bootstrap Icons); una pestaña se ve si alguno de sus botones se ve.
+# The Office-style ribbon: one tab per feature and, below, big buttons with the actions.
+# Each button carries its text key (ribbon.buttons.*), the permission it needs and the name of
+# its icon (Bootstrap Icons); a tab shows if any of its buttons shows.
 module RibbonHelper
-  Boton = Struct.new(:clave, :ruta, :permiso, :icono)
+  Button = Struct.new(:key, :route, :permission, :icon)
 
-  PESTANAS = [
-    { id: :inicio, grupos: [
-      { id: :ver, botones: [
-        Boton.new(:inicio, :root_path, nil, "house"),
-        Boton.new(:ventas_por_producto, :ventas_por_producto_path, "reportes.ver", "graph-up")
+  TABS = [
+    { id: :home, groups: [
+      { id: :view, buttons: [
+        Button.new(:home, :root_path, nil, "house"),
+        Button.new(:sales_by_product, :sales_by_product_path, "reports.view", "graph-up")
       ] },
-      { id: :revisar, botones: [ Boton.new(:por_revisar, :revisiones_path, "revisiones.resolver", "clipboard-check") ] },
-      { id: :ajustes, botones: [ Boton.new(:ajustes, :ajustes_path, nil, "gear") ] }
+      { id: :review, buttons: [ Button.new(:pending_review, :reviews_path, "reviews.resolve", "clipboard-check") ] },
+      { id: :settings, buttons: [ Button.new(:settings, :settings_path, nil, "gear") ] }
     ] },
-    { id: :caja, grupos: [
-      { id: :vender, botones: [
-        Boton.new(:vender, :caja_path, "caja.vender", "cart3"),
-        Boton.new(:ventas, :caja_ventas_path, "caja.vender", "receipt"),
-        Boton.new(:devolucion, :caja_devolucion_path, "caja.devolver", "arrow-return-left")
+    { id: :till, groups: [
+      { id: :sell, buttons: [
+        Button.new(:sell, :till_path, "till.sell", "cart3"),
+        Button.new(:sales, :till_sales_path, "till.sell", "receipt"),
+        Button.new(:refund, :till_refund_path, "till.refund", "arrow-return-left")
       ] },
-      { id: :corte, botones: [ Boton.new(:corte, :caja_corte_path, "caja.abrir", "cash-stack") ] }
+      { id: :shift, buttons: [ Button.new(:shift, :till_shift_path, "till.open", "cash-stack") ] }
     ] },
-    { id: :inventario, grupos: [
-      { id: :consultar, botones: [
-        Boton.new(:existencias, :inventario_path, "inventario.ver", "list"),
-        Boton.new(:kardex, :kardex_inventario_path, "inventario.ver", "arrow-down-up")
+    { id: :inventory, groups: [
+      { id: :query, buttons: [
+        Button.new(:stock_levels, :inventory_path, "inventory.view", "list"),
+        Button.new(:kardex, :kardex_inventory_path, "inventory.view", "arrow-down-up")
       ] },
-      { id: :capturar, botones: [
-        Boton.new(:entrada_ajuste, :nuevo_movimiento_inventario_path, "inventario.ajustar", "pencil")
+      { id: :capture, buttons: [
+        Button.new(:inflow_adjustment, :new_movement_inventory_path, "inventory.adjust", "pencil")
       ] }
     ] },
-    { id: :compras, grupos: [
-      { id: :recibir, botones: [
-        Boton.new(:recibir, :new_recepcion_path, "compras.recibir", "box-arrow-in-down"),
-        Boton.new(:recepciones, :recepciones_path, "compras.ver", "list-ul")
+    { id: :purchases, groups: [
+      { id: :receive, buttons: [
+        Button.new(:receive, :new_receipt_path, "purchases.receive", "box-arrow-in-down"),
+        Button.new(:receipts, :receipts_path, "purchases.view", "list-ul")
       ] },
-      { id: :facturas, botones: [
-        Boton.new(:nueva_factura, :new_factura_path, "compras.facturar", "file-earmark-plus"),
-        Boton.new(:cuentas_por_pagar, :cuentas_path, "compras.ver", "wallet2")
+      { id: :invoices, buttons: [
+        Button.new(:new_invoice, :new_invoice_path, "purchases.invoice", "file-earmark-plus"),
+        Button.new(:accounts_payable, :accounts_path, "purchases.view", "wallet2")
       ] },
-      { id: :proveedores, botones: [ Boton.new(:proveedores, :proveedores_path, "compras.ver", "truck") ] }
+      { id: :suppliers, buttons: [ Button.new(:suppliers, :suppliers_path, "purchases.view", "truck") ] }
     ] },
-    { id: :clientes, grupos: [
-      { id: :clientes, botones: [
-        Boton.new(:clientes, :clientes_path, "clientes.ver", "people"),
-        Boton.new(:nuevo_cliente, :new_cliente_path, "clientes.editar", "person-plus")
+    { id: :customers, groups: [
+      { id: :customers, buttons: [
+        Button.new(:customers, :customers_path, "customers.view", "people"),
+        Button.new(:new_customer, :new_customer_path, "customers.edit", "person-plus")
       ] },
-      { id: :pedidos, botones: [
-        Boton.new(:nuevo_pedido, :new_pedido_path, "clientes.pedidos", "journal-plus"),
-        Boton.new(:pedidos, :pedidos_path, "clientes.ver", "journal-text")
+      { id: :orders, buttons: [
+        Button.new(:new_order, :new_order_path, "customers.orders", "journal-plus"),
+        Button.new(:orders, :orders_path, "customers.view", "journal-text")
       ] }
     ] },
-    { id: :almacenes, grupos: [
-      { id: :granel, botones: [
-        Boton.new(:traspaso_granel, :new_traspaso_path, "almacenes.traspasar", "boxes"),
-        Boton.new(:traspasos, :traspasos_path, "almacenes.traspasar", "list-ul")
+    { id: :warehouses, groups: [
+      { id: :bulk, buttons: [
+        Button.new(:stock_transfer_bulk, :new_stock_transfer_path, "warehouses.transfer_stock", "boxes"),
+        Button.new(:stock_transfers, :stock_transfers_path, "warehouses.transfer_stock", "list-ul")
       ] },
-      { id: :reabasto, botones: [ Boton.new(:reabastecer, :reabasto_path, "almacenes.traspasar", "arrow-repeat") ] }
+      { id: :restock, buttons: [ Button.new(:restock, :restock_path, "warehouses.transfer_stock", "arrow-repeat") ] }
     ] },
-    { id: :conteos, grupos: [
-      { id: :contar, botones: [
-        Boton.new(:nuevo_conteo, :new_conteo_path, "conteos.hacer", "search"),
-        Boton.new(:conteos, :conteos_path, "conteos.hacer", "list-ul")
+    { id: :stock_counts, groups: [
+      { id: :count, buttons: [
+        Button.new(:new_stock_count, :new_stock_count_path, "stock_counts.make", "search"),
+        Button.new(:stock_counts, :stock_counts_path, "stock_counts.make", "list-ul")
       ] },
-      { id: :cargos, botones: [ Boton.new(:cargos, :cargos_path, "conteos.cargos", "cash-coin") ] }
+      { id: :charges, buttons: [ Button.new(:charges, :charges_path, "stock_counts.charges", "cash-coin") ] }
     ] },
-    { id: :admin, grupos: [
-      { id: :catalogo, botones: [
-        Boton.new(:productos, :admin_productos_path, "admin.catalogo", "box-seam"),
-        Boton.new(:promociones, :admin_promociones_path, "admin.catalogo", "percent")
+    { id: :admin, groups: [
+      { id: :catalog, buttons: [
+        Button.new(:products, :admin_products_path, "admin.catalog", "box-seam"),
+        Button.new(:promotions, :admin_promotions_path, "admin.catalog", "percent")
       ] },
-      { id: :gente, botones: [
-        Boton.new(:usuarios, :admin_usuarios_path, "admin.usuarios", "person"),
-        Boton.new(:roles, :admin_roles_path, "admin.usuarios", "key"),
-        Boton.new(:sucursales, :admin_sucursales_path, "admin.usuarios", "shop")
+      { id: :people, buttons: [
+        Button.new(:users, :admin_users_path, "admin.users", "person"),
+        Button.new(:roles, :admin_roles_path, "admin.users", "key"),
+        Button.new(:branches, :admin_branches_path, "admin.users", "shop")
       ] }
     ] }
   ].freeze
 
-  def boton_visible?(boton)
-    boton.permiso.nil? || puede?(boton.permiso)
+  def button_visible?(button)
+    button.permission.nil? || can?(button.permission)
   end
 
-  # Un grupo puede colgar de uno o varios módulos.
-  def grupo_visible?(grupo)
-    Array(grupo[:modulo]).all? { |m| Modulo.activo?(m) } && grupo[:botones].any? { |b| boton_visible?(b) }
+  # A group can depend on one or several features.
+  def group_visible?(group)
+    Array(group[:feature]).all? { |m| Features.active?(m) } && group[:buttons].any? { |b| button_visible?(b) }
   end
 
-  # Una pestaña se ve si su módulo está encendido y alguno de sus grupos se ve.
-  def pestanas_visibles
-    PESTANAS.select do |p|
-      # En un almacén no hay caja ni conteos: la mercancía solo se guarda.
-      next false if %i[caja conteos].include?(p[:id]) && sucursal_actual&.almacen?
-      Modulo.activo?(p[:id]) && p[:grupos].any? { |g| grupo_visible?(g) }
+  # A tab shows if its feature is on and any of its groups shows.
+  def visible_tabs
+    TABS.select do |tab|
+      # A warehouse has no till and no stock counts: goods are only stored there.
+      next false if %i[till stock_counts].include?(tab[:id]) && current_branch&.warehouse?
+      Features.active?(tab[:id]) && tab[:groups].any? { |g| group_visible?(g) }
     end
   end
 
-  # Ajustes cuelga de Inicio en la cinta, pero es su propia pestaña activa: cae en Inicio.
-  def pestana_activa
-    PESTANAS.find { |p| p[:id] == controller.pestana_ribbon } || PESTANAS.first
+  # Settings hangs off Home in the ribbon; a controller whose tab is not listed falls back to Home.
+  def active_tab
+    TABS.find { |tab| tab[:id] == controller.ribbon_tab } || TABS.first
   end
 
-  def ruta_de_pestana(pestana)
-    boton = pestana[:grupos].select { |g| grupo_visible?(g) }.flat_map { |g| g[:botones] }.find { |b| boton_visible?(b) }
-    boton ? send(boton.ruta) : root_path
+  def route_of_tab(tab)
+    button = tab[:groups].select { |g| group_visible?(g) }.flat_map { |g| g[:buttons] }.find { |b| button_visible?(b) }
+    button ? send(button.route) : root_path
   end
 end

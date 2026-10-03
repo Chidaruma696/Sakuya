@@ -1,0 +1,10 @@
+<div><label for="keys" class="field-label"><%= t("#{texts}.scenario.keys") %></label>
+  <%= text_field_tag :keys, scenario[:keys], id: "keys", class: "w-56 font-mono uppercase" %></div>
+<div><label for="total" class="field-label"><%= t("#{texts}.scenario.total") %></label>
+  <%= number_field_tag :total, format("%.2f", scenario[:total] / 100r), step: "0.01", min: 0, id: "total", class: "w-32 font-mono" %></div>
+<div><label for="payment_method" class="field-label"><%= t("#{texts}.scenario.payment_method") %></label>
+  <%= select_tag :payment_method, options_for_select(Payment::PAYMENT_METHODS.map { |f| [ t("payment_methods.#{f}"), f ] }, scenario[:payment_method]), id: "payment_method" %></div>
+<div><label for="hour" class="field-label"><%= t("#{texts}.scenario.hour") %></label>
+  <%= number_field_tag :hour, scenario[:hour], step: 1, min: 0, max: 23, id: "hour", class: "w-20 font-mono" %></div>
+<div class="basis-full border-t border-stone-100 pt-3"><label for="sale" class="field-label"><%= t("price_rule.scenario.sale") %></label>
+  <%= text_field_tag :sale, scenario[:sale_folio], id: "sale", class: "w-40 font-mono uppercase", placeholder: "B-00012" %></div>

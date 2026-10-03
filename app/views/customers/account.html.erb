@@ -1,0 +1,46 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("customers.account.title", name: @customer.name) %></h1>
+  <%= link_to t("customers.title"), customers_path, class: "btn btn-ghost btn-sm" %>
+</div>
+
+<div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+  <div class="card"><div class="stat-label"><%= t("customers.owes") %></div><div class="stat-value text-2xl" id="balance"><%= format_money(@account.balance_cents) %></div></div>
+  <div class="card"><div class="stat-label"><%= t("customers.credit_limit") %></div><div class="stat-value text-2xl"><%= format_money(@customer.credit_limit_cents) %></div></div>
+  <% @account.age.each do |bucket, cents| %>
+    <div class="card"><div class="stat-label"><%= t("customers.account.days", range: bucket) %></div><div class="stat-value text-xl <%= 'text-red-700' if cents.positive? && bucket != "0-30" %>"><%= format_money(cents) %></div></div>
+  <% end %>
+</div>
+
+<% if can?("customers.pay_account") %>
+  <div class="card mb-6">
+    <h2 class="mb-2 font-semibold"><%= t("customers.account.pay_account") %></h2>
+    <% if @shift %>
+      <%= form_with url: pay_account_customer_path(@customer), class: "flex flex-wrap items-end gap-3 text-sm" do |f| %>
+        <div><%= f.label :amount, t("common.amount"), class: "field-label" %><%= f.number_field :amount, step: "0.01", min: "0.01", required: true, class: "input w-36 font-mono" %></div>
+        <div><%= f.label :payment_method, t("purchases.payment_method"), class: "field-label" %><%= f.select :payment_method, Payment::PAYMENT_METHODS.map { |x| [ t("payment_methods.#{x}"), x ] }, {}, class: "input" %></div>
+        <div class="grow"><%= f.label :notes, t("common.notes"), class: "field-label" %><%= f.text_field :notes, class: "input" %></div>
+        <%= f.submit t("customers.account.register_account_payment"), class: "btn btn-primary" %>
+      <% end %>
+      <p class="mt-2 text-xs text-stone-500"><%= t("customers.account.goes_into_shift", folio: @shift.folio) %></p>
+    <% else %>
+      <p class="text-sm text-stone-600"><%= t("customers.account.no_till") %></p>
+    <% end %>
+  </div>
+<% end %>
+
+<table class="table">
+  <thead><tr><th><%= t("common.date") %></th><th><%= t("customers.account.concept") %></th><th class="text-right"><%= t("customers.account.charge") %></th><th class="text-right"><%= t("customers.account.account_payment_col") %></th><th class="text-right"><%= t("customers.owes") %></th><th><%= t("common.who") %></th></tr></thead>
+  <tbody>
+    <% @movements.each do |m, balance| %>
+      <tr>
+        <td class="px-3 py-2"><%= l m.date %></td>
+        <td class="px-3 py-2"><%= m.reference.is_a?(Sale) ? link_to(m.reason, till_ticket_path(m.reference), class: "link") : m.reason %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= format_money(m.amount_cents) if m.amount_cents.positive? %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= format_money(-m.amount_cents) if m.amount_cents.negative? %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= format_money(balance) %></td>
+        <td class="px-3 py-2"><%= m.user %></td>
+      </tr>
+    <% end %>
+    <% if @movements.empty? %><tr><td colspan="6" class="px-3 py-6 text-center text-stone-500"><%= t("customers.account.no_movements") %></td></tr><% end %>
+  </tbody>
+</table>

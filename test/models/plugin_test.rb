@@ -1,44 +1,44 @@
 require "test_helper"
 
 class PluginTest < ActiveSupport::TestCase
-  def instalar(texto = Plugin::EJEMPLO) = Plugin.instalar!(texto, usuario: usuarios(:admin))
+  def install(text = Plugin::EXAMPLE) = Plugin.install!(text, user: users(:admin))
 
-  test "lee la cabecera, las funciones, los informes y las traducciones del ejemplo" do
-    leido = Plugin.leer(Plugin::EJEMPLO)
-    assert_equal "fonda", leido.identificador
-    assert_equal "Fonda", leido.datos["name"]
-    assert_equal 1, leido.funciones.size
-    assert_equal [ "Sales of the week", "(sum-of :total (sales (days-ago 7) (today)))" ], [ leido.informes.first.titulo, leido.informes.first.codigo ]
-    assert_equal({ "caja.cobrar" => "Encaisser", "cinta.pestanas.caja" => "Caisse" }, leido.traducciones.first.textos)
+  test "reads the header, functions, reports and translations of the example" do
+    parsed = Plugin.read(Plugin::EXAMPLE)
+    assert_equal "fonda", parsed.identifier
+    assert_equal "Fonda", parsed.data["name"]
+    assert_equal 1, parsed.functions.size
+    assert_equal [ "Sales of the week", "(sum-of :total (sales (days-ago 7) (today)))" ], [ parsed.reports.first.title, parsed.reports.first.code ]
+    assert_equal({ "till.checkout" => "Encaisser", "ribbon.tabs.till" => "Caisse" }, parsed.translations.first.texts)
   end
 
-  test "rechaza lo que un plugin no puede traer" do
-    assert_match "empezar con (plugin", assert_raises(Lisp::Error) { Plugin.leer("(define (x) 1)") }.message
-    assert_match "no sirve", assert_raises(Lisp::Error) { Plugin.leer('(plugin "Mal Nombre")') }.message
-    assert_match "solo declara", assert_raises(Lisp::Error) { Plugin.leer(%((plugin "uno") (+ 1 2))) }.message
-    assert_match "prefijo del plugin: uno/", assert_raises(Lisp::Error) { Plugin.leer(%((plugin "uno") (define (sales) 0))) }.message
-    assert_match "(report", assert_raises(Lisp::Error) { Plugin.leer(%((plugin "uno") (report 1 2))) }.message
-    assert_match "clave", assert_raises(Lisp::Error) { Plugin.leer(%((plugin "uno") (translation "fr" "Français" ("solo")))) }.message
-    assert_match "falta cerrar", assert_raises(Lisp::Error) { Plugin.leer('(plugin "uno"') }.message
+  test "rejects what a plugin cannot bring" do
+    assert_match "must start with (plugin", assert_raises(Lisp::Error) { Plugin.read("(define (x) 1)") }.message
+    assert_match "will not do", assert_raises(Lisp::Error) { Plugin.read('(plugin "Bad Name")') }.message
+    assert_match "only declares", assert_raises(Lisp::Error) { Plugin.read(%((plugin "one") (+ 1 2))) }.message
+    assert_match "the plugin prefix: one/", assert_raises(Lisp::Error) { Plugin.read(%((plugin "one") (define (sales) 0))) }.message
+    assert_match "(report", assert_raises(Lisp::Error) { Plugin.read(%((plugin "one") (report 1 2))) }.message
+    assert_match "key", assert_raises(Lisp::Error) { Plugin.read(%((plugin "one") (translation "fr" "Français" ("only")))) }.message
+    assert_match "missing 1 closing parenthesis", assert_raises(Lisp::Error) { Plugin.read('(plugin "one"') }.message
   end
 
-  test "sus funciones se usan en las reglas y el REPL solo encendido, y lo de fábrica no depende de ellas" do
-    plugin = instalar(%((plugin "fonda") (define (fonda/doble x) (* 2 x)) (define fonda/tope 300)))
-    assert_not plugin.activo, "llega apagado"
-    assert_raises(Lisp::Error) { Repl.evaluar("(fonda/doble 2)", sucursales: [ sucursales(:tienda) ]) }
-    plugin.update!(activo: true)
-    assert_equal 4, Repl.evaluar("(fonda/doble 2)", sucursales: [ sucursales(:tienda) ])
-    datos = ReglaCorte::Datos.new(Corte.new(fondo_centavos: 50_000), 0, autorizado: false)
-    assert ReglaCorte.evaluar("(if (> (fonda/doble (abs (difference))) fonda/tope) (to-review \"x\") (allow))", datos).revisar?
-    plugin.update!(codigo: %((plugin "fonda") (define (fonda/doble x) (/ x 0))))
-    d = ReglaCorte.decidir(cortes(:tienda_abierto), contado_centavos: 50_000, usuario: usuarios(:cajera), codigo: "(if (fonda/doble 1) (allow) (allow))")
-    assert d.permite?, "decidió la de fábrica sin el plugin"
-    assert_match "dividir entre cero", d.error
+  test "its functions work in rules and the REPL only when switched on, and the built-in rules do not depend on them" do
+    plugin = install(%((plugin "fonda") (define (fonda/double x) (* 2 x)) (define fonda/cap 300)))
+    assert_not plugin.active, "arrives off"
+    assert_raises(Lisp::Error) { Repl.evaluate("(fonda/double 2)", branches: [ branches(:store) ]) }
+    plugin.update!(active: true)
+    assert_equal 4, Repl.evaluate("(fonda/double 2)", branches: [ branches(:store) ])
+    data = ShiftRule::Input.new(Shift.new(float_cents: 50_000), 0, authorized: false)
+    assert ShiftRule.evaluate("(if (> (fonda/double (abs (difference))) fonda/cap) (to-review \"x\") (allow))", data).review?
+    plugin.update!(code: %((plugin "fonda") (define (fonda/double x) (/ x 0))))
+    d = ShiftRule.decide(shifts(:store_open), counted_cents: 50_000, user: users(:cashier), code: "(if (fonda/double 1) (allow) (allow))")
+    assert d.allows?, "the built-in rule decided without the plugin"
+    assert_match "cannot divide by zero", d.error
   end
 
-  test "subir el mismo identificador lo pone al día y conserva si estaba encendido" do
-    instalar.update!(activo: true)
-    plugin = instalar(Plugin::EJEMPLO.sub(%((version "1.0")), %((version "1.1"))))
-    assert_equal [ 1, "1.1", true ], [ Plugin.count, plugin.version, plugin.activo ]
+  test "uploading the same identifier updates it and keeps whether it was switched on" do
+    install.update!(active: true)
+    plugin = install(Plugin::EXAMPLE.sub(%((version "1.0")), %((version "1.1"))))
+    assert_equal [ 1, "1.1", true ], [ Plugin.count, plugin.version, plugin.active ]
   end
 end

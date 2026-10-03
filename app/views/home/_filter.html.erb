@@ -1,0 +1,8 @@
+<%= form_with url: url_for, method: :get, class: "mb-4 flex flex-wrap items-end gap-3 text-sm" do |f| %>
+  <div><%= f.label :from, t("common.from"), class: "block" %><%= f.date_field :from, value: @from, class: "btn btn-secondary btn-xs" %></div>
+  <div><%= f.label :to, t("common.to"), class: "block" %><%= f.date_field :to, value: @to, class: "btn btn-secondary btn-xs" %></div>
+  <% if current_branch.head_office? %>
+    <div><%= f.label :branch_id, t("common.branch"), class: "block" %><%= f.select :branch_id, [ [ t("common.all"), "all" ] ] + Branch.active.order(:name).pluck(:name, :id), { selected: (@all ? "all" : @branch.id) }, class: "btn btn-secondary btn-xs" %></div>
+  <% end %>
+  <%= f.submit t("common.view"), class: "btn btn-primary btn-sm" %>
+<% end %>

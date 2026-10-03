@@ -1,1177 +1,1189 @@
 en:
-  ajustes:
-    titulo: Settings
-    guardado: Settings saved
-    guardar: Save
-    para_ti: For you
-    para_ti_ayuda: Applied the moment you pick one; saved on your user, they follow you to any computer.
-    idioma: Language
-    tema: Theme
-    densidad: Density
-    letra: Font size
-    idiomas:
+  settings:
+    defaults:
+      ticket_footer: "Thank you for your purchase!"
+    title: Settings
+    saved: Settings saved
+    save: Save
+    for_you: For you
+    for_you_help: Applied the moment you pick one; saved on your user, they follow you to any computer.
+    language: Language
+    theme: Theme
+    density: Density
+    text_size: Font size
+    languages:
       es: Español
       en: English
       de: Deutsch
-    tema_opciones:
-      sistema: Follow the system
-      claro: Light
-      oscuro: Dark
-    densidad_opciones:
+    theme_options:
+      system: Follow the system
+      light: Light
+      dark: Dark
+    density_options:
       normal: Normal
-      compacta: Compact
-    letra_opciones:
+      compact: Compact
+    text_size_options:
       normal: Normal
-      grande: Large
-      chica: Small
-    sistema: System
-    negocio: Business
-    negocio_ayuda: Printed on the receipt header and footer. Leave the name empty to use the branch name.
-    caja: Register
-    caja_ayuda: The cash drawer limit is set per branch.
-    candado_recibido_ayuda: With the lock on (the default), an invoice with more quantity than the receipts it links is not recorded and the attempt is reported; whoever has the exceed permission records it with a reason and it goes to review with the excess valued. Without the lock only the difference is shown.
-    compras_apagado: The purchasing module is off; turn it on in
-    ir_sucursales: See branches
-    claves:
-      negocio:
-        nombre: Business name
-        direccion: Address
-        telefono: Phone
-        pie_ticket: Receipt footer
-        moneda: Currency (ISO code)
-        simbolo: Symbol
-      caja:
-        piso_precio: Price floor (% of list price)
-        limite_gaveta: Drawer limit for new branches ($)
-        denominaciones: Bills and coins to count the drawer (comma-separated)
-        tope_diferencia: Maximum difference when closing ($; 0 = no limit)
-      compras:
-        candado_recibido: Do not allow invoicing more than received without a reason
+      large: Large
+      small: Small
+    system: System
+    business: Business
+    business_help: Printed on the receipt header and footer. Leave the name empty to use the branch name.
+    till: Register
+    till_help: The cash drawer limit is set per branch.
+    lock_received_help: With the lock on (the default), an invoice with more quantity than the receipts it links is not recorded and the attempt is reported; whoever has the exceed permission records it with a reason and it goes to review with the excess valued. Without the lock only the difference is shown.
+    purchases_off: The purchasing module is off; turn it on in
+    go_branches: See branches
+    keys:
+      business:
+        name: Business name
+        address: Address
+        phone: Phone
+        ticket_footer: Receipt footer
+        currency: Currency (ISO code)
+        symbol: Symbol
+      till:
+        price_floor: Price floor (% of list price)
+        drawer_limit: Drawer limit for new branches ($)
+        denominations: Bills and coins to count the drawer (comma-separated)
+        difference_cap: Maximum difference when closing ($; 0 = no limit)
+      purchases:
+        lock_received: Do not allow invoicing more than received without a reason
       ticket:
-        lema: Tagline or line under the name
-        rfc: Tax ID (RFC, VAT…)
-        leyenda_devoluciones: Returns notice
-        mostrar_cajero: Show who served
-        mostrar_codigo: Print the ticket barcode
-        ancho: Paper width
-    modulos: Modules
-    modulos_ayuda: What is off disappears from the ribbon, the roles and its screens; the data stays. A module with open work cannot be turned off.
+        tagline: Tagline or line under the name
+        tax_id: Tax ID (RFC, VAT…)
+        returns_legend: Returns notice
+        show_cashier: Show who served
+        show_code: Print the ticket barcode
+        width: Paper width
+    features: Modules
+    features_help: What is off disappears from the ribbon, the roles and its screens; the data stays. A module with open work cannot be turned off.
     ticket:
-      titulo: Ticket design
+      title: Ticket design
       intro: What you fill in on the left shows right away on the ticket on the right, exactly as it will come out of the printer. Applies to every branch.
-      ir: Design the ticket
-      ir_ayuda: 'Logo, name, address, phones, tax ID and footer: edited with a live preview.'
-      encabezado: Header
-      cuerpo: Body
-      pie: Footer
-      vista_previa: How it looks
-      sin_logo: No logo
-      subir_logo: Upload logo
-      quitar_logo: Remove
-      logo_ayuda: PNG or JPG, black on white, under 300 KB; printed 30 mm wide. Greys look dirty on thermal paper.
-      muestra:
-        producto_kg: Product by kilo
-        producto_pieza: Product by piece
-      zoom_mas: Zoom in
-      zoom_menos: Zoom out
-      zoom_ajustar: Fit to width
-      imprimir_prueba: Print test
-      imprimir_prueba_ayuda: Sends this sample to the printer as is, to test paper and width
-    moneda_ayuda: 'The symbol goes next to every amount in the system and on the ticket ($, €, Q, S/…). No conversions: one currency per installation.'
-    moneda: Currency
-    secciones:
-      para_ti: For you
-      negocio: Business and ticket
-      modulos: Modules
-      caja: Register
+      go: Design the ticket
+      go_help: 'Logo, name, address, phones, tax ID and footer: edited with a live preview.'
+      header: Header
+      body: Body
+      footer: Footer
+      preview: How it looks
+      no_logo: No logo
+      upload_logo: Upload logo
+      remove_logo: Remove
+      logo_help: PNG or JPG, black on white, under 300 KB; printed 30 mm wide. Greys look dirty on thermal paper.
+      sample:
+        product_kg: Product by kilo
+        product_piece: Product by piece
+      zoom_in: Zoom in
+      zoom_minus: Zoom out
+      zoom_fit: Fit to width
+      print_test: Print test
+      print_test_help: Sends this sample to the printer as is, to test paper and width
+    currency_help: 'The symbol goes next to every amount in the system and on the ticket ($, €, Q, S/…). No conversions: one currency per installation.'
+    currency: Currency
+    sections:
+      for_you: For you
+      business: Business and ticket
+      features: Modules
+      till: Register
       folios: Numbering
-      compras: Purchasing
-      tablero: Dashboard in Lisp
-      regla_corte: Cash closing in Lisp
-      regla_precio: Price in Lisp
-      regla_venta: Sales in Lisp
-      regla_credito: Credit in Lisp
-      regla_retiro: Withdrawals in Lisp
-      regla_movimiento: Stock in Lisp
-      regla_recepcion: Receipts in Lisp
-      regla_factura: Invoices in Lisp
-      archivo_reglas: Export and import
+      purchases: Purchasing
+      dashboard: Dashboard in Lisp
+      shift_rule: Cash closing in Lisp
+      price_rule: Price in Lisp
+      sale_rule: Sales in Lisp
+      credit_rule: Credit in Lisp
+      withdrawal_rule: Withdrawals in Lisp
+      movement_rule: Stock in Lisp
+      receipt_rule: Receipts in Lisp
+      invoice_rule: Invoices in Lisp
+      rules_file: Export and import
       repl: REPL
       plugins: Plugins
-    secciones_ayuda:
-      para_ti: Applied the moment you pick one; saved on your user, they follow you to any computer.
-      negocio: The business details as they appear on the ticket, with the ticket next to it exactly as it will print. Applies to every branch.
-      modulos: What is off disappears from the ribbon, the roles and its screens; the data stays. A module with open work cannot be turned off.
-      caja: Register rules for every branch.
+    sections_help:
+      for_you: Applied the moment you pick one; saved on your user, they follow you to any computer.
+      business: The business details as they appear on the ticket, with the ticket next to it exactly as it will print. Applies to every branch.
+      features: What is off disappears from the ribbon, the roles and its screens; the data stays. A module with open work cannot be turned off.
+      till: Register rules for every branch.
       folios: 'How documents are numbered: the business picks the letters before the number, or one running sequence for everything. Changing the letters does not restart the count; numbering is per branch.'
-      compras: Purchasing rules for every branch.
+      purchases: Purchasing rules for every branch.
     folios:
-      modos:
-        por_documento: One sequence per document
-        por_documento_ayuda: 'Each document has its own numbering and prefix: B-00001 for sales, C-00001 for till closes…'
-        unico: One running sequence
-        unico_ayuda: 'All documents share one count and one prefix: F-00001 sale, F-00002 cash count, F-00003 receipt of goods…'
-      unico: Prefix of the single sequence
-      ejemplo: 'Example: %{folio}'
-      por_documento: Prefix per document
-      ayuda: Up to 4 letters or digits; empty = number only. Only used when numbering is per document.
-      documentos:
-        venta: Sale (receipt)
-        corte: Till close
-        devolucion: Return
-        conteo: Count
-        recepcion: Goods receipt
-        traspaso: Transfer
-        abono: Customer payment
-        pedido: Customer order
-      sucursal: Put the branch code in front
-    avanzadas: Advanced
-  comun:
-    monto: Amount
-    cerrar: Close
-    guardar: Save
-    editar: Edit
-    ver: View
-    buscar: Search
-    si: 'yes'
+      modes:
+        per_document: One sequence per document
+        per_document_help: 'Each document has its own numbering and prefix: B-00001 for sales, C-00001 for till closes…'
+        single: One running sequence
+        single_help: 'All documents share one count and one prefix: F-00001 sale, F-00002 cash count, F-00003 receipt of goods…'
+      single: Prefix of the single sequence
+      example: 'Example: %{folio}'
+      per_document: Prefix per document
+      help: Up to 4 letters or digits; empty = number only. Only used when numbering is per document.
+      documents:
+        sale: Sale (receipt)
+        shift: Till close
+        refund: Return
+        stock_count: Count
+        receipt: Goods receipt
+        stock_transfer: Transfer
+        account_payment: Customer payment
+        order: Customer order
+      branch: Put the branch code in front
+    advanced: Advanced
+  common:
+    amount: Amount
+    close: Close
+    save: Save
+    edit: Edit
+    view: View
+    search: Search
+    'yes': 'yes'
     'no': 'no'
     folio: Number
-    producto: Product
-    cantidad: Quantity
-    estado: Status
-    notas: Notes
-    nota: note
-    motivo: Reason
-    importe: Amount
-    clave: Code
-    sucursal: Branch
-    matriz: headquarters
-    desde: From
-    hasta: To
-    todas: All
-    todas_las_sucursales: all branches
-    de: of
-    fecha: Date
-    cancelar: Cancel
-    volver: Back
-    nombre: Name
-    unidad: Unit
-    precio: Price
+    product: Product
+    quantity: Quantity
+    status: Status
+    notes: Notes
+    note: note
+    reason: Reason
+    line_amount: Amount
+    key: Code
+    branch: Branch
+    head_office: headquarters
+    from: From
+    to: To
+    all: All
+    all_branches: all branches
+    of: of
+    date: Date
+    cancel: Cancel
+    back: Back
+    name: Name
+    unit: Unit
+    price: Price
     total: Total
-    acciones: Actions
+    actions: Actions
     kg: kg
-    pieza: piece
-    piezas: pieces
-    abrir: Open
-    imprimir: Print
-    nada: Nothing.
-    activo: Active
-    quien: Who
-    cuando: When
-    codigo: Code
-    kg_cada_una: kg each
-    crear: Create
-    tipo: Type
-    renglon: line
-    autorizo: authorized by
-    por_revisar: to review
-    origen: Source
-    saldo: Balance
-    detalle: Detail
-    concepto: Concept
-    agregar: Add
-    quitar: Remove
-  cinta:
+    piece: piece
+    pieces: pieces
+    open: Open
+    print: Print
+    nothing: Nothing.
+    active: Active
+    who: Who
+    when: When
+    code: Code
+    kg_each_one: kg each
+    create: Create
+    kind: Type
+    row: line
+    authorized: authorized by
+    pending_review: to review
+    origin: Source
+    balance: Balance
+    detail: Detail
+    concept: Concept
+    add: Add
+    remove: Remove
+  ribbon:
     menu: Menu
-    salir: Sign out
-    pestanas:
-      inicio: Home
-      caja: Register
-      conteos: Counts
-      inventario: Inventory
+    logout: Sign out
+    tabs:
+      home: Home
+      till: Register
+      stock_counts: Counts
+      inventory: Inventory
       admin: Admin
-      ajustes: Settings
-      compras: Purchasing
-      almacenes: Warehouses
-      clientes: Customers
-    grupos:
-      ver: View
-      revisar: Review
-      ajustes: Settings
-      vender: Sell
-      corte: Cash-up
-      recibir: Receive
-      contar: Count
-      cargos: Charges
-      consultar: Look up
-      capturar: Enter
-      catalogo: Catalogue
-      gente: People
-      facturas: Invoices
-      proveedores: Suppliers
-      granel: Transfers
-      reabasto: Restock
-      clientes: Customers
-      pedidos: Orders
-    botones:
-      inicio: Home
-      reabastecer: Restock
-      clientes: Customers
-      nuevo_cliente: New customer
-      nuevo_pedido: New order
-      pedidos: Orders
-      ventas_por_producto: Sales by product
-      por_revisar: To review
-      ajustes: Settings
-      vender: Sell
-      ventas: Sales
-      devolucion: Return
-      corte: Cash-up
-      nuevo_conteo: New count
-      conteos: Counts
-      cargos: Charges
-      existencias: Stock
+      settings: Settings
+      purchases: Purchasing
+      warehouses: Warehouses
+      customers: Customers
+    groups:
+      view: View
+      review: Review
+      settings: Settings
+      sell: Sell
+      shift: Cash-up
+      receive: Receive
+      count: Count
+      charges: Charges
+      query: Look up
+      capture: Enter
+      catalog: Catalogue
+      people: People
+      invoices: Invoices
+      suppliers: Suppliers
+      bulk: Transfers
+      restock: Restock
+      customers: Customers
+      orders: Orders
+    buttons:
+      home: Home
+      restock: Restock
+      customers: Customers
+      new_customer: New customer
+      new_order: New order
+      orders: Orders
+      sales_by_product: Sales by product
+      pending_review: To review
+      settings: Settings
+      sell: Sell
+      sales: Sales
+      refund: Return
+      shift: Cash-up
+      new_stock_count: New count
+      stock_counts: Counts
+      charges: Charges
+      stock_levels: Stock
       kardex: Ledger
-      entrada_ajuste: Entry / adjustment
-      productos: Products
-      promociones: Promotions
-      usuarios: Users
+      inflow_adjustment: Entry / adjustment
+      products: Products
+      promotions: Promotions
+      users: Users
       roles: Roles
-      sucursales: Branches
-      recibir: Receive
-      recepciones: Receipts
-      nueva_factura: New invoice
-      cuentas_por_pagar: Accounts payable
-      proveedores: Suppliers
-      traspaso_granel: New transfer
-      traspasos: Transfers
-  acerca:
-    titulo: About Sakuya
-    lema: Point of sale and back office for the headquarters and its shops
+      branches: Branches
+      receive: Receive
+      receipts: Receipts
+      new_invoice: New invoice
+      accounts_payable: Accounts payable
+      suppliers: Suppliers
+      stock_transfer_bulk: New transfer
+      stock_transfers: Transfers
+  about:
+    title: About Sakuya
+    tagline: Point of sale and back office for the headquarters and its shops
     version: Version
-    motor: Engine
-    sesion: Session
-    servidor: Server
-    creditos_html: Sakuya Izayoi and Touhou Project belong to Team Shanghai Alice (ZUN). The name is an unofficial fan tribute with no affiliation, made under their guidelines for derivative works.
-    tecnologia: Built with Rails, Hotwire and Tailwind. Open source under the Apache 2.0 license.
-    codigo: Code on GitHub
-    reportar: Report a problem
-    pwa_descripcion: Point of sale and back office in modules, with rules each business adjusts.
-    instalar: Install the app
-  sesion:
-    usuario: User
-    contrasena: Password
-    entrar: Sign in
-    hola: Hi, %{nombre}
-    incorrectos: Wrong user or password
-    cerrada: Signed out
-    inicia_para_continuar: Sign in to continue
-  errores:
-    apartado:
-      no_alcanza: '%{producto}: there are %{hay}, but %{apartado} is held for orders; available %{disponible}'
-    impresora:
-      sin_direccion: the branch has no address for its network thermal printer
-      no_contesta: 'the thermal printer %{direccion} does not answer (%{error})'
-    pedido:
-      sin_renglones: the order has no lines
-      no_abierto: order %{folio} is no longer open
-      no_alcanza: '%{producto}: you ask for %{pide} and %{disponible} is available to hold (or save it without holding)'
-    abono:
-      mayor_que_cero: the payment must be greater than zero
-      sin_caja: there is no open till at %{sucursal} to take the payment
-    sin_permiso:
-      titulo: No permission
-      texto_html: Your role does not include %{clave}. Ask someone with permission to do it or to authorise you.
-    hace_falta_motivo: a reason is required
-    minimo:
-      maximo_menor: the maximum cannot be below the minimum
-    mayor_que_cero: must be greater than zero
+    engine: Engine
+    session: Session
+    server: Server
+    credits_html: Sakuya Izayoi and Touhou Project belong to Team Shanghai Alice (ZUN). The name is an unofficial fan tribute with no affiliation, made under their guidelines for derivative works.
+    technology: Built with Rails, Hotwire and Tailwind. Open source under the Apache 2.0 license.
+    code: Code on GitHub
+    report: Report a problem
+    pwa_description: Point of sale and back office in modules, with rules each business adjusts.
+    install: Install the app
+  session:
+    user: User
+    password: Password
+    login: Sign in
+    welcome: Hi, %{name}
+    wrong: Wrong user or password
+    closed: Signed out
+    sign_in_to_continue: Sign in to continue
+  errors:
+    reserved:
+      not_enough: '%{product}: there are %{on_hand}, but %{reserved} is held for orders; available %{available}'
+    printer:
+      no_address: the branch has no address for its network thermal printer
+      no_answer: 'the thermal printer %{address} does not answer (%{error})'
+    order:
+      no_rows: the order has no lines
+      not_open: order %{folio} is no longer open
+      not_enough: '%{product}: you ask for %{asks} and %{available} is available to hold (or save it without holding)'
+    account_payment:
+      greater_than_zero: the payment must be greater than zero
+      no_till: there is no open till at %{branch} to take the payment
+    not_allowed:
+      title: No permission
+      text_html: Your role does not include %{key}. Ask someone with permission to do it or to authorise you.
+    reason_required: a reason is required
+    minimum:
+      maximum_below_minimum: the maximum cannot be below the minimum
+    greater_than_zero: must be greater than zero
     barcode:
-      doce_digitos: 12 digits expected
-      plu_rango: PLU out of range
-      secuencia_rango: sequence out of range
-    corte:
-      ya_abierto: there is already an open register session at %{sucursal}
-      cerrado: the register session is closed
-      sin_efectivo: there is not that much cash in the drawer (%{monto})
-      ya_cerrado: the register session is already closed
-      falta_motivo: '%{motivo}: write the reason'
-      rechazado: '%{motivo}. It cannot be closed like this: count again or have someone allowed to accept differences close it. It has been reported.'
-      sin_caja_en_almacen: "%{sucursal} is a warehouse: there is no till there"
-    caja:
-      clave_ticket: the ticket key is missing
-      sin_caja: 'no register open at %{sucursal}: open it with its float'
-      sin_caja_simple: no register open
-      excede_limite: 'there is more than %{monto} in the drawer: drop cash into the safe before going on'
-      ticket_vacio: the ticket is empty
-      no_se_vende_sin: "%{mensaje}. You cannot sell what is not there: receive the transfer first."
-      sin_caja_en: no register open at %{sucursal}
-      forma_desconocida: 'unknown payment method: %{forma}'
-      ya_devuelta: the sale is already fully refunded
-      sin_caja_devolver: no register open to give the money back
-      nada_devuelto: nothing was returned
-      max_devolver: "%{producto}: at most %{max} can be returned"
-      cantidad_invalida: "%{producto}: invalid quantity"
-      piezas_enteras: "%{producto} is sold in whole pieces"
-      sin_precio: "%{producto}: no price at %{sucursal}; ask head office before selling it"
-      piso_precio: "%{producto}: the price cannot go below %{piso} % of the catalog (%{monto})"
-      precio_frenado: '%{cobro}: %{motivo}. It cannot be charged like this: keep the regular price or have someone allowed to lower prices charge it. It has been reported.'
-      retiro_frenado: '%{motivo}. It cannot be withdrawn like this: have someone allowed to withdraw do it. It has been reported.'
-      venta_frenada: '%{motivo}. It cannot be charged like this: have someone with permission charge it. It has been reported.'
-      credito_frenado: '%{motivo}. No credit like this: have someone with permission authorise it, or pay another way. It has been reported.'
-      a_cuenta_sin_cliente: to sell on account you must choose the customer
-      a_cuenta_sin_conexion: selling on account needs a connection
-      vendida_en_rara: the time of the offline sale does not add up (more than 7 days or in the future)
-      falta_dinero: 'not enough money: the ticket is %{total} and %{pago} is being paid'
-      no_efectivo_excede: a transfer or deposit cannot exceed the total
-      sin_ticket_devolucion: 'No receipt, no return: “%{codigo}” was not found'
-    escribe_motivo: write the reason
-    conteo:
-      ya_abierto: there is already an open count at %{sucursal}
-      cerrado: the count is closed
-      fuera_de_alcance: "%{producto} is not in this partial count"
-      parcial_vacio: choose a line or at least one product
-      cantidad_invalida: invalid quantity
-      ya_cerrado: the count is already closed
-      se_teclea: "%{producto} is sold in fractions: type it in by hand"
-      no_encontrado: "“%{codigo}” not found"
-    cargo:
-      sin_origen: a charge comes from a count, a review or a trip
-      ya_esta: the charge is already %{estado}
-    inventario:
-      movimiento_frenado: '%{motivo}. It cannot be moved like this: have someone allowed to adjust do it. It has been reported.'
-      cantidad_cero: the quantity must be greater than zero
-      insuficiente: 'Not enough stock of %{producto} at %{sucursal}: there is %{hay}, %{piden} requested'
-    revision:
-      ya_esta: the review is already %{estado}
-    promocion:
-      hasta_antes: cannot be before from
-    rol:
-      lista: must be a list
-      desconocidos: 'unknown: %{claves}'
-    ajuste:
-      entero: "%{clave}: must be a whole number"
+      twelve_digits: 12 digits expected
+      plu_range: PLU out of range
+      sequence_range: sequence out of range
+    shift:
+      already_open: there is already an open register session at %{branch}
+      closed: the register session is closed
+      no_cash: there is not that much cash in the drawer (%{amount})
+      already_closed: the register session is already closed
+      missing_reason: '%{reason}: write the reason'
+      rejected: '%{reason}. It cannot be closed like this: count again or have someone allowed to accept differences close it. It has been reported.'
+      no_till_in_warehouse: "%{branch} is a warehouse: there is no till there"
+    till:
+      key_ticket: the ticket key is missing
+      no_till: 'no register open at %{branch}: open it with its float'
+      no_till_simple: no register open
+      exceeds_limit: 'there is more than %{amount} in the drawer: drop cash into the safe before going on'
+      ticket_empty: the ticket is empty
+      cannot_sell_without: "%{message}. You cannot sell what is not there: receive the transfer first."
+      no_till_in: no register open at %{branch}
+      unknown_payment_method: 'unknown payment method: %{payment_method}'
+      already_refunded: the sale is already fully refunded
+      no_till_refund: no register open to give the money back
+      nothing_refunded: nothing was returned
+      max_refund: "%{product}: at most %{max} can be returned"
+      invalid_quantity: "%{product}: invalid quantity"
+      whole_pieces: "%{product} is sold in whole pieces"
+      not_found: "“%{code}” not found"
+      no_price: "%{product}: no price at %{branch}; ask head office before selling it"
+      price_floor: "%{product}: the price cannot go below %{floor} % of the catalog (%{amount})"
+      price_stopped: '%{line}: %{reason}. It cannot be charged like this: keep the regular price or have someone allowed to lower prices charge it. It has been reported.'
+      withdrawal_stopped: '%{reason}. It cannot be withdrawn like this: have someone allowed to withdraw do it. It has been reported.'
+      sale_stopped: '%{reason}. It cannot be charged like this: have someone with permission charge it. It has been reported.'
+      credit_stopped: '%{reason}. No credit like this: have someone with permission authorise it, or pay another way. It has been reported.'
+      on_account_no_customer: to sell on account you must choose the customer
+      on_account_offline: selling on account needs a connection
+      sold_at_odd: the time of the offline sale does not add up (more than 7 days or in the future)
+      missing_money: 'not enough money: the ticket is %{total} and %{payment} is being paid'
+      non_cash_exceeds: a transfer or deposit cannot exceed the total
+      no_ticket_refund: 'No receipt, no return: “%{code}” was not found'
+    writes_reason: write the reason
+    stock_count:
+      already_open: there is already an open count at %{branch}
+      closed: the count is closed
+      out_of_scope: "%{product} is not in this partial count"
+      partial_empty: choose a line or at least one product
+      invalid_quantity: invalid quantity
+      already_closed: the count is already closed
+      is_typed: "%{product} is sold in fractions: type it in by hand"
+      not_found: "“%{code}” not found"
+    charge:
+      no_origin: a charge comes from a count, a review or a trip
+      already: the charge is already %{status}
+    inventory:
+      movement_stopped: '%{reason}. It cannot be moved like this: have someone allowed to adjust do it. It has been reported.'
+      zero_quantity: the quantity must be greater than zero
+      insufficient: 'Not enough stock of %{product} at %{branch}: there is %{on_hand}, %{requested} requested'
+    review:
+      already: the review is already %{status}
+    promotion:
+      to_before: cannot be before from
+    role:
+      list: must be a list
+      unknown: 'unknown: %{keys}'
+    setting:
+      integer: "%{key}: must be a whole number"
       logo: the logo must be a PNG, JPG or WebP image under 300 KB
-      prefijo: "%{clave}: the prefix takes up to 4 letters or digits, no hyphen"
-      modo_folios: unknown numbering mode
-      denominaciones: denominations go comma-separated, e.g. 500,200,100,50,20,10,5,2,1,0.5
-    movimiento:
-      tipo_desconocido: 'unknown movement type: %{tipo}'
-    usuario:
-      formato: only lowercase letters, digits, dot and dash
-    modulo_apagado:
-      titulo: The %{modulo} module is off
-      texto: This business does not use it. Whoever manages users can turn it on in Settings › System.
-    modulo:
-      con_trabajo_abierto: 'cannot turn off %{modulo}: there is open work; close it first'
-      con_dependientes: 'cannot turn off %{modulo}: %{dependientes} needs it; turn that off too or leave it on'
-    compras:
-      factura_de_otro: that invoice belongs to another supplier
-      factura_cancelada: that invoice is cancelled
-      sin_renglones: 'no lines: scan or pick at least one product'
-      recepcion_cancelada: the receipt is already cancelled
-      folio_obligatorio: the invoice number is required
-      folio_repetido: invoice %{folio} from this supplier is already entered
-      monto_cero: the amount must be greater than zero
-      falta_motivo: '%{motivo}: write the reason'
-      factura_frenada: '%{motivo}. It cannot be recorded like this: link the missing receipts or have someone allowed to exceed record it. It has been reported.'
-      recepcion_frenada: '%{motivo}. It cannot come in like this: have someone with permission receive it. It has been reported.'
-      factura_ya_cancelada: the invoice is already cancelled
-      factura_con_pagos: 'the invoice has payments: void them before cancelling'
-      pago_excede: the payment exceeds what remains on the invoice (%{resta})
-      anticipo_excede: the payment exceeds what is owed (%{saldo}); link an invoice if it is an advance
-      pago_ya_anulado: the payment is already void
-      corte_cerrado: 'that payment''s till session is closed: the cash cannot go back to the drawer'
-      envases_insuficientes: we do not owe that many %{envase} (balance %{saldo})
-    traspaso:
-      mismo_lugar: origin and destination are the same place
-      externo_solo_a_matriz: from %{almacen} goods only go to the headquarters; from there to the shops
-      ya_cancelado: the transfer is already cancelled
-  inicio:
-    titulo: Home
-    ventas: Sales
+      prefix: "%{key}: the prefix takes up to 4 letters or digits, no hyphen"
+      mode_folios: unknown numbering mode
+      denominations: denominations go comma-separated, e.g. 500,200,100,50,20,10,5,2,1,0.5
+    movement:
+      unknown_kind: 'unknown movement type: %{kind}'
+    user:
+      format: only lowercase letters, digits, dot and dash
+    feature_off:
+      title: The %{feature} module is off
+      text: This business does not use it. Whoever manages users can turn it on in Settings › System.
+    feature:
+      with_work_open: 'cannot turn off %{feature}: there is open work; close it first'
+      with_dependents: 'cannot turn off %{feature}: %{dependents} needs it; turn that off too or leave it on'
+    purchases:
+      invoice_of_other: that invoice belongs to another supplier
+      invoice_cancelled: that invoice is cancelled
+      no_rows: 'no lines: scan or pick at least one product'
+      receipt_cancelled: the receipt is already cancelled
+      folio_required: the invoice number is required
+      folio_repeated: invoice %{folio} from this supplier is already entered
+      zero_amount: the amount must be greater than zero
+      missing_reason: '%{reason}: write the reason'
+      invoice_stopped: '%{reason}. It cannot be recorded like this: link the missing receipts or have someone allowed to exceed record it. It has been reported.'
+      receipt_stopped: '%{reason}. It cannot come in like this: have someone with permission receive it. It has been reported.'
+      invoice_already_cancelled: the invoice is already cancelled
+      invoice_with_payments: 'the invoice has payments: void them before cancelling'
+      payment_exceeds: the payment exceeds what remains on the invoice (%{remaining})
+      advance_exceeds: the payment exceeds what is owed (%{balance}); link an invoice if it is an advance
+      payment_already_voided: the payment is already void
+      closed_shift: 'that payment''s till session is closed: the cash cannot go back to the drawer'
+    stock_transfer:
+      same_place: origin and destination are the same place
+      external_only_to_head_office: from %{warehouse} goods only go to the headquarters; from there to the shops
+      already_cancelled: the transfer is already cancelled
+  home:
+    title: Home
+    sales: Sales
     tickets: Receipts
-    ticket_promedio: Average receipt
-    devoluciones: Returns
-    efectivo: Cash
-    transferencias: Transfers
-    depositos: Deposits
-    inventario_valorizado: Inventory value
-    lo_mas_vendido: Top sellers
-    sin_ventas: No sales in the range.
-    cortes_cerrados: Closed cash-ups
-    sin_cortes: No cash-ups in the range.
-    conteos: Counts
-    sin_conteos: No counts in the range.
-    ventas_por_producto: Sales by product
-    descargar_csv: Download CSV
-    lineas: Lines
-    revisar: Review
-    por_revisar_html:
+    average_ticket: Average receipt
+    refunds: Returns
+    cash: Cash
+    transfers: Transfers
+    deposits: Deposits
+    inventory_valued: Inventory value
+    best_sellers: Top sellers
+    no_sales: No sales in the range.
+    closed_shifts: Closed cash-ups
+    no_shifts: No cash-ups in the range.
+    stock_counts: Counts
+    no_stock_counts: No counts in the range.
+    sales_by_product: Sales by product
+    download_csv: Download CSV
+    lines: Lines
+    review: Review
+    pending_review_html:
       one: "%{n} operation done without authorisation awaits review."
       other: "%{n} operations done without authorisation await review."
     csv:
-      clave: key
-      producto: product
-      unidad: unit
-      cantidad: quantity
-      importe: amount
-      lineas: lines
-  revisiones:
-    titulo: To review
-    solo_esta: Only %{sucursal}
-    explicacion: Operations someone did without anyone to authorise them at the time. They went through and were recorded under their name; here you decide what happens with each one. When flagging, you can charge the amount to the person responsible.
-    cuando: When
-    quien: Who
-    que: What
-    vale: Worth
-    decidir: Decide
-    aprobar: Approve
-    observar_y_cargar: Flag and charge
-    nada: Nothing to review.
-    sin_cargar: To flag without charging, leave the amount at 0.
-    revisadas: Reviewed
-    cargo: charge
-    aprobada: Approved
-    observada_sin_cargo: Flagged, no charge
-    observada_cargada: 'Flagged and charged to %{quien}: %{monto}'
+      key: key
+      product: product
+      unit: unit
+      quantity: quantity
+      amount: amount
+      lines: lines
+  reviews:
+    title: To review
+    only_this: Only %{branch}
+    explanation: Operations someone did without anyone to authorise them at the time. They went through and were recorded under their name; here you decide what happens with each one. When flagging, you can charge the amount to the person responsible.
+    when: When
+    who: Who
+    what: What
+    worth: Worth
+    decide: Decide
+    approve: Approve
+    flag_and_charge: Flag and charge
+    nothing: Nothing to review.
+    no_load: To flag without charging, leave the amount at 0.
+    reviewed: Reviewed
+    charge: charge
+    approved: Approved
+    flagged_no_charge: Flagged, no charge
+    flagged_loaded: 'Flagged and charged to %{who}: %{amount}'
     desc:
-      movimiento: "%{tipo} of %{cantidad}"
-      retiro: Cash drop of %{monto} from session %{folio}
-      venta_linea: 'Price lowered on %{folio}: %{producto} to %{precio} (catalog %{catalogo})'
-      factura_proveedor: Invoice %{folio} from %{proveedor} with more than received
-      corte: Session %{folio} closed with a difference of %{diferencia}
-      frenado: Attempt stopped in session %{folio}
-      frenado_producto: 'Movement stopped: %{producto}'
-      frenado_proveedor: 'Invoice stopped from %{proveedor}'
-      venta: 'Sale %{folio} of %{total}'
-      recepcion: 'Receipt %{folio} from %{proveedor}'
-      corte_abierto: Session %{folio}, open
-  estados:
-    pendiente: pending
-    aprobada: approved
-    observada: flagged
-    cerrado: closed
-    cancelado: cancelled
-    cancelada: cancelled
-    abierta: open
-    cerrada: closed
-    abierto: open
-    faltante: missing
-    sobrante: surplus
-    cobrada: paid
-    devuelta: returned
-    perdonado: forgiven
-    cobrado: charged
-  movimientos:
-    entrada: Entry
-    recepcion: Receipt
-    devolucion_cliente: Customer return
-    ajuste_entrada: Adjustment (+)
-    venta: Sale
-    salida: Shipment
-    merma: Waste
-    ajuste_salida: Adjustment (−)
-  permisos:
-    caja.vender: Sell at the register
-    caja.abrir: Open and close the register
-    caja.retirar: Move cash to the safe
-    caja.diferencia: Close the session with a difference above the limit
-    caja.bajar_precio: Authorise a price below list
-    caja.forzar_venta: Charge a sale the sales rule stops (it goes to review)
-    caja.devolver: Take customer returns
-    inventario.ver: See stock and movements
-    inventario.ajustar: Adjust stock with a reason
-    conteos.hacer: Do physical counts and charge shortages
-    conteos.cargos: Collect or forgive charges
-    reportes.ver: See the board and the reports
-    revisiones.resolver: Review what was done without authorisation (approve, flag, charge)
-    admin.catalogo: Manage products and codes
-    admin.usuarios: Manage users, roles and branches
-    compras.ver: View suppliers, accounts payable and containers
-    compras.recibir: Receive goods from suppliers
-    compras.facturar: Enter and cancel supplier invoices
-    clientes.ver: See customers
-    clientes.editar: Add and edit customers
-    clientes.pedidos: Take and cancel customer orders
-    clientes.abonar: Take customer payments at the till
-    clientes.forzar_credito: Sell on account even if the credit rule stops it (it goes to review)
-    compras.forzar_recepcion: Receive goods the receipts rule stops (it goes to review)
-    compras.pagar: Pay suppliers from the till
-    compras.exceder: Record an invoice with more than received (with a reason, it goes to review)
-    almacenes.traspasar: Transfers between branches and warehouses
-    reglas.editar: Write the business's Lisp programs (the dashboard)
+      movement: "%{kind} of %{quantity}"
+      withdrawal: Cash drop of %{amount} from session %{folio}
+      sale_line: 'Price lowered on %{folio}: %{product} to %{price} (catalog %{catalog})'
+      supplier_invoice: Invoice %{folio} from %{supplier} with more than received
+      shift: Session %{folio} closed with a difference of %{difference}
+      stopped: Attempt stopped in session %{folio}
+      stopped_product: 'Movement stopped: %{product}'
+      stopped_supplier: 'Invoice stopped from %{supplier}'
+      sale: 'Sale %{folio} of %{total}'
+      receipt: 'Receipt %{folio} from %{supplier}'
+      open_shift: Session %{folio}, open
+  statuses:
+    pending: pending
+    approved: approved
+    flagged: flagged
+    closed: closed
+    cancelled: cancelled
+    open: open
+    shortage: missing
+    surplus: surplus
+    forgiven: forgiven
+    paid: charged
+  sale_statuses:
+    paid: paid
+    cancelled: cancelled
+    refunded: returned
+  movements:
+    inflow: Entry
+    receipt: Receipt
+    customer_return: Customer return
+    adjustment_inflow: Adjustment (+)
+    sale: Sale
+    outflow: Shipment
+    waste: Waste
+    adjustment_outflow: Adjustment (−)
+  permissions:
+    till.sell: Sell at the register
+    till.open: Open and close the register
+    till.withdraw: Move cash to the safe
+    till.difference: Close the session with a difference above the limit
+    till.lower_price: Authorise a price below list
+    till.force_sale: Charge a sale the sales rule stops (it goes to review)
+    till.refund: Take customer returns
+    inventory.view: See stock and movements
+    inventory.adjust: Adjust stock with a reason
+    stock_counts.make: Do physical counts and charge shortages
+    stock_counts.charges: Collect or forgive charges
+    reports.view: See the board and the reports
+    reviews.resolve: Review what was done without authorisation (approve, flag, charge)
+    admin.catalog: Manage products and codes
+    admin.users: Manage users, roles and branches
+    purchases.view: View suppliers, accounts payable and containers
+    purchases.receive: Receive goods from suppliers
+    purchases.invoice: Enter and cancel supplier invoices
+    customers.view: See customers
+    customers.edit: Add and edit customers
+    customers.orders: Take and cancel customer orders
+    customers.pay_account: Take customer payments at the till
+    customers.force_credit: Sell on account even if the credit rule stops it (it goes to review)
+    purchases.force_receipt: Receive goods the receipts rule stops (it goes to review)
+    purchases.pay: Pay suppliers from the till
+    purchases.exceed: Record an invoice with more than received (with a reason, it goes to review)
+    warehouses.transfer_stock: Transfers between branches and warehouses
+    rules.edit: Write the business's Lisp programs (the dashboard)
   js:
     pos:
-      no_en_catalogo: It is not in the catalogue saved on this device
-      necesita_conexion: Offline you cannot sell on account or charge an order
-      guardada_sin_conexion: 'Sale saved offline (%{total}, change %{cambio}). It uploads by itself when the network is back; print the receipt from Sales once it is up.'
-      sin_conexion: 'Offline: selling with the saved catalogue'
-      por_subir: '%{n} sales to upload'
-      por_subir_una: 1 sale to upload
-      corte_pendientes: 'This device has %{n} sales made offline that have not been uploaded: wait for them before closing the session.'
-      corte_pendiente: 'This device has 1 sale made offline that has not been uploaded: wait for it before closing the session.'
-      ticket_vacio: The ticket is empty
-      cantidad: Type the quantity
-    unidades:
+      not_in_catalog: It is not in the catalogue saved on this device
+      needs_connection: Offline you cannot sell on account or charge an order
+      saved_offline: 'Sale saved offline (%{total}, change %{change}). It uploads by itself when the network is back; print the receipt from Sales once it is up.'
+      offline: 'Offline: selling with the saved catalogue'
+      to_upload: '%{n} sales to upload'
+      to_upload_one: 1 sale to upload
+      shift_pending_other: 'This device has %{n} sales made offline that have not been uploaded: wait for them before closing the session.'
+      shift_pending_one: 'This device has 1 sale made offline that has not been uploaded: wait for it before closing the session.'
+      ticket_empty: The ticket is empty
+      quantity: Type the quantity
+    units:
       kg: kg
-      pieza: pc
-      litro: l
-      metro: m
+      piece: pc
+      liter: l
+      meter: m
     ticket:
-      logo_grande: The logo is over 300 KB; use a smaller image.
+      logo_large: The logo is over 300 KB; use a smaller image.
     pwa:
-      version_nueva: A new version of Sakuya is ready.
-      recargar: Reload
-    cargando: Loading…
-    no_se_pudo: Could not load. Check the connection.
-  caja:
-    nueva_venta: New sale
-    bajar_escpos: Download ESC/POS
-    escpos_ayuda: The receipt as bytes for a thermal printer
-    imprimir_termica: Print on the thermal printer
-    subir_ahora: Upload now
-    impreso: Receipt printed.
-    sin_serial: 'This browser cannot talk to a cable printer; use Chrome or Edge, or download it as ESC/POS.'
-    elige_impresora: 'Choose the printer with «Print on the thermal printer»; after that it is not asked again.'
-    corte_de_caja: Register session
-    corte: Session
-    fondo: Float
-    ventas: Sales
-    efectivo_de_ventas: Cash from sales
-    devoluciones: Refunds
-    retiros: Cash drops
-    en_gaveta: In drawer
-    corte_abierto_por: Session %{folio} opened by %{quien} on %{fecha}
-    n_ventas:
+      new_version: A new version of Sakuya is ready.
+      reload: Reload
+    loading: Loading…
+    load_failed: Could not load. Check the connection.
+  till:
+    new_sale: New sale
+    download_escpos: Download ESC/POS
+    escpos_help: The receipt as bytes for a thermal printer
+    print_thermal: Print on the thermal printer
+    upload_now: Upload now
+    printed: Receipt printed.
+    no_serial: 'This browser cannot talk to a cable printer; use Chrome or Edge, or download it as ESC/POS.'
+    choose_printer: 'Choose the printer with «Print on the thermal printer»; after that it is not asked again.'
+    till_shift: Register session
+    shift: Session
+    float: Float
+    sales: Sales
+    cash_from_sales: Cash from sales
+    refunds: Refunds
+    withdrawals: Cash drops
+    in_drawer: In drawer
+    shift_opened_by: Session %{folio} opened by %{who} on %{date}
+    n_sales:
       one: 1 sale
       other: "%{count} sales"
-    retiro_caja_fuerte: Cash drop to safe
-    monto: Amount
-    retiro_por_revisar: Without permission to withdraw, the withdrawal is stopped and reported.
-    retirar: Drop
-    cerrar_corte: Close session
-    cerrar_corte_ayuda: Count how many bills and coins of each there are (float included) or type the total. The system keeps the expected amount, the breakdown and the difference.
-    confirmar_cerrar_corte: Close session %{folio}?
-    efectivo_contado: Counted cash
-    suma: Total
-    tope_diferencia_aviso: The difference exceeds %{monto}.
-    tope_frena: 'It cannot be closed like this: count again or call someone allowed to accept differences. The attempt is reported.'
-    tope_queda_por_revisar: It closes with your reason and goes to review.
-    cierre_frenado: 'Closing attempt stopped: counted %{contado}, difference of %{diferencia} (%{motivo})'
-    cobro: '%{producto} at %{precio} (should be %{regular})'
-    retiro_frenado: 'Withdrawal of %{monto} stopped (%{motivo}): %{regla}'
-    venta_frenada: 'Sale of %{total} stopped: %{motivo}'
-    cliente: Customer
-    sin_cliente: — no customer —
-    abonos: Customer payments
-    credito_frenado: 'On account for %{cliente}, %{monto}, stopped: %{motivo}'
-    sin_conexion_aviso: 'Sale made offline that would otherwise have been stopped: %{aviso}'
-    sin_conexion_excede_limite: the drawer was already over the cash limit
-    motivo_diferencia: Reason for the difference
-    regla_propia_aviso: 'This business has its own closing rule: if the difference needs a reason, write it here.'
-    cortes_cerrados: Closed sessions
-    resumen: Day summary
-    ver_resumen: Summary
-    ver_resumen_abierto: See the day summary so far
-    compartir: Share
-    copiado: Summary copied
-    cargos: Charges
-    en_total: in total
-    por_revisar_n:
+    safe_drop: Cash drop to safe
+    amount: Amount
+    withdrawal_pending_review: Without permission to withdraw, the withdrawal is stopped and reported.
+    withdraw: Drop
+    close_shift: Close session
+    close_shift_help: Count how many bills and coins of each there are (float included) or type the total. The system keeps the expected amount, the breakdown and the difference.
+    confirm_close_shift: Close session %{folio}?
+    counted_cash: Counted cash
+    sum: Total
+    difference_cap_notice: The difference exceeds %{amount}.
+    cap_stops: 'It cannot be closed like this: count again or call someone allowed to accept differences. The attempt is reported.'
+    cap_remains_pending_review: It closes with your reason and goes to review.
+    closing_stopped: 'Closing attempt stopped: counted %{counted}, difference of %{difference} (%{reason})'
+    price_line: '%{product} at %{price} (should be %{regular})'
+    withdrawal_stopped: 'Withdrawal of %{amount} stopped (%{reason}): %{rule}'
+    sale_stopped: 'Sale of %{total} stopped: %{reason}'
+    customer: Customer
+    no_customer: — no customer —
+    account_payments: Customer payments
+    credit_stopped: 'On account for %{customer}, %{amount}, stopped: %{reason}'
+    offline_notice: 'Sale made offline that would otherwise have been stopped: %{notice}'
+    offline_exceeds_limit: the drawer was already over the cash limit
+    reason_difference: Reason for the difference
+    custom_rule_notice: 'This business has its own closing rule: if the difference needs a reason, write it here.'
+    closed_shifts: Closed sessions
+    summary: Day summary
+    view_summary: Summary
+    view_summary_open: See the day summary so far
+    share: Share
+    copied: Summary copied
+    charges: Charges
+    in_total: in total
+    pending_review_n:
       one: 1 pending review
       other: "%{count} pending reviews"
-    resumen_texto: Session %{folio} · %{sucursal} · sales %{ventas} (%{tickets}) · in drawer %{efectivo} · difference %{diferencia}
-    abierto: Opened
-    cerrado: Closed
-    cajero: Cashier
-    esperado: Expected
-    contado: Counted
-    diferencia: Difference
-    devolucion: Refund
+    summary_text: Session %{folio} · %{branch} · sales %{sales} (%{tickets}) · in drawer %{cash} · difference %{difference}
+    open: Opened
+    closed: Closed
+    cashier: Cashier
+    expected: Expected
+    counted: Counted
+    difference: Difference
+    refund: Refund
     ticket: Ticket
-    vendido: Sold
-    ya_devuelto: Already returned
-    devolver: Return
-    devolver_y_regresar: Return and give the money back
-    excede_limite_html: 'There is more than %{monto} in the drawer: %{enlace} before selling any more.'
-    haz_un_retiro: drop cash into the safe
-    escanea_o_teclea: Scan the barcode or type PLU / code and press Enter
-    cambio: Change
-    cobrar: Charge
-    vaciar_ticket: Clear ticket
-    sin_caja_en: No register open at %{sucursal}.
-    fondo_inicial: Opening float
-    abrir_caja: Open register
-    pide_que_la_abran: Ask someone with permission to open it.
-    le_atendio: Served by
-    devoluciones_solo_con_ticket: Refunds only with this ticket
-    hora: Time
-    lineas: Lines
-    pago: Payment
-    sin_ventas: No sales.
-    avisos:
-      abierta: Register opened with a float of %{fondo}
-      corte_cerrado: 'Session %{folio} closed: expected %{esperado}, counted %{contado}, difference %{diferencia}'
-      retiro: Cash drop of %{monto} recorded
-      queda_por_revisar: "; goes to review"
-      devolucion: Refund %{folio} of %{monto} on %{venta}
-    escanea_ticket: Scan or type the receipt
-  formas_pago:
-    efectivo: Cash
-    transferencia: Transfer
-    deposito: Deposit
-    credito: On account
-  conteos:
-    conteos: Counts
-    conteo: Count
+    sold: Sold
+    already_refunded: Already returned
+    do_refund: Return
+    refund_and_back: Return and give the money back
+    exceeds_limit_html: 'There is more than %{amount} in the drawer: %{link} before selling any more.'
+    make_to_withdrawal: drop cash into the safe
+    scans_or_types: Scan the barcode or type PLU / code and press Enter
+    change: Change
+    checkout: Charge
+    clear_ticket: Clear ticket
+    no_till_in: No register open at %{branch}.
+    initial_float: Opening float
+    open_till: Open register
+    ask_to_open_it: Ask someone with permission to open it.
+    served_by: Served by
+    refunds_only_with_ticket: Refunds only with this ticket
+    hour: Time
+    lines: Lines
+    payment: Payment
+    no_sales: No sales.
+    notices:
+      open: Register opened with a float of %{float}
+      closed_shift: 'Session %{folio} closed: expected %{expected}, counted %{counted}, difference %{difference}'
+      withdrawal: Cash drop of %{amount} recorded
+      remains_pending_review: "; goes to review"
+      refund: Refund %{folio} of %{amount} on %{sale}
+    scans_ticket: Scan or type the receipt
+  payment_methods:
+    cash: Cash
+    transfer: Transfer
+    deposit: Deposit
+    credit: On account
+  stock_counts:
+    stock_counts: Counts
+    stock_count: Count
     supervisor: Supervisor
-    responsable: Responsible
-    faltante: Shortage
-    sobrante: Surplus
-    sin_conteos: No counts.
-    nuevo: New count
-    ya_hay_abierto: 'There is already an open count:'
-    cierralo_antes: Close it before opening another.
-    responsable_ayuda: Person responsible for the stock (the shortage is charged to them)
-    alcance: Scope
-    alcance_total: The whole inventory
-    alcance_parcial: Only one line or some products
-    o_estos_productos: Or these products
-    parcial_ayuda: A partial count only adjusts what was chosen; the rest is left alone. If you pick a line, the products are ignored.
-    parcial_badge:
+    responsible: Responsible
+    shortage: Shortage
+    surplus: Surplus
+    no_stock_counts: No counts.
+    new: New count
+    already_open: 'There is already an open count:'
+    close_it_before: Close it before opening another.
+    responsible_help: Person responsible for the stock (the shortage is charged to them)
+    scope: Scope
+    scope_total: The whole inventory
+    scope_partial: Only one line or some products
+    or_these_products: Or these products
+    partial_help: A partial count only adjusts what was chosen; the rest is left alone. If you pick a line, the products are ignored.
+    partial_badge:
       one: partial · 1 product
       other: partial · %{count} products
-    toca_contar: 'Time to count: counts are every %{cada} days and the last closed count is older (or there is none).'
-    nuevo_ayuda: 'Opening takes the system''s stock. Scan the pieces; anything by the kilo, litre or metre is typed in. On closing the count rules: stock is adjusted and the shortfall is charged to the person responsible.'
-    abrir: Open count
-    escanear: Scan
-    contar: Count
-    contar_a_mano: Count by hand
-    cerrar: Close count
-    confirmar_cerrar: 'The count rules: stock is adjusted and the shortfall is charged to %{responsable}. Close it?'
-    sistema: System
-    escaneado: Scanned
-    a_mano: By hand
-    contado: Counted
-    avisos:
-      abierto: 'Count %{folio} opened: scan everything there is'
-      contado: "%{producto}: one more piece"
-    codigo_placeholder: Barcode, PLU or code
-    escanear_ayuda: Each scan adds one piece. Anything sold by the kilo, litre or metre is typed in by hand.
-  cargos:
-    cargos: Charges
-    revision: review
-    cobrado: Collected
-    perdonar: Forgive
-    sin_cargos: No charges.
-    avisos:
-      marcado: Charge to %{quien} marked as %{estado}
-  inventario:
-    apartado: Held
-    disponible: Available
-    movimiento_frenado: '%{tipo} of %{cantidad} stopped (%{motivo}): %{regla}'
-    existencias: Stock
+    count_due: 'Time to count: counts are every %{each} days and the last closed count is older (or there is none).'
+    new_help: 'Opening takes the system''s stock. Scan the pieces; anything by the kilo, litre or metre is typed in. On closing the count rules: stock is adjusted and the shortfall is charged to the person responsible.'
+    open: Open count
+    scan: Scan
+    count: Count
+    count_by_hand: Count by hand
+    close: Close count
+    confirm_close: 'The count rules: stock is adjusted and the shortfall is charged to %{responsible}. Close it?'
+    system: System
+    scanned: Scanned
+    by_hand: By hand
+    counted: Counted
+    notices:
+      open: 'Count %{folio} opened: scan everything there is'
+      counted: "%{product}: one more piece"
+      counted_manual: "%{product}: %{quantity} counted by hand"
+      closed: 'Count %{folio} closed: shortage %{shortage}, surplus %{surplus}'
+      charge_to: " · charged to %{responsible}"
+      kardex_reason: Count %{folio}
+      shortage_line: "%{product}: %{quantity} %{unit} missing (%{amount})"
+    code_placeholder: Barcode, PLU or code
+    scan_help: Each scan adds one piece. Anything sold by the kilo, litre or metre is typed in by hand.
+  charges:
+    charges: Charges
+    review: review
+    paid: Collected
+    forgive: Forgive
+    no_charges: No charges.
+    notices:
+      marked: Charge to %{who} marked as %{status}
+  inventory:
+    reserved: Held
+    available: Available
+    movement_stopped: '%{kind} of %{quantity} stopped (%{reason}): %{rule}'
+    movement_recorded: '%{kind} of %{product} recorded'
+    stock_levels: Stock
     kardex: Ledger
-    sin_existencias: No stock yet.
-    sin_movimientos: No movements.
-    entrada_o_ajuste: Receipt or adjustment
-    queda_por_revisar: Without permission to adjust, the movement is stopped and reported.
-    registrar: Record
-  promociones:
-    tipos:
-      precio: Special price
-      porcentaje: Discount %
-      por_cantidad: Price from a quantity
+    no_stock_levels: No stock yet.
+    no_movements: No movements.
+    inflow_or_adjustment: Receipt or adjustment
+    remains_pending_review: Without permission to adjust, the movement is stopped and reported.
+    register: Record
+  promotions:
+    kinds:
+      price: Special price
+      percentage: Discount %
+      by_quantity: Price from a quantity
     desc:
-      precio: "%{precio} fixed"
-      porcentaje: "%{pct} % off"
-      por_cantidad: "%{precio} from %{desde} %{unidad}"
+      price: "%{price} fixed"
+      percentage: "%{pct} % off"
+      by_quantity: "%{price} from %{from} %{unit}"
   admin:
-    impresora: Receipt printer
-    impresora_red: Network thermal printer (address:port)
-    impresora_ayuda: 'Only if it prints on a network thermal printer; almost always port 9100.'
-    impresoras:
-      navegador: With the browser
-      red: Network thermal printer
+    printer: Receipt printer
+    network_printer: Network thermal printer (address:port)
+    printer_help: 'Only if it prints on a network thermal printer; almost always port 9100.'
+    printers:
+      browser: With the browser
+      network: Network thermal printer
       serial: Cable thermal printer (Chrome)
-    modelos:
-      producto: Product
-      promocion: Promotion
-      rol: Role
-      sucursal: Branch
-      usuario: User
-    modulos:
+    models:
+      product: Product
+      promotion: Promotion
+      role: Role
+      branch: Branch
+      user: User
+    features:
       admin: administration
-      caja: register
-      conteos: counts
-      inventario: inventory
-      reportes: reports
-      revisiones: reviews
-      reglas: Lisp rules
-    avisos:
-      creado: "%{que} created"
-      guardado: "%{que} saved"
-      borrado: "%{que} deleted"
-      ya_usado: "%{que} is already in use: deactivate it instead of deleting it"
-      codigo_agregado: Code %{codigo} added
-      codigo_quitado: Code removed
-    borrar: delete
-    precio_por_sucursal: Price per branch
-    precio_por_sucursal_ayuda: Empty = inherits the general price (%{precio}). Saved with the product's %{boton} button.
+      till: register
+      stock_counts: counts
+      inventory: inventory
+      reports: reports
+      reviews: reviews
+      rules: Lisp rules
+    notices:
+      created: "%{what} created"
+      saved: "%{what} saved"
+      deleted: "%{what} deleted"
+      already_used: "%{what} is already in use: deactivate it instead of deleting it"
+      code_added: Code %{code} added
+      code_removed: Code removed
+    delete: delete
+    price_by_branch: Price per branch
+    price_by_branch_help: Empty = inherits the general price (%{price}). Saved with the product's %{button} button.
     general: general
-    codigos_proveedor: Supplier codes
-    escanea_o_teclea_codigo: scan or type the code
-    plu_automatico: PLU (empty = automatic)
-    linea: Line
-    productos: Products
-    nuevo_producto: New product
-    codigos: Codes
-    nombre_en_ticket: Name (shown on the ticket)
-    regla: Rule
-    descuento_pct: Discount %
-    cantidad_minima: Minimum quantity
-    desde_opcional: From (optional)
-    hasta_opcional: To (optional)
-    activa: Active
-    promocion_ayuda: Special price and price from a quantity use the Price field; the discount uses the percentage over the branch price. If several are in force, the register applies the cheapest.
-    promociones: Promotions
-    nueva_promocion: New promotion
-    vigencia: Validity
-    siempre: always
-    confirmar_borrar: Delete %{nombre}?
-    sin_promociones: No promotions.
-    rol: Role
-    nuevo_rol: New role
+    supplier_codes: Supplier codes
+    scans_or_types_code: scan or type the code
+    plu_automatic: PLU (empty = automatic)
+    line: Line
+    products: Products
+    new_product: New product
+    codes: Codes
+    name_in_ticket: Name (shown on the ticket)
+    rule: Rule
+    discount_pct: Discount %
+    minimum_quantity: Minimum quantity
+    from_optional: From (optional)
+    to_optional: To (optional)
+    active: Active
+    promotion_help: Special price and price from a quantity use the Price field; the discount uses the percentage over the branch price. If several are in force, the register applies the cheapest.
+    promotions: Promotions
+    new_promotion: New promotion
+    validity: Validity
+    always: always
+    confirm_delete: Delete %{name}?
+    no_promotions: No promotions.
+    role: Role
+    new_role: New role
     roles: Roles
-    permisos: Permissions
-    usuarios: Users
-    todo_administrador: Everything (administrator)
-    todo_el_modulo: whole module
-    nueva_sucursal: New branch
-    sucursales: Branches
-    tienda: store
-    limite_efectivo: Maximum cash in the drawer before a drop is required
-    dias_conteo: Count every (days; empty = no reminder)
-    limite_en_gaveta: Drawer limit
-    nuevo_usuario: New user
-    usuario: Username
-    usuario_minusculas: Username (lowercase)
-    nueva_contrasena: New password (empty = unchanged)
-    almacen: Warehouse (storage only, no till)
-    almacen_corto: warehouse
-  instalacion:
-    titulo: First run
+    permissions: Permissions
+    users: Users
+    all_administrator: Everything (administrator)
+    all_feature: whole module
+    new_branch: New branch
+    branches: Branches
+    store: store
+    cash_limit: Maximum cash in the drawer before a drop is required
+    count_interval_days: Count every (days; empty = no reminder)
+    limit_in_drawer: Drawer limit
+    new_user: New user
+    user: Username
+    user_lowercase: Username (lowercase)
+    new_password: New password (empty = unchanged)
+    warehouse: Warehouse (storage only, no till)
+    warehouse_short: warehouse
+  setup:
+    head_office_name: Head office
+    title: First run
     intro: The database is empty. Name the business and create the first administrator; sign in with it and set up the rest (products, branches, users).
-    negocio: Business
-    nombre_negocio: Business name
-    nombre_negocio_ayuda: Printed on tickets. Can be changed later in Settings.
-    matriz: Head office (where everything ships from)
-    matriz_ayuda: The code goes on document numbers. Shops are added later.
-    administrador: Administrator
-    crear: Create and sign in
-    lista: 'Done. Sakuya is yours: start in Administration to add products, branches and users.'
-    giro: Type of business
-    giro_ayuda: 'Pick the closest to your business. It only decides which modules start on: the crossed-out ones can be turned on later in Settings, and the on ones can be turned off.'
-    sucursal_detalle: Name and code of the main branch (otherwise the business name and MTZ)
-    bienvenida: Welcome to Sakuya
-    apariencia_ayuda: 'Now make it comfortable for you: light or dark theme, font size and density. They apply right away, stay on your user, and everyone picks their own in Settings.'
-    pasos:
-      apariencia: Appearance
-      negocio: Business
-      sucursal: Main branch
-      administrador: Administrator
-      resumen: Review and create
-      idioma: Language
+    business: Business
+    business_name: Business name
+    business_name_help: Printed on tickets. Can be changed later in Settings.
+    head_office: Head office (where everything ships from)
+    head_office_help: The code goes on document numbers. Shops are added later.
+    administrator: Administrator
+    create: Create and sign in
+    list: 'Done. Sakuya is yours: start in Administration to add products, branches and users.'
+    business_type: Type of business
+    business_type_help: 'Pick the closest to your business. It only decides which modules start on: the crossed-out ones can be turned on later in Settings, and the on ones can be turned off.'
+    branch_detail: Name and code of the main branch (otherwise the business name and MTZ)
+    welcome: Welcome to Sakuya
+    appearance_help: 'Now make it comfortable for you: light or dark theme, font size and density. They apply right away, stay on your user, and everyone picks their own in Settings.'
+    steps:
+      appearance: Appearance
+      business: Business
+      branch: Main branch
+      administrator: Administrator
+      summary: Review and create
+      language: Language
       folios: Numbering
-    matriz_placeholder: the business name
-    administrador_ayuda: The first user can do everything. You add the rest with their roles afterwards.
-    contrasena_ayuda: At least 8 characters.
-    resumen_ayuda: Check it; use Back to fix anything. On create, you are signed in.
-    anterior: Back
-    siguiente: Next
-    idioma_ayuda: Let's start with the language. You pick it now for this installation, but you can change it later in Settings, and every user you add picks their own.
-    idioma_nota: Picking one reloads the screen in that language; that is why it is the first step, before typing anything.
-    siempre_incluye: Register, inventory, settings and administration (always)
+    head_office_placeholder: the business name
+    administrator_help: The first user can do everything. You add the rest with their roles afterwards.
+    password_help: At least 8 characters.
+    summary_help: Check it; use Back to fix anything. On create, you are signed in.
+    previous: Back
+    next_step: Next
+    language_help: Let's start with the language. You pick it now for this installation, but you can change it later in Settings, and every user you add picks their own.
+    language_note: Picking one reloads the screen in that language; that is why it is the first step, before typing anything.
+    always_includes: Register, inventory, settings and administration (always)
     folios:
-      ayuda: How receipts and the other documents are numbered. It can be changed later in Settings › Numbering without restarting the count.
-      modo: One sequence per document, or one for everything?
-      letra: What goes before the number?
-      letras:
-        sucursal: The branch code
-        sucursal_ayuda: 'Taken from the branch code: MTZ-00001. Each branch tells itself apart.'
-        propia: My own letters
-        propia_ayuda: You pick the letters for receipts (B, NV, TK…). The rest in Settings.
-        ninguna: Nothing
-        ninguna_ayuda: 'Number only: 00001.'
-      venta: Letters for receipts
-      ejemplo: 'Your first receipt would be:'
-      despues: The other documents (cash counts, receipts, transfers…) use their default letter; change it in Settings › Numbering.
-  modulos:
-    necesita_alguno: Needs at least %{lista}
-    necesita: Needs %{lista}
-    lo_necesita: Needed by %{lista}
-    conteos:
-      nombre: Counts
-      que: Physical counts by scanning; the shortage is charged to the responsible person.
-    compras:
-      nombre: Purchasing
-      que: Suppliers, goods receipt, supplier invoices, accounts payable and returnable containers.
-    almacenes:
-      nombre: Warehouses
-      que: Warehouses (storage-only sites) and transfers between branches.
-    clientes:
-      nombre: Customers
-      que: Customers, their credit account and payments, and orders.
-  giros:
-    todo:
-      nombre: Everything on
-      que: 'all modules: purchases, warehouses, stock counts and customers.'
-    tienda:
-      nombre: A single shop
-      que: Till, stock, purchasing and stock counts.
-    varias_sucursales:
-      nombre: Several branches
-      que: Everything a shop has, plus warehouses and transfers between branches.
-  unidades:
+      help: How receipts and the other documents are numbered. It can be changed later in Settings › Numbering without restarting the count.
+      mode: One sequence per document, or one for everything?
+      prefix: What goes before the number?
+      prefixes:
+        branch: The branch code
+        branch_help: 'Taken from the branch code: MTZ-00001. Each branch tells itself apart.'
+        own: My own letters
+        own_help: You pick the letters for receipts (B, NV, TK…). The rest in Settings.
+        none: Nothing
+        none_help: 'Number only: 00001.'
+      sale: Letters for receipts
+      example: 'Your first receipt would be:'
+      after: The other documents (cash counts, receipts, transfers…) use their default letter; change it in Settings › Numbering.
+  features:
+    needs_any: Needs at least %{list}
+    needs: Needs %{list}
+    needed_by: Needed by %{list}
+    stock_counts:
+      name: Counts
+      what: Physical counts by scanning; the shortage is charged to the responsible person.
+    purchases:
+      name: Purchasing
+      what: Suppliers, goods receipt, supplier invoices, accounts payable and returnable containers.
+    warehouses:
+      name: Warehouses
+      what: Warehouses (storage-only sites) and transfers between branches.
+    customers:
+      name: Customers
+      what: Customers, their credit account and payments, and orders.
+  business_types:
+    all:
+      name: Everything on
+      what: 'all modules: purchases, warehouses, stock counts and customers.'
+    store:
+      name: A single shop
+      what: Till, stock, purchasing and stock counts.
+    several_branches:
+      name: Several branches
+      what: Everything a shop has, plus warehouses and transfers between branches.
+  short_units:
+    kg: kg
+    piece: pc
+    liter: l
+    meter: m
+  units:
     kg: Kilo
-    pieza: Piece
-    litro: Litre
-    metro: Metre
+    piece: Piece
+    liter: Litre
+    meter: Metre
   activerecord:
     attributes:
-      producto:
-        clave: Key
-        nombre: Name
-        linea: Line
-        unidad: Unit
-        precio: Price
-        precio_centavos: Price
+      product:
+        key: Key
+        name: Name
+        line: Line
+        unit: Unit
+        price: Price
+        price_cents: Price
         plu: PLU
-        activo: Active
-        codigo: Code
-      usuario:
-        nombre: Name
-        usuario: Username
+        active: Active
+        code: Code
+      user:
+        name: Name
+        user: Username
         password: Password
-        rol: Role
-        sucursal: Branch
-        idioma: Language
-        tema: Theme
-        densidad: Density
-        letra: Font size
-        activo: Active
-      sucursal:
-        codigo: Code
-        nombre: Name
-        tipo: Type
-        limite_efectivo: Cash limit in drawer
-        limite_efectivo_centavos: Cash limit in drawer
-        activa: Active
-      promocion:
-        nombre: Name
-        producto: Product
-        sucursal: Branch
-        tipo: Rule
-        precio: Price
-        precio_centavos: Price
-        porcentaje: Discount %
-        cantidad_minima: Minimum quantity
-        desde: From
-        hasta: To
-        activa: Active
-      rol:
-        nombre: Name
-        permisos: Permissions
-      codigo_barras:
-        codigo: Code
-      conteo:
-        responsable: Responsible
-      ajuste:
-        clave: Key
-        valor: Value
-      pedido:
-        cliente: Customer
-        fecha_entrega: Delivery
-        notas: Notes
-      cliente:
-        nombre: Name
-        telefono: Phone
-        rfc: Tax ID
-        direccion: Address
-        notas: Notes
-        limite_credito: Credit limit
-        activo: Active
-      proveedor:
-        nombre: Name
-        rfc: Tax ID
-        contacto: Contact
-        telefono: Phone
-        dias_credito: Credit days
-        notas: Notes
-        activo: Active
+        role: Role
+        branch: Branch
+        language: Language
+        theme: Theme
+        density: Density
+        text_size: Font size
+        active: Active
+      branch:
+        code: Code
+        name: Name
+        kind: Type
+        cash_limit: Cash limit in drawer
+        cash_limit_cents: Cash limit in drawer
+        active: Active
+      promotion:
+        name: Name
+        product: Product
+        branch: Branch
+        kind: Rule
+        price: Price
+        price_cents: Price
+        percentage: Discount %
+        minimum_quantity: Minimum quantity
+        from: From
+        to: To
+        active: Active
+      role:
+        name: Name
+        permissions: Permissions
+      product_barcode:
+        code: Code
+      stock_count:
+        responsible: Responsible
+      setting:
+        key: Key
+        value: Value
+      order:
+        customer: Customer
+        delivery_date: Delivery
+        notes: Notes
+      customer:
+        name: Name
+        phone: Phone
+        tax_id: Tax ID
+        address: Address
+        notes: Notes
+        credit_limit: Credit limit
+        active: Active
+      supplier:
+        name: Name
+        tax_id: Tax ID
+        contact: Contact
+        phone: Phone
+        credit_days: Credit days
+        notes: Notes
+        active: Active
     models:
-      producto: Product
-      usuario: User
-      sucursal: Branch
-      promocion: Promotion
-      rol: Role
-      conteo: Count
-      proveedor: Supplier
-      cliente: Customer
-      recepcion: Receipt
-      factura_proveedor: Supplier invoice
-  pedidos:
-    titulo: Orders
-    nuevo: New order
-    pedido: Order %{folio}
-    ayuda: What the customer wants and for when. It does not hold stock or carry prices; it is charged at the till when they pick it up, with the usual rules.
-    entrega: Delivery
-    que: What
-    guardar: Save order
-    apartar: Hold stock
-    apartar_ayuda: What it asks for is held and cannot be sold or transferred until it is charged or cancelled. Without holding, for future orders.
-    apartado: holds stock
-    sin_apartar: not holding
-    cobrar: Charge at the till
-    cancelar: Cancel order
-    cobrando: 'Charging order %{folio} for %{cliente}.'
-    cobrado_en: Charged in sale
-    cancelado_por: 'Cancelled: %{motivo}'
-    primero_cliente: Add the customer first
-    sin_pedidos: No orders here.
-    estados:
-      abierto: Open
-      entregado: Delivered
-      cancelado: Cancelled
-    avisos:
-      creado: Order %{folio} for %{cliente} saved.
-      cancelado: Order %{folio} cancelled.
-  clientes:
-    cuenta:
-      abono: Payment %{folio} (%{forma})
-      titulo: Account of %{nombre}
-      titulo_corto: Account
-      dias: '%{rango} days'
-      abonar: Take a payment
-      registrar_abono: Record payment
-      entra_al_corte: It goes into the till, session %{folio}.
-      sin_caja: There is no open till at this branch; open it to take payments.
-      concepto: Concept
-      cargo: Charge
-      abono_col: Payment
-      sin_movimientos: No movements yet.
-      cargo_venta: Sale %{folio}
-      devolucion: Return from sale %{folio}
-    titulo: Customers
-    nuevo: New customer
-    editar: Edit customer
-    buscar: Search by name
-    telefono: Phone
-    rfc: Tax ID
-    limite_credito: Credit limit
-    debe: Owes
-    limite_ayuda: The credit rule reads it as (limit). Out of the box nobody gets credit; the rule decides whether it is used.
-    inactivo: inactive
-    sin_clientes: No customers yet.
-    avisos:
-      abono: 'Payment %{folio} of %{monto}; they now owe %{saldo}.'
-      creado: Customer %{nombre} added.
-      guardado: Customer %{nombre} saved.
-  compras:
-    proveedores: Suppliers
-    proveedor: Supplier
-    nuevo_proveedor: New supplier
-    proveedores_ayuda: Who supplies us. The balance is what we owe them per their invoices and payments.
-    sin_proveedores: No suppliers yet.
-    contacto: Contact
-    telefono: Phone
-    rfc: Tax ID
-    dias_credito: Credit days
-    dias_credito_ayuda: 0 = cash. With days, invoices are due at date + days.
-    saldo: Balance
-    cuenta: Account
-    inactivo: inactive
-    primero_proveedor: First add a supplier
-    recepciones: Receipts
-    recepcion: Receipt
-    recibir: Receive
-    recibir_mercancia: Receive goods
-    recepciones_ayuda: What has come in from suppliers to %{sucursal}. Each receipt is an inventory entry.
-    recibir_ayuda: Scan the supplier's barcode or pick the product, enter how much arrived and it enters the inventory of %{sucursal}. The invoice is linked later, when it arrives.
-    remision: Delivery note
-    remision_ayuda: number on the paper the driver brings
-    escanear: Scan
-    escanear_ayuda: supplier barcode, PLU, code or name + Enter
-    cajas: Boxes
-    registrar_entrada: Record entry
-    renglones: Lines
-    sin_factura: no invoice
-    sin_factura_aun: Not linked to an invoice yet.
-    sin_recepciones: No receipts yet.
-    ninguna: "— none —"
-    ligar: Link
-    desligar: Unlink
-    capturar_factura: Enter the invoice
-    cancelar_recepcion: Cancel receipt
-    cancelar_recepcion_ayuda: The goods leave the inventory and the containers are deducted. Only if the receipt was entered wrong.
-    confirmar_cancelar: Cancel %{folio}?
-    facturas: Invoices
-    factura: Invoice
-    nueva_factura: New invoice
-    factura_ayuda: The supplier's invoice is what creates the debt. With lines the amount is computed; without lines (freight, ice) type the amount.
-    folio_proveedor: Supplier's invoice number
-    folio_proveedor_ayuda: as printed on it
-    vence: Due
-    vence_ayuda: Empty = date + the supplier's credit days.
-    monto_sin_renglones: Amount (no lines)
-    monto_sin_renglones_ayuda: Only used if you enter no lines.
-    concepto: Description
-    precio_compra: Price
-    registrar_factura: Record invoice
-    todos_los_proveedores: All suppliers
-    pagado: Paid
-    resta: Remaining
-    sin_facturas: No invoices.
-    facturado_vs_recibido: Invoiced vs received
-    recepcion_estado:
-      sin_recepcion: no receipt
-      parcial: partially received
-      completa: fully received
-    recepciones_a_ligar: Receipts this invoice covers
-    recepciones_a_ligar_ayuda: Tick the receipts without invoice from this supplier; they are linked on save. They can also be linked later from the invoice.
-    motivo_exceso: Reason if invoicing more than received
-    candado_aviso: 'Lock is on: if any line has more quantity than the ticked receipts, the invoice is not recorded; with permission to exceed, a reason is required and it goes to review.'
-    factura_frenada: 'Invoice %{folio} stopped: %{regla}'
-    recepcion_frenada: 'Receipt stopped: %{motivo}'
-    comparativo_ayuda: 'Per product: what the invoice says and what came in on the linked receipts. A warning, not a lock.'
-    sin_renglones_ni_recepciones: 'No lines and no linked receipts: nothing to compare.'
-    facturado: Invoiced
-    recibido: Received
-    diferencia: Difference
-    recepciones_ligadas: Linked receipts
-    ninguna_recepcion: No receipt linked yet.
-    recepciones_sueltas: This supplier's receipts without invoice
-    pagos: Payments
-    sin_pagos: No payments.
-    cancelar_factura: Cancel invoice
-    cancelar_factura_ayuda: The debt is reversed and the receipts are unlinked. Not possible with active payments.
-    cuentas_por_pagar: Accounts payable
-    cuentas_ayuda: What is owed to each supplier and which invoices are due. Cash payments leave the open drawer as a withdrawal.
-    debemos: We owe
-    vencidas: Overdue
-    vencen_esta_semana: Due this week
-    n_facturas:
+      product: Product
+      user: User
+      branch: Branch
+      promotion: Promotion
+      role: Role
+      stock_count: Count
+      supplier: Supplier
+      customer: Customer
+      receipt: Receipt
+      supplier_invoice: Supplier invoice
+  orders:
+    title: Orders
+    new: New order
+    order: Order %{folio}
+    help: What the customer wants and for when. It does not hold stock or carry prices; it is charged at the till when they pick it up, with the usual rules.
+    delivery: Delivery
+    what: What
+    save: Save order
+    reserve: Hold stock
+    reserve_help: What it asks for is held and cannot be sold or transferred until it is charged or cancelled. Without holding, for future orders.
+    reserved: holds stock
+    no_reserve: not holding
+    checkout: Charge at the till
+    cancel: Cancel order
+    checking_out: 'Charging order %{folio} for %{customer}.'
+    paid_in: Charged in sale
+    cancelled_by: 'Cancelled: %{reason}'
+    first_customer: Add the customer first
+    no_orders: No orders here.
+    statuses:
+      open: Open
+      delivered: Delivered
+      cancelled: Cancelled
+    notices:
+      created: Order %{folio} for %{customer} saved.
+      cancelled: Order %{folio} cancelled.
+  customers:
+    account:
+      account_payment: Payment %{folio} (%{payment_method})
+      title: Account of %{name}
+      title_short: Account
+      days: '%{range} days'
+      pay_account: Take a payment
+      register_account_payment: Record payment
+      goes_into_shift: It goes into the till, session %{folio}.
+      no_till: There is no open till at this branch; open it to take payments.
+      concept: Concept
+      charge: Charge
+      account_payment_col: Payment
+      no_movements: No movements yet.
+      charge_sale: Sale %{folio}
+      refund: Return from sale %{folio}
+    title: Customers
+    new: New customer
+    edit: Edit customer
+    search: Search by name
+    phone: Phone
+    tax_id: Tax ID
+    credit_limit: Credit limit
+    owes: Owes
+    limit_help: The credit rule reads it as (limit). Out of the box nobody gets credit; the rule decides whether it is used.
+    inactive: inactive
+    no_customers: No customers yet.
+    notices:
+      account_payment: 'Payment %{folio} of %{amount}; they now owe %{balance}.'
+      created: Customer %{name} added.
+      saved: Customer %{name} saved.
+  purchases:
+    suppliers: Suppliers
+    supplier: Supplier
+    new_supplier: New supplier
+    suppliers_help: Who supplies us. The balance is what we owe them per their invoices and payments.
+    no_suppliers: No suppliers yet.
+    contact: Contact
+    phone: Phone
+    tax_id: Tax ID
+    credit_days: Credit days
+    credit_days_help: 0 = cash. With days, invoices are due at date + days.
+    balance: Balance
+    account: Account
+    inactive: inactive
+    first_supplier: First add a supplier
+    receipts: Receipts
+    receipt: Receipt
+    receive: Receive
+    receive_goods: Receive goods
+    receipts_help: What has come in from suppliers to %{branch}. Each receipt is an inventory entry.
+    receive_help: Scan the supplier's barcode or pick the product, enter how much arrived and it enters the inventory of %{branch}. The invoice is linked later, when it arrives.
+    delivery_note: Delivery note
+    delivery_note_help: number on the paper the driver brings
+    scan: Scan
+    scan_help: supplier barcode, PLU, code or name + Enter
+    boxes: Boxes
+    register_inflow: Record entry
+    rows: Lines
+    no_invoice: no invoice
+    no_invoice_still: Not linked to an invoice yet.
+    no_receipts: No receipts yet.
+    none: "— none —"
+    link: Link
+    unlink: Unlink
+    capture_invoice: Enter the invoice
+    cancel_receipt: Cancel receipt
+    cancel_receipt_help: The goods leave the inventory and the containers are deducted. Only if the receipt was entered wrong.
+    confirm_cancel: Cancel %{folio}?
+    invoices: Invoices
+    invoice: Invoice
+    new_invoice: New invoice
+    invoice_help: The supplier's invoice is what creates the debt. With lines the amount is computed; without lines (freight, ice) type the amount.
+    supplier_folio: Supplier's invoice number
+    supplier_folio_help: as printed on it
+    due: Due
+    due_help: Empty = date + the supplier's credit days.
+    amount_no_rows: Amount (no lines)
+    amount_no_rows_help: Only used if you enter no lines.
+    concept: Description
+    purchase_price: Price
+    register_invoice: Record invoice
+    all_suppliers: All suppliers
+    paid: Paid
+    remaining: Remaining
+    no_invoices: No invoices.
+    invoiced_vs_received: Invoiced vs received
+    receipt_status:
+      no_receipt: no receipt
+      partial: partially received
+      complete: fully received
+    receipts_to_link: Receipts this invoice covers
+    receipts_to_link_help: Tick the receipts without invoice from this supplier; they are linked on save. They can also be linked later from the invoice.
+    reason_excess: Reason if invoicing more than received
+    lock_notice: 'Lock is on: if any line has more quantity than the ticked receipts, the invoice is not recorded; with permission to exceed, a reason is required and it goes to review.'
+    invoice_stopped: 'Invoice %{folio} stopped: %{rule}'
+    receipt_stopped: 'Receipt stopped: %{reason}'
+    comparison_help: 'Per product: what the invoice says and what came in on the linked receipts. A warning, not a lock.'
+    no_rows_nor_receipts: 'No lines and no linked receipts: nothing to compare.'
+    invoiced: Invoiced
+    received: Received
+    difference: Difference
+    receipts_linked: Linked receipts
+    no_receipt: No receipt linked yet.
+    receipts_loose: This supplier's receipts without invoice
+    payments: Payments
+    no_payments: No payments.
+    cancel_invoice: Cancel invoice
+    cancel_invoice_help: The debt is reversed and the receipts are unlinked. Not possible with active payments.
+    accounts_payable: Accounts payable
+    accounts_help: What is owed to each supplier and which invoices are due. Cash payments leave the open drawer as a withdrawal.
+    owed: We owe
+    overdue: Overdue
+    due_this_week: Due this week
+    n_invoices:
       one: 1 invoice
       other: "%{count} invoices"
-    por_proveedor: By supplier
-    sin_deuda: Nothing owed.
-    vencimientos: Due dates
-    nada_vence: Nothing overdue or due this week.
-    pagar: Pay
-    pago_sale_de_caja: Cash leaves the open drawer of %{sucursal} as a withdrawal; transfer and deposit do not touch the till.
-    pago_sin_caja: 'No till open in %{sucursal}: only transfer or deposit payments are possible.'
-    a_cuenta: on account (no invoice)
-    forma: Method
-    referencia: Reference
-    registrar_pago: Record payment
-    facturas_abiertas: Open invoices
-    sin_facturas_abiertas: Nothing pending.
-    anular: Void
-    confirmar_anular: Void the payment of %{monto}?
-    libro: Supplier ledger
-    movimientos:
-      cargo: charge
-      abono: payment
-      ajuste: adjustment
-    estados:
-      registrada: recorded
-      cancelada: cancelled
-      abierta: open
-      pagada: paid
-      vencida: overdue
-    avisos:
-      proveedor_creado: Supplier %{nombre} created
-      proveedor_guardado: Supplier %{nombre} saved
-      recibida: 'Receipt %{folio} recorded: the goods are in the inventory'
-      recepcion_cancelada: Receipt %{folio} cancelled
-      ligada: Linked to invoice %{folio}
-      desligada: Receipt without invoice
-      facturada: Invoice %{folio} for %{monto} recorded
-      factura_cancelada: Invoice %{folio} cancelled
-      pagado: Payment of %{monto} to %{proveedor} recorded; balance %{saldo}
-      pago_anulado: Payment of %{monto} voided
-      envases_movidos: Containers recorded
-      entrada_motivo: Receipt %{folio} from %{proveedor}
-      cancelacion_motivo: 'Cancellation of %{folio}: %{motivo}'
-      cargo_factura: Invoice %{folio}
-      cancelacion_factura: 'Cancellation of invoice %{folio}: %{motivo}'
-      retiro_pago: Payment to %{proveedor} %{folio}
-      abono_pago: Payment %{folio} (%{forma})
-      anulacion_pago: 'Payment voided: %{motivo}'
-  reabasto:
-    titulo: Restock branches
-    ayuda: What each branch is missing according to its minimums and maximums. «Build transfer» opens a transfer already filled in; it is checked, adjusted and recorded like any other.
-    minimos: Minimums and maximums
-    minimos_de: Minimums and maximums of %{sucursal}
-    minimos_ayuda: Below the minimum, restocking suggests what is missing to reach the maximum (or the minimum, if there is no maximum). An empty minimum removes the product.
-    armar: Build transfer
-    hay: In stock
-    minimo: Minimum
-    maximo: Maximum
-    nota_traspaso: Restock by minimums
-    faltan:
+    by_supplier: By supplier
+    no_debt: Nothing owed.
+    due_dates: Due dates
+    nothing_due: Nothing overdue or due this week.
+    pay: Pay
+    payment_leaves_till: Cash leaves the open drawer of %{branch} as a withdrawal; transfer and deposit do not touch the till.
+    payment_no_till: 'No till open in %{branch}: only transfer or deposit payments are possible.'
+    on_account: on account (no invoice)
+    payment_method: Method
+    reference: Reference
+    register_payment: Record payment
+    invoices_open: Open invoices
+    no_invoices_open: Nothing pending.
+    void: Void
+    confirm_void: Void the payment of %{amount}?
+    book: Supplier ledger
+    movements:
+      charge: charge
+      account_payment: payment
+      setting: adjustment
+    statuses:
+      registered: recorded
+      cancelled: cancelled
+      open: open
+      paid: paid
+      overdue: overdue
+    notices:
+      supplier_created: Supplier %{name} created
+      supplier_saved: Supplier %{name} saved
+      received: 'Receipt %{folio} recorded: the goods are in the inventory'
+      receipt_cancelled: Receipt %{folio} cancelled
+      linked: Linked to invoice %{folio}
+      unlinked: Receipt without invoice
+      invoiced: Invoice %{folio} for %{amount} recorded
+      invoice_cancelled: Invoice %{folio} cancelled
+      paid: Payment of %{amount} to %{supplier} recorded; balance %{balance}
+      payment_voided: Payment of %{amount} voided
+      inflow_reason: Receipt %{folio} from %{supplier}
+      cancellation_reason: 'Cancellation of %{folio}: %{reason}'
+      charge_invoice: Invoice %{folio}
+      cancellation_invoice: 'Cancellation of invoice %{folio}: %{reason}'
+      withdrawal_payment: Payment to %{supplier} %{folio}
+      supplier_payment: Payment %{folio} (%{payment_method})
+      void_payment: 'Payment voided: %{reason}'
+  restock:
+    title: Restock branches
+    help: What each branch is missing according to its minimums and maximums. «Build transfer» opens a transfer already filled in; it is checked, adjusted and recorded like any other.
+    minimums: Minimums and maximums
+    minimums_of: Minimums and maximums of %{branch}
+    minimums_help: Below the minimum, restocking suggests what is missing to reach the maximum (or the minimum, if there is no maximum). An empty minimum removes the product.
+    build: Build transfer
+    on_hand: In stock
+    minimum: Minimum
+    maximum: Maximum
+    note_stock_transfer: Restock by minimums
+    missing:
       zero: nothing missing
       one: 1 product missing
       other: '%{count} products missing'
-    avisos:
-      guardados: Minimums of %{sucursal} saved.
-  traspasos:
-    titulo: Transfers
-    traspaso: Transfer
-    nuevo: Transfer
-    ayuda: 'Goods moving between branches: they leave the origin and arrive at the destination at once.'
-    nuevo_ayuda: Leaves the origin and arrives at the destination at once.
-    de: From
+    notices:
+      saved: Minimums of %{branch} saved.
+  stock_transfers:
+    title: Transfers
+    stock_transfer: Transfer
+    new: Transfer
+    help: 'Goods moving between branches: they leave the origin and arrive at the destination at once.'
+    new_help: Leaves the origin and arrives at the destination at once.
+    from: From
     a: To
-    registrar: Record transfer
-    ninguno: No transfers yet.
-    cancelar: Cancel transfer
-    cancelar_ayuda: The goods go back to the origin if the destination still has them.
-    reglas: 'Rule: from a warehouse, goods only go to head office.'
-    estados:
-      registrado: recorded
-      cancelado: cancelled
-    avisos:
-      registrado: 'Transfer %{folio} recorded: the goods are now in %{destino}'
-      cancelado: Transfer %{folio} cancelled
-      motivo: 'Transfer %{folio}: %{origen} → %{destino}'
-      cancelacion: 'Cancellation of %{folio}: %{motivo}'
+    register: Record transfer
+    none: No transfers yet.
+    cancel: Cancel transfer
+    cancel_help: The goods go back to the origin if the destination still has them.
+    rules: 'Rule: from a warehouse, goods only go to head office.'
+    statuses:
+      registered: recorded
+      cancelled: cancelled
+    notices:
+      registered: 'Transfer %{folio} recorded: the goods are now in %{destination}'
+      cancelled: Transfer %{folio} cancelled
+      reason: 'Transfer %{folio}: %{origin} → %{destination}'
+      cancellation: 'Cancellation of %{folio}: %{reason}'
   repl:
-    ver_bitacora: See who asked what.
-    bitacora: REPL log
-    bitacora_ayuda: Every question stays here, with who asked it, from which branch and whether it ran. It cannot be edited or deleted.
-    pregunta: Question
-    corrio: ran
-    fallo: failed
-    sin_consultas: Nobody has asked anything yet.
-    titulo: Read-only REPL
-    ayuda: Ask the live data questions with the same Lisp as the rules. Queries return lists of maps you can filter, sort and add up; a list of maps shows as a table. Nothing can be changed from here. Dates like "2026-10-03"; without dates, today.
-    evaluar: Evaluate
-    historial: What you asked last
-    informes: Plugin reports
-    consultas: Queries
-    herramientas: To work the lists
-    solo_lectura: the REPL only reads; that tried to write to the database
-    cortado: 'showing the first %{n}'
-    filas:
+    view_log: See who asked what.
+    log: REPL log
+    log_help: Every question stays here, with who asked it, from which branch and whether it ran. It cannot be edited or deleted.
+    question: Question
+    ran: ran
+    failure: failed
+    no_queries: Nobody has asked anything yet.
+    title: Read-only REPL
+    help: Ask the live data questions with the same Lisp as the rules. Queries return lists of maps you can filter, sort and add up; a list of maps shows as a table. Nothing can be changed from here. Dates like "2026-10-03"; without dates, today.
+    evaluate: Evaluate
+    history: What you asked last
+    reports: Plugin reports
+    queries: Queries
+    tools: To work the lists
+    read_only: the REPL only reads; that tried to write to the database
+    cut: 'showing the first %{n}'
+    rows:
       one: 1 row
       other: '%{count} rows'
-    errores:
-      no_es_mapa: 'expected a map and got %{valor}'
-      fecha: 'I do not understand the date %{valor} (it goes like "2026-10-03")'
-      texto: '%{quien} expects text and got %{valor}'
-    funciones:
+    errors:
+      not_to_map: 'expected a map and got %{value}'
+      date: 'I do not understand the date %{value} (it goes like "2026-10-03")'
+      text: '%{who} expects text and got %{value}'
+    functions:
       today: today's date
       days_ago: the date n days ago
       sales: sales (number, date, branch, cashier, customer, total…)
@@ -1191,133 +1203,133 @@ en:
       pluck: just that column
       take: the first n
   plugins:
-    titulo: Plugins in Lisp
-    ayuda: A plugin is a .lisp file that brings what Sakuya does not bring out of the box. It can bring functions that every rule, the dashboard and the REPL can use, reports for the REPL and a new language for the interface. It only declares; installing it reads it but runs nothing, and it arrives switched off. If you remove one your rules use, those rules fail and the built-in one decides.
-    encendido: on
-    apagado: 'off'
-    encender: Switch on
-    apagar: Switch off
-    quitar: Remove
-    subido: 'uploaded %{fecha} by %{quien}'
-    no_se_lee: This plugin can no longer be read; upload it again or remove it.
-    sin_plugins: No plugins installed yet.
-    subir: Install or update a plugin
-    subir_ayuda: If there is already one with the same identifier, it is updated and keeps whether it was on.
-    instalar: Install
-    trae:
-      funciones:
+    title: Plugins in Lisp
+    help: A plugin is a .lisp file that brings what Sakuya does not bring out of the box. It can bring functions that every rule, the dashboard and the REPL can use, reports for the REPL and a new language for the interface. It only declares; installing it reads it but runs nothing, and it arrives switched off. If you remove one your rules use, those rules fail and the built-in one decides.
+    enabled: 'on'
+    disabled: 'off'
+    switch_on: Switch on
+    switch_off: Switch off
+    remove: Remove
+    uploaded: 'uploaded %{date} by %{who}'
+    unreadable: This plugin can no longer be read; upload it again or remove it.
+    no_plugins: No plugins installed yet.
+    upload: Install or update a plugin
+    upload_help: If there is already one with the same identifier, it is updated and keeps whether it was on.
+    install: Install
+    brings:
+      functions:
         one: 1 function
         other: '%{count} functions'
-      informes:
+      reports:
         one: 1 report
         other: '%{count} reports'
-      traducciones:
+      translations:
         one: 1 language
         other: '%{count} languages'
-    avisos:
-      instalado: 'Plugin %{nombre} installed. It arrives off: switch it on to use it.'
-      actualizado: Plugin %{nombre} updated.
-      encendido: Plugin %{nombre} switched on.
-      apagado: Plugin %{nombre} switched off.
-      quitado: Plugin %{nombre} removed.
-      no_se_instalo: 'Not installed: %{error}'
-    errores:
-      cabecera: 'the file must start with (plugin "identifier" …)'
-      identificador: 'the identifier %{id} will not do: lowercase, digits and dashes, 2 to 31'
-      dato: 'I do not understand %{dato} in the header; it takes (name "…"), and also %{datos}'
-      forma: 'a plugin only declares define, report and translation; not this: %{forma}'
-      prefijo: '%{nombre} must carry the plugin prefix: %{id}/…'
-      informe: 'a report goes like this: (report "Title" (query …))'
-      traduccion: 'a translation goes like this: (translation "fr" "Français" ("key" "text") …)'
-      par: 'each text goes like this: ("key" "text"), and this does not: %{par}'
-      claves: 'these text keys do not exist: %{claves}'
-      html: 'these texts carry HTML and a plugin cannot change them: %{claves}'
-  reglas:
-    archivo:
-      ayuda: All the business rules in a single .lisp file, to back them up or take them to another installation. It is text you can read and edit by hand; each rule goes under its header.
-      exportar: Download the current rules
-      bajar: Download the file
-      todas_de_fabrica: There are no custom rules yet; everything uses the built-in ones.
-      importar: Upload a file
-      importar_ayuda: Every rule that changed is saved as a new version, with the contract version it carries. If any cannot be read, none is imported.
-      subir: Import
-      sin_archivo: Choose a file.
-      vacio: the file has no rules (each one goes under ";;; hook:")
-      gancho: 'unknown hook %{gancho}'
-      repetido: 'the hook %{gancho} comes twice'
-      no_se_importo: 'Nothing was imported: %{error}'
-      importadas: 'Imported: %{ganchos}.'
-      sin_cambios: The file has the same rules already in place; nothing changed.
-    por_permiso: 'The rule stops it, but the person doing it has permission: it goes through and to review.'
-    con_corte_real: With the real open session
-    con_corte_inventado: With a made-up one
-    sin_corte_real: 'There is no open session at this branch: a made-up one is used.'
-    contrato: 'contract v%{n}'
-    contrato_ayuda: The hook version it was written for
-    vieja: 'This rule was written for version %{suya} of the hook and Sakuya is now on %{actual}: check that it reads and answers what the hook expects now, and save it again.'
-    errores:
-      sin_decision: 'the rule must end in (allow), (to-review "why") or (reject "why"), and it ended in %{valor}'
-      motivo: to-review and reject need the reason, as a string or a keyword
-      motivo_desconocido: 'unknown reason :%{motivo}; the ones I know: :%{motivos}'
-    versiones: Versions
-    vigente: current
-    restaurar: Go back to this one
-    sin_versiones: 'No versions yet: the built-in rule is used.'
-    avisos:
-      guardado: Rule saved.
-      restaurado: Went back to the version from %{fecha}.
-    caso: Test case
-    lee: What it reads (in pesos)
-    contesta: What it answers
-    ejemplo: Example
-  regla_recepcion:
-    titulo: Receipts in Lisp
-    ayuda: Before the supplier's goods enter the stock, this rule looks at what arrives, from whom and with which papers, and decides whether it comes in, goes to review or is stopped. Out of the box it stops nothing. Test saves nothing.
-    fallo: 'The receipts rule failed and the built-in one decided: %{error}'
-    motivos: {}
-    caso:
-      llegan: What arrives (CODE quantity, …)
-      remision: Delivery note
-      facturada: Comes with an invoice
-      autorizado: Received by someone allowed to force receipts
-    veredictos:
+    notices:
+      installed: 'Plugin %{name} installed. It arrives off: switch it on to use it.'
+      updated: Plugin %{name} updated.
+      enabled: Plugin %{name} switched on.
+      disabled: Plugin %{name} switched off.
+      removed: Plugin %{name} removed.
+      not_installed: 'Not installed: %{error}'
+    errors:
+      header: 'the file must start with (plugin "identifier" …)'
+      identifier: 'the identifier %{id} will not do: lowercase, digits and dashes, 2 to 31'
+      datum: 'I do not understand %{datum} in the header; it takes (name "…"), and also %{data}'
+      form: 'a plugin only declares define, report and translation; not this: %{form}'
+      prefix: '%{name} must carry the plugin prefix: %{id}/…'
+      report: 'a report goes like this: (report "Title" (query …))'
+      translation: 'a translation goes like this: (translation "fr" "Français" ("key" "text") …)'
+      pair: 'each text goes like this: ("key" "text"), and this does not: %{pair}'
+      keys: 'these text keys do not exist: %{keys}'
+      html: 'these texts carry HTML and a plugin cannot change them: %{keys}'
+  rules:
+    file:
+      help: All the business rules in a single .lisp file, to back them up or take them to another installation. It is text you can read and edit by hand; each rule goes under its header.
+      export: Download the current rules
+      download: Download the file
+      all_default: There are no custom rules yet; everything uses the built-in ones.
+      import: Upload a file
+      import_help: Every rule that changed is saved as a new version, with the contract version it carries. If any cannot be read, none is imported.
+      upload: Import
+      no_file: Choose a file.
+      empty: the file has no rules (each one goes under ";;; hook:")
+      hook: 'unknown hook %{hook}'
+      repeated: 'the hook %{hook} comes twice'
+      not_imported: 'Nothing was imported: %{error}'
+      imported: 'Imported: %{hooks}.'
+      no_changes: The file has the same rules already in place; nothing changed.
+    by_permission: 'The rule stops it, but the person doing it has permission: it goes through and to review.'
+    with_shift_real: With the real open session
+    with_shift_made_up: With a made-up one
+    no_shift_real: 'There is no open session at this branch: a made-up one is used.'
+    contract: 'contract v%{n}'
+    contract_help: The hook version it was written for
+    old: 'This rule was written for version %{rule_version} of the hook and Sakuya is now on %{current_version}: check that it reads and answers what the hook expects now, and save it again.'
+    errors:
+      no_decision: 'the rule must end in (allow), (to-review "why") or (reject "why"), and it ended in %{value}'
+      reason: to-review and reject need the reason, as a string or a keyword
+      unknown_reason: 'unknown reason :%{reason}; the ones I know: :%{reasons}'
+    versions: Versions
+    current: current
+    restore: Go back to this one
+    no_versions: 'No versions yet: the built-in rule is used.'
+    notices:
+      saved: Rule saved.
+      restored: Went back to the version from %{date}.
+    scenario: Test case
+    reads: What it reads (in pesos)
+    answers: What it answers
+    example: Example
+  receipt_rule:
+    title: Receipts in Lisp
+    help: Before the supplier's goods enter the stock, this rule looks at what arrives, from whom and with which papers, and decides whether it comes in, goes to review or is stopped. Out of the box it stops nothing. Test saves nothing.
+    failure: 'The receipts rule failed and the built-in one decided: %{error}'
+    reasons: {}
+    scenario:
+      arriving: What arrives (CODE quantity, …)
+      delivery_note: Delivery note
+      invoiced: Comes with an invoice
+      authorized: Received by someone allowed to force receipts
+    verdicts:
       allow: It comes in
       review: It comes in and goes to review
       reject: It is stopped
-    funciones:
+    functions:
       supplier: the supplier name
       lines: how many lines
       products: the list of codes
       quantity_of: '(quantity-of "CODE"): how much of that product arrives'
       value: what it is worth at list price
-      remission: 'the written delivery note ("" if none)'
+      delivery_note: 'the written delivery note ("" if none)'
       invoiced: whether it is linked to an invoice
       authorized: whether the person receiving may force receipts
     allow: it comes in
     to_review: it comes in and goes to review
     reject: it does not come in and the attempt is reported
-    nucleo: Someone allowed to force receipts can always receive; for them, stopping means review.
-  regla_factura:
-    factura_no_existe: 'there is no invoice %{folio}'
-    titulo: Invoices in Lisp
-    ayuda: Before a supplier invoice is recorded, this rule compares what is invoiced with what the linked receipts brought, and decides whether it is recorded, goes to review or is stopped. Test saves nothing.
-    fallo: 'The invoice rule failed and the built-in one decided: %{error}'
-    motivos:
-      over_received: 'invoicing more than received (%{detalle})'
-    caso:
-      factura: Or a real invoice (number)
-      factura_ayuda: Compares it with the receipts linked to it, as when it was recorded.
-      productos_de_mas: Products in excess
-      valor_de_mas: Value of the excess
+    core: Someone allowed to force receipts can always receive; for them, stopping means review.
+  invoice_rule:
+    invoice_not_found: 'there is no invoice %{folio}'
+    title: Invoices in Lisp
+    help: Before a supplier invoice is recorded, this rule compares what is invoiced with what the linked receipts brought, and decides whether it is recorded, goes to review or is stopped. Test saves nothing.
+    failure: 'The invoice rule failed and the built-in one decided: %{error}'
+    reasons:
+      over_received: 'invoicing more than received (%{detail})'
+    scenario:
+      invoice: Or a real invoice (number)
+      invoice_help: Compares it with the receipts linked to it, as when it was recorded.
+      excess_items: Products in excess
+      excess_value: Value of the excess
       total: Invoice total
-      candado_puesto: The lock in Settings › Purchases is on.
-      candado_quitado: The lock in Settings › Purchases is off.
-      autorizado: Invoiced by someone allowed to exceed
-    veredictos:
+      lock_set: The lock in Settings › Purchases is on.
+      lock_removed: The lock in Settings › Purchases is off.
+      authorized: Invoiced by someone allowed to exceed
+    verdicts:
       allow: It is recorded
       review: It is recorded and goes to review
       reject: It is stopped
-    funciones:
+    functions:
       excess_items: how many products come in excess
       excess_value: what the excess is worth
       total: the invoice total
@@ -1328,22 +1340,22 @@ en:
     allow: it is recorded
     to_review: asks for a reason and goes to review
     reject: it is not recorded and the attempt is reported
-    nucleo: Someone allowed to exceed can always record it; for them, stopping means review with a reason.
-  regla_movimiento:
-    titulo: Stock in Lisp
-    ayuda: Before a loose entry, an adjustment or waste, this rule looks at what, how much and why, and decides whether it moves, goes to review or is stopped. Sakuya requires a reason and enough stock before asking. Test saves nothing.
-    fallo: 'The stock rule failed and the built-in one decided: %{error}'
-    motivos:
+    core: Someone allowed to exceed can always record it; for them, stopping means review with a reason.
+  movement_rule:
+    title: Stock in Lisp
+    help: Before a loose entry, an adjustment or waste, this rule looks at what, how much and why, and decides whether it moves, goes to review or is stopped. Sakuya requires a reason and enough stock before asking. Test saves nothing.
+    failure: 'The stock rule failed and the built-in one decided: %{error}'
+    reasons:
       needs_permission: permission to adjust is needed
-    caso:
-      tipo: Movement
-      motivo_ejemplo: went bad
-      autorizado: Done by someone allowed to adjust
-    veredictos:
+    scenario:
+      kind: Movement
+      reason_example: went bad
+      authorized: Done by someone allowed to adjust
+    verdicts:
       allow: It moves
       review: It moves and goes to review
       reject: It is stopped
-    funciones:
+    functions:
       kind: ':in entry, :adjust-in adjustment (+), :adjust-out adjustment (−), :waste waste'
       quantity: the quantity
       stock: what there is before moving it
@@ -1354,24 +1366,24 @@ en:
     allow: it moves
     to_review: it moves and goes to review
     reject: it does not move and the attempt is reported
-    nucleo: Someone allowed to adjust can always do it; for them, stopping means review.
-  regla_retiro:
-    titulo: Withdrawals in Lisp
-    ayuda: Before cash leaves the drawer, this rule looks at how much and why, and decides whether it goes out, goes to review or is stopped. Sakuya requires a reason and enough cash before asking. Test saves nothing.
-    fallo: 'The withdrawal rule failed and the built-in one decided: %{error}'
-    motivos:
+    core: Someone allowed to adjust can always do it; for them, stopping means review.
+  withdrawal_rule:
+    title: Withdrawals in Lisp
+    help: Before cash leaves the drawer, this rule looks at how much and why, and decides whether it goes out, goes to review or is stopped. Sakuya requires a reason and enough cash before asking. Test saves nothing.
+    failure: 'The withdrawal rule failed and the built-in one decided: %{error}'
+    reasons:
       needs_permission: permission to withdraw is needed
-    caso:
-      monto: Amount
-      en_gaveta: In drawer
-      motivo: Reason
-      motivo_ejemplo: safe
-      autorizado: Withdrawn by someone allowed to withdraw
-    veredictos:
+    scenario:
+      amount: Amount
+      in_drawer: In drawer
+      reason: Reason
+      reason_example: safe
+      authorized: Withdrawn by someone allowed to withdraw
+    verdicts:
       allow: It goes out
       review: It goes out and goes to review
       reject: It is stopped
-    funciones:
+    functions:
       amount: what goes out
       cash: what the drawer has
       withdrawn: already withdrawn in the session
@@ -1381,27 +1393,27 @@ en:
     allow: it goes out
     to_review: it goes out and goes to review
     reject: it does not go out and the attempt is reported
-    nucleo: Someone allowed to withdraw can always do it; for them, stopping means review.
-  regla_credito:
-    titulo: Credit in Lisp
-    ayuda: When a sale goes on a customer's account, this rule looks at the account (balance, limit, overdue, last payment) and decides whether to give credit, send it to review or stop it. Out of the box nobody gets credit. Test saves nothing.
-    fallo: 'The credit rule failed and the built-in one decided: %{error}'
-    motivos:
+    core: Someone allowed to withdraw can always do it; for them, stopping means review.
+  credit_rule:
+    title: Credit in Lisp
+    help: When a sale goes on a customer's account, this rule looks at the account (balance, limit, overdue, last payment) and decides whether to give credit, send it to review or stop it. Out of the box nobody gets credit. Test saves nothing.
+    failure: 'The credit rule failed and the built-in one decided: %{error}'
+    reasons:
       no_credit: this business does not sell on account
-      over_limit: 'this sale takes them over their limit (owes %{saldo}, limit %{limite})'
-    caso:
-      cliente: Customer
-      inventado: — a made-up one —
-      monto: On account
-      saldo: Owes
-      limite: Limit
-      cuenta: 'Owes %{saldo} · limit %{limite}'
-      autorizado: Charged by someone allowed to force credit
-    veredictos:
+      over_limit: 'this sale takes them over their limit (owes %{balance}, limit %{limit})'
+    scenario:
+      customer: Customer
+      made_up: — a made-up one —
+      amount: On account
+      balance: Owes
+      limit: Limit
+      account: 'Owes %{balance} · limit %{limit}'
+      authorized: Charged by someone allowed to force credit
+    verdicts:
       allow: Credit given
       review: Credit given and goes to review
       reject: It is stopped
-    funciones:
+    functions:
       amount: what goes on account
       total: the sale total
       balance: what they owe before this sale
@@ -1413,24 +1425,24 @@ en:
     allow: credit is given
     to_review: credit is given and goes to review
     reject: no credit and the attempt is reported
-    nucleo: Someone allowed to force credit can always do it; for them, stopping means review.
-  regla_venta:
-    titulo: Sales in Lisp
-    ayuda: With the whole ticket, right before charging, this rule looks at the sale (total, products, payment methods, time) and decides whether it is charged, goes to review or is stopped. Out of the box it stops nothing; prices are judged by their own rule. Test saves nothing.
-    fallo: 'The sales rule failed and the built-in one decided: %{error}'
-    forma: 'paid-with takes a payment method: :%{formas}'
-    motivos: {}
-    caso:
-      claves: Codes (comma separated)
+    core: Someone allowed to force credit can always do it; for them, stopping means review.
+  sale_rule:
+    title: Sales in Lisp
+    help: With the whole ticket, right before charging, this rule looks at the sale (total, products, payment methods, time) and decides whether it is charged, goes to review or is stopped. Out of the box it stops nothing; prices are judged by their own rule. Test saves nothing.
+    failure: 'The sales rule failed and the built-in one decided: %{error}'
+    payment_method: 'paid-with takes a payment method: :%{payment_methods}'
+    reasons: {}
+    scenario:
+      keys: Codes (comma separated)
       total: Total
-      forma: Payment method
-      hora: Hour
-      autorizado: Charged by someone allowed to force sales
-    veredictos:
+      payment_method: Payment method
+      hour: Hour
+      authorized: Charged by someone allowed to force sales
+    verdicts:
       allow: It is charged
       review: It is charged and goes to review
       reject: It is stopped
-    funciones:
+    functions:
       total: the total
       change: the change
       paid_with: '(paid-with :cash), :transfer or :deposit: what was paid that way'
@@ -1443,28 +1455,28 @@ en:
     allow: it is charged
     to_review: it is charged and goes to review
     reject: it is not charged and the attempt is reported
-    nucleo: Someone allowed to force sales can always charge; for them, stopping means review.
-  regla_precio:
-    venta_no_existe: 'there is no sale %{folio} at this branch'
-    titulo: Price in Lisp
-    ayuda: Every line charged at the till goes through this rule, which looks at the price and decides whether it is charged, goes to review or is stopped. No rule can cross the floor from Settings › Till. Test saves nothing.
-    sin_productos: there are no products with a price to test with
-    fallo: 'The price rule failed and the built-in one decided: %{error}'
-    motivos:
+    core: Someone allowed to force sales can always charge; for them, stopping means review.
+  price_rule:
+    sale_not_found: 'there is no sale %{folio} at this branch'
+    title: Price in Lisp
+    help: Every line charged at the till goes through this rule, which looks at the price and decides whether it is charged, goes to review or is stopped. No rule can cross the floor from Settings › Till. Test saves nothing.
+    no_products: there are no products with a price to test with
+    failure: 'The price rule failed and the built-in one decided: %{error}'
+    reasons:
       below_price: below the regular price
-    caso:
-      venta: Or a real sale (number)
-      venta_ayuda: Goes through its lines as they were charged; the regular price comes from the list price back then and today's promotions.
-      producto: Product code
-      cantidad: Quantity
-      precio: Price charged
-      toca: 'Regular: %{regular} (list %{catalogo})'
-      autorizado: Charged by someone allowed to lower prices
-    veredictos:
+    scenario:
+      sale: Or a real sale (number)
+      sale_help: Goes through its lines as they were charged; the regular price comes from the list price back then and today's promotions.
+      product: Product code
+      quantity: Quantity
+      price: Price charged
+      regular: 'Regular: %{regular} (list %{catalog})'
+      authorized: Charged by someone allowed to lower prices
+    verdicts:
       allow: It is charged
       review: It is charged and goes to review
       reject: It is stopped
-    funciones:
+    functions:
       price: what is charged
       list_price: the branch list price
       regular_price: the regular price (promotion or list)
@@ -1475,22 +1487,22 @@ en:
     allow: it is charged
     to_review: it is charged and goes to review
     reject: it is not charged and the attempt is reported
-    nucleo: Someone allowed to lower prices can always charge; for them, stopping means review.
-  regla_corte:
-    titulo: Cash closing in Lisp
-    ayuda: When the session is closed, this rule looks at the count and decides whether it closes, goes to review or is stopped. Test saves nothing; each saved version stays in the list below.
-    fallo: 'The cash count rule failed and the built-in one decided: %{error}'
-    motivos:
-      over_limit: the difference (%{diferencia}) exceeds the limit (%{tope})
-    caso:
-      esperado: Expected in drawer
-      contado: Counted
-      autorizado: Closed by someone allowed to accept differences
-    veredictos:
+    core: Someone allowed to lower prices can always charge; for them, stopping means review.
+  shift_rule:
+    title: Cash closing in Lisp
+    help: When the session is closed, this rule looks at the count and decides whether it closes, goes to review or is stopped. Test saves nothing; each saved version stays in the list below.
+    failure: 'The cash count rule failed and the built-in one decided: %{error}'
+    reasons:
+      over_limit: the difference (%{difference}) exceeds the limit (%{cap})
+    scenario:
+      expected: Expected in drawer
+      counted: Counted
+      authorized: Closed by someone allowed to accept differences
+    verdicts:
       allow: It closes
       review: It closes and goes to review
       reject: It is stopped
-    funciones:
+    functions:
       difference: counted − expected; negative = missing
       counted: what was counted
       expected: what should be there
@@ -1505,45 +1517,75 @@ en:
     allow: it closes
     to_review: asks for a reason and goes to review
     reject: stops it and reports the attempt
-    nucleo: Someone allowed to accept differences can always close; for them, stopping means review.
-  tablero:
-    titulo: Dashboard in Lisp
-    ayuda: The home dashboard is a program. Change which figures show and in what order, compute your own and pick the lists below. Trying doesn't save anything; every saved version stays in the list below.
-    personalizar: Customize
-    arreglar: Fix it
+    core: Someone allowed to accept differences can always close; for them, stopping means review.
+  dashboard:
+    title: Dashboard in Lisp
+    help: The home dashboard is a program. Change which figures show and in what order, compute your own and pick the lists below. Trying doesn't save anything; every saved version stays in the list below.
+    customize: Customize
+    fix: Fix it
     error_html: 'Your dashboard has an error, so the default one is shown: %{error}'
-    programa: Program
-    probar: Try it
-    guardar: Save
-    vista_previa: Preview
-    vista_previa_ayuda: With today's figures for your branch.
-    versiones: Versions
-    vigente: current
-    restaurar: Restore
-    sin_versiones: 'No versions yet: the default dashboard is used.'
-    avisos:
-      guardado: Dashboard saved.
-      restaurado: Restored the version from %{fecha}.
-    referencia:
-      titulo: What you can write
-      cifras: Built-in figures
-      propias: Your own figures
-      propias_ayuda: 'Every built-in figure can also be read as a function: (sales), (tickets)… Plus (days) and, by product code, (sold "CODE") and (sales-of "CODE"). The format goes last: :money, :number or :percent.'
-      paneles: Lists
-      paneles_ayuda: 'A number after it sets how many rows: (panel :top-products 5).'
-      lenguaje: The language
-      lenguaje_ayuda: You have let, if, cond, when, define, lambda, map, filter, reduce, +, -, *, /, round and comparisons. (when (> (returns) 0) (tile :returns)) shows a figure only when it matters. Money is in exact decimals.
-    errores:
-      sin_dashboard: the program has to end with (dashboard …)
-      cifra_desconocida: there is no figure :%{cifra}; the built-in ones are :%{cifras}
-      titulo: tile takes a built-in figure (:sales) or a title in quotes
-      valor: "“%{titulo}” needs a value that is a number or text"
-      formato: the format is one of :%{formatos}
-      panel: there is no list :%{panel}; there are :%{paneles}
-      limite: a list shows from 1 to 50 rows
-      pieza: dashboard only takes (tile …) and (panel …), and got %{valor}
-      clave: the product code goes in quotes
-      producto: there is no product with code %{clave}
-    muestra: Load sample data
-    muestra_ayuda: Try it with made-up figures, to see the dashboard full even with no sales today. Nothing is touched.
-    vista_previa_muestra: 'Made-up sample data: these are not your business’s sales.'
+    program: Program
+    trial: Try it
+    save: Save
+    preview: Preview
+    preview_help: With today's figures for your branch.
+    versions: Versions
+    current: current
+    restore: Restore
+    no_versions: 'No versions yet: the default dashboard is used.'
+    notices:
+      saved: Dashboard saved.
+      restored: Restored the version from %{date}.
+    reference:
+      title: What you can write
+      figures: Built-in figures
+      own: Your own figures
+      own_help: 'Every built-in figure can also be read as a function: (sales), (tickets)… Plus (days) and, by product code, (sold "CODE") and (sales-of "CODE"). The format goes last: :money, :number or :percent.'
+      panels: Lists
+      panels_help: 'A number after it sets how many rows: (panel :top-products 5).'
+      language: The language
+      language_help: You have let, if, cond, when, define, lambda, map, filter, reduce, +, -, *, /, round and comparisons. (when (> (returns) 0) (tile :returns)) shows a figure only when it matters. Money is in exact decimals.
+    errors:
+      missing_dashboard: the program has to end with (dashboard …)
+      unknown_figure: there is no figure :%{figure}; the built-in ones are :%{figures}
+      title: tile takes a built-in figure (:sales) or a title in quotes
+      value: "“%{title}” needs a value that is a number or text"
+      format: the format is one of :%{formats}
+      panel: there is no list :%{panel}; there are :%{panels}
+      limit: a list shows from 1 to 50 rows
+      piece: dashboard only takes (tile …) and (panel …), and got %{value}
+      key: the product code goes in quotes
+      product: there is no product with code %{key}
+    sample: Load sample data
+    sample_help: Try it with made-up figures, to see the dashboard full even with no sales today. Nothing is touched.
+    preview_sample: 'Made-up sample data: these are not your business’s sales.'
+  lisp:
+    anonymous: anonymous
+    errors:
+      expects_numbers: "%{who} expects numbers and got %{value}"
+      expects_list: "%{who} expects a list and got %{value}"
+      division_by_zero: cannot divide by zero
+      get_expects_map: get expects a map
+      unknown_name: I don’t know “%{name}”
+      arity: "%{name} takes %{expected} and you gave it %{given}"
+      the_function: the function
+      at_least: at least %{count}
+      between: "%{from} to %{to}"
+      not_a_function: "%{value} is not a function"
+      cond_clause: each cond clause is (test value…)
+      let_syntax: 'let goes like this: (let ((name value) …) body…)'
+      define_syntax: 'define goes like this: (define name value) or (define (name args…) body…)'
+      lambda_syntax: '%{name} goes like this: (%{name} (args…) body…)'
+      parameter_names: parameters must be names
+      too_many_steps: the program ran out of steps (an endless loop?)
+      too_deep: the program went too deep (an endless recursion?)
+      too_long: the program is longer than %{max} characters
+      unreadable: I can’t make sense of what follows on line %{line}
+      too_nested: too many nested parentheses on line %{line}
+      extra_close: one ) too many on line %{line}
+      quote_before_close: nothing to quote before the ) on line %{line}
+      unclosed_string: an unclosed string on line %{line}
+      unclosed_parens:
+        one: missing 1 closing parenthesis
+        other: missing %{count} closing parentheses
+      quote_at_end: nothing to quote at the end

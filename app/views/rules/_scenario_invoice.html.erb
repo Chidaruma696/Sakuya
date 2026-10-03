@@ -1,0 +1,10 @@
+<div><label for="excess_items" class="field-label"><%= t("#{texts}.scenario.excess_items") %></label>
+  <%= number_field_tag :excess_items, scenario[:excess_items], step: 1, min: 0, id: "excess_items", class: "w-24 font-mono" %></div>
+<div><label for="excess_value" class="field-label"><%= t("#{texts}.scenario.excess_value") %></label>
+  <%= number_field_tag :excess_value, format("%.2f", scenario[:excess_value] / 100r), step: "0.01", min: 0, id: "excess_value", class: "w-32 font-mono" %></div>
+<div><label for="total" class="field-label"><%= t("#{texts}.scenario.total") %></label>
+  <%= number_field_tag :total, format("%.2f", scenario[:total] / 100r), step: "0.01", min: 0, id: "total", class: "w-32 font-mono" %></div>
+<p class="pb-2 text-stone-600"><%= t("#{texts}.scenario.lock_#{InvoiceRule.lock? ? 'set' : 'removed'}") %></p>
+<div class="basis-full border-t border-stone-100 pt-3"><label for="invoice" class="field-label"><%= t("#{texts}.scenario.invoice") %></label>
+  <%= text_field_tag :invoice, scenario[:invoice_folio], id: "invoice", class: "w-40 font-mono" %>
+  <p class="mt-1 text-xs text-stone-500"><%= t("#{texts}.scenario.invoice_help") %></p></div>

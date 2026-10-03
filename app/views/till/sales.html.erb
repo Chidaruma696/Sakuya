@@ -1,0 +1,19 @@
+<h1 class="mb-4 text-2xl font-bold"><%= t("till.sales") %> · <%= current_branch %></h1>
+<table class="table">
+  <thead><tr><th class="px-3 py-2"><%= t("common.folio") %></th><th class="px-3 py-2"><%= t("till.hour") %></th><th class="px-3 py-2"><%= t("till.cashier") %></th><th class="px-3 py-2"><%= t("till.lines") %></th><th class="px-3 py-2 text-right"><%= t("common.total") %></th><th class="px-3 py-2"><%= t("till.payment") %></th><th class="px-3 py-2"><%= t("common.status") %></th><th></th></tr></thead>
+  <tbody>
+    <% @sales.each do |v| %>
+      <tr class="border-t border-stone-100">
+        <td class="px-3 py-2 font-mono"><%= v.folio %></td>
+        <td class="px-3 py-2 whitespace-nowrap"><%= l v.created_at, format: :short %></td>
+        <td class="px-3 py-2"><%= v.user %></td>
+        <td class="px-3 py-2 text-stone-600"><%= v.lines.map { |l| "#{l.product.name} #{number_with_precision(l.quantity, precision: l.product.decimals)}" }.join(", ") %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= format_money(v.total_cents) %></td>
+        <td class="px-3 py-2"><%= v.payments.map { |p| t("payment_methods.#{p.payment_method}").downcase }.uniq.join("+") %></td>
+        <td class="px-3 py-2"><%= t("sale_statuses.#{v.status}") %></td>
+        <td class="px-3 py-2 text-right whitespace-nowrap"><%= link_to t("till.ticket").downcase, till_ticket_path(v), target: "_blank", class: "link" %> · <%= link_to t("till.do_refund").downcase, till_refund_path(code: v.folio), class: "link" %></td>
+      </tr>
+    <% end %>
+    <% if @sales.empty? %><tr><td colspan="8" class="px-3 py-6 text-center text-stone-500"><%= t("till.no_sales") %></td></tr><% end %>
+  </tbody>
+</table>

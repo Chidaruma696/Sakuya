@@ -1,0 +1,31 @@
+<h1 class="mb-4 text-2xl font-bold"><%= t("stock_counts.new") %> · <%= current_branch %></h1>
+<% if @open %>
+  <p class="rounded bg-amber-50 p-3 text-sm"><%= t("stock_counts.already_open") %> <%= link_to @open.folio, stock_count_path(@open), class: "chip-folio" %>. <%= t("stock_counts.close_it_before") %></p>
+<% else %>
+  <%= form_with url: stock_counts_path, class: "form" do |f| %>
+    <div class="fields">
+      <div class="md:col-span-2">
+        <%= f.label :responsible_id, t("stock_counts.responsible_help"), class: "field-label" %>
+        <%= f.collection_select :responsible_id, @responsible, :id, :name, {}, class: "input" %>
+      </div>
+    </div>
+    <fieldset class="rounded-lg border border-stone-200 p-4" data-controller="scope">
+      <legend class="px-1 text-sm font-medium"><%= t("stock_counts.scope") %></legend>
+      <div class="flex flex-wrap gap-4 text-sm">
+        <label class="flex items-center gap-2"><%= radio_button_tag :scope, "total", true, data: { action: "scope#change" } %> <%= t("stock_counts.scope_total") %></label>
+        <label class="flex items-center gap-2"><%= radio_button_tag :scope, "partial", false, data: { action: "scope#change" } %> <%= t("stock_counts.scope_partial") %></label>
+      </div>
+      <div class="mt-3 hidden gap-4 md:grid-cols-2" data-scope-target="partial">
+        <label class="block text-sm"><%= t("admin.line") %>
+          <%= select_tag :line, options_for_select([ [ "—", "" ] ] + @lines.map { |l| [ l, l ] }), class: "input" %>
+        </label>
+        <label class="block text-sm"><%= t("stock_counts.or_these_products") %>
+          <%= select_tag :product_ids, options_from_collection_for_select(@products, :id, ->(p) { "#{p.name} (#{p.unit})" }), multiple: true, size: 8, class: "input h-auto" %>
+        </label>
+        <p class="text-xs text-stone-600 md:col-span-2"><%= t("stock_counts.partial_help") %></p>
+      </div>
+    </fieldset>
+    <p class="text-sm text-stone-600"><%= t("stock_counts.new_help") %></p>
+    <%= f.submit t("stock_counts.open"), class: "btn btn-primary btn-lg" %>
+  <% end %>
+<% end %>

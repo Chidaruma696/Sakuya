@@ -1,29 +1,29 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Botón "Instalar la app": solo aparece cuando el navegador ofrece instalar (beforeinstallprompt) y
-// la app no está ya instalada; al pulsarlo se abre el diálogo nativo.
+// "Install the app" button: only shows up when the browser offers to install (beforeinstallprompt) and
+// the app is not installed yet; pressing it opens the native dialog.
 export default class extends Controller {
-  static targets = ["boton"]
+  static targets = ["button"]
 
   connect() {
-    this.alOfrecer = (e) => { e.preventDefault(); this.evento = e; this.mostrar(true) }
-    this.alInstalar = () => { this.evento = null; this.mostrar(false) }
-    window.addEventListener("beforeinstallprompt", this.alOfrecer)
-    window.addEventListener("appinstalled", this.alInstalar)
-    if (window.pwaEvento) { this.evento = window.pwaEvento; this.mostrar(true) }
+    this.onOffer = (e) => { e.preventDefault(); this.event = e; this.show(true) }
+    this.onInstall = () => { this.event = null; this.show(false) }
+    window.addEventListener("beforeinstallprompt", this.onOffer)
+    window.addEventListener("appinstalled", this.onInstall)
+    if (window.pwaEvent) { this.event = window.pwaEvent; this.show(true) }
   }
 
   disconnect() {
-    window.removeEventListener("beforeinstallprompt", this.alOfrecer)
-    window.removeEventListener("appinstalled", this.alInstalar)
+    window.removeEventListener("beforeinstallprompt", this.onOffer)
+    window.removeEventListener("appinstalled", this.onInstall)
   }
 
-  mostrar(si) { this.botonTargets.forEach((b) => b.classList.toggle("hidden", !si)) }
+  show(visible) { this.buttonTargets.forEach((b) => b.classList.toggle("hidden", !visible)) }
 
-  async instalar() {
-    if (!this.evento) return
-    this.evento.prompt()
-    const { outcome } = await this.evento.userChoice
-    if (outcome === "accepted") this.mostrar(false)
+  async install() {
+    if (!this.event) return
+    this.event.prompt()
+    const { outcome } = await this.event.userChoice
+    if (outcome === "accepted") this.show(false)
   }
 }

@@ -1,0 +1,4 @@
+<div>
+  <%= f.label field, label, class: "field-label" %>
+  <%= f.send(kind, field, **{ class: "input" }.merge(local_assigns[:options] || {})) %>
+</div>

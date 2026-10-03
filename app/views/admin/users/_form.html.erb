@@ -1,0 +1,13 @@
+<%= form_with model: [ :admin, @user ], class: "form" do |f| %>
+  <div class="fields">
+    <%= render "admin/field", f: f, field: :name, label: t("common.name"), kind: :text_field %>
+    <%= render "admin/field", f: f, field: :user, label: t("admin.user_lowercase"), kind: :text_field, options: { autocapitalize: "none" } %>
+    <%= render "admin/field", f: f, field: :password, label: @user.new_record? ? t("session.password") : t("admin.new_password"), kind: :password_field, options: { autocomplete: "new-password" } %>
+    <div><%= f.label :role_id, t("admin.role"), class: "field-label" %><%= f.collection_select :role_id, Role.order(:name), :id, :name, {}, class: "input" %></div>
+    <div><%= f.label :branch_id, t("common.branch"), class: "field-label" %><%= f.collection_select :branch_id, Branch.order(:name), :id, :name, {}, class: "input" %></div>
+  </div>
+  <div class="flex flex-wrap items-center gap-4">
+    <%= f.submit @user.new_record? ? t("common.create") : t("common.save"), class: "btn btn-primary btn-lg" %>
+    <label class="flex items-center gap-2 text-sm"><%= f.check_box :active %> <%= t("common.active") %></label>
+  </div>
+<% end %>

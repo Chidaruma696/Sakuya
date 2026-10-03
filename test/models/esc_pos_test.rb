@@ -2,47 +2,48 @@ require "test_helper"
 
 class EscPosTest < ActiveSupport::TestCase
   setup do
-    tienda = sucursales(:tienda)
-    Inventario.mover!(sucursal: tienda, producto: productos(:catsup), tipo: "entrada", cantidad: 5, usuario: usuarios(:admin))
-    @venta = Caja.cobrar!(sucursal: tienda, usuario: usuarios(:cajera), clave: "e", lineas: [ { producto_id: productos(:catsup).id, cantidad: 2 } ],
-                          pagos: [ { forma: "efectivo", monto_centavos: 10_000 } ])
+    store = branches(:store)
+    products(:ketchup).update!(name: "Jalapeño ketchup 1 kg") # an accent to check that it survives PC850
+    Inventory.move!(branch: store, product: products(:ketchup), kind: "inflow", quantity: 5, user: users(:admin))
+    @sale = Till.checkout!(branch: store, user: users(:cashier), key: "e", lines: [ { product_id: products(:ketchup).id, quantity: 2 } ],
+                          payments: [ { payment_method: "cash", amount_cents: 10_000 } ])
   end
 
-  def texto(bytes) = bytes.dup.force_encoding("CP850").encode("UTF-8")
+  def text(bytes) = bytes.dup.force_encoding("CP850").encode("UTF-8")
 
-  test "el ticket arranca, elige PC850, lleva los renglones, el total en grande, el código y corta" do
-    b = EscPos.ticket(@venta)
+  test "the ticket resets, picks PC850, carries the lines, the total in large print, the code, and cuts" do
+    b = EscPos.ticket(@sale)
     assert_equal Encoding::BINARY, b.encoding
-    assert b.start_with?("\e@\et\x02".b), "reinicia y elige PC850"
-    assert_includes b, "\x1D!\x11".b, "total al doble"
-    assert_includes b, "\x1Dk\x43\x0D#{@venta.codigo}".b, "EAN-13 del ticket"
-    assert b.end_with?("\ed\x03\x1DV\x42\x00".b), "avanza y corta"
-    t = texto(b)
-    assert_match "Cátsup 1 kg", t, "los acentos llegan en PC850"
-    assert_match(/  2 pz x \$42\.00 +\$84\.00\n/, t)
-    assert_match @venta.folio, t
-    assert t.lines.all? { |l| l.gsub(/[\x00-\x1F]./m, "").chomp.length <= 48 }, "nada pasa de 48 columnas"
+    assert b.start_with?("\e@\et\x02".b), "resets and picks PC850"
+    assert_includes b, "\x1D!\x11".b, "double-size total"
+    assert_includes b, "\x1Dk\x43\x0D#{@sale.code}".b, "the ticket's EAN-13"
+    assert b.end_with?("\ed\x03\x1DV\x42\x00".b), "feeds and cuts"
+    t = text(b)
+    assert_match "Jalapeño ketchup 1 kg", t, "accents arrive in PC850"
+    assert_match(/  2 pc x \$42\.00 +\$84\.00\n/, t)
+    assert_match @sale.folio, t
+    assert t.lines.all? { |l| l.gsub(/[\x00-\x1F]./m, "").chomp.length <= 48 }, "nothing goes past 48 columns"
   end
 
-  test "en papel de 58 mm va a 32 columnas y sin código si se apagó" do
-    Ajuste.guardar!("ticket.ancho" => "58", "ticket.mostrar_codigo" => "0")
-    t = texto(EscPos.ticket(@venta))
+  test "on 58 mm paper it uses 32 columns and no code if it was turned off" do
+    Setting.store!("ticket.width" => "58", "ticket.show_code" => "0")
+    t = text(EscPos.ticket(@sale))
     assert_includes t, "-" * 32 + "\n"
     assert_not_includes t, "-" * 33
-    assert_not_includes EscPos.ticket(@venta), "\x1Dk".b
+    assert_not_includes EscPos.ticket(@sale), "\x1Dk".b
   end
 
-  test "lo que no cabe en PC850 sale con un sustituto en vez de romper" do
-    d = EscPos::Documento.new(columnas: 32).texto("10 € 漢 −5")
-    assert_match "10 EUR ? -5", texto(d.to_s)
+  test "whatever does not fit in PC850 comes out as a substitute instead of breaking" do
+    d = EscPos::Document.new(columns: 32).text("10 € 漢 −5")
+    assert_match "10 EUR ? -5", text(d.to_s)
   end
 
-  test "el logo sale como imagen raster en blanco y negro, y uno roto no estorba" do
-    # 16 × 2 puntos: la mitad izquierda negra, la derecha blanca.
+  test "the logo comes out as a black and white raster image, and a broken one does not get in the way" do
+    # 16 × 2 dots: the left half black, the right half white.
     img = Vips::Image.black(8, 2).join(Vips::Image.black(8, 2) + 255, :horizontal).cast(:uchar)
-    Ajuste.guardar!("ticket.logo" => "data:image/png;base64,#{Base64.strict_encode64(img.write_to_buffer(".png"))}")
-    b = EscPos.ticket(@venta)
-    assert_includes b, "\x1Dv0\x00\x02\x00\x02\x00\xFF\x00\xFF\x00".b, "2 bytes por renglón, 2 renglones, 8 puntos negros y 8 blancos"
-    assert_nil EscPos.raster("data:image/png;base64,#{Base64.strict_encode64("no es imagen")}")
+    Setting.store!("ticket.logo" => "data:image/png;base64,#{Base64.strict_encode64(img.write_to_buffer(".png"))}")
+    b = EscPos.ticket(@sale)
+    assert_includes b, "\x1Dv0\x00\x02\x00\x02\x00\xFF\x00\xFF\x00".b, "2 bytes per row, 2 rows, 8 black dots and 8 white"
+    assert_nil EscPos.raster("data:image/png;base64,#{Base64.strict_encode64("not an image")}")
   end
 end

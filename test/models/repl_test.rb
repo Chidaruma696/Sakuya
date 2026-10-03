@@ -2,41 +2,41 @@ require "test_helper"
 
 class ReplTest < ActiveSupport::TestCase
   setup do
-    @tienda = sucursales(:tienda)
-    Inventario.mover!(sucursal: @tienda, producto: productos(:catsup), tipo: "entrada", cantidad: 10, usuario: usuarios(:admin))
-    Inventario.mover!(sucursal: @tienda, producto: productos(:pechuga), tipo: "entrada", cantidad: 5, usuario: usuarios(:admin))
-    cobrar = ->(clave, lineas, usuario) {
-      Caja.cobrar!(sucursal: @tienda, usuario: usuario, clave: clave, lineas: lineas, pagos: [ { forma: "efectivo", monto_centavos: 1_000_000 } ])
+    @store = branches(:store)
+    Inventory.move!(branch: @store, product: products(:ketchup), kind: "inflow", quantity: 10, user: users(:admin))
+    Inventory.move!(branch: @store, product: products(:chicken), kind: "inflow", quantity: 5, user: users(:admin))
+    checkout = ->(key, lines, user) {
+      Till.checkout!(branch: @store, user: user, key: key, lines: lines, payments: [ { payment_method: "cash", amount_cents: 1_000_000 } ])
     }
-    cobrar.("a", [ { producto_id: productos(:catsup).id, cantidad: 2 } ], usuarios(:cajera))
-    cobrar.("b", [ { producto_id: productos(:pechuga).id, cantidad: "1.5" } ], usuarios(:cajera))
-    cobrar.("c", [ { producto_id: productos(:catsup).id, cantidad: 1 } ], usuarios(:supervisora))
+    checkout.("a", [ { product_id: products(:ketchup).id, quantity: 2 } ], users(:cashier))
+    checkout.("b", [ { product_id: products(:chicken).id, quantity: "1.5" } ], users(:cashier))
+    checkout.("c", [ { product_id: products(:ketchup).id, quantity: 1 } ], users(:supervisor))
   end
 
-  def ev(texto, sucursales: [ @tienda ]) = Repl.evaluar(texto, sucursales: sucursales)
+  def ev(text, branches: [ @store ]) = Repl.evaluate(text, branches: branches)
 
-  test "las ventas de hoy como lista de mapas, y las herramientas para sumarlas, contarlas y ordenarlas" do
-    ventas = ev("(sales)")
-    assert_equal 3, ventas.size
-    assert_equal %i[folio date branch cashier customer total change status], ventas.first.keys
+  test "today's sales as a list of maps, and the tools to add them up, count them and sort them" do
+    sales = ev("(sales)")
+    assert_equal 3, sales.size
+    assert_equal %i[folio date branch cashier customer total change status], sales.first.keys
     assert_equal BigDecimal("319.50"), ev("(sum-of :total (sales))"), "84 + 193.50 + 42"
-    assert_equal({ "Cajera" => 2, "Supervisora" => 1 }, ev("(count-by :cashier (sales))"))
+    assert_equal({ "Cashier" => 2, "Supervisor" => 1 }, ev("(count-by :cashier (sales))"))
     assert_equal BigDecimal("193.50"), ev("(get (first (sort-by-desc :total (sales))) :total)")
-    assert_equal [ "CATS", "CATS" ], ev('(pluck :code (where :code "CATS" (sale-lines)))')
+    assert_equal [ "KETC", "KETC" ], ev('(pluck :code (where :code "KETC" (sale-lines)))')
     assert_equal 0, ev("(count (sales (days-ago 30) (days-ago 1)))")
-    assert_equal BigDecimal("7"), ev('(get (first (stock "cats")) :quantity)')
+    assert_equal BigDecimal("7"), ev('(get (first (stock "ketc")) :quantity)')
   end
 
-  test "solo ve las sucursales que le tocan" do
-    assert_equal 0, ev("(count (sales))", sucursales: [ sucursales(:matriz) ])
-    assert_equal 3, ev("(count (sales))", sucursales: Sucursal.all)
+  test "only sees the branches it is allowed to" do
+    assert_equal 0, ev("(count (sales))", branches: [ branches(:head_office) ])
+    assert_equal 3, ev("(count (sales))", branches: Branch.all)
   end
 
-  test "no escribe aunque lo intente, y explica lo que no entiende" do
-    assert_match "solo lee", assert_raises(Lisp::Error) { Repl.solo_lectura { productos(:catsup).update!(nombre: "x") } }.message
-    assert_equal "Cátsup 1 kg", productos(:catsup).reload.nombre
-    assert_match "no entiendo la fecha", assert_raises(Lisp::Error) { ev('(sales "ayer")') }.message
-    assert_match "esperaba un mapa", assert_raises(Lisp::Error) { ev("(sum-of :total (list 1 2))") }.message
-    assert_raises(Lisp::Agotado) { ev("(define (f n) (f n)) (f 1)") }
+  test "does not write even if it tries, and explains what it does not understand" do
+    assert_match "only reads", assert_raises(Lisp::Error) { Repl.read_only { products(:ketchup).update!(name: "x") } }.message
+    assert_equal "Ketchup 1 kg", products(:ketchup).reload.name
+    assert_match "I do not understand the date", assert_raises(Lisp::Error) { ev('(sales "yesterday")') }.message
+    assert_match "expected a map", assert_raises(Lisp::Error) { ev("(sum-of :total (list 1 2))") }.message
+    assert_raises(Lisp::Exhausted) { ev("(define (f n) (f n)) (f 1)") }
   end
 end

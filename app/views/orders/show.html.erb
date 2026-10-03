@@ -1,0 +1,31 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("orders.order", folio: @order.folio) %> <span class="badge"><%= t("orders.statuses.#{@order.status}") %></span>
+    <% if @order.open? %><span class="badge"><%= t(@order.reserve ? "orders.reserved" : "orders.no_reserve") %></span><% end %></h1>
+  <%= link_to t("orders.title"), orders_path, class: "btn btn-ghost btn-sm" %>
+</div>
+<div class="mb-4 grid gap-4 sm:grid-cols-3">
+  <div class="card"><div class="stat-label"><%= t("till.customer") %></div><div class="text-lg font-semibold"><%= link_to @order.customer, account_customer_path(@order.customer), class: "link" %></div></div>
+  <div class="card"><div class="stat-label"><%= t("orders.delivery") %></div><div class="text-lg font-semibold"><%= @order.delivery_date ? l(@order.delivery_date) : "—" %></div></div>
+  <div class="card"><div class="stat-label"><%= t("common.notes") %></div><div><%= @order.notes.presence || "—" %></div></div>
+</div>
+<table class="table mb-6">
+  <thead><tr><th><%= t("common.product") %></th><th class="text-right"><%= t("common.quantity") %></th></tr></thead>
+  <tbody>
+    <% @order.lines.each do |l| %><tr><td class="px-3 py-2"><%= l.product.name %></td><td class="px-3 py-2 text-right font-mono"><%= quantity(l.quantity, l.product) %> <%= l.product.short_unit %></td></tr><% end %>
+  </tbody>
+</table>
+<% if @order.open? %>
+  <div class="flex flex-wrap items-end gap-4">
+    <%= link_to icon("cart3", t("orders.checkout")), till_path(order: @order.id), class: "btn btn-success btn-lg" if can?("till.sell") %>
+    <% if can?("customers.orders") %>
+      <%= form_with url: cancel_order_path(@order), class: "flex items-end gap-2 text-sm" do |f| %>
+        <div><%= f.label :reason, t("common.reason"), class: "field-label" %><%= f.text_field :reason, required: true, class: "input" %></div>
+        <%= f.submit t("orders.cancel"), class: "btn btn-danger" %>
+      <% end %>
+    <% end %>
+  </div>
+<% elsif @order.sale %>
+  <p class="text-sm"><%= t("orders.paid_in") %> <%= link_to @order.sale.folio, till_ticket_path(@order.sale), class: "link font-mono" %></p>
+<% elsif @order.cancellation_reason %>
+  <p class="text-sm text-stone-600"><%= t("orders.cancelled_by", reason: @order.cancellation_reason) %></p>
+<% end %>

@@ -1,0 +1,53 @@
+<% if @shift.nil? %>
+  <%= render "no_till" %>
+<% else %>
+  <% if @shift.exceeds_limit? %>
+    <div class="mb-4 rounded border-l-4 border-red-600 bg-red-50 p-3 text-sm"><%= t("till.exceeds_limit_html", amount: format_money(current_branch.cash_limit_cents), link: link_to(t("till.make_to_withdrawal"), till_shift_path, class: "link")) %></div>
+  <% end %>
+  <div class="grid gap-4 lg:grid-cols-3" data-controller="pos" data-pos-scan-url-value="<%= till_scan_path %>" data-pos-checkout-url-value="<%= till_checkout_path %>" data-pos-key-value="<%= @key %>" data-pos-catalog-url-value="<%= till_catalog_path %>" data-pos-token-url-value="<%= till_token_path %>" data-pos-branch-value="<%= current_branch.id %>"<% if @pos_order %> data-pos-order-value="<%= @pos_order.to_json %>"<% end %>>
+    <div class="lg:col-span-2">
+      <div class="mb-3 flex gap-3">
+        <input data-pos-target="code" data-action="keydown.enter->pos#scan" autofocus autocomplete="off" placeholder="<%= t("till.scans_or_types") %>" class="flex-1 rounded border border-stone-300 px-3 py-3 font-mono text-lg">
+      </div>
+      <% if @order %>
+        <div class="mb-2 rounded bg-blue-50 px-3 py-2 text-sm text-blue-900" id="checking_out_order"><%= t("orders.checking_out", folio: @order.folio, customer: @order.customer) %></div>
+      <% end %>
+      <div id="connection" data-pos-target="connection" hidden class="mb-2 rounded border-l-4 border-amber-500 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+        <i class="bi bi-wifi-off"></i> <span data-text></span>
+        <button type="button" class="link ml-2" data-action="pos#sync"><%= t("till.upload_now") %></button>
+        <div class="text-xs text-red-800" data-errors></div>
+      </div>
+      <div id="notice" data-pos-target="notice" class="mb-2 empty:hidden rounded bg-red-50 px-3 py-2 text-sm text-red-800"></div>
+      <div data-pos-target="pending" class="mb-2 hidden rounded bg-blue-50 p-3 text-sm">
+        <span data-pos-target="pendingName" class="font-semibold"></span> ·
+        <%= t("common.quantity").downcase %> <input data-pos-target="pendingQuantity" data-action="keydown.enter->pos#confirmPending" type="number" step="0.001" min="0.001" class="w-28 rounded border border-stone-300 px-2 py-1 font-mono">
+        <button type="button" data-action="pos#confirmPending" class="btn btn-primary btn-xs"><%= t("common.add").downcase %></button>
+        <button type="button" data-action="pos#cancelPending" class="px-2 py-1 text-stone-500"><%= t("common.cancel").downcase %></button>
+      </div>
+      <table class="table">
+        <thead><tr><th class="px-3 py-2"><%= t("common.product") %></th><th class="px-3 py-2 text-right"><%= t("common.quantity") %></th><th class="px-3 py-2 text-right"><%= t("common.price") %></th><th class="px-3 py-2 text-right"><%= t("common.line_amount") %></th><th></th></tr></thead>
+        <tbody data-pos-target="body"></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="stat-label"><%= t("common.total") %></div>
+      <div class="mb-4 stat-value text-4xl" data-pos-target="total"><%= format_money(0) %></div>
+      <div class="space-y-2 text-sm">
+        <label class="flex items-center justify-between gap-2"><%= t("payment_methods.cash") %> <input data-pos-target="cash" data-action="input->pos#recalculate" type="number" step="0.01" min="0" class="w-32 rounded border border-stone-300 px-2 py-1 text-right font-mono"></label>
+        <label class="flex items-center justify-between gap-2"><%= t("payment_methods.transfer") %> <input data-pos-target="transfer" data-action="input->pos#recalculate" type="number" step="0.01" min="0" class="w-32 rounded border border-stone-300 px-2 py-1 text-right font-mono"></label>
+        <label class="flex items-center justify-between gap-2"><%= t("payment_methods.deposit") %> <input data-pos-target="deposit" data-action="input->pos#recalculate" type="number" step="0.01" min="0" class="w-32 rounded border border-stone-300 px-2 py-1 text-right font-mono"></label>
+        <% if Features.active?("customers") %>
+          <div class="space-y-2 border-t border-stone-200 pt-2">
+            <label class="flex items-center justify-between gap-2"><%= t("till.customer") %>
+              <%= select_tag :customer_id, options_for_select([ [ t("till.no_customer"), "" ] ] + Customer.active.order(:name).limit(500).map { |c| [ c.name, c.id ] }), data: { pos_target: "customer" }, class: "w-40 rounded border border-stone-300 px-2 py-1" %></label>
+            <label class="flex items-center justify-between gap-2"><%= t("payment_methods.credit") %> <input data-pos-target="credit" data-action="input->pos#recalculate" type="number" step="0.01" min="0" class="w-32 rounded border border-stone-300 px-2 py-1 text-right font-mono"></label>
+          </div>
+        <% end %>
+        <div class="flex items-center justify-between border-t border-stone-200 pt-2"><%= t("till.change") %> <span class="stat-value text-xl" data-pos-target="change"><%= format_money(0) %></span></div>
+      </div>
+      <button type="button" data-action="pos#checkout" data-pos-target="checkoutButton" class="btn btn-success btn-lg mt-4 w-full"><%= t("till.checkout") %></button>
+      <button type="button" data-action="pos#clear" class="btn btn-secondary mt-2 w-full"><%= t("till.clear_ticket") %></button>
+      <p class="mt-3 text-xs text-stone-500"><%= t("till.shift") %> <%= @shift.folio %> · <%= t("till.in_drawer").downcase %> <%= format_money(@shift.expected_cash_cents) %></p>
+    </div>
+  </div>
+<% end %>

@@ -2,9 +2,6 @@ ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
 
-# Los tests están escritos en español; el sistema arranca en inglés.
-I18n.default_locale = :es
-
 module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers

@@ -1,0 +1,12 @@
+<div><label for="customer_id" class="field-label"><%= t("#{texts}.scenario.customer") %></label>
+  <%= select_tag :customer_id, options_for_select([ [ t("#{texts}.scenario.made_up"), "" ] ] + Customer.active.order(:name).limit(300).map { |c| [ c.name, c.id ] }, scenario[:customer]&.id), id: "customer_id" %></div>
+<div><label for="amount" class="field-label"><%= t("#{texts}.scenario.amount") %></label>
+  <%= number_field_tag :amount, format("%.2f", scenario[:amount] / 100r), step: "0.01", min: 0, id: "amount", class: "w-32 font-mono" %></div>
+<% unless scenario[:customer] %>
+  <div><label for="balance" class="field-label"><%= t("#{texts}.scenario.balance") %></label>
+    <%= number_field_tag :balance, format("%.2f", scenario[:balance] / 100r), step: "0.01", id: "balance", class: "w-32 font-mono" %></div>
+  <div><label for="limit" class="field-label"><%= t("#{texts}.scenario.limit") %></label>
+    <%= number_field_tag :limit, format("%.2f", scenario[:limit] / 100r), step: "0.01", min: 0, id: "limit", class: "w-32 font-mono" %></div>
+<% else %>
+  <p class="pb-2 text-stone-600"><%= t("#{texts}.scenario.account", balance: format_money(scenario[:customer].balance_cents), limit: format_money(scenario[:customer].credit_limit_cents)) %></p>
+<% end %>

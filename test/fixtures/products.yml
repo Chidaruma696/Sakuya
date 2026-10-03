@@ -1,0 +1,15 @@
+chicken:
+  key: CHKN
+  name: Chicken breast
+  line: Poultry
+  unit: kg
+  price_cents: 12900
+  plu: 90001
+
+ketchup:
+  key: KETC
+  name: Ketchup 1 kg
+  line: Groceries
+  unit: piece
+  price_cents: 4200
+  plu: 90002

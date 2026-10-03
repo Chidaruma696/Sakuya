@@ -1,0 +1,43 @@
+<%# The sale ticket. `sale` can be real or the sample from Settings › Ticket; the data-ticket
+    attributes let the preview update while typing. %>
+<% settings = Setting.to_h %>
+<div class="ticket" style="width: <%= Setting.ticket_width_mm %>mm" data-ticket="paper">
+  <div class="logo <%= 'hidden' if settings["ticket.logo"].blank? %>" data-ticket="logo"><img src="<%= settings["ticket.logo"].presence || "data:," %>" alt=""></div>
+  <div class="center bold" style="font-size: 10pt;" data-ticket="business.name" data-empty="<%= sale.branch&.name %>"><%= settings["business.name"].presence || sale.branch&.name %></div>
+  <div class="center <%= 'hidden' if settings["ticket.tagline"].blank? %>" data-ticket="ticket.tagline"><%= settings["ticket.tagline"] %></div>
+  <% if settings["business.name"].present? && sale.branch && sale.branch.name != settings["business.name"] %><div class="center" data-ticket="branch"><%= sale.branch.name %></div><% end %>
+  <div class="center <%= 'hidden' if settings["business.address"].blank? %>" data-ticket="business.address"><%= settings["business.address"] %></div>
+  <div class="center bold <%= 'hidden' if settings["business.phone"].blank? %>" data-ticket="business.phone"><%= settings["business.phone"] %></div>
+  <div class="center <%= 'hidden' if settings["ticket.tax_id"].blank? %>" data-ticket="ticket.tax_id"><%= settings["ticket.tax_id"] %></div>
+  <div class="line"></div>
+  <table>
+    <tr>
+      <td><%= t("common.date") %>: <%= l sale.created_at, format: :short %><br><span class="bold"><%= t("common.folio") %>: <%= sale.folio %></span></td>
+      <td class="right <%= 'hidden' if settings["ticket.show_cashier"] != "1" %>" data-ticket="ticket.show_cashier"><%= t("till.served_by") %><br><span class="bold"><%= sale.user&.name %></span></td>
+    </tr>
+  </table>
+  <table style="margin-top: 1mm;">
+    <thead><tr><th style="width: 46%;"><%= t("common.product") %></th><th class="right" style="width: 20%;"><%= t("common.quantity") %></th><th class="right" style="width: 16%;"><%= t("common.price") %></th><th class="right" style="width: 18%;"><%= t("common.line_amount") %></th></tr></thead>
+    <tbody>
+      <% sale.lines.each do |l| %>
+        <tr>
+          <td><%= l.product.name %><%= " (#{l.promotion.name})" if l.promotion %><%= " *" if l.price_cents < l.catalog_cents %></td>
+          <td class="right mono"><%= quantity(l.quantity, l.product) %></td>
+          <td class="right mono"><%= format_money(l.price_cents) %></td>
+          <td class="right mono"><%= format_money(l.amount_cents) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="line"></div>
+  <table>
+    <tr><td class="bold total"><%= t("common.total").upcase %></td><td class="right bold mono total"><%= format_money(sale.total_cents) %></td></tr>
+    <% sale.payments.each do |p| %><tr><td><%= t("payment_methods.#{p.payment_method}") %></td><td class="right mono"><%= format_money(p.amount_cents) %></td></tr><% end %>
+    <tr><td><%= t("till.change") %></td><td class="right mono"><%= format_money(sale.change_cents) %></td></tr>
+  </table>
+  <% if sale.status == "refunded" %><div class="cancelled"><%= t("sale_statuses.refunded").upcase %></div><% end %>
+  <div class="line-dotted"></div>
+  <div class="center" style="font-size: 7pt;" data-ticket="ticket.returns_legend" data-empty="<%= t("till.refunds_only_with_ticket") %>"><%= settings["ticket.returns_legend"].presence || t("till.refunds_only_with_ticket") %></div>
+  <div class="center <%= 'hidden' if settings["ticket.show_code"] != "1" %>" data-ticket="ticket.show_code"><%= ean13_svg(sale.code, height: 34, module_width: 2) %></div>
+  <div class="center italic <%= 'hidden' if settings["business.ticket_footer"].blank? %>" style="margin-top: 1.5mm;" data-ticket="business.ticket_footer"><%= settings["business.ticket_footer"] %></div>
+</div>

@@ -1,0 +1,7 @@
+store_open:
+  folio: C-00900
+  branch: store
+  user: cashier
+  status: open
+  float_cents: 50000
+  opened_at: <%= Time.current %>

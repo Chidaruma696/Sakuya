@@ -1,0 +1,34 @@
+DEFAULTS: &defaults
+  password_digest: <%= BCrypt::Password.create("secret12", cost: 4) %>
+  active: true
+  language: en
+
+admin:
+  <<: *defaults
+  name: Administrator
+  user: admin
+  role: administrator
+  branch: head_office
+
+cashier:
+  <<: *defaults
+  name: Cashier
+  user: cashier
+  role: cashier
+  branch: store
+
+supervisor:
+  <<: *defaults
+  name: Supervisor
+  user: supervisor
+  role: supervisor
+  branch: store
+
+inactive:
+  <<: *defaults
+  name: Inactive
+  user: inactive
+  role: supervisor
+  branch: store
+  active: false
+

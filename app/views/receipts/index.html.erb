@@ -1,0 +1,22 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("purchases.receipts") %></h1>
+  <%= link_to icon("box-arrow-in-down", t("purchases.receive")), new_receipt_path, class: "btn btn-primary" if can?("purchases.receive") %>
+</div>
+<p class="mb-4 text-sm text-stone-600"><%= t("purchases.receipts_help", branch: current_branch) %></p>
+<table class="table">
+  <thead><tr><th><%= t("common.folio") %></th><th><%= t("common.date") %></th><th><%= t("purchases.supplier") %></th><th><%= t("purchases.delivery_note") %></th><th><%= t("purchases.invoice") %></th><th class="text-right"><%= t("purchases.rows") %></th><th><%= t("common.who") %></th><th><%= t("common.status") %></th></tr></thead>
+  <tbody>
+    <% @receipts.each do |r| %>
+      <tr class="<%= 'text-stone-400 line-through' if r.cancelled? %>">
+        <td class="px-3 py-2"><%= link_to r.folio, receipt_path(r), class: "chip-folio" %></td>
+        <td class="px-3 py-2 whitespace-nowrap"><%= l r.date %></td>
+        <td class="px-3 py-2"><%= r.supplier %></td><td class="px-3 py-2 font-mono text-xs"><%= r.delivery_note %></td>
+        <td class="px-3 py-2"><%= r.invoice ? link_to(r.invoice.folio, invoice_path(r.invoice), class: "chip-folio") : tag.span(t("purchases.no_invoice"), class: "text-xs text-amber-700") %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= r.lines.size %></td>
+        <td class="px-3 py-2"><%= r.user %></td>
+        <td class="px-3 py-2"><%= t("purchases.statuses.#{r.status}") %></td>
+      </tr>
+    <% end %>
+    <% if @receipts.empty? %><tr><td colspan="8" class="px-3 py-6 text-center text-stone-500"><%= t("purchases.no_receipts") %></td></tr><% end %>
+  </tbody>
+</table>

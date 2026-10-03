@@ -1,0 +1,17 @@
+<%= form_with model: [ :admin, @branch ], class: "form" do |f| %>
+  <div class="fields-4">
+    <%= render "admin/field", f: f, field: :code, label: t("common.code"), kind: :text_field %>
+    <div><%= f.label :kind, t("common.kind"), class: "field-label" %><%= f.select :kind, [ [ t("common.head_office"), "head_office" ], [ t("admin.store"), "store" ] ] + (Features.active?("warehouses") || @branch.warehouse? ? [ [ t("admin.warehouse"), "warehouse" ] ] : []), {}, class: "input" %></div>
+    <%= render "admin/field", f: f, field: :name, label: t("common.name"), kind: :text_field %>
+    <%= render "admin/field", f: f, field: :cash_limit, label: t("admin.cash_limit"), kind: :number_field, options: { step: "0.01", min: 1 } %>
+    <div><%= f.label :printer, t("admin.printer"), class: "field-label" %><%= f.select :printer, Branch::PRINTERS.map { |i| [ t("admin.printers.#{i}"), i ] }, {}, class: "input" %></div>
+    <div><%= f.label :network_printer, t("admin.network_printer"), class: "field-label" %><%= f.text_field :network_printer, placeholder: "192.168.1.50:9100", class: "input font-mono" %><p class="mt-1 text-xs text-stone-500"><%= t("admin.printer_help") %></p></div>
+    <% if Features.active?("stock_counts") %>
+      <%= render "admin/field", f: f, field: :count_interval_days, label: t("admin.count_interval_days"), kind: :number_field, options: { step: "1", min: 1 } %>
+    <% end %>
+  </div>
+  <div class="flex flex-wrap items-center gap-4">
+    <%= f.submit @branch.new_record? ? t("common.create") : t("common.save"), class: "btn btn-primary btn-lg" %>
+    <label class="flex items-center gap-2 text-sm"><%= f.check_box :active %> <%= t("admin.active") %></label>
+  </div>
+<% end %>

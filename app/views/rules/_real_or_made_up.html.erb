@@ -1,0 +1,9 @@
+<%# A real or made-up shift, for the scenarios that read the drawer (closing and withdrawals). %>
+<% if scenario[:has_real] %>
+  <div class="flex basis-full flex-wrap gap-4 text-sm">
+    <label class="flex items-center gap-2"><%= radio_button_tag :made_up, "0", scenario[:real].present?, id: "made_up_no" %> <%= t("rules.with_shift_real") %></label>
+    <label class="flex items-center gap-2"><%= radio_button_tag :made_up, "1", scenario[:real].nil?, id: "made_up_yes" %> <%= t("rules.with_shift_made_up") %></label>
+  </div>
+<% else %>
+  <p class="basis-full text-sm text-stone-500"><%= t("rules.no_shift_real") %></p>
+<% end %>

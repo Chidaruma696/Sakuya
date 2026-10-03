@@ -1,12 +1,12 @@
-administrador:
-  nombre: administrador
-  permisos: ["*"]
-cajero:
-  nombre: cajero
-  permisos: ["caja.vender", "caja.abrir", "caja.devolver", "inventario.ver", "pedidos.solicitar", "salidas.recibir"]
+administrator:
+  name: administrator
+  permissions: ["*"]
+
+cashier:
+  name: cashier
+  permissions: ["till.sell", "till.open", "till.refund", "inventory.view"]
+
 supervisor:
-  nombre: supervisor
-  permisos: ["caja.*", "inventario.*", "etiquetas.crear", "pedidos.*", "produccion.*", "salidas.*", "rutas.*", "cobranza.*", "canastillas.*", "conteos.*", "clientes.*", "reportes.ver", "revisiones.resolver"]
-chofer:
-  nombre: chofer
-  permisos: ["rutas.repartir", "pedidos.solicitar"]
+  name: supervisor
+  permissions: ["till.*", "inventory.*", "stock_counts.*", "customers.*", "reports.view", "reviews.resolve"]
+

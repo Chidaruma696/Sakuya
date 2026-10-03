@@ -1,0 +1,16 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("admin.branches") %></h1>
+  <%= link_to t("admin.new_branch"), new_admin_branch_path, class: "btn btn-primary btn-sm" %>
+</div>
+<table class="table">
+  <thead><tr><th class="px-3 py-2"><%= t("common.code") %></th><th class="px-3 py-2"><%= t("common.name") %></th><th class="px-3 py-2"><%= t("common.kind") %></th><th class="px-3 py-2 text-right"><%= t("admin.limit_in_drawer") %></th><th class="px-3 py-2"><%= t("admin.active") %></th><th></th></tr></thead>
+  <tbody>
+    <% @branches.each do |s| %>
+      <tr class="border-t border-stone-100">
+        <td class="px-3 py-2 font-mono"><%= s.code %></td><td class="px-3 py-2"><%= s.name %></td><td class="px-3 py-2"><%= s.head_office? ? t("common.head_office") : (s.warehouse? ? t("admin.warehouse_short") : t("admin.store")) %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= format_money(s.cash_limit_cents) %></td><td class="px-3 py-2"><%= s.active ? t("common.yes") : t("common.no") %></td>
+        <td class="px-3 py-2 text-right"><%= link_to t("common.edit"), edit_admin_branch_path(s), class: "btn btn-secondary btn-xs" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

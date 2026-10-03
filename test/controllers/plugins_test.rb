@@ -1,79 +1,79 @@
 require "test_helper"
 
 class PluginsTest < ActionDispatch::IntegrationTest
-  setup { post entrar_path, params: { usuario: "admin", password: "secreto1" } }
+  setup { post login_path, params: { user: "admin", password: "secret12" } }
 
-  def subir(texto)
-    post plugins_path, params: { archivo: Rack::Test::UploadedFile.new(StringIO.new(texto.dup), "text/plain", original_filename: "p.lisp") }
+  def upload(text)
+    post plugins_path, params: { file: Rack::Test::UploadedFile.new(StringIO.new(text.dup), "text/plain", original_filename: "p.lisp") }
   end
 
-  test "se sube, se ve qué trae, se enciende, se apaga y se quita" do
+  test "it is uploaded, shows what it brings, is switched on, switched off and removed" do
     get plugins_path
-    assert_match "Todavía no hay plugins", response.body
-    subir(Plugin::EJEMPLO)
-    assert_match "Llega apagado", flash[:notice]
+    assert_match "No plugins installed yet", response.body
+    upload(Plugin::EXAMPLE)
+    assert_match "It arrives off", flash[:notice]
     get plugins_path
-    assert_select "#plugin_fonda", /1 función.*1 informe.*1 idioma/m
+    assert_select "#plugin_fonda", /1 function.*1 report.*1 language/m
     plugin = Plugin.last
-    post alternar_plugin_path(plugin)
-    assert plugin.reload.activo
-    post alternar_plugin_path(plugin)
-    assert_not plugin.reload.activo
+    post toggle_plugin_path(plugin)
+    assert plugin.reload.active
+    post toggle_plugin_path(plugin)
+    assert_not plugin.reload.active
     delete plugin_path(plugin)
     assert_equal 0, Plugin.count
-    subir("(define (x) 1)")
-    assert_match "No se instaló", flash[:alert]
+    upload("(define (x) 1)")
+    assert_match "Not installed", flash[:alert]
   end
 
-  test "los informes de un plugin encendido salen como botones en el REPL" do
-    Plugin.instalar!(%((plugin "fonda") (report "Cuántos productos" (count (products)))), usuario: usuarios(:admin))
+  test "the reports of a plugin that is on show up as buttons in the REPL" do
+    Plugin.install!(%((plugin "fonda") (report "How many products" (count (products)))), user: users(:admin))
     get repl_path
-    assert_select "#informes", 0, "apagado no aporta nada"
-    Plugin.last.update!(activo: true)
+    assert_select "#reports", 0, "switched off it adds nothing"
+    Plugin.last.update!(active: true)
     get repl_path
-    assert_select "#informes button", "Cuántos productos"
-    post repl_evaluar_path, params: { texto: "(count (products))" }
-    assert_select "#resultado pre", Producto.count.to_s
+    assert_select "#reports button", "How many products"
+    post repl_evaluate_path, params: { text: "(count (products))" }
+    assert_select "#result pre", Product.count.to_s
   end
 
-  test "un plugin trae un idioma: se elige en Para ti, lo que no traduce sale en español y al apagarlo se vuelve a lo de fábrica" do
-    plugin = Plugin.instalar!(Plugin::EJEMPLO, usuario: usuarios(:admin))
-    get ajustes_seccion_path("para_ti")
+  test "a plugin brings a language: it is chosen in For you, what it does not translate falls back to English and switching it off goes back to the built-in ones" do
+    plugin = Plugin.install!(Plugin::EXAMPLE, user: users(:admin))
+    get settings_section_path("for_you")
     assert_no_match "Français", response.body
-    plugin.update!(activo: true)
-    get ajustes_seccion_path("para_ti")
+    plugin.update!(active: true)
+    get settings_section_path("for_you")
     assert_match "Français", response.body
-    patch ajustes_preferencias_path, params: { usuario: { idioma: "fr" } }
-    assert_equal "fr", usuarios(:admin).reload.idioma
-    usuarios(:admin).update!(sucursal: sucursales(:tienda))
-    get caja_path
+    patch settings_preferences_path, params: { user: { language: "fr" } }
+    assert_equal "fr", users(:admin).reload.language
+    users(:admin).update!(branch: branches(:store))
+    get till_path
     assert_select "nav a", "Caisse"
     assert_select "button", "Encaisser"
-    assert_select "button", "Vaciar ticket", "lo que el plugin no traduce cae al español"
-    assert_match '"pos":', response.body, "los textos del JavaScript llegan completos"
-    plugin.update!(activo: false)
-    get caja_path
+    assert_select "button", "Clear ticket", "what the plugin does not translate falls back to English"
+    assert_match '"pos":', response.body, "the JavaScript texts arrive complete"
+    plugin.update!(active: false)
+    get till_path
     assert_response :ok
-    assert_select "html[lang=fr]", 0, "el usuario tenía francés; sin el plugin cae a un idioma de fábrica"
+    assert_select "html[lang=fr]", 0, "the user had French; without the plugin it falls back to a built-in language"
     assert_select "nav a", { text: "Caisse", count: 0 }
   end
 
-  test "una traducción con claves que no existen no se instala" do
-    texto = %((plugin "mal") (translation "fr" "Français" ("caja.no_existe" "x")))
-    assert_match "no existen estas claves de texto: caja.no_existe", assert_raises(Lisp::Error) { Plugin.leer(texto) }.message
-    html = %((plugin "mal") (translation "es" "Español" ("caja.excede_limite_html" "<script>")))
-    assert_match "llevan HTML", assert_raises(Lisp::Error) { Plugin.leer(html) }.message
+  test "a translation with keys that do not exist is not installed" do
+    text = %((plugin "bad") (translation "fr" "Français" ("till.does_not_exist" "x")))
+    assert_match "these text keys do not exist: till.does_not_exist", assert_raises(Lisp::Error) { Plugin.read(text) }.message
+    html = %((plugin "bad") (translation "es" "Español" ("till.exceeds_limit_html" "<script>")))
+    assert_match "carry HTML", assert_raises(Lisp::Error) { Plugin.read(html) }.message
   end
 
-  test "un plugin puede cambiar un texto de un idioma que ya existe" do
-    Plugin.instalar!(%((plugin "turnos") (translation "es" "Español" ("caja.cobrar" "Cobrar ya"))), usuario: usuarios(:admin)).update!(activo: true)
-    post entrar_path, params: { usuario: "cajera", password: "secreto1" }
-    get caja_path
-    assert_select "button", "Cobrar ya"
+  test "a plugin can change a text of a language that already exists" do
+    Plugin.install!(%((plugin "shifts") (translation "en" "English" ("till.checkout" "Charge now"))), user: users(:admin)).update!(active: true)
+    post login_path, params: { user: "cashier", password: "secret12" }
+    get till_path
+    assert_select "button", "Charge now"
   end
 
-  test "sin reglas.editar no se entra" do
-    post entrar_path, params: { usuario: "cajera", password: "secreto1" }
+  test "without rules.edit you cannot get in" do
+    post login_path, params: { user: "cashier", password: "secret12" }
     get plugins_path
     assert_response :forbidden
   end

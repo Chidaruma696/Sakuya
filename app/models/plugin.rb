@@ -1,19 +1,19 @@
-# Un plugin en Lisp: un archivo que el negocio instala para traer lo que Sakuya no trae. Solo
-# declara; al instalarlo se lee, nunca se ejecuta. Puede traer:
+# A Lisp plugin: a file the business installs to bring what Sakuya does not bring out of the box.
+# It only declares; installing it reads it, it never runs. It can bring:
 #
 #   (plugin "fonda" (name "Fonda") (version "1.0") (author "…") (description "…"))
-#   (define (fonda/margin sales returns) (- sales returns))   ; funciones para todas las reglas
-#   (report "Ventas de la semana" (sales (days-ago 7) (today))) ; informes para el REPL
-#   (translation "fr" "Français" ("caja.cobrar" "Encaisser"))   ; un idioma para la interfaz
+#   (define (fonda/margin sales returns) (- sales returns))   ; functions for every rule
+#   (report "Sales of the week" (sales (days-ago 7) (today))) ; reports for the REPL
+#   (translation "fr" "Français" ("till.checkout" "Encaisser")) ; a language for the interface
 #
-# Las funciones llevan el prefijo del plugin ("fonda/…"), así que no pisan las de Sakuya ni las de
-# otro plugin. Un plugin apagado no aporta nada.
+# Functions carry the plugin prefix ("fonda/…"), so they do not clash with Sakuya's or with
+# another plugin's. A switched-off plugin contributes nothing.
 class Plugin < ApplicationRecord
   self.table_name = "plugins"
-  IDENTIFICADOR = /\A[a-z][a-z0-9-]{1,30}\z/
-  IDIOMA = /\A[a-z]{2}(-[A-Z]{2})?\z/
-  DATOS = %w[name version author description].freeze
-  EJEMPLO = <<~LISP
+  IDENTIFIER = /\A[a-z][a-z0-9-]{1,30}\z/
+  LANGUAGE = /\A[a-z]{2}(-[A-Z]{2})?\z/
+  DATA = %w[name version author description].freeze
+  EXAMPLE = <<~LISP
     ; fonda.lisp: a Sakuya plugin. It only declares; nothing runs when it is installed.
     (plugin "fonda"
       (name "Fonda")
@@ -27,110 +27,110 @@ class Plugin < ApplicationRecord
     ; Saved questions for the REPL.
     (report "Sales of the week" (sum-of :total (sales (days-ago 7) (today))))
 
-    ; A language for the interface; whatever it does not translate stays in Spanish.
+    ; A language for the interface; whatever it does not translate stays in English.
     (translation "fr" "Français"
-      ("caja.cobrar" "Encaisser")
-      ("cinta.pestanas.caja" "Caisse"))
+      ("till.checkout" "Encaisser")
+      ("ribbon.tabs.till" "Caisse"))
   LISP
-  EJEMPLO.freeze
+  EXAMPLE.freeze
 
-  belongs_to :usuario
+  belongs_to :user
 
-  validates :identificador, presence: true, uniqueness: true, format: { with: IDENTIFICADOR }
-  validates :nombre, :codigo, presence: true
+  validates :identifier, presence: true, uniqueness: true, format: { with: IDENTIFIER }
+  validates :name, :code, presence: true
 
-  scope :activos, -> { where(activo: true).order(:identificador) }
+  scope :active, -> { where(active: true).order(:identifier) }
 
-  Leido = Data.define(:identificador, :datos, :funciones, :informes, :traducciones)
-  Informe = Data.define(:plugin, :titulo, :codigo)
-  Traduccion = Data.define(:idioma, :nombre, :textos)
+  Parsed = Data.define(:identifier, :data, :functions, :reports, :translations)
+  Report = Data.define(:plugin, :title, :code)
+  Translation = Data.define(:language, :name, :texts)
 
-  # Lee un archivo de plugin y revisa todo lo que trae; levanta Lisp::Error con lo que falla.
-  def self.leer(texto)
-    formas = Lisp::Lector.leer(texto.to_s)
-    cabeza = formas.first
-    unless cabeza.is_a?(Array) && cabeza.first == Lisp::Simbolo.new("plugin") && cabeza[1].is_a?(String)
-      raise Lisp::Error, I18n.t("plugins.errores.cabecera")
+  # Reads a plugin file and checks everything it brings; raises Lisp::Error with whatever fails.
+  def self.read(text)
+    forms = Lisp::Reader.read(text.to_s)
+    head = forms.first
+    unless head.is_a?(Array) && head.first == Lisp::Sym.new("plugin") && head[1].is_a?(String)
+      raise Lisp::Error, I18n.t("plugins.errors.header")
     end
-    id = cabeza[1]
-    raise Lisp::Error, I18n.t("plugins.errores.identificador", id: id) unless id.match?(IDENTIFICADOR)
-    datos = cabeza.drop(2).to_h do |par|
-      unless par.is_a?(Array) && par.size == 2 && par.first.is_a?(Lisp::Simbolo) && DATOS.include?(par.first.nombre) && par.last.is_a?(String)
-        raise Lisp::Error, I18n.t("plugins.errores.dato", dato: Lisp.a_texto(par), datos: DATOS.join(", "))
+    id = head[1]
+    raise Lisp::Error, I18n.t("plugins.errors.identifier", id: id) unless id.match?(IDENTIFIER)
+    data = head.drop(2).to_h do |pair|
+      unless pair.is_a?(Array) && pair.size == 2 && pair.first.is_a?(Lisp::Sym) && DATA.include?(pair.first.name) && pair.last.is_a?(String)
+        raise Lisp::Error, I18n.t("plugins.errors.datum", datum: Lisp.to_text(pair), data: DATA.join(", "))
       end
-      [ par.first.nombre, par.last ]
+      [ pair.first.name, pair.last ]
     end
-    funciones = []
-    informes = []
-    traducciones = []
-    formas.drop(1).each do |forma|
-      case forma.is_a?(Array) && forma.first.is_a?(Lisp::Simbolo) ? forma.first.nombre : nil
-      when "define" then funciones << revisar_define!(forma, id)
-      when "report" then informes << revisar_informe!(forma, id)
-      when "translation" then traducciones << revisar_traduccion!(forma)
-      else raise Lisp::Error, I18n.t("plugins.errores.forma", forma: Lisp.a_texto(forma).truncate(60))
+    functions = []
+    reports = []
+    translations = []
+    forms.drop(1).each do |form|
+      case form.is_a?(Array) && form.first.is_a?(Lisp::Sym) ? form.first.name : nil
+      when "define" then functions << review_define!(form, id)
+      when "report" then reports << review_report!(form, id)
+      when "translation" then translations << review_translation!(form)
+      else raise Lisp::Error, I18n.t("plugins.errors.form", form: Lisp.to_text(form).truncate(60))
       end
     end
-    Leido.new(identificador: id, datos: datos, funciones: funciones, informes: informes, traducciones: traducciones)
+    Parsed.new(identifier: id, data: data, functions: functions, reports: reports, translations: translations)
   end
 
-  # Solo (define (prefijo/nombre args…) cuerpo…) o (define prefijo/nombre valor).
-  def self.revisar_define!(forma, id)
-    destino = forma[1]
-    nombre = (destino.is_a?(Array) ? destino.first : destino)
-    unless nombre.is_a?(Lisp::Simbolo) && nombre.nombre.start_with?("#{id}/") && forma.size >= 3
-      raise Lisp::Error, I18n.t("plugins.errores.prefijo", nombre: Lisp.a_texto(nombre), id: id)
+  # Only (define (prefix/name args…) body…) or (define prefix/name value).
+  def self.review_define!(form, id)
+    destination = form[1]
+    name = (destination.is_a?(Array) ? destination.first : destination)
+    unless name.is_a?(Lisp::Sym) && name.name.start_with?("#{id}/") && form.size >= 3
+      raise Lisp::Error, I18n.t("plugins.errors.prefix", name: Lisp.to_text(name), id: id)
     end
-    forma
+    form
   end
 
-  def self.revisar_informe!(forma, id)
-    unless forma.size == 3 && forma[1].is_a?(String)
-      raise Lisp::Error, I18n.t("plugins.errores.informe")
+  def self.review_report!(form, id)
+    unless form.size == 3 && form[1].is_a?(String)
+      raise Lisp::Error, I18n.t("plugins.errors.report")
     end
-    Informe.new(plugin: id, titulo: forma[1], codigo: Lisp.a_texto(forma[2]))
+    Report.new(plugin: id, title: form[1], code: Lisp.to_text(form[2]))
   end
 
-  def self.revisar_traduccion!(forma)
-    idioma, nombre, *pares = forma.drop(1)
-    unless idioma.is_a?(String) && idioma.match?(IDIOMA) && nombre.is_a?(String)
-      raise Lisp::Error, I18n.t("plugins.errores.traduccion")
+  def self.review_translation!(form)
+    language, name, *pairs = form.drop(1)
+    unless language.is_a?(String) && language.match?(LANGUAGE) && name.is_a?(String)
+      raise Lisp::Error, I18n.t("plugins.errors.translation")
     end
-    textos = pares.to_h do |par|
-      raise Lisp::Error, I18n.t("plugins.errores.par", par: Lisp.a_texto(par).truncate(60)) unless par.is_a?(Array) && par.size == 2 && par.all?(String)
-      par
+    texts = pairs.to_h do |pair|
+      raise Lisp::Error, I18n.t("plugins.errors.pair", pair: Lisp.to_text(pair).truncate(60)) unless pair.is_a?(Array) && pair.size == 2 && pair.all?(String)
+      pair
     end
-    # Las claves *_html se pintan sin escapar: un plugin no las toca.
-    html = textos.keys.select { |clave| clave.end_with?("_html") || clave.split(".").last == "html" }
-    raise Lisp::Error, I18n.t("plugins.errores.html", claves: html.first(5).join(", ")) if html.any?
-    desconocidas = textos.keys.reject { |clave| I18n.exists?(clave, locale: :es) }
-    raise Lisp::Error, I18n.t("plugins.errores.claves", claves: desconocidas.first(5).join(", ")) if desconocidas.any?
-    Traduccion.new(idioma: idioma, nombre: nombre, textos: textos)
+    # *_html keys are rendered unescaped: a plugin does not touch them.
+    html = texts.keys.select { |key| key.end_with?("_html") || key.split(".").last == "html" }
+    raise Lisp::Error, I18n.t("plugins.errors.html", keys: html.first(5).join(", ")) if html.any?
+    unknown = texts.keys.reject { |key| I18n.exists?(key, locale: :en) }
+    raise Lisp::Error, I18n.t("plugins.errors.keys", keys: unknown.first(5).join(", ")) if unknown.any?
+    Translation.new(language: language, name: name, texts: texts)
   end
 
-  private_class_method :revisar_define!, :revisar_informe!, :revisar_traduccion!
+  private_class_method :review_define!, :review_report!, :review_translation!
 
-  # Instala (o pone al día, si ya estaba) un plugin desde su archivo. Uno nuevo llega apagado.
-  def self.instalar!(texto, usuario:)
-    leido = leer(texto)
-    plugin = find_or_initialize_by(identificador: leido.identificador)
-    plugin.update!(nombre: leido.datos["name"].presence || leido.identificador, version: leido.datos["version"], autor: leido.datos["author"],
-                   descripcion: leido.datos["description"], codigo: texto, usuario: usuario)
+  # Installs (or updates, if it was already there) a plugin from its file. A new one arrives switched off.
+  def self.install!(text, user:)
+    parsed = read(text)
+    plugin = find_or_initialize_by(identifier: parsed.identifier)
+    plugin.update!(name: parsed.data["name"].presence || parsed.identifier, version: parsed.data["version"], author: parsed.data["author"],
+                   description: parsed.data["description"], code: text, user: user)
     plugin
   end
 
-  def leido = @leido ||= self.class.leer(codigo)
+  def parsed = @parsed ||= self.class.read(code)
 
-  # Las funciones de los plugins encendidos, ya leídas, para evaluarlas antes de cada programa.
-  # Se cachean por la hora del último cambio a cualquier plugin.
-  def self.preludio
-    clave = pick(Arel.sql("COUNT(*)"), Arel.sql("MAX(updated_at)"))
-    @preludio = nil if @clave_preludio != clave
-    @clave_preludio = clave
-    @preludio ||= activos.flat_map { |p| p.leido.funciones }.freeze
+  # The active plugins' functions, already read, to evaluate before each program. Cached by the
+  # time of the last change to any plugin.
+  def self.prelude
+    key = pick(Arel.sql("COUNT(*)"), Arel.sql("MAX(updated_at)"))
+    @prelude = nil if @prelude_key != key
+    @prelude_key = key
+    @prelude ||= active.flat_map { |p| p.parsed.functions }.freeze
   end
 
-  def self.informes = activos.flat_map { |p| p.leido.informes }
+  def self.reports = active.flat_map { |p| p.parsed.reports }
 
-  def to_s = nombre
+  def to_s = name
 end

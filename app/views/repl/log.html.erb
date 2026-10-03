@@ -1,0 +1,25 @@
+<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+<%= render "settings/menu", current: "repl" %>
+<section class="min-w-0">
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h2 class="text-xl font-bold"><%= t("repl.log") %></h2>
+  <%= link_to t("repl.title"), repl_path, class: "btn btn-ghost btn-sm" %>
+</div>
+<p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("repl.log_help") %></p>
+<table class="table">
+  <thead><tr><th><%= t("common.date") %></th><th><%= t("common.who") %></th><th><%= t("common.branch") %></th><th><%= t("repl.question") %></th><th></th></tr></thead>
+  <tbody>
+    <% @queries.each do |c| %>
+      <tr>
+        <td class="px-3 py-1.5 whitespace-nowrap"><%= l c.created_at, format: :short %></td>
+        <td class="px-3 py-1.5"><%= c.user %></td>
+        <td class="px-3 py-1.5"><%= c.branch %></td>
+        <td class="px-3 py-1.5"><code class="code text-xs"><%= c.text.truncate(200) %></code></td>
+        <td class="px-3 py-1.5 text-xs <%= c.ok ? 'text-stone-500' : 'text-red-700' %>"><%= t(c.ok ? "repl.ran" : "repl.failure") %></td>
+      </tr>
+    <% end %>
+    <% if @queries.empty? %><tr><td colspan="5" class="px-3 py-6 text-center text-stone-500"><%= t("repl.no_queries") %></td></tr><% end %>
+  </tbody>
+</table>
+</section>
+</div>

@@ -1,0 +1,17 @@
+<%= form_with model: [ :admin, @product ], id: "form_product", class: "form" do |f| %>
+  <div class="fields-4">
+    <%= render "admin/field", f: f, field: :key, label: t("common.key"), kind: :text_field %>
+    <%= render "admin/field", f: f, field: :plu, label: t("admin.plu_automatic"), kind: :number_field %>
+    <div class="md:col-span-2"><%= render "admin/field", f: f, field: :name, label: t("common.name"), kind: :text_field %></div>
+    <%= render "admin/field", f: f, field: :line, label: t("admin.line"), kind: :text_field %>
+    <div>
+      <%= f.label :unit, t("common.unit"), class: "field-label" %>
+      <%= f.select :unit, Product::UNITS.map { |u| [ Product.unit_name(u), u ] }, {}, class: "input" %>
+    </div>
+    <%= render "admin/field", f: f, field: :price, label: t("common.price"), kind: :number_field, options: { step: "0.01", min: 0 } %>
+  </div>
+  <div class="flex flex-wrap items-center gap-4">
+    <%= f.submit @product.new_record? ? t("common.create") : t("common.save"), class: "btn btn-primary btn-lg" %>
+    <label class="flex items-center gap-2 text-sm"><%= f.check_box :active %> <%= t("common.active") %></label>
+  </div>
+<% end %>

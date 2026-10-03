@@ -1,8 +1,0 @@
-<%= form_with url: url_for, method: :get, class: "mb-4 flex flex-wrap items-end gap-3 text-sm" do |f| %>
-  <div><%= f.label :desde, t("comun.desde"), class: "block" %><%= f.date_field :desde, value: @desde, class: "btn btn-secondary btn-xs" %></div>
-  <div><%= f.label :hasta, t("comun.hasta"), class: "block" %><%= f.date_field :hasta, value: @hasta, class: "btn btn-secondary btn-xs" %></div>
-  <% if sucursal_actual.matriz? %>
-    <div><%= f.label :sucursal_id, t("comun.sucursal"), class: "block" %><%= f.select :sucursal_id, [ [ t("comun.todas"), "todas" ] ] + Sucursal.activas.order(:nombre).pluck(:nombre, :id), { selected: (@todas ? "todas" : @sucursal.id) }, class: "btn btn-secondary btn-xs" %></div>
-  <% end %>
-  <%= f.submit t("comun.ver"), class: "btn btn-primary btn-sm" %>
-<% end %>

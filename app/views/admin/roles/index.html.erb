@@ -1,16 +1,16 @@
 <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
   <h1 class="text-2xl font-bold"><%= t("admin.roles") %></h1>
-  <%= link_to t("admin.nuevo_rol"), new_admin_rol_path, class: "btn btn-primary btn-sm" %>
+  <%= link_to t("admin.new_role"), new_admin_role_path, class: "btn btn-primary btn-sm" %>
 </div>
-<table class="tabla">
-  <thead><tr><th class="px-3 py-2"><%= t("admin.rol") %></th><th class="px-3 py-2"><%= t("admin.permisos") %></th><th class="px-3 py-2"><%= t("admin.usuarios") %></th><th></th></tr></thead>
+<table class="table">
+  <thead><tr><th class="px-3 py-2"><%= t("admin.role") %></th><th class="px-3 py-2"><%= t("admin.permissions") %></th><th class="px-3 py-2"><%= t("admin.users") %></th><th></th></tr></thead>
   <tbody>
     <% @roles.each do |r| %>
       <tr class="border-t border-stone-100 align-top">
-        <td class="px-3 py-2 font-semibold"><%= r.nombre %></td>
-        <td class="px-3 py-2 font-mono text-xs"><%= r.permisos.join(", ") %></td>
-        <td class="px-3 py-2"><%= r.usuarios.size %></td>
-        <td class="px-3 py-2 text-right"><%= link_to t("comun.editar"), edit_admin_rol_path(r), class: "btn btn-secondary btn-xs" %></td>
+        <td class="px-3 py-2 font-semibold"><%= r.name %></td>
+        <td class="px-3 py-2 font-mono text-xs"><%= r.permissions.join(", ") %></td>
+        <td class="px-3 py-2"><%= r.users.size %></td>
+        <td class="px-3 py-2 text-right"><%= link_to t("common.edit"), edit_admin_role_path(r), class: "btn btn-secondary btn-xs" %></td>
       </tr>
     <% end %>
   </tbody>

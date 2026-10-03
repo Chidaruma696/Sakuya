@@ -11,14 +11,14 @@ module Sakuya
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1
 
-    # Una sola fuente de hora. TODO: la zona sale de fábrica en la Ciudad de México; que la elija
-    # el negocio al arrancar. El sistema arranca en inglés; cada usuario lo pone en español o
-    # alemán. Las claves nacen en español, así que lo que falte en un idioma cae al español.
+    # A single source of time. TODO: the time zone defaults to Mexico City; let the business choose
+    # it at setup. The system starts in English; each user switches it to Spanish or German. Whatever
+    # is missing in a language falls back to English, the default.
     config.time_zone = "America/Mexico_City"
     config.active_record.default_timezone = :utc
     config.i18n.default_locale = :en
     config.i18n.available_locales = [ :es, :en, :de ]
-    config.i18n.fallbacks = [ :es ]
+    config.i18n.fallbacks = [ :en ]
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.

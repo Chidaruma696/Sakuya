@@ -1,0 +1,37 @@
+<h1 class="mb-1 text-2xl font-bold"><%= t("purchases.receive_goods") %></h1>
+<p class="mb-4 text-sm text-stone-600"><%= t("purchases.receive_help", branch: current_branch) %></p>
+<%= form_with model: @receipt, url: receipts_path, class: "form", data: { controller: "rows", rows_url_value: search_products_path } do |f| %>
+  <%= f.hidden_field :key, value: @key %>
+  <div class="fields">
+    <div>
+      <%= f.label :supplier_id, t("purchases.supplier"), class: "field-label" %>
+      <%= f.collection_select :supplier_id, @suppliers, :id, :name, { include_blank: "—" }, required: true, class: "input" %>
+      <% if @suppliers.empty? %><p class="mt-1 text-xs text-amber-700"><%= link_to t("purchases.first_supplier"), new_supplier_path, class: "link" %></p><% end %>
+    </div>
+    <div><%= f.label :delivery_note, t("purchases.delivery_note"), class: "field-label" %><%= f.text_field :delivery_note, class: "input font-mono", placeholder: t("purchases.delivery_note_help") %></div>
+    <div><%= f.label :date, t("common.date"), class: "field-label" %><%= f.date_field :date, class: "input" %></div>
+    <div class="md:col-span-2 xl:col-span-3"><%= f.label :notes, t("common.notes"), class: "field-label" %><%= f.text_field :notes, class: "input" %></div>
+  </div>
+  <div class="rounded-lg border border-stone-200 p-4">
+    <div class="mb-3 flex flex-wrap items-center gap-3">
+      <label class="text-sm font-medium" for="scanner"><%= icon("upc-scan", t("purchases.scan")) %></label>
+      <input id="scanner" type="text" autocomplete="off" autofocus data-rows-target="scanner" data-action="keydown->rows#scan" placeholder="<%= t("purchases.scan_help") %>" class="input mt-0 max-w-md font-mono">
+      <span data-rows-target="notice" class="text-sm text-amber-700"></span>
+    </div>
+    <table class="w-full text-sm">
+      <thead><tr class="text-left text-stone-500"><th class="py-1"><%= t("common.product") %></th><th class="w-40 py-1"><%= t("common.quantity") %></th><th class="w-32 py-1"><%= t("purchases.boxes") %></th><th class="w-10"></th></tr></thead>
+      <tbody data-rows-target="body">
+        <%= f.fields_for :lines do |l| %>
+          <tr data-rows-target="row">
+            <td class="py-1 pr-2"><%= l.collection_select :product_id, @products, :id, ->(p) { "#{p.name} (#{p.short_unit})" }, { include_blank: "—" }, class: "input mt-0" %></td>
+            <td class="py-1 pr-2"><%= l.number_field :quantity, step: "0.001", min: "0.001", data: { field: "quantity" }, class: "input mt-0 font-mono" %></td>
+            <td class="py-1 pr-2"><%= l.number_field :boxes, min: 0, placeholder: "0", class: "input mt-0 font-mono" %></td>
+            <td class="py-1"><button type="button" data-action="rows#remove" class="btn btn-ghost-danger btn-sm"><i class="bi bi-x-lg"></i></button></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <button type="button" data-action="rows#new" class="btn btn-secondary mt-3">+ <%= t("common.row") %></button>
+  </div>
+  <%= f.submit t("purchases.register_inflow"), class: "btn btn-primary btn-lg" %>
+<% end %>

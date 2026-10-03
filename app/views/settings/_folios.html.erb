@@ -1,0 +1,31 @@
+<%= form_with url: settings_system_path, method: :patch, class: "form" do |f| %>
+  <%= hidden_field_tag :back, "folios" %>
+  <% mode = @settings["folios.mode"] %>
+  <div class="grid gap-3 md:grid-cols-2">
+    <% Folio::MODES.each do |m| %>
+      <label class="option items-start text-base">
+        <%= f.radio_button "setting[folios.mode]", m, checked: mode == m, class: "mt-1" %>
+        <span class="flex-1"><strong><%= t("settings.folios.modes.#{m}") %></strong><br><span class="text-sm font-normal text-stone-600"><%= t("settings.folios.modes.#{m}_help") %></span></span>
+        <i class="bi bi-check-circle-fill option-check text-2xl"></i>
+      </label>
+    <% end %>
+  </div>
+  <label class="flex items-center gap-2 text-sm"><%= f.check_box "setting[folios.branch]", { checked: @settings["folios.branch"] == "1" }, "1", "0" %> <%= t("settings.folios.branch") %> <span class="text-xs text-stone-500">(<%= Folio.compose(@settings["folios.sale"], 42, code: current_branch.code) %>)</span></label>
+  <div class="fields-4">
+    <label class="block text-sm"><%= t("settings.folios.single") %>
+      <%= f.text_field "setting[folios.single]", value: @settings["folios.single"], maxlength: 4, class: "input font-mono uppercase", placeholder: "F" %>
+      <span class="mt-1 block text-xs text-stone-500"><%= t("settings.folios.example", folio: Folio.compose(@settings["folios.single"], 42)) %></span>
+    </label>
+  </div>
+  <h3 class="font-semibold"><%= t("settings.folios.per_document") %></h3>
+  <p class="text-xs text-stone-500"><%= t("settings.folios.help") %></p>
+  <div class="fields-4">
+    <% Folio::DOCUMENTS.each_key do |doc| %>
+      <label class="block text-sm"><%= t("settings.folios.documents.#{doc}") %>
+        <%= f.text_field "setting[folios.#{doc}]", value: @settings["folios.#{doc}"], maxlength: 4, class: "input font-mono uppercase" %>
+        <span class="mt-1 block text-xs text-stone-500"><%= Folio.compose(@settings["folios.#{doc}"], 42) %></span>
+      </label>
+    <% end %>
+  </div>
+  <%= f.submit t("settings.save"), class: "btn btn-primary btn-lg" %>
+<% end %>

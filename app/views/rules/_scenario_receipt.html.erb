@@ -1,0 +1,5 @@
+<div><label for="arriving" class="field-label"><%= t("#{texts}.scenario.arriving") %></label>
+  <%= text_field_tag :arriving, scenario[:arriving], id: "arriving", class: "w-64 font-mono uppercase" %></div>
+<div><label for="delivery_note" class="field-label"><%= t("#{texts}.scenario.delivery_note") %></label>
+  <%= text_field_tag :delivery_note, scenario[:delivery_note], id: "delivery_note", class: "w-32 font-mono" %></div>
+<label class="flex items-center gap-2 pb-2"><%= check_box_tag :invoiced, "1", scenario[:invoiced], id: "invoiced" %> <%= t("#{texts}.scenario.invoiced") %></label>
