@@ -52,6 +52,15 @@ module EscPos
       self
     end
 
+    # El logo del ticket (data URL de Ajustes › Ticket) como imagen raster en blanco y negro, a 30 mm
+    # como en pantalla. Si la imagen no se puede leer, el ticket sale sin logo.
+    def imagen(data_url)
+      raster = EscPos.raster(data_url) or return self
+      ancho_bytes, alto, puntos = raster
+      @bytes << GS << "v0" << 0.chr << [ ancho_bytes, alto ].pack("v2") << puntos
+      self
+    end
+
     # Avanza el papel y corta (parcial, para que el ticket no se caiga).
     def cortar
       @bytes << ESC << "d" << 3.chr << GS << "V" << 66.chr << 0.chr
@@ -71,6 +80,37 @@ module EscPos
       s.to_s.gsub("€", "EUR").gsub(/[−–—]/, "-").encode("CP850", undef: :replace, invalid: :replace, replace: "?").b
     end
   end
+
+  LOGO_PUNTOS = 240 # 30 mm a 8 puntos por mm
+
+  # [bytes por renglón, alto, puntos] de un data URL, o nil. Se calcula una vez por logo.
+  def self.raster(data_url)
+    return if data_url.blank?
+    @rasters ||= {}
+    clave = Digest::SHA256.hexdigest(data_url)
+    return @rasters[clave] if @rasters.key?(clave)
+    @rasters.clear if @rasters.size > 8
+    @rasters[clave] = rasterizar(Base64.decode64(data_url.split(",", 2).last.to_s))
+  end
+
+  def self.rasterizar(binario)
+    img = Vips::Image.new_from_buffer(binario, "")
+    img = img.flatten(background: 255) if img.has_alpha?
+    img = img.colourspace(:b_w)
+    img = img.resize(LOGO_PUNTOS.to_f / img.width) if img.width > LOGO_PUNTOS
+    ancho = img.width
+    ancho_bytes = (ancho + 7) / 8
+    pixeles = img.cast(:uchar).write_to_memory.bytes
+    puntos = img.height.times.flat_map do |y|
+      ancho_bytes.times.map do |b|
+        8.times.sum { |i| x = b * 8 + i; x < ancho && pixeles[y * ancho + x] < 128 ? (0x80 >> i) : 0 }
+      end
+    end
+    [ ancho_bytes, img.height, puntos.pack("C*") ]
+  rescue Vips::Error
+    nil
+  end
+  private_class_method :rasterizar
 
   # El resumen del día de un corte, como la hoja de la pantalla: lo que pasó por la caja, el conteo y
   # lo más vendido.
@@ -108,7 +148,8 @@ module EscPos
   def self.ticket(venta)
     a = Ajuste.todos
     d = Documento.new(columnas: Ajuste.entero("ticket.ancho") == 58 ? 32 : 48)
-    d.centro.negrita.texto(a["negocio.nombre"].presence || venta.sucursal&.nombre).negrita(false)
+    d.centro.imagen(a["ticket.logo"])
+    d.negrita.texto(a["negocio.nombre"].presence || venta.sucursal&.nombre).negrita(false)
     [ a["ticket.lema"], (venta.sucursal&.nombre if a["negocio.nombre"].present? && venta.sucursal&.nombre != a["negocio.nombre"]),
       a["negocio.direccion"], a["negocio.telefono"], a["ticket.rfc"] ].compact_blank.each { |l| d.texto(l) }
     d.izquierda.linea

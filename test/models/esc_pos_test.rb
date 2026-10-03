@@ -36,4 +36,13 @@ class EscPosTest < ActiveSupport::TestCase
     d = EscPos::Documento.new(columnas: 32).texto("10 € 漢 −5")
     assert_match "10 EUR ? -5", texto(d.to_s)
   end
+
+  test "el logo sale como imagen raster en blanco y negro, y uno roto no estorba" do
+    # 16 × 2 puntos: la mitad izquierda negra, la derecha blanca.
+    img = Vips::Image.black(8, 2).join(Vips::Image.black(8, 2) + 255, :horizontal).cast(:uchar)
+    Ajuste.guardar!("ticket.logo" => "data:image/png;base64,#{Base64.strict_encode64(img.write_to_buffer(".png"))}")
+    b = EscPos.ticket(@venta)
+    assert_includes b, "\x1Dv0\x00\x02\x00\x02\x00\xFF\x00\xFF\x00".b, "2 bytes por renglón, 2 renglones, 8 puntos negros y 8 blancos"
+    assert_nil EscPos.raster("data:image/png;base64,#{Base64.strict_encode64("no es imagen")}")
+  end
 end

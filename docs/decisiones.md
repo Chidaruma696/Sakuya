@@ -16,7 +16,7 @@ Además del precio de cada renglón, la venta completa pasa por una regla justo 
 
 ## Tickets en ESC/POS (3 oct 2026)
 
-El ticket sale también en bytes ESC/POS, el idioma de las térmicas, sin driver de por medio: página de códigos PC850 (acentos, ñ, ¿ y ¡; el € sale como EUR), el total al doble, el EAN-13 del ticket y el corte de papel, a 32 o 48 columnas según el papel. Cada sucursal elige en Admin › Sucursales cómo imprime: con el navegador (como antes), en una térmica de red (el servidor abre su puerto, casi siempre el 9100, y escribe) o en una por cable desde Chrome con Web Serial (la primera vez se elige el puerto; luego el navegador lo recuerda). Siempre se puede bajar el `.bin`. La de red se prueba contra un puerto de mentira; la de cable y una impresora de verdad, sin probar todavía. Pendiente: el logo en mapa de bits y el resumen del corte en ESC/POS.
+El ticket sale también en bytes ESC/POS, el idioma de las térmicas, sin driver de por medio: página de códigos PC850 (acentos, ñ, ¿ y ¡; el € sale como EUR), el total al doble, el EAN-13 del ticket y el corte de papel, a 32 o 48 columnas según el papel. Cada sucursal elige en Admin › Sucursales cómo imprime: con el navegador (como antes), en una térmica de red (el servidor abre su puerto, casi siempre el 9100, y escribe) o en una por cable desde Chrome con Web Serial (la primera vez se elige el puerto; luego el navegador lo recuerda). Siempre se puede bajar el `.bin`. La de red se prueba contra un puerto de mentira; la de cable y una impresora de verdad, sin probar todavía. El logo sale en mapa de bits a 30 mm y el resumen del corte también va a la térmica.
 
 ## PostgreSQL cuando hacen falta muchas sucursales (3 oct 2026)
 
