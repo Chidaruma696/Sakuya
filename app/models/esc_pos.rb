@@ -72,6 +72,38 @@ module EscPos
     end
   end
 
+  # El resumen del día de un corte, como la hoja de la pantalla: lo que pasó por la caja, el conteo y
+  # lo más vendido.
+  def self.resumen(c)
+    d = Documento.new(columnas: Ajuste.entero("ticket.ancho") == 58 ? 32 : 48)
+    pesos = ->(centavos) { Dinero.pesos(centavos) }
+    ventas = c.ventas_cobradas
+    d.centro.negrita.texto(I18n.t("caja.resumen").upcase).negrita(false)
+    d.texto("#{c.sucursal} · #{I18n.t("caja.corte")} #{c.folio}")
+    d.texto("#{I18n.l(c.abierto_en, format: :short)} -> #{c.cerrado_en ? I18n.l(c.cerrado_en, format: :short) : I18n.t("estados.abierto")}")
+    d.texto("#{I18n.t("caja.cajero")}: #{c.usuario}")
+    d.izquierda.linea
+    d.renglon("#{I18n.t("caja.ventas")} (#{ventas.count})", pesos.(ventas.sum(:total_centavos)))
+    Pago.where(venta: ventas).group(:forma).sum(:monto_centavos).each { |forma, monto| d.renglon("  #{I18n.t("formas_pago.#{forma}")}", pesos.(monto)) }
+    d.renglon(I18n.t("caja.devoluciones"), "-#{pesos.(c.devoluciones_centavos)}") if c.devoluciones_centavos.positive?
+    d.renglon(I18n.t("caja.abonos"), pesos.(c.abonos.sum(:monto_centavos))) if c.abonos.any?
+    d.renglon(I18n.t("caja.retiros"), "-#{pesos.(c.retiros_centavos)}") if c.retiros_centavos.positive?
+    d.linea
+    d.renglon(I18n.t("caja.fondo"), pesos.(c.fondo_centavos))
+    d.renglon(I18n.t("caja.esperado"), pesos.(c.esperado_centavos || c.efectivo_esperado_centavos))
+    if c.contado_centavos
+      d.renglon(I18n.t("caja.contado"), pesos.(c.contado_centavos))
+      d.negrita.renglon(I18n.t("caja.diferencia"), pesos.(c.diferencia_centavos)).negrita(false)
+    end
+    top = VentaLinea.where(venta: ventas).joins(:producto).group("productos.nombre").order(Arel.sql("SUM(importe_centavos) DESC")).limit(10).sum(:importe_centavos)
+    if top.any?
+      d.linea(".")
+      d.negrita.texto(I18n.t("inicio.lo_mas_vendido")).negrita(false)
+      top.each { |nombre, importe| d.renglon(nombre, pesos.(importe)) }
+    end
+    d.cortar.to_s
+  end
+
   # El ticket de una venta, con los mismos datos y ajustes que el de la pantalla.
   def self.ticket(venta)
     a = Ajuste.todos

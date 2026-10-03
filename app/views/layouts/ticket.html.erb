@@ -50,23 +50,23 @@
     <%= yield %>
     <div class="acciones" <%= "hidden" if @previa %>>
       <button onclick="window.print()"><%= t("comun.imprimir") %></button>
+      <% if @termica && @termica[:modo] != "navegador" %><button type="button" id="termica"><%= t("caja.imprimir_termica") %></button><% end %>
+      <% if @termica %><a href="<%= @termica[:escpos] %>?bajar=1" title="<%= t("caja.escpos_ayuda") %>"><%= t("caja.bajar_escpos") %></a><% end %>
       <% if @venta&.persisted? %>
-        <% if @venta.sucursal.impresora != "navegador" %><button type="button" id="termica"><%= t("caja.imprimir_termica") %></button><% end %>
-        <a href="<%= caja_escpos_path(@venta, bajar: 1) %>" title="<%= t("caja.escpos_ayuda") %>"><%= t("caja.bajar_escpos") %></a>
         <a href="<%= caja_path %>"><%= t("caja.nueva_venta") %></a>
       <% end %>
     </div>
-    <% if @venta&.persisted? && @venta.sucursal.impresora != "navegador" %>
+    <% if @termica && @termica[:modo] != "navegador" %>
       <p id="estado_impresion" class="acciones" style="font: 14px system-ui, sans-serif;"></p>
       <%# La térmica: por red la manda el servidor; por cable, el navegador con Web Serial. La primera
           vez por cable hay que elegir el puerto con un clic; luego el navegador lo recuerda. %>
       <script>
         (() => {
-          const modo = <%= raw @venta.sucursal.impresora.to_json %>
+          const modo = <%= raw @termica[:modo].to_json %>
           const estado = document.getElementById("estado_impresion")
           const textos = <%= raw({ impreso: t("caja.impreso"), sin_serial: t("caja.sin_serial"), elige: t("caja.elige_impresora") }.to_json) %>
           const porRed = async () => {
-            const r = await fetch(<%= raw caja_imprimir_path(@venta).to_json %>, { method: "POST", headers: { Accept: "application/json", "X-CSRF-Token": <%= raw form_authenticity_token.to_json %> } })
+            const r = await fetch(<%= raw @termica[:imprimir].to_json %>, { method: "POST", headers: { Accept: "application/json", "X-CSRF-Token": <%= raw form_authenticity_token.to_json %> } })
             const datos = await r.json()
             estado.textContent = datos.aviso || datos.error
           }
@@ -77,7 +77,7 @@
               if (!elegir) { estado.textContent = textos.elige; return }
               puerto = await navigator.serial.requestPort()
             }
-            const bytes = new Uint8Array(await (await fetch(<%= raw caja_escpos_path(@venta).to_json %>)).arrayBuffer())
+            const bytes = new Uint8Array(await (await fetch(<%= raw @termica[:escpos].to_json %>)).arrayBuffer())
             await puerto.open({ baudRate: 9600 })
             const escritor = puerto.writable.getWriter()
             await escritor.write(bytes)

@@ -48,6 +48,7 @@ class CajaController < ApplicationController
   def ticket
     autorizar!("caja.vender")
     @venta = Venta.where(sucursal: sucursal_actual).includes(:pagos, :usuario, lineas: :producto).find(params[:id])
+    @termica = { modo: sucursal_actual.impresora, escpos: caja_escpos_path(@venta), imprimir: caja_imprimir_path(@venta) }
     render layout: "ticket"
   end
 
@@ -61,11 +62,17 @@ class CajaController < ApplicationController
   # Imprime el ticket en la térmica de red de la sucursal (JSON: ok o el error).
   def imprimir
     autorizar!("caja.vender")
-    venta = Venta.where(sucursal: sucursal_actual).find(params[:id])
-    Impresora.enviar!(sucursal_actual.impresora_red, EscPos.ticket(venta))
-    render json: { ok: true, aviso: t("caja.impreso") }
-  rescue Impresora::Error => e
-    render json: { error: e.message }, status: :unprocessable_entity
+    imprimir_en_red(EscPos.ticket(Venta.where(sucursal: sucursal_actual).find(params[:id])))
+  end
+
+  # El resumen del corte en ESC/POS, y en la térmica de red.
+  def resumen_escpos
+    corte = corte_para_resumen
+    send_data EscPos.resumen(corte), filename: "#{corte.folio}.bin", type: "application/octet-stream", disposition: params[:bajar] ? "attachment" : "inline"
+  end
+
+  def resumen_imprimir
+    imprimir_en_red(EscPos.resumen(corte_para_resumen))
   end
 
   # ---- corte
@@ -115,6 +122,7 @@ class CajaController < ApplicationController
   def resumen
     raise SinPermiso, "caja.abrir" unless puede?("caja.abrir") || puede?("reportes.ver")
     @c = Corte.where(sucursal: sucursal_actual).includes(:usuario, :cerrado_por, retiros: :usuario).find(params[:id])
+    @termica = { modo: sucursal_actual.impresora, escpos: caja_resumen_escpos_path(@c), imprimir: caja_resumen_imprimir_path(@c) }
     ventas = @c.ventas_cobradas
     @tickets = ventas.count
     @total = ventas.sum(:total_centavos)
@@ -168,6 +176,18 @@ class CajaController < ApplicationController
   end
 
   private
+
+  def corte_para_resumen
+    raise SinPermiso, "caja.abrir" unless puede?("caja.abrir") || puede?("reportes.ver")
+    Corte.where(sucursal: sucursal_actual).find(params[:id])
+  end
+
+  def imprimir_en_red(bytes)
+    Impresora.enviar!(sucursal_actual.impresora_red, bytes)
+    render json: { ok: true, aviso: t("caja.impreso") }
+  rescue Impresora::Error => e
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
 
   # Lo que la pantalla de caja necesita de un producto para armar su renglón; nil si no tiene precio aquí.
   def datos_pos(p)

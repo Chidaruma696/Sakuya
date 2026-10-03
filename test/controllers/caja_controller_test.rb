@@ -223,6 +223,25 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     assert_match "no contesta", response.parsed_body["error"]
   end
 
+  test "el resumen del corte también sale en ESC/POS y en la térmica de red" do
+    corte = cortes(:tienda_abierto)
+    Caja.cobrar!(sucursal: @tienda, usuario: usuarios(:cajera), clave: "r", lineas: [ { producto_id: productos(:catsup).id, cantidad: 1 } ],
+                 pagos: [ { forma: "efectivo", monto_centavos: 5_000 } ])
+    corte.cerrar!(contado_centavos: 54_200, usuario: usuarios(:cajera))
+    get caja_resumen_path(corte)
+    assert_select "a[href=?]", "#{caja_resumen_escpos_path(corte)}?bajar=1"
+    get caja_resumen_escpos_path(corte)
+    texto = response.body.b.force_encoding("CP850").encode("UTF-8")
+    assert_match(/Ventas \(1\) +\$42\.00/, texto)
+    assert_match(/Diferencia +\$0\.00/, texto)
+    assert_match "Cátsup 1 kg", texto
+    @tienda.update!(impresora: "red", impresora_red: "127.0.0.1:1")
+    get caja_resumen_path(corte)
+    assert_select "#termica"
+    post caja_resumen_imprimir_path(corte), headers: { "Accept" => "application/json" }
+    assert_match "no contesta", response.parsed_body["error"]
+  end
+
   test "devolución solo con ticket" do
     venta = Caja.cobrar!(sucursal: @tienda, usuario: usuarios(:cajera), clave: "v1", lineas: [ @pesada ], pagos: [ { forma: "efectivo", monto_centavos: 30_000 } ])
     get caja_devolucion_path(codigo: "0000000000000")
