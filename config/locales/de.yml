@@ -90,6 +90,7 @@ de:
       regla_corte: Kassenabschluss in Lisp
       regla_precio: Preis in Lisp
       regla_venta: Verkäufe in Lisp
+      regla_credito: Kredit in Lisp
       regla_retiro: Entnahmen in Lisp
       regla_movimiento: Bestand in Lisp
       regla_recepcion: Wareneingänge in Lisp
@@ -295,6 +296,8 @@ de:
       precio_frenado: '%{cobro}: %{motivo}. So kann nicht kassiert werden: regulären Preis lassen oder jemanden mit Berechtigung für Preissenkungen kassieren lassen. Es wurde gemeldet.'
       retiro_frenado: '%{motivo}. So kann nicht entnommen werden: jemand mit Berechtigung für Entnahmen muss es tun. Es wurde gemeldet.'
       venta_frenada: '%{motivo}. So kann nicht kassiert werden: jemand mit Berechtigung muss kassieren. Es wurde gemeldet.'
+      credito_frenado: '%{motivo}. So gibt es keinen Kredit: jemand mit Berechtigung muss es freigeben, oder anders bezahlen. Es wurde gemeldet.'
+      a_cuenta_sin_cliente: für einen Verkauf auf Rechnung muss der Kunde gewählt werden
       falta_dinero: 'Geld fehlt: das Ticket ist %{total} und gezahlt werden %{pago}'
       no_efectivo_excede: Überweisung oder Einzahlung dürfen die Summe nicht übersteigen
       sin_ticket_devolucion: 'Ohne Beleg keine Rückgabe: „%{codigo}“ nicht gefunden'
@@ -466,6 +469,7 @@ de:
     compras.facturar: Lieferantenrechnungen erfassen und stornieren
     clientes.ver: Kunden ansehen
     clientes.editar: Kunden anlegen und bearbeiten
+    clientes.forzar_credito: Auf Rechnung verkaufen, auch wenn die Kreditregel stoppt (geht zur Prüfung)
     compras.forzar_recepcion: Ware annehmen, die die Eingangsregel stoppt (geht zur Prüfung)
     compras.pagar: Lieferanten aus der Kasse bezahlen
     compras.exceder: Eine Rechnung mit mehr als erhalten erfassen (mit Grund, geht zur Prüfung)
@@ -517,6 +521,9 @@ de:
     cobro: '%{producto} zu %{precio} (regulär %{regular})'
     retiro_frenado: 'Entnahme von %{monto} gestoppt (%{motivo}): %{regla}'
     venta_frenada: 'Verkauf von %{total} gestoppt: %{motivo}'
+    cliente: Kunde
+    sin_cliente: — ohne Kunde —
+    credito_frenado: 'Auf Rechnung für %{cliente}, %{monto}, gestoppt: %{motivo}'
     motivo_diferencia: Grund der Differenz
     regla_propia_aviso: 'Dieses Geschäft hat eine eigene Abschlussregel: wenn die Differenz einen Grund braucht, hier eintragen.'
     cortes_cerrados: Geschlossene Abschnitte
@@ -570,6 +577,7 @@ de:
     efectivo: Bar
     transferencia: Überweisung
     deposito: Einzahlung
+    credito: Auf Rechnung
   conteos:
     conteos: Zählungen
     conteo: Zählung
@@ -857,6 +865,9 @@ de:
       recepcion: Wareneingang
       factura_proveedor: Lieferantenrechnung
   clientes:
+    cuenta:
+      cargo_venta: Verkauf %{folio}
+      devolucion: Rückgabe aus Verkauf %{folio}
     titulo: Kunden
     nuevo: Neuer Kunde
     editar: Kunde bearbeiten
@@ -864,6 +875,7 @@ de:
     telefono: Telefon
     rfc: Steuernummer
     limite_credito: Kreditlimit
+    debe: Schuldet
     limite_ayuda: Die Kreditregel liest es als (limit). Standardmäßig bekommt niemand Kredit; die Regel entscheidet, ob es genutzt wird.
     inactivo: inaktiv
     sin_clientes: Noch keine Kunden.
@@ -1172,6 +1184,38 @@ de:
     to_review: wird entnommen und geprüft
     reject: wird nicht entnommen und der Versuch gemeldet
     nucleo: Wer entnehmen darf, kann es immer; für diese Person heißt Stoppen Prüfung.
+  regla_credito:
+    titulo: Kredit in Lisp
+    ayuda: Wenn ein Verkauf auf Rechnung eines Kunden geht, prüft diese Regel sein Konto (Saldo, Limit, Rückstände, letzte Zahlung) und entscheidet, ob Kredit gegeben wird, ob es zur Prüfung geht oder ob gestoppt wird. Standardmäßig bekommt niemand Kredit. Testen speichert nichts.
+    fallo: 'Die Kreditregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    motivos:
+      no_credit: dieses Geschäft verkauft nicht auf Rechnung
+      over_limit: 'mit diesem Verkauf wird das Limit überschritten (Schuld %{saldo}, Limit %{limite})'
+    caso:
+      cliente: Kunde
+      inventado: — ein erfundener —
+      monto: Auf Rechnung
+      saldo: Schuld
+      limite: Limit
+      cuenta: 'Schuld %{saldo} · Limit %{limite}'
+      autorizado: Kassiert von jemandem mit Berechtigung, Kredit zu erzwingen
+    veredictos:
+      allow: Kredit gegeben
+      review: Kredit gegeben und geprüft
+      reject: Wird gestoppt
+    funciones:
+      amount: was auf Rechnung geht
+      total: die Verkaufssumme
+      balance: was er vor diesem Verkauf schuldet
+      limit: sein Kreditlimit
+      overdue: '(overdue 30): was er von vor mehr als 30 Tagen schuldet'
+      days_since_payment: Tage seit seiner letzten Zahlung (-1 wenn nie)
+      customer: sein Name
+      authorized: ob die kassierende Person Kredit erzwingen darf
+    allow: Kredit wird gegeben
+    to_review: Kredit wird gegeben und geprüft
+    reject: kein Kredit und der Versuch wird gemeldet
+    nucleo: Wer Kredit erzwingen darf, kann es immer; für diese Person heißt Stoppen Prüfung.
   regla_venta:
     titulo: Verkäufe in Lisp
     ayuda: Mit dem ganzen Ticket, direkt vor dem Kassieren, prüft diese Regel den Verkauf (Summe, Produkte, Zahlungsarten, Uhrzeit) und entscheidet, ob kassiert wird, ob es zur Prüfung geht oder ob gestoppt wird. Standardmäßig stoppt sie nichts; Preise prüft ihre eigene Regel. Testen speichert nichts.

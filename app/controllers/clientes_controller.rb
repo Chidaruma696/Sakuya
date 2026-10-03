@@ -9,6 +9,7 @@ class ClientesController < ApplicationController
   def index
     @clientes = Cliente.order(:nombre).to_a.sort_by { |c| [ c.activo ? 0 : 1, c.nombre.downcase ] }
     @clientes = @clientes.select { |c| c.nombre.downcase.include?(params[:q].to_s.downcase.strip) } if params[:q].present?
+    @saldos = MovimientoCredito.group(:cliente_id).sum(:monto_centavos)
   end
 
   def new

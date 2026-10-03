@@ -4,7 +4,7 @@ import { Controller } from "@hotwired/stimulus"
 // que es quien de verdad cobra y recalcula.
 export default class extends Controller {
   static targets = ["codigo", "cuerpo", "total", "efectivo", "transferencia", "deposito", "cambio", "aviso",
-                    "pendiente", "pendienteNombre", "pendienteCantidad", "botonCobrar"]
+                    "pendiente", "pendienteNombre", "pendienteCantidad", "botonCobrar", "cliente", "credito"]
   static values = { escanearUrl: String, cobrarUrl: String, clave: String }
 
   connect() {
@@ -112,8 +112,11 @@ export default class extends Controller {
     this.recalcular()
   }
 
+  // Con el módulo de clientes, lo que va a cuenta cuenta como pagado (el servidor decide si se fía).
+  aCuenta() { return this.hasCreditoTarget ? this.centavos(this.creditoTarget) : 0 }
+
   recalcular() {
-    const pagado = this.centavos(this.efectivoTarget) + this.centavos(this.transferenciaTarget) + this.centavos(this.depositoTarget)
+    const pagado = this.centavos(this.efectivoTarget) + this.centavos(this.transferenciaTarget) + this.centavos(this.depositoTarget) + this.aCuenta()
     const cambio = pagado - this.totalCentavos()
     this.cambioTarget.textContent = this.pesos(Math.max(cambio, 0))
     this.cambioTarget.classList.toggle("text-red-700", cambio < 0)
@@ -123,17 +126,19 @@ export default class extends Controller {
     if (this.lineas.length === 0) { this.avisar(T.pos.ticket_vacio); return }
     const total = this.totalCentavos()
     let efectivo = this.centavos(this.efectivoTarget)
-    const otros = this.centavos(this.transferenciaTarget) + this.centavos(this.depositoTarget)
+    const otros = this.centavos(this.transferenciaTarget) + this.centavos(this.depositoTarget) + this.aCuenta()
     if (efectivo + otros === 0) efectivo = total  // pago exacto en efectivo si no se capturó nada
     const pagos = [
       { forma: "efectivo", monto_centavos: efectivo },
       { forma: "transferencia", monto_centavos: this.centavos(this.transferenciaTarget) },
-      { forma: "deposito", monto_centavos: this.centavos(this.depositoTarget) }
+      { forma: "deposito", monto_centavos: this.centavos(this.depositoTarget) },
+      { forma: "credito", monto_centavos: this.aCuenta() }
     ]
     const cuerpo = new FormData()
     cuerpo.append("lineas", JSON.stringify(this.lineas.map(l => ({ producto_id: l.producto_id, cantidad: l.cantidad, precio_centavos: l.manual ? l.precio : null }))))
     cuerpo.append("pagos", JSON.stringify(pagos))
     cuerpo.append("clave", this.claveValue)
+    if (this.hasClienteTarget) cuerpo.append("cliente_id", this.clienteTarget.value)
     cuerpo.append("authenticity_token", document.querySelector("meta[name=csrf-token]").content)
     this.botonCobrarTarget.disabled = true
     try {
@@ -149,6 +154,8 @@ export default class extends Controller {
   vaciar() {
     this.lineas = []
     this.efectivoTarget.value = this.transferenciaTarget.value = this.depositoTarget.value = ""
+    if (this.hasCreditoTarget) this.creditoTarget.value = ""
+    if (this.hasClienteTarget) this.clienteTarget.value = ""
     this.render()
     this.codigoTarget.focus()
   }

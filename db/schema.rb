@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_000003) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_000004) do
   create_table "ajustes", force: :cascade do |t|
     t.string "clave", null: false
     t.datetime "created_at", null: false
@@ -143,6 +143,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000003) do
   end
 
   create_table "devoluciones", force: :cascade do |t|
+    t.integer "a_cuenta_centavos", default: 0, null: false
     t.integer "corte_id"
     t.datetime "created_at", null: false
     t.string "folio", null: false
@@ -237,6 +238,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000003) do
     t.check_constraint "tipo IN ('entrada', 'recepcion', 'devolucion_cliente', 'ajuste_entrada', 'venta', 'salida', 'merma', 'ajuste_salida')", name: "movimientos_tipo"
   end
 
+  create_table "movimientos_credito", force: :cascade do |t|
+    t.integer "cliente_id", null: false
+    t.datetime "created_at", null: false
+    t.date "fecha", null: false
+    t.integer "monto_centavos", null: false
+    t.string "motivo"
+    t.integer "referencia_id"
+    t.string "referencia_type"
+    t.integer "sucursal_id", null: false
+    t.string "tipo", null: false
+    t.integer "usuario_id", null: false
+    t.index ["cliente_id", "fecha", "id"], name: "index_movimientos_credito_on_cliente_id_and_fecha_and_id"
+    t.index ["cliente_id"], name: "index_movimientos_credito_on_cliente_id"
+    t.index ["referencia_type", "referencia_id"], name: "index_movimientos_credito_on_referencia"
+    t.index ["sucursal_id"], name: "index_movimientos_credito_on_sucursal_id"
+    t.index ["usuario_id"], name: "index_movimientos_credito_on_usuario_id"
+    t.check_constraint "tipo IN ('cargo', 'abono', 'devolucion')", name: "movimientos_credito_tipo"
+  end
+
   create_table "movimientos_proveedor", force: :cascade do |t|
     t.string "concepto"
     t.datetime "created_at", null: false
@@ -266,7 +286,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000003) do
     t.datetime "updated_at", null: false
     t.integer "venta_id", null: false
     t.index ["venta_id"], name: "index_pagos_on_venta_id"
-    t.check_constraint "forma IN ('efectivo', 'transferencia', 'deposito')", name: "pagos_forma"
+    t.check_constraint "forma IN ('efectivo', 'transferencia', 'deposito', 'credito')", name: "pagos_forma"
     t.check_constraint "monto_centavos > 0", name: "pagos_monto"
   end
 
@@ -528,6 +548,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000003) do
   create_table "ventas", force: :cascade do |t|
     t.integer "cambio_centavos", default: 0, null: false
     t.string "clave", null: false
+    t.integer "cliente_id"
     t.string "codigo", limit: 13, null: false
     t.integer "corte_id", null: false
     t.datetime "created_at", null: false
@@ -539,6 +560,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000003) do
     t.datetime "updated_at", null: false
     t.integer "usuario_id", null: false
     t.index ["clave"], name: "index_ventas_on_clave", unique: true
+    t.index ["cliente_id"], name: "index_ventas_on_cliente_id"
     t.index ["codigo"], name: "index_ventas_on_codigo", unique: true
     t.index ["corte_id", "estado"], name: "index_ventas_on_corte_id_and_estado"
     t.index ["corte_id"], name: "index_ventas_on_corte_id"
@@ -580,6 +602,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000003) do
   add_foreign_key "movimientos", "productos"
   add_foreign_key "movimientos", "sucursales"
   add_foreign_key "movimientos", "usuarios"
+  add_foreign_key "movimientos_credito", "clientes"
+  add_foreign_key "movimientos_credito", "sucursales"
+  add_foreign_key "movimientos_credito", "usuarios"
   add_foreign_key "movimientos_proveedor", "facturas_proveedor", column: "factura_proveedor_id"
   add_foreign_key "movimientos_proveedor", "pagos_proveedor", column: "pago_proveedor_id"
   add_foreign_key "movimientos_proveedor", "proveedores"
@@ -621,6 +646,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000003) do
   add_foreign_key "venta_lineas", "promociones"
   add_foreign_key "venta_lineas", "usuarios", column: "autorizado_por_id"
   add_foreign_key "venta_lineas", "ventas"
+  add_foreign_key "ventas", "clientes"
   add_foreign_key "ventas", "cortes"
   add_foreign_key "ventas", "sucursales"
   add_foreign_key "ventas", "usuarios"

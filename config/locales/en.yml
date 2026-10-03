@@ -90,6 +90,7 @@ en:
       regla_corte: Cash closing in Lisp
       regla_precio: Price in Lisp
       regla_venta: Sales in Lisp
+      regla_credito: Credit in Lisp
       regla_retiro: Withdrawals in Lisp
       regla_movimiento: Stock in Lisp
       regla_recepcion: Receipts in Lisp
@@ -295,6 +296,8 @@ en:
       precio_frenado: '%{cobro}: %{motivo}. It cannot be charged like this: keep the regular price or have someone allowed to lower prices charge it. It has been reported.'
       retiro_frenado: '%{motivo}. It cannot be withdrawn like this: have someone allowed to withdraw do it. It has been reported.'
       venta_frenada: '%{motivo}. It cannot be charged like this: have someone with permission charge it. It has been reported.'
+      credito_frenado: '%{motivo}. No credit like this: have someone with permission authorise it, or pay another way. It has been reported.'
+      a_cuenta_sin_cliente: to sell on account you must choose the customer
       falta_dinero: 'not enough money: the ticket is %{total} and %{pago} is being paid'
       no_efectivo_excede: a transfer or deposit cannot exceed the total
       sin_ticket_devolucion: 'No receipt, no return: “%{codigo}” was not found'
@@ -466,6 +469,7 @@ en:
     compras.facturar: Enter and cancel supplier invoices
     clientes.ver: See customers
     clientes.editar: Add and edit customers
+    clientes.forzar_credito: Sell on account even if the credit rule stops it (it goes to review)
     compras.forzar_recepcion: Receive goods the receipts rule stops (it goes to review)
     compras.pagar: Pay suppliers from the till
     compras.exceder: Record an invoice with more than received (with a reason, it goes to review)
@@ -517,6 +521,9 @@ en:
     cobro: '%{producto} at %{precio} (should be %{regular})'
     retiro_frenado: 'Withdrawal of %{monto} stopped (%{motivo}): %{regla}'
     venta_frenada: 'Sale of %{total} stopped: %{motivo}'
+    cliente: Customer
+    sin_cliente: — no customer —
+    credito_frenado: 'On account for %{cliente}, %{monto}, stopped: %{motivo}'
     motivo_diferencia: Reason for the difference
     regla_propia_aviso: 'This business has its own closing rule: if the difference needs a reason, write it here.'
     cortes_cerrados: Closed sessions
@@ -570,6 +577,7 @@ en:
     efectivo: Cash
     transferencia: Transfer
     deposito: Deposit
+    credito: On account
   conteos:
     conteos: Counts
     conteo: Count
@@ -857,6 +865,9 @@ en:
       recepcion: Receipt
       factura_proveedor: Supplier invoice
   clientes:
+    cuenta:
+      cargo_venta: Sale %{folio}
+      devolucion: Return from sale %{folio}
     titulo: Customers
     nuevo: New customer
     editar: Edit customer
@@ -864,6 +875,7 @@ en:
     telefono: Phone
     rfc: Tax ID
     limite_credito: Credit limit
+    debe: Owes
     limite_ayuda: The credit rule reads it as (limit). Out of the box nobody gets credit; the rule decides whether it is used.
     inactivo: inactive
     sin_clientes: No customers yet.
@@ -1172,6 +1184,38 @@ en:
     to_review: it goes out and goes to review
     reject: it does not go out and the attempt is reported
     nucleo: Someone allowed to withdraw can always do it; for them, stopping means review.
+  regla_credito:
+    titulo: Credit in Lisp
+    ayuda: When a sale goes on a customer's account, this rule looks at the account (balance, limit, overdue, last payment) and decides whether to give credit, send it to review or stop it. Out of the box nobody gets credit. Test saves nothing.
+    fallo: 'The credit rule failed and the built-in one decided: %{error}'
+    motivos:
+      no_credit: this business does not sell on account
+      over_limit: 'this sale takes them over their limit (owes %{saldo}, limit %{limite})'
+    caso:
+      cliente: Customer
+      inventado: — a made-up one —
+      monto: On account
+      saldo: Owes
+      limite: Limit
+      cuenta: 'Owes %{saldo} · limit %{limite}'
+      autorizado: Charged by someone allowed to force credit
+    veredictos:
+      allow: Credit given
+      review: Credit given and goes to review
+      reject: It is stopped
+    funciones:
+      amount: what goes on account
+      total: the sale total
+      balance: what they owe before this sale
+      limit: their credit limit
+      overdue: '(overdue 30): what they owe from more than 30 days ago'
+      days_since_payment: days since their last payment (-1 if never)
+      customer: their name
+      authorized: whether the person charging may force credit
+    allow: credit is given
+    to_review: credit is given and goes to review
+    reject: no credit and the attempt is reported
+    nucleo: Someone allowed to force credit can always do it; for them, stopping means review.
   regla_venta:
     titulo: Sales in Lisp
     ayuda: With the whole ticket, right before charging, this rule looks at the sale (total, products, payment methods, time) and decides whether it is charged, goes to review or is stopped. Out of the box it stops nothing; prices are judged by their own rule. Test saves nothing.

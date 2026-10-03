@@ -14,6 +14,10 @@ Cada gancho lleva un número de contrato (`VERSION` en su módulo) y cada regla 
 
 Además del precio de cada renglón, la venta completa pasa por una regla justo antes de cobrarse: total, productos, formas de pago, hora y día. De fábrica no frena nada, porque los precios ya tienen su regla y una venta normal no es irregular; está para lo que cada negocio necesita (nada de alcohol a deshoras, ventas grandes a revisión). Lo que frena no se cobra y queda reportado en el corte; con el permiso nuevo `caja.forzar_venta` se cobra y queda por revisar. Lo mismo al recibir mercancía: una regla mira qué llega, de quién y con qué papeles (remisión, factura); de fábrica no frena nada, lo que frena no entra y queda reportado en el proveedor, y con `compras.forzar_recepcion` entra por revisar.
 
+## Clientes y crédito, con el crédito en Lisp (3 oct 2026)
+
+Los clientes vuelven como módulo propio, apagado de fábrica. Vender a cuenta es una forma de pago más ("A cuenta", que no mete dinero a la gaveta) y carga la cuenta del cliente, un libro de solo inserción. En vez de traer tipos de crédito fijos (contado, nota por nota, límite, semanal…), la decisión es un gancho en Lisp que lee saldo, límite, lo vencido a N días y los días sin abonar: de fábrica no se fía a nadie, y la regla de ejemplo es la del límite. Lo que frena no se cobra y queda reportado; con `clientes.forzar_credito` se fía y queda por revisar. Devolver algo vendido a cuenta baja primero la deuda de esa venta y solo lo demás sale de la gaveta.
+
 ## Las reglas viajan en un archivo .lisp (3 oct 2026)
 
 Ajustes › Opciones avanzadas › Exportar e importar baja todas las reglas vigentes en un solo archivo de texto, cada una debajo de una cabecera `;;; hook: corte (contract 1)`, y lo vuelve a subir. Se eligió texto plano y no JSON porque se lee y se edita a mano, y se puede pasar de un negocio a otro como quien comparte un init de Emacs. Al subir, lo que cambió se asienta como versión nueva con la versión de contrato que trae; si una sola regla no se lee, no entra ninguna.

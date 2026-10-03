@@ -15,9 +15,10 @@ module Caja
   end
 
   # lineas: [{ producto_id:, cantidad:, precio_centavos: }]
-  # pagos:  [{ forma:, monto_centavos: }]
+  # pagos:  [{ forma:, monto_centavos: }]; la forma "credito" va a cuenta del cliente.
   # clave:  identificador único del ticket generado por la caja; repetir la misma clave devuelve la misma venta.
-  def self.cobrar!(sucursal:, usuario:, lineas:, pagos:, clave:, autorizador: nil)
+  # cliente: a quién se le vende (hace falta para vender a cuenta).
+  def self.cobrar!(sucursal:, usuario:, lineas:, pagos:, clave:, autorizador: nil, cliente: nil)
     raise Error, I18n.t("errores.caja.clave_ticket") if clave.blank?
     if (previa = Venta.find_by(clave: clave))
       return previa
@@ -34,9 +35,11 @@ module Caja
       total = preparadas.sum { |l| l[:importe_centavos] }
       pagos_ok = preparar_pagos(pagos, total)
       cambio = pagos_ok.sum { |p| p[:monto_centavos] } - total
+      a_cuenta = pagos_ok.select { |p| p[:forma] == Pago::A_CUENTA }.sum { |p| p[:monto_centavos] }
       revisar_venta = juzgar_venta!(preparadas, pagos_ok, total, cambio, usuario, fallos)
+      revisar_credito = juzgar_credito!(cliente, a_cuenta, total, usuario, fallos) if a_cuenta.positive?
 
-      venta = Venta.create!(sucursal: sucursal, corte: corte, usuario: usuario, clave: clave,
+      venta = Venta.create!(sucursal: sucursal, corte: corte, usuario: usuario, clave: clave, cliente: cliente,
                             folio: Folio.siguiente!(sucursal, "venta"), codigo: codigo_ticket(sucursal),
                             total_centavos: total, cambio_centavos: cambio, fecha_negocio: Date.current)
       preparadas.each do |l|
@@ -48,6 +51,11 @@ module Caja
       end
       pagos_ok.each { |p| venta.pagos.create!(p) }
       Revision.abrir!(venta, usuario: usuario, sucursal: sucursal, motivo: revisar_venta, valor_centavos: total) if revisar_venta
+      if a_cuenta.positive?
+        cliente.movimientos_credito.create!(tipo: "cargo", monto_centavos: a_cuenta, fecha: Date.current, referencia: venta, sucursal: sucursal,
+                                            usuario: usuario, motivo: I18n.t("clientes.cuenta.cargo_venta", folio: venta.folio))
+        Revision.abrir!(venta, usuario: usuario, sucursal: sucursal, motivo: revisar_credito, valor_centavos: a_cuenta) if revisar_credito
+      end
       # Si la regla del negocio tronó decidió la de fábrica; el fallo se reporta una vez por corte.
       fallos.uniq.each { |clave, f| Revision.abrir!(corte, usuario: usuario, sucursal: sucursal, motivo: I18n.t(clave, error: f), sin_repetir: true) }
       venta
@@ -59,7 +67,8 @@ module Caja
     raise
   end
 
-  # lineas: [{ venta_linea_id:, cantidad: }]. El dinero sale de la gaveta del corte abierto.
+  # lineas: [{ venta_linea_id:, cantidad: }]. El dinero sale de la gaveta del corte abierto; si la
+  # venta fue a cuenta, primero baja lo que el cliente debe de ella y solo lo demás sale en efectivo.
   def self.devolver!(venta:, lineas:, motivo:, usuario:)
     raise Error, I18n.t("errores.hace_falta_motivo") if motivo.blank?
     raise Error, I18n.t("errores.caja.ya_devuelta") unless venta.cobrada?
@@ -80,7 +89,12 @@ module Caja
                           usuario: usuario, referencia: devolucion, motivo: "#{venta.folio}: #{motivo}")
       end
       devolucion.total_centavos = total
+      devolucion.a_cuenta_centavos = [ total, venta.a_cuenta_pendiente_centavos ].min if venta.cliente
       devolucion.save!
+      if devolucion.a_cuenta_centavos.positive?
+        venta.cliente.movimientos_credito.create!(tipo: "devolucion", monto_centavos: -devolucion.a_cuenta_centavos, fecha: Date.current, referencia: devolucion,
+                                                  sucursal: venta.sucursal, usuario: usuario, motivo: I18n.t("clientes.cuenta.devolucion", folio: venta.folio))
+      end
       venta.update!(estado: "devuelta") if venta.lineas.all? { |vl| vl.reload.cantidad_pendiente.zero? }
       devolucion
     end
@@ -133,9 +147,24 @@ module Caja
   end
   private_class_method :juzgar_venta!
 
+  # A cuenta del cliente, si la regla de crédito lo deja. Si frena y quien cobra no tiene
+  # clientes.forzar_credito, no se cobra y queda reportado; si no, devuelve el motivo para revisarla (o nil).
+  def self.juzgar_credito!(cliente, a_cuenta, total, usuario, fallos)
+    raise Error, I18n.t("errores.caja.a_cuenta_sin_cliente") unless cliente
+    autorizado = usuario.puede?("clientes.forzar_credito")
+    decision = ReglaCredito.decidir(ReglaCredito.datos(cliente, monto: a_cuenta, total: total, autorizado: autorizado))
+    fallos << [ "regla_credito.fallo", decision.error ] if decision.error
+    if decision.rechaza? && !autorizado
+      raise Frenado.new(I18n.t("errores.caja.credito_frenado", motivo: decision.motivo),
+                        reporte: I18n.t("caja.credito_frenado", cliente: cliente.nombre, monto: Dinero.pesos(a_cuenta), motivo: decision.motivo), valor_centavos: a_cuenta)
+    end
+    decision.permite? ? nil : decision.motivo
+  end
+  private_class_method :juzgar_credito!
+
   def self.preparar_pagos(pagos, total)
     limpios = Array(pagos).map { |p| { forma: p[:forma].to_s, monto_centavos: p[:monto_centavos].to_i } }.reject { |p| p[:monto_centavos] <= 0 }
-    limpios.each { |p| raise Error, I18n.t("errores.caja.forma_desconocida", forma: p[:forma]) unless Pago::FORMAS.include?(p[:forma]) }
+    limpios.each { |p| raise Error, I18n.t("errores.caja.forma_desconocida", forma: p[:forma]) unless (Pago::FORMAS + [ Pago::A_CUENTA ]).include?(p[:forma]) }
     suma = limpios.sum { |p| p[:monto_centavos] }
     raise Error, I18n.t("errores.caja.falta_dinero", total: Dinero.pesos(total), pago: Dinero.pesos(suma)) if suma < total
     no_efectivo = limpios.reject { |p| p[:forma] == "efectivo" }.sum { |p| p[:monto_centavos] }

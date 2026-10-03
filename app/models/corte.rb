@@ -61,8 +61,9 @@ class Corte < ApplicationRecord
     ventas_cobradas.sum(:total_centavos)
   end
 
+  # Lo que salió de la gaveta por devoluciones (lo de ventas a cuenta baja la deuda del cliente).
   def devoluciones_centavos
-    devoluciones.sum(:total_centavos)
+    devoluciones.sum("total_centavos - a_cuenta_centavos")
   end
 
   def retiros_centavos

@@ -90,6 +90,7 @@ es:
       regla_corte: Cierre de caja en Lisp
       regla_precio: Precio en Lisp
       regla_venta: Ventas en Lisp
+      regla_credito: Crédito en Lisp
       regla_retiro: Retiros en Lisp
       regla_movimiento: Inventario en Lisp
       regla_recepcion: Recepciones en Lisp
@@ -295,6 +296,8 @@ es:
       precio_frenado: '%{cobro}: %{motivo}. Así no se cobra: deja el precio que toca o que cobre alguien con permiso para bajar precios. Queda reportado.'
       retiro_frenado: '%{motivo}. Así no se retira: que lo haga alguien con permiso para retirar. Queda reportado.'
       venta_frenada: '%{motivo}. Así no se cobra: que la cobre alguien con permiso. Queda reportado.'
+      credito_frenado: '%{motivo}. Así no se fía: que lo autorice alguien con permiso, o que pague de otra forma. Queda reportado.'
+      a_cuenta_sin_cliente: para vender a cuenta hay que elegir el cliente
       falta_dinero: 'falta dinero: el ticket es %{total} y se pagan %{pago}'
       no_efectivo_excede: una transferencia o depósito no puede pasarse del total
       sin_ticket_devolucion: 'Sin ticket no hay devolución: no se encontró «%{codigo}»'
@@ -466,6 +469,7 @@ es:
     compras.facturar: Capturar y cancelar facturas del proveedor
     clientes.ver: Ver clientes
     clientes.editar: Dar de alta y editar clientes
+    clientes.forzar_credito: Vender a cuenta aunque la regla de crédito lo frene (queda por revisar)
     compras.forzar_recepcion: Recibir mercancía que la regla de recepciones frena (queda por revisar)
     compras.pagar: Pagar a proveedores desde la caja
     compras.exceder: Registrar una factura con más de lo recibido (con motivo, queda por revisar)
@@ -517,6 +521,9 @@ es:
     cobro: '%{producto} a %{precio} (toca %{regular})'
     retiro_frenado: 'Retiro de %{monto} frenado (%{motivo}): %{regla}'
     venta_frenada: 'Venta de %{total} frenada: %{motivo}'
+    cliente: Cliente
+    sin_cliente: — sin cliente —
+    credito_frenado: 'A cuenta de %{cliente} por %{monto} frenado: %{motivo}'
     motivo_diferencia: Motivo de la diferencia
     regla_propia_aviso: 'El negocio tiene su propia regla para el cierre: si la diferencia pide motivo, escríbelo aquí.'
     cortes_cerrados: Cortes cerrados
@@ -570,6 +577,7 @@ es:
     efectivo: Efectivo
     transferencia: Transferencia
     deposito: Depósito
+    credito: A cuenta
   conteos:
     conteos: Conteos
     conteo: Conteo
@@ -857,6 +865,9 @@ es:
       recepcion: Recepción
       factura_proveedor: Factura del proveedor
   clientes:
+    cuenta:
+      cargo_venta: Venta %{folio}
+      devolucion: Devolución de la venta %{folio}
     titulo: Clientes
     nuevo: Nuevo cliente
     editar: Editar cliente
@@ -864,6 +875,7 @@ es:
     telefono: Teléfono
     rfc: RFC
     limite_credito: Límite de crédito
+    debe: Debe
     limite_ayuda: Lo lee la regla de crédito como (limit). De fábrica no se fía a nadie; la regla decide si se usa.
     inactivo: inactivo
     sin_clientes: Todavía no hay clientes.
@@ -1172,6 +1184,38 @@ es:
     to_review: sale y queda por revisar
     reject: no sale y deja reportado el intento
     nucleo: Quien tiene permiso para retirar nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
+  regla_credito:
+    titulo: Crédito en Lisp
+    ayuda: Cuando una venta va a cuenta de un cliente, esta regla mira su cuenta (saldo, límite, atrasos, último abono) y decide si se fía, si queda por revisar o si se frena. De fábrica no se fía a nadie. Probar no guarda nada.
+    fallo: 'La regla de crédito falló y decidió la de fábrica: %{error}'
+    motivos:
+      no_credit: este negocio no vende a cuenta
+      over_limit: 'con esta venta pasa su límite (debe %{saldo}, límite %{limite})'
+    caso:
+      cliente: Cliente
+      inventado: — uno inventado —
+      monto: A cuenta
+      saldo: Debe
+      limite: Límite
+      cuenta: 'Debe %{saldo} · límite %{limite}'
+      autorizado: Cobra alguien con permiso para forzar el crédito
+    veredictos:
+      allow: Se fía
+      review: Se fía y queda por revisar
+      reject: Se frena
+    funciones:
+      amount: lo que va a cuenta
+      total: el total de la venta
+      balance: lo que debe antes de esta venta
+      limit: su límite de crédito
+      overdue: '(overdue 30): lo que debe de hace más de 30 días'
+      days_since_payment: días desde su último abono (-1 si nunca)
+      customer: su nombre
+      authorized: si quien cobra tiene permiso para forzar el crédito
+    allow: se fía
+    to_review: se fía y queda por revisar
+    reject: no se fía y deja reportado el intento
+    nucleo: Quien tiene permiso para forzar el crédito nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
   regla_venta:
     titulo: Ventas en Lisp
     ayuda: Con el ticket completo, justo antes de cobrar, esta regla mira la venta entera (total, productos, formas de pago, hora) y decide si se cobra, si queda por revisar o si se frena. De fábrica no frena nada; los precios ya los juzga su propia regla. Probar no guarda nada.

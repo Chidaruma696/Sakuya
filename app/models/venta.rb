@@ -1,4 +1,5 @@
 class Venta < ApplicationRecord
+  belongs_to :cliente, optional: true
   belongs_to :sucursal
   belongs_to :corte
   belongs_to :usuario
@@ -36,5 +37,10 @@ class Venta < ApplicationRecord
 
   def to_s
     folio
+  end
+
+  # De lo que fue a cuenta del cliente, lo que todavía no se le ha descontado por devoluciones.
+  def a_cuenta_pendiente_centavos
+    pagos.where(forma: Pago::A_CUENTA).sum(:monto_centavos) - devoluciones.sum(:a_cuenta_centavos)
   end
 end

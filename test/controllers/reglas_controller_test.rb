@@ -178,6 +178,21 @@ class ReglasControllerTest < ActionDispatch::IntegrationTest
     assert_match "Recepción #{recepcion.folio} de Granja", Revision.last.descripcion
   end
 
+  test "crédito: solo con el módulo de clientes; el editor prueba con un cliente de verdad o uno inventado" do
+    get regla_editar_path("corte")
+    assert_select "a[href=?]", regla_editar_path("credito"), 0
+    Modulo.guardar!(Modulo::OPCIONALES, comprobar: false)
+    lupita = Cliente.create!(nombre: "Fonda Lupita", limite_credito: "100")
+    get regla_editar_path("credito")
+    assert_select "a[href=?]", regla_editar_path("credito")
+    assert_select "textarea#codigo", /reject :no-credit/
+    post regla_guardar_path("credito"), params: { probar: "1", codigo: ReglaCredito::EJEMPLO, monto: "500", saldo: "0", limite: "1000" }
+    assert_select "#decision", /Se fía/
+    post regla_guardar_path("credito"), params: { probar: "1", codigo: ReglaCredito::EJEMPLO, monto: "500", cliente_id: lupita.id }
+    assert_select "#decision", /Se frena: con esta venta pasa su límite \(debe \$0.00, límite \$100.00\)/
+    assert_select "p", /Debe \$0.00 · límite \$100.00/
+  end
+
   test "sin reglas.editar no se entra" do
     post entrar_path, params: { usuario: "cajera", password: "secreto1" }
     get regla_editar_path("corte")

@@ -16,7 +16,7 @@ module ReglaVenta
     (allow)
   LISP
 
-  FORMAS = { cash: "efectivo", transfer: "transferencia", deposit: "deposito" }.freeze
+  FORMAS = { cash: "efectivo", transfer: "transferencia", deposit: "deposito", credit: "credito" }.freeze
   MOTIVOS = %i[].freeze
   FUNCIONES = %w[total change paid-with lines products quantity-of hour weekday authorized].freeze
   EJEMPLO = <<~LISP

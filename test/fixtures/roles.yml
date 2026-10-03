@@ -6,7 +6,7 @@ cajero:
   permisos: ["caja.vender", "caja.abrir", "caja.devolver", "inventario.ver", "pedidos.solicitar", "salidas.recibir"]
 supervisor:
   nombre: supervisor
-  permisos: ["caja.*", "inventario.*", "etiquetas.crear", "pedidos.*", "produccion.*", "salidas.*", "rutas.*", "cobranza.*", "canastillas.*", "conteos.*", "reportes.ver", "revisiones.resolver"]
+  permisos: ["caja.*", "inventario.*", "etiquetas.crear", "pedidos.*", "produccion.*", "salidas.*", "rutas.*", "cobranza.*", "canastillas.*", "conteos.*", "clientes.*", "reportes.ver", "revisiones.resolver"]
 chofer:
   nombre: chofer
   permisos: ["rutas.repartir", "pedidos.solicitar"]

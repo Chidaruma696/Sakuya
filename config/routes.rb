@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     post "importar", action: :importar, as: :importar_reglas
   end
   # Las reglas que deciden (el cierre de caja, el precio…), con un editor común.
-  scope "ajustes/avanzado/reglas/:gancho", controller: "reglas", as: "regla", constraints: { gancho: /corte|precio|venta|retiro|movimiento|recepcion|factura/ } do
+  scope "ajustes/avanzado/reglas/:gancho", controller: "reglas", as: "regla", constraints: { gancho: /corte|precio|venta|credito|retiro|movimiento|recepcion|factura/ } do
     get "editar", action: :edit, as: :editar
     post "/", action: :guardar, as: :guardar
     post "versiones/:id/restaurar", action: :restaurar, as: :restaurar

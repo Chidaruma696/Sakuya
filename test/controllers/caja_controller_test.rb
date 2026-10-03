@@ -172,6 +172,21 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     assert_match(/Intento de cierre frenado.*\nLa regla del corte falló/m, Revision.last.motivo)
   end
 
+  test "con el módulo de clientes la caja pide el cliente y lo que va a cuenta" do
+    get caja_path
+    assert_select "[data-pos-target=credito]", 0
+    Modulo.guardar!(Modulo::OPCIONALES, comprobar: false)
+    lupita = Cliente.create!(nombre: "Fonda Lupita")
+    Regla.create!(gancho: "credito", codigo: "(allow)", usuario: usuarios(:admin))
+    get caja_path
+    assert_select "select[data-pos-target=cliente] option", /Fonda Lupita/
+    assert_select "[data-pos-target=credito]"
+    post caja_cobrar_path, params: { clave: "fiado", cliente_id: lupita.id, lineas: [ { producto_id: productos(:catsup).id, cantidad: 1 } ].to_json,
+                                     pagos: [ { forma: "credito", monto_centavos: 4_200 } ].to_json }, headers: { "Accept" => "application/json" }
+    assert_response :ok
+    assert_equal 4_200, lupita.saldo_centavos
+  end
+
   test "devolución solo con ticket" do
     venta = Caja.cobrar!(sucursal: @tienda, usuario: usuarios(:cajera), clave: "v1", lineas: [ @pesada ], pagos: [ { forma: "efectivo", monto_centavos: 30_000 } ])
     get caja_devolucion_path(codigo: "0000000000000")
