@@ -89,6 +89,7 @@ de:
       tablero: Übersicht in Lisp
       regla_corte: Kassenabschluss in Lisp
       regla_precio: Preis in Lisp
+      regla_retiro: Entnahmen in Lisp
     secciones_ayuda:
       para_ti: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
       negocio: Die Betriebsdaten, wie sie auf dem Ticket stehen, mit dem Ticket daneben genau so, wie es gedruckt wird. Gilt für alle Filialen.
@@ -283,6 +284,7 @@ de:
       sin_precio: "%{producto}: kein Preis in %{sucursal}; vor dem Verkauf bei der Zentrale anfragen"
       piso_precio: "%{producto}: der Preis darf nicht unter %{piso} % des Katalogs fallen (%{monto})"
       precio_frenado: '%{cobro}: %{motivo}. So kann nicht kassiert werden: regulären Preis lassen oder jemanden mit Berechtigung für Preissenkungen kassieren lassen. Es wurde gemeldet.'
+      retiro_frenado: '%{motivo}. So kann nicht entnommen werden: jemand mit Berechtigung für Entnahmen muss es tun. Es wurde gemeldet.'
       falta_dinero: 'Geld fehlt: das Ticket ist %{total} und gezahlt werden %{pago}'
       no_efectivo_excede: Überweisung oder Einzahlung dürfen die Summe nicht übersteigen
       sin_ticket_devolucion: 'Ohne Beleg keine Rückgabe: „%{codigo}“ nicht gefunden'
@@ -480,7 +482,7 @@ de:
       other: "%{count} Verkäufe"
     retiro_caja_fuerte: Abschöpfung in den Tresor
     monto: Betrag
-    retiro_por_revisar: Die Abschöpfung wird erfasst und geht zur Prüfung.
+    retiro_por_revisar: Ohne Berechtigung für Entnahmen wird die Entnahme gestoppt und gemeldet.
     retirar: Abschöpfen
     cerrar_corte: Abschnitt schließen
     cerrar_corte_ayuda: Zähle, wie viele Scheine und Münzen von jeder Sorte da sind (mit Wechselgeld) oder gib die Summe ein. Das System speichert Soll, Aufschlüsselung und Differenz.
@@ -492,6 +494,7 @@ de:
     tope_queda_por_revisar: Wird mit deinem Grund abgeschlossen und geht zur Prüfung.
     cierre_frenado: 'Abschlussversuch gestoppt: gezählt %{contado}, Differenz von %{diferencia} (%{motivo})'
     cobro: '%{producto} zu %{precio} (regulär %{regular})'
+    retiro_frenado: 'Entnahme von %{monto} gestoppt (%{motivo}): %{regla}'
     motivo_diferencia: Grund der Differenz
     regla_propia_aviso: 'Dieses Geschäft hat eine eigene Abschlussregel: wenn die Differenz einen Grund braucht, hier eintragen.'
     cortes_cerrados: Geschlossene Abschnitte
@@ -984,6 +987,33 @@ de:
     lee: Was sie liest (in Pesos)
     contesta: Was sie antwortet
     ejemplo: Beispiel
+  regla_retiro:
+    titulo: Entnahmen in Lisp
+    ayuda: Bevor Bargeld die Lade verlässt, prüft diese Regel wie viel und wofür und entscheidet, ob es entnommen wird, ob es zur Prüfung geht oder ob gestoppt wird. Grund und genug Bargeld verlangt Sakuya vorher. Testen speichert nichts.
+    fallo: 'Die Entnahmeregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    motivos:
+      needs_permission: es braucht eine Berechtigung für Entnahmen
+    caso:
+      monto: Betrag
+      en_gaveta: In der Lade
+      motivo: Grund
+      motivo_ejemplo: Tresor
+      autorizado: Entnahme durch jemanden mit Berechtigung
+    veredictos:
+      allow: Wird entnommen
+      review: Wird entnommen und geprüft
+      reject: Wird gestoppt
+    funciones:
+      amount: was entnommen wird
+      cash: was in der Lade ist
+      withdrawn: bereits im Abschnitt entnommen
+      cash_limit: die Bargeldgrenze der Filiale
+      reason: der geschriebene Grund
+      authorized: ob die Person entnehmen darf
+    allow: wird entnommen
+    to_review: wird entnommen und geprüft
+    reject: wird nicht entnommen und der Versuch gemeldet
+    nucleo: Wer entnehmen darf, kann es immer; für diese Person heißt Stoppen Prüfung.
   regla_precio:
     titulo: Preis in Lisp
     ayuda: Jede kassierte Zeile läuft durch diese Regel, die den Preis prüft und entscheidet, ob kassiert wird, ob es zur Prüfung geht oder ob gestoppt wird. Die Untergrenze aus Einstellungen › Kasse überschreitet keine Regel. Testen speichert nichts.

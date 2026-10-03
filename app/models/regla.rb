@@ -2,7 +2,7 @@
 # guardar es asentar una versión nueva, y volver atrás es asentar la vieja otra vez.
 class Regla < ApplicationRecord
   self.table_name = "reglas"
-  GANCHOS = %w[tablero corte precio].freeze
+  GANCHOS = %w[tablero corte precio retiro].freeze
 
   belongs_to :usuario
 

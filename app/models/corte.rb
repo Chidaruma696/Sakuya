@@ -79,11 +79,15 @@ class Corte < ApplicationRecord
   end
 
   def retirar!(monto_centavos:, motivo:, usuario:, autorizado_por: nil)
+    comprobar_retiro!(monto_centavos, motivo)
+    retiros.create!(monto_centavos: monto_centavos.to_i, motivo: motivo, usuario: usuario, autorizado_por: autorizado_por)
+  end
+
+  # Lo que un retiro necesita antes de preguntarle a nadie: corte abierto, motivo y efectivo.
+  def comprobar_retiro!(monto_centavos, motivo)
     raise ArgumentError, I18n.t("errores.corte.cerrado") unless abierto?
     raise ArgumentError, I18n.t("errores.hace_falta_motivo") if motivo.blank?
-    monto = monto_centavos.to_i
-    raise ArgumentError, I18n.t("errores.corte.sin_efectivo", monto: Dinero.pesos(efectivo_esperado_centavos)) if monto > efectivo_esperado_centavos
-    retiros.create!(monto_centavos: monto, motivo: motivo, usuario: usuario, autorizado_por: autorizado_por)
+    raise ArgumentError, I18n.t("errores.corte.sin_efectivo", monto: Dinero.pesos(efectivo_esperado_centavos)) if monto_centavos.to_i > efectivo_esperado_centavos
   end
 
   # Cierra contando: con el desglose por denominación (y el total sale de ahí) o con el total tecleado.

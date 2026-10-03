@@ -60,7 +60,7 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     assert_select "td", /#{venta.folio}/
   end
 
-  test "sin caja abierta no cobra y el corte se abre, se retira (por revisar) y se cierra" do
+  test "sin caja abierta no cobra; el corte se abre, la cajera sin permiso no retira (queda reportado), la supervisora sí, y se cierra" do
     cortes(:tienda_abierto).update!(estado: "cerrado")
     post caja_cobrar_path, params: { clave: "x", lineas: [ { producto_id: productos(:catsup).id, cantidad: 1 } ].to_json, pagos: [ { forma: "efectivo", monto_centavos: 5_000 } ].to_json }, headers: { "Accept" => "application/json" }
     assert_response :unprocessable_entity
@@ -69,13 +69,22 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to caja_path
     corte = Corte.abierto_en(@tienda)
     assert_equal 50_000, corte.fondo_centavos
+    get caja_corte_path
+    assert_match "el retiro se frena", response.body
     post caja_retirar_path, params: { monto: "100", motivo: "caja fuerte" }
-    assert_equal 1, corte.retiros.count, "la cajera no tiene caja.retirar: se retira igual y queda por revisar"
-    assert_nil corte.retiros.last.autorizado_por
-    assert_equal 10_000, Revision.last.valor_centavos
+    assert_match "Así no se retira", flash[:alert]
+    assert_equal 0, corte.retiros.count, "la cajera no tiene caja.retirar: se frena"
+    reporte = Revision.last
+    assert reporte.frenado?
+    assert_equal [ corte, 10_000 ], [ reporte.revisable, reporte.valor_centavos ]
+    assert_match "Retiro de $100.00 frenado (caja fuerte)", reporte.motivo
     post caja_retirar_path, params: { monto: "100", motivo: "caja fuerte" }
+    assert_equal 1, Revision.count, "el mismo intento no se reporta dos veces"
+    post entrar_path, params: { usuario: "supervisora", password: "secreto1" }
+    2.times { post caja_retirar_path, params: { monto: "100", motivo: "caja fuerte" } }
     assert_equal 20_000, corte.retiros.sum(:monto_centavos)
-    assert_equal 2, Revision.count, "cada retiro sin permiso queda por revisar"
+    assert_equal [ usuarios(:supervisora) ], corte.retiros.map(&:autorizado_por).uniq
+    assert_equal 1, Revision.count, "con permiso, de fábrica, no hay nada que revisar"
     post caja_cerrar_path, params: { contado: "300.00" }
     assert_redirected_to caja_resumen_path(corte)
     assert_equal 0, corte.reload.diferencia_centavos
@@ -83,7 +92,7 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     assert_select "div.centro", /#{corte.folio}/
     assert_match "Retiros", response.body
     assert_match "caja fuerte", response.body
-    assert_match "2 pendientes por revisar", response.body
+    assert_match "1 pendiente", response.body
     get caja_corte_path
     assert_select "td", /#{corte.folio}/
     assert_select "a[href=?]", caja_resumen_path(corte)

@@ -15,7 +15,7 @@
       <%= form_with url: caja_retirar_path, class: "space-y-2 text-sm" do |f| %>
         <%= f.number_field :monto, step: "0.01", min: "0.01", placeholder: t("caja.monto"), required: true, class: "w-full rounded border border-stone-300 px-3 py-2 font-mono" %>
         <%= f.text_field :motivo, placeholder: t("comun.motivo"), required: true, class: "w-full rounded border border-stone-300 px-3 py-2" %>
-        <% unless puede?("caja.retirar") %><p class="text-xs text-stone-600"><%= t("caja.retiro_por_revisar") %></p><% end %>
+        <% unless puede?("caja.retirar") || Regla.vigente("retiro") %><p class="text-xs text-stone-600"><%= t("caja.retiro_por_revisar") %></p><% end %>
         <%= f.submit t("caja.retirar"), class: "btn btn-primary" %>
       <% end %>
       <% if @corte.retiros.any? %>

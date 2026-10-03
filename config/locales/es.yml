@@ -89,6 +89,7 @@ es:
       tablero: Tablero en Lisp
       regla_corte: Cierre de caja en Lisp
       regla_precio: Precio en Lisp
+      regla_retiro: Retiros en Lisp
     secciones_ayuda:
       para_ti: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
       negocio: Los datos del negocio como salen en el ticket, con el ticket al lado tal cual va a imprimirse. Vale para todas las sucursales.
@@ -283,6 +284,7 @@ es:
       sin_precio: "%{producto}: sin precio en %{sucursal}; pídelo a la matriz antes de venderlo"
       piso_precio: "%{producto}: el precio no puede bajar del %{piso} % del catálogo (%{monto})"
       precio_frenado: '%{cobro}: %{motivo}. Así no se cobra: deja el precio que toca o que cobre alguien con permiso para bajar precios. Queda reportado.'
+      retiro_frenado: '%{motivo}. Así no se retira: que lo haga alguien con permiso para retirar. Queda reportado.'
       falta_dinero: 'falta dinero: el ticket es %{total} y se pagan %{pago}'
       no_efectivo_excede: una transferencia o depósito no puede pasarse del total
       sin_ticket_devolucion: 'Sin ticket no hay devolución: no se encontró «%{codigo}»'
@@ -480,7 +482,7 @@ es:
       other: "%{count} ventas"
     retiro_caja_fuerte: Retiro a caja fuerte
     monto: Monto
-    retiro_por_revisar: El retiro se registra y queda por revisar.
+    retiro_por_revisar: Sin permiso para retirar, el retiro se frena y queda reportado.
     retirar: Retirar
     cerrar_corte: Cerrar corte
     cerrar_corte_ayuda: Cuenta cuántos billetes y monedas hay de cada uno (con el fondo) o escribe el total. El sistema guarda lo esperado, el desglose y la diferencia.
@@ -492,6 +494,7 @@ es:
     tope_queda_por_revisar: Se cierra con tu motivo y queda por revisar.
     cierre_frenado: 'Intento de cierre frenado: contó %{contado}, diferencia de %{diferencia} (%{motivo})'
     cobro: '%{producto} a %{precio} (toca %{regular})'
+    retiro_frenado: 'Retiro de %{monto} frenado (%{motivo}): %{regla}'
     motivo_diferencia: Motivo de la diferencia
     regla_propia_aviso: 'El negocio tiene su propia regla para el cierre: si la diferencia pide motivo, escríbelo aquí.'
     cortes_cerrados: Cortes cerrados
@@ -984,6 +987,33 @@ es:
     lee: Lo que lee (en pesos)
     contesta: Lo que contesta
     ejemplo: Ejemplo
+  regla_retiro:
+    titulo: Retiros en Lisp
+    ayuda: Antes de sacar efectivo de la gaveta, esta regla mira cuánto y para qué, y decide si sale, si queda por revisar o si se frena. Que haya motivo y efectivo suficiente lo exige Sakuya antes de preguntar. Probar no guarda nada.
+    fallo: 'La regla de retiros falló y decidió la de fábrica: %{error}'
+    motivos:
+      needs_permission: hace falta permiso para retirar
+    caso:
+      monto: Monto
+      en_gaveta: En gaveta
+      motivo: Motivo
+      motivo_ejemplo: caja fuerte
+      autorizado: Retira alguien con permiso para retirar
+    veredictos:
+      allow: Sale
+      review: Sale y queda por revisar
+      reject: Se frena
+    funciones:
+      amount: lo que sale
+      cash: lo que hay en la gaveta
+      withdrawn: lo ya retirado en el corte
+      cash_limit: el tope de efectivo de la sucursal
+      reason: el motivo escrito
+      authorized: si quien retira tiene permiso para retirar
+    allow: sale
+    to_review: sale y queda por revisar
+    reject: no sale y deja reportado el intento
+    nucleo: Quien tiene permiso para retirar nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
   regla_precio:
     titulo: Precio en Lisp
     ayuda: Cada renglón que se cobra pasa por esta regla, que mira el precio y decide si se cobra, si queda por revisar o si se frena. El piso de Ajustes › Caja no lo cruza ninguna regla. Probar no guarda nada.

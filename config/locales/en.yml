@@ -89,6 +89,7 @@ en:
       tablero: Dashboard in Lisp
       regla_corte: Cash closing in Lisp
       regla_precio: Price in Lisp
+      regla_retiro: Withdrawals in Lisp
     secciones_ayuda:
       para_ti: Applied the moment you pick one; saved on your user, they follow you to any computer.
       negocio: The business details as they appear on the ticket, with the ticket next to it exactly as it will print. Applies to every branch.
@@ -283,6 +284,7 @@ en:
       sin_precio: "%{producto}: no price at %{sucursal}; ask head office before selling it"
       piso_precio: "%{producto}: the price cannot go below %{piso} % of the catalog (%{monto})"
       precio_frenado: '%{cobro}: %{motivo}. It cannot be charged like this: keep the regular price or have someone allowed to lower prices charge it. It has been reported.'
+      retiro_frenado: '%{motivo}. It cannot be withdrawn like this: have someone allowed to withdraw do it. It has been reported.'
       falta_dinero: 'not enough money: the ticket is %{total} and %{pago} is being paid'
       no_efectivo_excede: a transfer or deposit cannot exceed the total
       sin_ticket_devolucion: 'No receipt, no return: “%{codigo}” was not found'
@@ -480,7 +482,7 @@ en:
       other: "%{count} sales"
     retiro_caja_fuerte: Cash drop to safe
     monto: Amount
-    retiro_por_revisar: The drop is recorded and goes to review.
+    retiro_por_revisar: Without permission to withdraw, the withdrawal is stopped and reported.
     retirar: Drop
     cerrar_corte: Close session
     cerrar_corte_ayuda: Count how many bills and coins of each there are (float included) or type the total. The system keeps the expected amount, the breakdown and the difference.
@@ -492,6 +494,7 @@ en:
     tope_queda_por_revisar: It closes with your reason and goes to review.
     cierre_frenado: 'Closing attempt stopped: counted %{contado}, difference of %{diferencia} (%{motivo})'
     cobro: '%{producto} at %{precio} (should be %{regular})'
+    retiro_frenado: 'Withdrawal of %{monto} stopped (%{motivo}): %{regla}'
     motivo_diferencia: Reason for the difference
     regla_propia_aviso: 'This business has its own closing rule: if the difference needs a reason, write it here.'
     cortes_cerrados: Closed sessions
@@ -984,6 +987,33 @@ en:
     lee: What it reads (in pesos)
     contesta: What it answers
     ejemplo: Example
+  regla_retiro:
+    titulo: Withdrawals in Lisp
+    ayuda: Before cash leaves the drawer, this rule looks at how much and why, and decides whether it goes out, goes to review or is stopped. Sakuya requires a reason and enough cash before asking. Test saves nothing.
+    fallo: 'The withdrawal rule failed and the built-in one decided: %{error}'
+    motivos:
+      needs_permission: permission to withdraw is needed
+    caso:
+      monto: Amount
+      en_gaveta: In drawer
+      motivo: Reason
+      motivo_ejemplo: safe
+      autorizado: Withdrawn by someone allowed to withdraw
+    veredictos:
+      allow: It goes out
+      review: It goes out and goes to review
+      reject: It is stopped
+    funciones:
+      amount: what goes out
+      cash: what the drawer has
+      withdrawn: already withdrawn in the session
+      cash_limit: the branch cash limit
+      reason: the written reason
+      authorized: whether the person withdrawing may withdraw
+    allow: it goes out
+    to_review: it goes out and goes to review
+    reject: it does not go out and the attempt is reported
+    nucleo: Someone allowed to withdraw can always do it; for them, stopping means review.
   regla_precio:
     titulo: Price in Lisp
     ayuda: Every line charged at the till goes through this rule, which looks at the price and decides whether it is charged, goes to review or is stopped. No rule can cross the floor from Settings › Till. Test saves nothing.

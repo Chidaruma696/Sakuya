@@ -108,12 +108,24 @@ class CajaController < ApplicationController
     render layout: "ticket"
   end
 
+  # El retiro lo juzga la regla de retiros (ReglaRetiro): lo que frena no sale y queda reportado,
+  # salvo que retire alguien con caja.retirar (entonces sale y queda por revisar).
   def retirar
     raise ArgumentError, t("errores.caja.sin_caja_simple") unless @corte
-    autoriza = autorizador_o_revision("caja.retirar")
-    retiro = @corte.retirar!(monto_centavos: Dinero.centavos(params[:monto]), motivo: params[:motivo], usuario: usuario_actual, autorizado_por: autoriza)
-    revisar_si_hace_falta(retiro, autoriza, motivo: retiro.motivo, valor_centavos: retiro.monto_centavos)
-    redirect_to caja_corte_path, notice: t("caja.avisos.retiro", monto: Dinero.pesos(retiro.monto_centavos)) + (autoriza ? "" : t("caja.avisos.queda_por_revisar"))
+    monto = Dinero.centavos(params[:monto])
+    @corte.comprobar_retiro!(monto, params[:motivo])
+    decision = ReglaRetiro.decidir(@corte, monto_centavos: monto, motivo: params[:motivo], usuario: usuario_actual)
+    con_permiso = puede?("caja.retirar")
+    if decision.rechaza? && !con_permiso
+      reporte = [ t("caja.retiro_frenado", monto: Dinero.pesos(monto), motivo: params[:motivo], regla: decision.motivo), (t("regla_retiro.fallo", error: decision.error) if decision.error) ].compact.join("\n")
+      Revision.abrir!(@corte, usuario: usuario_actual, sucursal: sucursal_actual, motivo: reporte, valor_centavos: monto, frenado: true)
+      raise ArgumentError, t("errores.caja.retiro_frenado", motivo: decision.motivo)
+    end
+    autoriza = con_permiso ? usuario_actual : nil
+    revisar = decision.permite? && !decision.error ? nil : [ params[:motivo], (decision.motivo unless decision.permite?), (t("regla_retiro.fallo", error: decision.error) if decision.error) ].compact.join("\n")
+    retiro = @corte.retirar!(monto_centavos: monto, motivo: params[:motivo], usuario: usuario_actual, autorizado_por: autoriza)
+    revisar_si_hace_falta(retiro, revisar ? nil : autoriza, motivo: revisar, valor_centavos: retiro.monto_centavos)
+    redirect_to caja_corte_path, notice: t("caja.avisos.retiro", monto: Dinero.pesos(retiro.monto_centavos)) + (revisar ? t("caja.avisos.queda_por_revisar") : "")
   rescue ArgumentError, ActiveRecord::RecordInvalid => e
     redirect_to caja_corte_path, alert: e.message
   end

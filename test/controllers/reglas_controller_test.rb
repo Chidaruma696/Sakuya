@@ -53,6 +53,23 @@ class ReglasControllerTest < ActionDispatch::IntegrationTest
     assert_raises(ActionController::UrlGenerationError) { regla_editar_path("nada") }
   end
 
+  test "retiros: el editor prueba y una regla propia manda a revisión los grandes aunque haya permiso" do
+    get regla_editar_path("retiro")
+    assert_select "input#motivo[value=?]", "caja fuerte"
+    post regla_guardar_path("retiro"), params: { probar: "1", codigo: ReglaRetiro::DE_FABRICA, monto: "100" }
+    assert_select "#decision", /Se frena: hace falta permiso para retirar/
+    post regla_guardar_path("retiro"), params: { codigo: '(if (> (amount) 1000) (to-review "retiro grande") (allow))' }
+    post entrar_path, params: { usuario: "supervisora", password: "secreto1" }
+    post caja_retirar_path, params: { monto: "200", motivo: "caja fuerte" }
+    assert_equal 1, cortes(:tienda_abierto).retiros.count
+    assert_equal 0, Revision.count
+    Inventario.mover!(sucursal: sucursales(:tienda), producto: productos(:catsup), tipo: "entrada", cantidad: 30, usuario: usuarios(:admin))
+    Caja.cobrar!(sucursal: sucursales(:tienda), usuario: usuarios(:admin), clave: "r", lineas: [ { producto_id: productos(:catsup).id, cantidad: 30 } ], pagos: [ { forma: "efectivo", monto_centavos: 126_000 } ])
+    post caja_retirar_path, params: { monto: "1200", motivo: "banco" }
+    assert_match "queda por revisar", flash[:notice]
+    assert_equal "banco\nretiro grande", Revision.last.motivo
+  end
+
   test "sin reglas.editar no se entra" do
     post entrar_path, params: { usuario: "cajera", password: "secreto1" }
     get regla_editar_path("corte")
