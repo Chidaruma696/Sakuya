@@ -92,6 +92,7 @@ es:
       regla_venta: Ventas en Lisp
       regla_retiro: Retiros en Lisp
       regla_movimiento: Inventario en Lisp
+      regla_recepcion: Recepciones en Lisp
       regla_factura: Facturas en Lisp
     secciones_ayuda:
       para_ti: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
@@ -342,6 +343,7 @@ es:
       monto_cero: el monto debe ser mayor que cero
       falta_motivo: '%{motivo}: escribe el motivo'
       factura_frenada: '%{motivo}. Así no se registra: liga las recepciones que faltan o que la registre alguien con permiso para exceder. Queda reportado.'
+      recepcion_frenada: '%{motivo}. Así no entra: que la reciba alguien con permiso. Queda reportado.'
       factura_ya_cancelada: la factura ya está cancelada
       factura_con_pagos: 'la factura tiene pagos: anúlalos antes de cancelarla'
       pago_excede: el pago pasa de lo que resta de la factura (%{resta})
@@ -411,6 +413,7 @@ es:
       frenado_producto: 'Movimiento frenado: %{producto}'
       frenado_proveedor: 'Factura frenada de %{proveedor}'
       venta: 'Venta %{folio} de %{total}'
+      recepcion: 'Recepción %{folio} de %{proveedor}'
       corte_abierto: Corte %{folio}, abierto
   estados:
     pendiente: pendiente
@@ -456,6 +459,7 @@ es:
     compras.ver: Ver proveedores, cuentas por pagar y envases
     compras.recibir: Recibir mercancía del proveedor
     compras.facturar: Capturar y cancelar facturas del proveedor
+    compras.forzar_recepcion: Recibir mercancía que la regla de recepciones frena (queda por revisar)
     compras.pagar: Pagar a proveedores desde la caja
     compras.exceder: Registrar una factura con más de lo recibido (con motivo, queda por revisar)
     almacenes.traspasar: Traspasos entre sucursales y almacenes
@@ -898,6 +902,7 @@ es:
     motivo_exceso: Motivo si se factura más de lo recibido
     candado_aviso: 'Hay candado: si algún renglón trae más cantidad que las recepciones marcadas, la factura no se registra; con permiso para exceder, hace falta motivo y queda por revisar.'
     factura_frenada: 'Factura %{folio} frenada: %{regla}'
+    recepcion_frenada: 'Recepción frenada: %{motivo}'
     comparativo_ayuda: 'Por producto: lo que dice la factura y lo que entró en las recepciones ligadas. Es un aviso, no un candado.'
     sin_renglones_ni_recepciones: 'Sin renglones ni recepciones ligadas: nada que comparar.'
     facturado: Facturado
@@ -1007,6 +1012,33 @@ es:
     lee: Lo que lee (en pesos)
     contesta: Lo que contesta
     ejemplo: Ejemplo
+  regla_recepcion:
+    titulo: Recepciones en Lisp
+    ayuda: Antes de que la mercancía del proveedor entre al inventario, esta regla mira qué llega, de quién y con qué papeles, y decide si entra, si queda por revisar o si se frena. De fábrica no frena nada. Probar no guarda nada.
+    fallo: 'La regla de recepciones falló y decidió la de fábrica: %{error}'
+    motivos: {}
+    caso:
+      llegan: Lo que llega (CLAVE cantidad, …)
+      remision: Remisión
+      facturada: Va con factura
+      autorizado: Recibe alguien con permiso para forzar recepciones
+    veredictos:
+      allow: Entra
+      review: Entra y queda por revisar
+      reject: Se frena
+    funciones:
+      supplier: el nombre del proveedor
+      lines: cuántos renglones
+      products: la lista de claves
+      quantity_of: '(quantity-of "CLAVE"): cuánto llega de ese producto'
+      value: lo que vale a precio de catálogo
+      remission: 'la remisión escrita ("" si no hay)'
+      invoiced: si va ligada a una factura
+      authorized: si quien recibe tiene permiso para forzar recepciones
+    allow: entra
+    to_review: entra y queda por revisar
+    reject: no entra y deja reportado el intento
+    nucleo: Quien tiene permiso para forzar recepciones nunca se queda sin poder recibir; para esa persona, frenar es revisar.
   regla_factura:
     factura_no_existe: 'no hay una factura %{folio}'
     titulo: Facturas en Lisp

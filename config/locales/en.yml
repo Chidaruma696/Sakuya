@@ -92,6 +92,7 @@ en:
       regla_venta: Sales in Lisp
       regla_retiro: Withdrawals in Lisp
       regla_movimiento: Stock in Lisp
+      regla_recepcion: Receipts in Lisp
       regla_factura: Invoices in Lisp
     secciones_ayuda:
       para_ti: Applied the moment you pick one; saved on your user, they follow you to any computer.
@@ -342,6 +343,7 @@ en:
       monto_cero: the amount must be greater than zero
       falta_motivo: '%{motivo}: write the reason'
       factura_frenada: '%{motivo}. It cannot be recorded like this: link the missing receipts or have someone allowed to exceed record it. It has been reported.'
+      recepcion_frenada: '%{motivo}. It cannot come in like this: have someone with permission receive it. It has been reported.'
       factura_ya_cancelada: the invoice is already cancelled
       factura_con_pagos: 'the invoice has payments: void them before cancelling'
       pago_excede: the payment exceeds what remains on the invoice (%{resta})
@@ -411,6 +413,7 @@ en:
       frenado_producto: 'Movement stopped: %{producto}'
       frenado_proveedor: 'Invoice stopped from %{proveedor}'
       venta: 'Sale %{folio} of %{total}'
+      recepcion: 'Receipt %{folio} from %{proveedor}'
       corte_abierto: Session %{folio}, open
   estados:
     pendiente: pending
@@ -456,6 +459,7 @@ en:
     compras.ver: View suppliers, accounts payable and containers
     compras.recibir: Receive goods from suppliers
     compras.facturar: Enter and cancel supplier invoices
+    compras.forzar_recepcion: Receive goods the receipts rule stops (it goes to review)
     compras.pagar: Pay suppliers from the till
     compras.exceder: Record an invoice with more than received (with a reason, it goes to review)
     almacenes.traspasar: Transfers between branches and warehouses
@@ -898,6 +902,7 @@ en:
     motivo_exceso: Reason if invoicing more than received
     candado_aviso: 'Lock is on: if any line has more quantity than the ticked receipts, the invoice is not recorded; with permission to exceed, a reason is required and it goes to review.'
     factura_frenada: 'Invoice %{folio} stopped: %{regla}'
+    recepcion_frenada: 'Receipt stopped: %{motivo}'
     comparativo_ayuda: 'Per product: what the invoice says and what came in on the linked receipts. A warning, not a lock.'
     sin_renglones_ni_recepciones: 'No lines and no linked receipts: nothing to compare.'
     facturado: Invoiced
@@ -1007,6 +1012,33 @@ en:
     lee: What it reads (in pesos)
     contesta: What it answers
     ejemplo: Example
+  regla_recepcion:
+    titulo: Receipts in Lisp
+    ayuda: Before the supplier's goods enter the stock, this rule looks at what arrives, from whom and with which papers, and decides whether it comes in, goes to review or is stopped. Out of the box it stops nothing. Test saves nothing.
+    fallo: 'The receipts rule failed and the built-in one decided: %{error}'
+    motivos: {}
+    caso:
+      llegan: What arrives (CODE quantity, …)
+      remision: Delivery note
+      facturada: Comes with an invoice
+      autorizado: Received by someone allowed to force receipts
+    veredictos:
+      allow: It comes in
+      review: It comes in and goes to review
+      reject: It is stopped
+    funciones:
+      supplier: the supplier name
+      lines: how many lines
+      products: the list of codes
+      quantity_of: '(quantity-of "CODE"): how much of that product arrives'
+      value: what it is worth at list price
+      remission: 'the written delivery note ("" if none)'
+      invoiced: whether it is linked to an invoice
+      authorized: whether the person receiving may force receipts
+    allow: it comes in
+    to_review: it comes in and goes to review
+    reject: it does not come in and the attempt is reported
+    nucleo: Someone allowed to force receipts can always receive; for them, stopping means review.
   regla_factura:
     factura_no_existe: 'there is no invoice %{folio}'
     titulo: Invoices in Lisp

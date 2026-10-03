@@ -4,7 +4,7 @@ class Regla < ApplicationRecord
   self.table_name = "reglas"
   # Cada gancho y el módulo que guarda su contrato (su VERSION).
   CONTRATOS = { "tablero" => "Tablero", "corte" => "ReglaCorte", "precio" => "ReglaPrecio", "retiro" => "ReglaRetiro",
-                "movimiento" => "ReglaMovimiento", "factura" => "ReglaFactura", "venta" => "ReglaVenta" }.freeze
+                "movimiento" => "ReglaMovimiento", "factura" => "ReglaFactura", "recepcion" => "ReglaRecepcion", "venta" => "ReglaVenta" }.freeze
   GANCHOS = CONTRATOS.keys.freeze
 
   belongs_to :usuario

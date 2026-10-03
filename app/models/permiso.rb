@@ -18,6 +18,7 @@ module Permiso
     "compras.recibir" => "Recibir mercancía del proveedor",
     "compras.facturar" => "Capturar y cancelar facturas del proveedor",
     "compras.pagar" => "Pagar a proveedores desde la caja",
+    "compras.forzar_recepcion" => "Recibir mercancía que la regla de recepciones frena (queda por revisar)",
     "compras.exceder" => "Registrar una factura con más de lo recibido (con motivo, queda por revisar)",
     "almacenes.traspasar" => "Traspasos a granel entre sucursales y almacenes",
     "admin.catalogo" => "Administrar productos y códigos",

@@ -12,7 +12,7 @@ Cada gancho lleva un número de contrato (`VERSION` en su módulo) y cada regla 
 
 ## La venta entera también pregunta (3 oct 2026)
 
-Además del precio de cada renglón, la venta completa pasa por una regla justo antes de cobrarse: total, productos, formas de pago, hora y día. De fábrica no frena nada, porque los precios ya tienen su regla y una venta normal no es irregular; está para lo que cada negocio necesita (nada de alcohol a deshoras, ventas grandes a revisión). Lo que frena no se cobra y queda reportado en el corte; con el permiso nuevo `caja.forzar_venta` se cobra y queda por revisar.
+Además del precio de cada renglón, la venta completa pasa por una regla justo antes de cobrarse: total, productos, formas de pago, hora y día. De fábrica no frena nada, porque los precios ya tienen su regla y una venta normal no es irregular; está para lo que cada negocio necesita (nada de alcohol a deshoras, ventas grandes a revisión). Lo que frena no se cobra y queda reportado en el corte; con el permiso nuevo `caja.forzar_venta` se cobra y queda por revisar. Lo mismo al recibir mercancía: una regla mira qué llega, de quién y con qué papeles (remisión, factura); de fábrica no frena nada, lo que frena no entra y queda reportado en el proveedor, y con `compras.forzar_recepcion` entra por revisar.
 
 ## Probar en seco con lo de verdad (3 oct 2026)
 

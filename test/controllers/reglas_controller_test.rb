@@ -157,6 +157,27 @@ class ReglasControllerTest < ActionDispatch::IntegrationTest
     assert_select "p", /paid-with recibe una forma de pago/
   end
 
+  test "recepciones: sin remisión no entra (queda reportado) y con permiso entra por revisar; el editor prueba" do
+    post regla_guardar_path("recepcion"), params: { probar: "1", codigo: ReglaRecepcion::EJEMPLO, llegan: "cats 10, pech 2.5", remision: "" }
+    assert_select "#decision", /Se frena: No delivery note/
+    post regla_guardar_path("recepcion"), params: { probar: "1", codigo: "(if (= (quantity-of \"pech\") 2.5) (allow) (reject \"no\"))", llegan: "cats 10, pech 2.5" }
+    assert_select "#decision", /Entra/
+    post regla_guardar_path("recepcion"), params: { codigo: '(if (= (remission) "") (reject "sin remisión no entra") (allow))' }
+    prov = Proveedor.create!(nombre: "Granja", dias_credito: 0)
+    lineas = { "0" => { producto_id: productos(:catsup).id, cantidad: "6" } }
+    roles(:administrador).update!(permisos: Permiso::CLAVES.keys - [ "compras.forzar_recepcion" ])
+    post recepciones_path, params: { recepcion: { proveedor_id: prov.id, remision: "", lineas_attributes: lineas } }
+    assert_match "sin remisión no entra. Así no entra", flash[:alert]
+    assert_equal 0, Recepcion.count
+    assert_equal [ prov, 25_200, true ], [ Revision.last.revisable, Revision.last.valor_centavos, Revision.last.frenado ]
+    roles(:administrador).update!(permisos: [ "*" ])
+    post recepciones_path, params: { recepcion: { proveedor_id: prov.id, remision: "", lineas_attributes: lineas } }
+    recepcion = Recepcion.last
+    assert_redirected_to recepcion_path(recepcion)
+    assert_equal [ recepcion, "sin remisión no entra" ], [ Revision.last.revisable, Revision.last.motivo ]
+    assert_match "Recepción #{recepcion.folio} de Granja", Revision.last.descripcion
+  end
+
   test "sin reglas.editar no se entra" do
     post entrar_path, params: { usuario: "cajera", password: "secreto1" }
     get regla_editar_path("corte")

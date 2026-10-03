@@ -92,6 +92,7 @@ de:
       regla_venta: Verkäufe in Lisp
       regla_retiro: Entnahmen in Lisp
       regla_movimiento: Bestand in Lisp
+      regla_recepcion: Wareneingänge in Lisp
       regla_factura: Rechnungen in Lisp
     secciones_ayuda:
       para_ti: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
@@ -342,6 +343,7 @@ de:
       monto_cero: der Betrag muss größer als null sein
       falta_motivo: '%{motivo}: Grund angeben'
       factura_frenada: '%{motivo}. So kann sie nicht erfasst werden: fehlende Wareneingänge verknüpfen oder jemanden mit Berechtigung zum Überschreiten erfassen lassen. Es wurde gemeldet.'
+      recepcion_frenada: '%{motivo}. So kommt sie nicht herein: jemand mit Berechtigung muss sie annehmen. Es wurde gemeldet.'
       factura_ya_cancelada: die Rechnung ist bereits storniert
       factura_con_pagos: 'die Rechnung hat Zahlungen: erst stornieren'
       pago_excede: die Zahlung übersteigt den Rest der Rechnung (%{resta})
@@ -411,6 +413,7 @@ de:
       frenado_producto: 'Bewegung gestoppt: %{producto}'
       frenado_proveedor: 'Rechnung gestoppt von %{proveedor}'
       venta: 'Verkauf %{folio} über %{total}'
+      recepcion: 'Wareneingang %{folio} von %{proveedor}'
       corte_abierto: Kassenabschnitt %{folio}, offen
   estados:
     pendiente: offen
@@ -456,6 +459,7 @@ de:
     compras.ver: Lieferanten, Verbindlichkeiten und Leergut sehen
     compras.recibir: Ware vom Lieferanten annehmen
     compras.facturar: Lieferantenrechnungen erfassen und stornieren
+    compras.forzar_recepcion: Ware annehmen, die die Eingangsregel stoppt (geht zur Prüfung)
     compras.pagar: Lieferanten aus der Kasse bezahlen
     compras.exceder: Eine Rechnung mit mehr als erhalten erfassen (mit Grund, geht zur Prüfung)
     almacenes.traspasar: Umbuchungen zwischen Filialen und Lagern
@@ -898,6 +902,7 @@ de:
     motivo_exceso: Grund, falls mehr als erhalten abgerechnet wird
     candado_aviso: 'Sperre aktiv: hat eine Zeile mehr Menge als die angekreuzten Wareneingänge, wird die Rechnung nicht erfasst; mit Berechtigung zum Überschreiten ist ein Grund nötig und sie geht zur Prüfung.'
     factura_frenada: 'Rechnung %{folio} gestoppt: %{regla}'
+    recepcion_frenada: 'Wareneingang gestoppt: %{motivo}'
     comparativo_ayuda: 'Pro Produkt: was die Rechnung sagt und was in den verknüpften Wareneingängen ankam. Ein Hinweis, keine Sperre.'
     sin_renglones_ni_recepciones: 'Keine Positionen und keine verknüpften Wareneingänge: nichts zu vergleichen.'
     facturado: Berechnet
@@ -1007,6 +1012,33 @@ de:
     lee: Was sie liest (in Pesos)
     contesta: Was sie antwortet
     ejemplo: Beispiel
+  regla_recepcion:
+    titulo: Wareneingänge in Lisp
+    ayuda: Bevor die Ware des Lieferanten in den Bestand geht, prüft diese Regel was kommt, von wem und mit welchen Papieren, und entscheidet, ob sie hereinkommt, ob es zur Prüfung geht oder ob gestoppt wird. Standardmäßig stoppt sie nichts. Testen speichert nichts.
+    fallo: 'Die Eingangsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    motivos: {}
+    caso:
+      llegan: Was ankommt (CODE Menge, …)
+      remision: Lieferschein
+      facturada: Kommt mit Rechnung
+      autorizado: Angenommen von jemandem mit Berechtigung, Eingänge zu erzwingen
+    veredictos:
+      allow: Kommt herein
+      review: Kommt herein und wird geprüft
+      reject: Wird gestoppt
+    funciones:
+      supplier: der Name des Lieferanten
+      lines: wie viele Zeilen
+      products: die Liste der Codes
+      quantity_of: '(quantity-of "CODE"): wie viel von diesem Produkt ankommt'
+      value: der Wert zum Listenpreis
+      remission: 'der geschriebene Lieferschein ("" wenn keiner)'
+      invoiced: ob er mit einer Rechnung verknüpft ist
+      authorized: ob die annehmende Person Eingänge erzwingen darf
+    allow: kommt herein
+    to_review: kommt herein und wird geprüft
+    reject: kommt nicht herein und der Versuch wird gemeldet
+    nucleo: Wer Eingänge erzwingen darf, kann immer annehmen; für diese Person heißt Stoppen Prüfung.
   regla_factura:
     factura_no_existe: 'es gibt keine Rechnung %{folio}'
     titulo: Rechnungen in Lisp
