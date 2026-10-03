@@ -1107,6 +1107,13 @@ en:
       motivo: 'Transfer %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancellation of %{folio}: %{motivo}'
   repl:
+    ver_bitacora: See who asked what.
+    bitacora: REPL log
+    bitacora_ayuda: Every question stays here, with who asked it, from which branch and whether it ran. It cannot be edited or deleted.
+    pregunta: Question
+    corrio: ran
+    fallo: failed
+    sin_consultas: Nobody has asked anything yet.
     titulo: Read-only REPL
     ayuda: Ask the live data questions with the same Lisp as the rules. Queries return lists of maps you can filter, sort and add up; a list of maps shows as a table. Nothing can be changed from here. Dates like "2026-10-03"; without dates, today.
     evaluar: Evaluate

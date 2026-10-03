@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   # El REPL de solo lectura: preguntarle cosas a los datos en vivo.
   get "ajustes/avanzado/repl", to: "repl#show", as: :repl
   post "ajustes/avanzado/repl", to: "repl#evaluar", as: :repl_evaluar
+  get "ajustes/avanzado/repl/bitacora", to: "repl#bitacora", as: :repl_bitacora
   # Todas las reglas del negocio en un archivo .lisp: bajarlo y subirlo.
   scope "ajustes/avanzado/archivo", controller: "archivo_reglas" do
     get "/", action: :show, as: :archivo_reglas

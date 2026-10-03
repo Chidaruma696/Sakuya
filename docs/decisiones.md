@@ -32,7 +32,7 @@ Pendiente: un lugar de donde bajar plugins de la comunidad. Por ahora se compart
 
 ## Un REPL para preguntarle a los datos (3 oct 2026)
 
-Ajustes › Opciones avanzadas › REPL evalúa Lisp contra los datos en vivo: consultas que devuelven listas de mapas (`(sales)`, `(stock)`, `(customers)`, `(cash-counts)`, `(reviews)`…) y herramientas para filtrarlas, ordenarlas, agruparlas y sumarlas; una lista de mapas sale como tabla. Es de solo lectura dos veces: el Lisp solo llama lo que se le da, y además cada evaluación corre con las escrituras bloqueadas en la base (`while_preventing_writes`), con límite de pasos y de 500 filas. Pide el mismo permiso que editar reglas porque deja ver todo; la matriz ve todas las sucursales y una tienda, la suya. No se guarda nada salvo las últimas preguntas en la sesión. Pendiente, si hace falta: dejar asentado quién preguntó qué.
+Ajustes › Opciones avanzadas › REPL evalúa Lisp contra los datos en vivo: consultas que devuelven listas de mapas (`(sales)`, `(stock)`, `(customers)`, `(cash-counts)`, `(reviews)`…) y herramientas para filtrarlas, ordenarlas, agruparlas y sumarlas; una lista de mapas sale como tabla. Es de solo lectura dos veces: el Lisp solo llama lo que se le da, y además cada evaluación corre con las escrituras bloqueadas en la base (`while_preventing_writes`), con límite de pasos y de 500 filas. Pide el mismo permiso que editar reglas porque deja ver todo; la matriz ve todas las sucursales y una tienda, la suya. No se guarda nada salvo las últimas preguntas en la sesión. Cada pregunta queda en una bitácora de solo inserción (quién, desde qué sucursal, qué y si corrió), al lado del REPL.
 
 ## Clientes y crédito, con el crédito en Lisp (3 oct 2026)
 

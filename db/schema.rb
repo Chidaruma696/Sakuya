@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_000008) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_000009) do
   create_table "abonos", force: :cascade do |t|
     t.integer "cliente_id", null: false
     t.integer "corte_id", null: false
@@ -79,6 +79,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000008) do
     t.datetime "updated_at", null: false
     t.index ["codigo"], name: "index_codigos_barras_on_codigo", unique: true
     t.index ["producto_id"], name: "index_codigos_barras_on_producto_id"
+  end
+
+  create_table "consultas_repl", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.boolean "ok", null: false
+    t.integer "sucursal_id", null: false
+    t.text "texto", null: false
+    t.integer "usuario_id", null: false
+    t.index ["created_at"], name: "index_consultas_repl_on_created_at"
+    t.index ["sucursal_id"], name: "index_consultas_repl_on_sucursal_id"
+    t.index ["usuario_id"], name: "index_consultas_repl_on_usuario_id"
   end
 
   create_table "contadores", force: :cascade do |t|
@@ -646,6 +657,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000008) do
   add_foreign_key "cargos", "usuarios"
   add_foreign_key "cargos", "usuarios", column: "resuelto_por_id"
   add_foreign_key "codigos_barras", "productos"
+  add_foreign_key "consultas_repl", "sucursales"
+  add_foreign_key "consultas_repl", "usuarios"
   add_foreign_key "conteo_lineas", "conteos"
   add_foreign_key "conteo_lineas", "productos"
   add_foreign_key "conteos", "sucursales"

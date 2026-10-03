@@ -1107,6 +1107,13 @@ es:
       motivo: 'Traspaso %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancelación de %{folio}: %{motivo}'
   repl:
+    ver_bitacora: Ver quién ha preguntado qué.
+    bitacora: Bitácora del REPL
+    bitacora_ayuda: Cada pregunta queda aquí, con quién la hizo, desde qué sucursal y si corrió. No se edita ni se borra.
+    pregunta: Pregunta
+    corrio: corrió
+    fallo: falló
+    sin_consultas: Nadie le ha preguntado nada todavía.
     titulo: REPL de solo lectura
     ayuda: Pregúntale cosas a los datos en vivo con el mismo Lisp de las reglas. Las consultas devuelven listas de mapas que se filtran, ordenan y suman; una lista de mapas sale como tabla. No se puede cambiar nada desde aquí. Fechas como "2026-10-03"; sin fechas, hoy.
     evaluar: Evaluar

@@ -1107,6 +1107,13 @@ de:
       motivo: 'Umlagerung %{folio}: %{origen} → %{destino}'
       cancelacion: 'Storno von %{folio}: %{motivo}'
   repl:
+    ver_bitacora: Sehen, wer was gefragt hat.
+    bitacora: REPL-Protokoll
+    bitacora_ayuda: Jede Frage bleibt hier, mit wer sie gestellt hat, aus welcher Filiale und ob sie lief. Sie lässt sich weder bearbeiten noch löschen.
+    pregunta: Frage
+    corrio: lief
+    fallo: fehlgeschlagen
+    sin_consultas: Noch hat niemand etwas gefragt.
     titulo: REPL nur zum Lesen
     ayuda: Stell den Live-Daten Fragen mit demselben Lisp wie die Regeln. Abfragen liefern Listen von Maps, die man filtern, sortieren und summieren kann; eine Liste von Maps erscheint als Tabelle. Von hier aus lässt sich nichts ändern. Daten wie "2026-10-03"; ohne Datum heute.
     evaluar: Auswerten

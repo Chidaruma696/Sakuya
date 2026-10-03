@@ -3,7 +3,7 @@
 <%= render "ajustes/menu", actual: "repl" %>
 <section class="min-w-0">
 <h2 class="mb-1 text-xl font-bold"><%= t("repl.titulo") %></h2>
-<p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("repl.ayuda") %></p>
+<p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("repl.ayuda") %> <%= link_to t("repl.ver_bitacora"), repl_bitacora_path, class: "enlace" %></p>
 
 <div class="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_22rem]">
   <div class="min-w-0 space-y-4">

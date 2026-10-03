@@ -12,6 +12,11 @@ class ReplController < ApplicationController
     @informes = informes
   end
 
+  # Quién le ha preguntado qué al REPL, lo último primero.
+  def bitacora
+    @consultas = ConsultaRepl.includes(:usuario, :sucursal).order(id: :desc).limit(200)
+  end
+
   def evaluar
     @texto = params[:texto].to_s
     begin
@@ -21,6 +26,8 @@ class ReplController < ApplicationController
       @error = e.message
     end
     session[:repl] = ([ @texto.strip ] + (session[:repl] || [])).uniq.first(HISTORIAL) if @texto.present? && @texto.size <= 300
+    # Fuera del bloqueo de escrituras: la bitácora sí se escribe.
+    ConsultaRepl.create!(usuario: usuario_actual, sucursal: sucursal_actual, texto: @texto.strip, ok: @error.nil?) if @texto.present?
     @historial = session[:repl]
     @informes = informes
     render :show, status: @error ? :unprocessable_entity : :ok

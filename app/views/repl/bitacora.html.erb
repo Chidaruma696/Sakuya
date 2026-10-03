@@ -1,0 +1,25 @@
+<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+<%= render "ajustes/menu", actual: "repl" %>
+<section class="min-w-0">
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h2 class="text-xl font-bold"><%= t("repl.bitacora") %></h2>
+  <%= link_to t("repl.titulo"), repl_path, class: "btn btn-ghost btn-sm" %>
+</div>
+<p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("repl.bitacora_ayuda") %></p>
+<table class="tabla">
+  <thead><tr><th><%= t("comun.fecha") %></th><th><%= t("comun.quien") %></th><th><%= t("comun.sucursal") %></th><th><%= t("repl.pregunta") %></th><th></th></tr></thead>
+  <tbody>
+    <% @consultas.each do |c| %>
+      <tr>
+        <td class="px-3 py-1.5 whitespace-nowrap"><%= l c.created_at, format: :short %></td>
+        <td class="px-3 py-1.5"><%= c.usuario %></td>
+        <td class="px-3 py-1.5"><%= c.sucursal %></td>
+        <td class="px-3 py-1.5"><code class="codigo text-xs"><%= c.texto.truncate(200) %></code></td>
+        <td class="px-3 py-1.5 text-xs <%= c.ok ? 'text-stone-500' : 'text-red-700' %>"><%= t(c.ok ? "repl.corrio" : "repl.fallo") %></td>
+      </tr>
+    <% end %>
+    <% if @consultas.empty? %><tr><td colspan="5" class="px-3 py-6 text-center text-stone-500"><%= t("repl.sin_consultas") %></td></tr><% end %>
+  </tbody>
+</table>
+</section>
+</div>

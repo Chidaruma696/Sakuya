@@ -23,6 +23,17 @@ class ReplControllerTest < ActionDispatch::IntegrationTest
     assert_select "ul a", "(products)"
   end
 
+  test "cada pregunta queda en la bitácora, con quién y si corrió" do
+    post repl_evaluar_path, params: { texto: "(count (products))" }
+    post repl_evaluar_path, params: { texto: "(products" }
+    assert_equal [ [ "(products", false ], [ "(count (products))", true ] ], ConsultaRepl.order(id: :desc).pluck(:texto, :ok)
+    assert_equal usuarios(:admin), ConsultaRepl.last.usuario
+    get repl_bitacora_path
+    assert_select "td code", "(count (products))"
+    assert_select "td", "falló"
+    assert_raises(ActiveRecord::ReadOnlyRecord) { ConsultaRepl.last.destroy }
+  end
+
   test "sin reglas.editar no se entra" do
     post entrar_path, params: { usuario: "cajera", password: "secreto1" }
     get repl_path
