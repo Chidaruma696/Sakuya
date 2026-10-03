@@ -67,7 +67,8 @@ class CajaController < ApplicationController
 
   # Se cuenta por billetes y monedas (denominacion[centavos] = cuántos) o se teclea el total. La
   # diferencia la juzga la regla del corte (ReglaCorte): si pide revisión hace falta motivo, y si
-  # rechaza no se cierra, salvo que cierre alguien con caja.diferencia (entonces queda por revisar).
+  # rechaza no se cierra y el intento queda reportado, salvo que cierre alguien con caja.diferencia
+  # (entonces queda por revisar).
   def cerrar
     autorizar!("caja.abrir")
     raise ArgumentError, t("errores.caja.sin_caja_simple") unless @corte
@@ -75,7 +76,10 @@ class CajaController < ApplicationController
     contado = desglose.any? ? Corte.sumar(desglose) : Dinero.centavos(params[:contado])
     diferencia = contado - @corte.efectivo_esperado_centavos
     decision = ReglaCorte.decidir(@corte, contado_centavos: contado, usuario: usuario_actual)
-    raise ArgumentError, t("errores.corte.rechazado", motivo: decision.motivo) if decision.rechaza? && !puede?("caja.diferencia")
+    if decision.rechaza? && !puede?("caja.diferencia")
+      reportar_cierre_frenado(contado, diferencia, decision)
+      raise ArgumentError, t("errores.corte.rechazado", motivo: decision.motivo)
+    end
     autoriza = decision.permite? ? usuario_actual : nil
     raise ArgumentError, t("errores.corte.falta_motivo", motivo: decision.motivo) if autoriza.nil? && params[:motivo].blank?
     # Si la regla del negocio tronó decidió la de fábrica, y el fallo se asienta en la revisión del corte.
@@ -136,6 +140,15 @@ class CajaController < ApplicationController
   end
 
   private
+
+  # Un cierre frenado no se pierde: queda en Revisión a nombre de quien contó. Si vuelve a contar
+  # lo mismo no se repite el reporte.
+  def reportar_cierre_frenado(contado, diferencia, decision)
+    texto = t("caja.cierre_frenado", contado: Dinero.pesos(contado), diferencia: Dinero.pesos(diferencia), motivo: decision.motivo)
+    texto += "\n#{t("regla_corte.fallo", error: decision.error)}" if decision.error
+    return if Revision.pendientes.exists?(revisable: @corte, usuario: usuario_actual, motivo: texto)
+    Revision.abrir!(@corte, usuario: usuario_actual, sucursal: sucursal_actual, motivo: texto, valor_centavos: diferencia.abs)
+  end
 
   def cargar_corte
     @corte = Corte.abierto_en(sucursal_actual)

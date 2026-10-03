@@ -261,7 +261,7 @@ de:
       sin_efectivo: so viel Bargeld ist nicht in der Lade (%{monto})
       ya_cerrado: der Kassenabschnitt ist bereits geschlossen
       falta_motivo: '%{motivo}: Grund angeben'
-      rechazado: '%{motivo}. So kann nicht abgeschlossen werden: neu zählen oder jemanden mit Berechtigung für Differenzen abschließen lassen'
+      rechazado: '%{motivo}. So kann nicht abgeschlossen werden: neu zählen oder jemanden mit Berechtigung für Differenzen abschließen lassen. Es wurde gemeldet.'
       sin_caja_en_almacen: "%{sucursal} ist ein Lager: dort gibt es keine Kasse"
     caja:
       clave_ticket: der Ticketschlüssel fehlt
@@ -396,6 +396,7 @@ de:
       venta_linea: 'Preis gesenkt in %{folio}: %{producto} auf %{precio} (Katalog %{catalogo})'
       factura_proveedor: Rechnung %{folio} von %{proveedor} mit mehr als erhalten
       corte: Abschnitt %{folio} mit einer Differenz von %{diferencia} geschlossen
+      corte_frenado: 'Abschnitt %{folio} nicht abgeschlossen: Versuch gestoppt'
   estados:
     pendiente: offen
     aprobada: freigegeben
@@ -483,6 +484,9 @@ de:
     efectivo_contado: Gezähltes Bargeld
     suma: Summe
     tope_diferencia_aviso: Die Differenz übersteigt %{monto}.
+    tope_frena: 'So kann nicht abgeschlossen werden: neu zählen oder jemanden mit Berechtigung für Differenzen rufen. Der Versuch wird gemeldet.'
+    tope_queda_por_revisar: Wird mit deinem Grund abgeschlossen und geht zur Prüfung.
+    cierre_frenado: 'Abschlussversuch gestoppt: gezählt %{contado}, Differenz von %{diferencia} (%{motivo})'
     motivo_diferencia: Grund der Differenz
     regla_propia_aviso: 'Dieses Geschäft hat eine eigene Abschlussregel: wenn die Differenz einen Grund braucht, hier eintragen.'
     cortes_cerrados: Geschlossene Abschnitte

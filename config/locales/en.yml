@@ -261,7 +261,7 @@ en:
       sin_efectivo: there is not that much cash in the drawer (%{monto})
       ya_cerrado: the register session is already closed
       falta_motivo: '%{motivo}: write the reason'
-      rechazado: '%{motivo}. It cannot be closed like this: count again or have someone allowed to accept differences close it'
+      rechazado: '%{motivo}. It cannot be closed like this: count again or have someone allowed to accept differences close it. It has been reported.'
       sin_caja_en_almacen: "%{sucursal} is a warehouse: there is no till there"
     caja:
       clave_ticket: the ticket key is missing
@@ -396,6 +396,7 @@ en:
       venta_linea: 'Price lowered on %{folio}: %{producto} to %{precio} (catalog %{catalogo})'
       factura_proveedor: Invoice %{folio} from %{proveedor} with more than received
       corte: Session %{folio} closed with a difference of %{diferencia}
+      corte_frenado: 'Session %{folio} not closed: attempt stopped'
   estados:
     pendiente: pending
     aprobada: approved
@@ -483,6 +484,9 @@ en:
     efectivo_contado: Counted cash
     suma: Total
     tope_diferencia_aviso: The difference exceeds %{monto}.
+    tope_frena: 'It cannot be closed like this: count again or call someone allowed to accept differences. The attempt is reported.'
+    tope_queda_por_revisar: It closes with your reason and goes to review.
+    cierre_frenado: 'Closing attempt stopped: counted %{contado}, difference of %{diferencia} (%{motivo})'
     motivo_diferencia: Reason for the difference
     regla_propia_aviso: 'This business has its own closing rule: if the difference needs a reason, write it here.'
     cortes_cerrados: Closed sessions

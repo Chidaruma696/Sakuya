@@ -4,7 +4,7 @@ Por qué Sakuya es como es. Lo más nuevo, arriba.
 
 ## El cierre de caja ya pregunta a una regla (3 oct 2026)
 
-El segundo gancho, y el primero que decide algo: al cerrar el corte, la regla lee el conteo en pesos (`(difference)`, `(expected)`, `(limit)`, `(authorized)`…) y contesta `(allow)`, `(to-review "motivo")` o `(reject "motivo")`. La de fábrica hace exactamente lo de antes con el tope de Ajustes › Caja, así que nada cambia para quien no la toque. Un rechazo frena a la cajera, pero no a quien tiene `caja.diferencia`: para esa persona cuenta como revisión. No me convence del todo, pero una regla mal escrita no puede dejar una caja sin poder cerrarse a las once de la noche. Si la regla truena decide la de fábrica y el fallo se anota en la revisión del corte. Todavía no hay editor: la regla solo se guarda desde la consola; el editor llega junto al del tablero.
+El segundo gancho, y el primero que decide algo: al cerrar el corte, la regla lee el conteo en pesos (`(difference)`, `(expected)`, `(limit)`, `(authorized)`…) y contesta `(allow)`, `(to-review "motivo")` o `(reject "motivo")`. La de fábrica usa el tope de Ajustes › Caja. Un rechazo frena a la cajera, pero no a quien tiene `caja.diferencia`: para esa persona cuenta como revisión. No me convence del todo, pero una regla mal escrita no puede dejar una caja sin poder cerrarse a las once de la noche. Si la regla truena decide la de fábrica y el fallo se anota en la revisión del corte. Todavía no hay editor: la regla solo se guarda desde la consola; el editor llega junto al del tablero.
 
 ## El primer gancho es el tablero (30 sept 2026)
 
@@ -28,7 +28,7 @@ Por qué un Lisp propio y no Ruby: Ruby ajeno no se puede ejecutar seguro desde 
 
 ## Más estricto de fábrica (30 sept 2026)
 
-Lo que necesita a un supervisor, de fábrica, lo espera: la regla general no es "se hace con motivo y se revisa después", es "se frena". El negocio que lo quiera más suelto lo relaja con una regla. Los roles de fábrica ya van con lo justo: la caja vende, abre, retira y ve el inventario; devolver dinero es de supervisor y recibir mercancía es de almacén. TODO: frenar de verdad llega con los ganchos del Lisp; hoy todavía manda la autorización diferida.
+Lo que necesita a un supervisor, de fábrica, lo espera: la regla general no es "se hace con motivo y se revisa después", es "se frena". El negocio que lo quiera más suelto lo relaja con una regla. Los roles de fábrica ya van con lo justo: la caja vende, abre, retira y ve el inventario; devolver dinero es de supervisor y recibir mercancía es de almacén. Frenar y reportar: lo irregular no pasa y el intento queda en Revisión a nombre de quien lo hizo, para que nada se pierda aunque no haya pasado. Desde el 3 oct 2026 así va el cierre de caja: fuera del tope, la cajera no cierra ni con motivo y su intento queda reportado; cierra quien tiene `caja.diferencia`, con motivo, y también queda por revisar. TODO: los retiros, los precios abajo del catálogo y los ajustes de inventario todavía van con la autorización diferida (se hace con motivo y se revisa después); pasan a frenar cuando les toque su gancho.
 
 ## Sakuya arranca solo con lo genérico (30 sept 2026)
 

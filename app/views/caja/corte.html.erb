@@ -49,8 +49,8 @@
           </div>
         <% elsif Corte.tope_diferencia_centavos.positive? %>
           <div class="hidden" data-gaveta-target="motivo">
-            <p class="mb-1 text-xs text-amber-700"><%= t("caja.tope_diferencia_aviso", monto: pesos(Corte.tope_diferencia_centavos)) %><%= " " + t("caja.retiro_por_revisar") unless puede?("caja.diferencia") %></p>
-            <%= f.text_field :motivo, placeholder: t("caja.motivo_diferencia"), class: "w-full rounded border border-stone-300 px-3 py-2" %>
+            <p class="mb-1 text-xs text-amber-700"><%= t("caja.tope_diferencia_aviso", monto: pesos(Corte.tope_diferencia_centavos)) %> <%= puede?("caja.diferencia") ? t("caja.tope_queda_por_revisar") : t("caja.tope_frena") %></p>
+            <%= f.text_field :motivo, placeholder: t("caja.motivo_diferencia"), class: "w-full rounded border border-stone-300 px-3 py-2" if puede?("caja.diferencia") %>
           </div>
         <% end %>
         <%= f.submit t("caja.cerrar_corte"), class: "btn btn-danger" %>

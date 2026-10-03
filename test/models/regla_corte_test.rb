@@ -9,14 +9,14 @@ class ReglaCorteTest < ActiveSupport::TestCase
     ReglaCorte.decidir(@corte, contado_centavos: contado, usuario: usuario, codigo: codigo)
   end
 
-  test "la de fábrica hace lo de siempre: sin tope o dentro del tope pasa, fuera pide revisión salvo con permiso" do
+  test "la de fábrica frena: sin tope o dentro del tope pasa, fuera se rechaza aunque cierre la supervisora" do
     assert decidir(10_000).permite?, "sin tope todo pasa"
     Ajuste.guardar!("caja.tope_diferencia" => "50")
     assert decidir(45_000).permite?, "faltan $50 justos"
     d = decidir(44_999)
-    assert d.revisar?
+    assert d.rechaza?
     assert_equal "la diferencia (−$50.01) pasa del tope ($50.00)", d.motivo
-    assert decidir(44_999, usuario: usuarios(:supervisora)).permite?, "la supervisora tiene caja.diferencia"
+    assert decidir(44_999, usuario: usuarios(:supervisora)).rechaza?, "el permiso lo mira el núcleo, no la regla"
   end
 
   test "una regla propia lee el conteo en pesos y decide" do
@@ -36,7 +36,7 @@ class ReglaCorteTest < ActiveSupport::TestCase
   test "si la regla truena o no decide, decide la de fábrica y el error viaja en la decisión" do
     Ajuste.guardar!("caja.tope_diferencia" => "50")
     d = decidir(40_000, "(allow")
-    assert d.revisar?, "decidió la de fábrica"
+    assert d.rechaza?, "decidió la de fábrica"
     assert d.error.present?
     d = decidir(50_000, "(+ 1 2)")
     assert d.permite?

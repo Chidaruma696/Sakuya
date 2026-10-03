@@ -80,7 +80,7 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", caja_resumen_path(corte)
   end
 
-  test "cerrar contando billetes; con tope, una diferencia grande pide motivo y queda por revisar" do
+  test "cerrar contando billetes; con tope, una diferencia grande frena a la cajera, se reporta y solo la supervisora cierra" do
     corte = cortes(:tienda_abierto)
     get caja_corte_path
     assert_select "input[name='denominacion[50000]']"
@@ -88,9 +88,19 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     Ajuste.guardar!("caja.tope_diferencia" => "50")
     get caja_corte_path
     assert_select "[data-gaveta-target=motivo]"
-    post caja_cerrar_path, params: { denominacion: { "20000" => "1", "10000" => "2" } }
-    assert_match "pasa del tope", flash[:alert], "la cajera no tiene caja.diferencia y no dio motivo"
+    assert_match "No se puede cerrar así", response.body
+    post caja_cerrar_path, params: { denominacion: { "20000" => "1", "10000" => "2" }, motivo: "faltó un billete" }
+    assert_match "pasa del tope ($50.00). Así no se cierra", flash[:alert], "la cajera no tiene caja.diferencia: ni con motivo"
     assert corte.reload.abierto?
+    reporte = Revision.last
+    assert_equal [ corte, usuarios(:cajera), 10_000 ], [ reporte.revisable, reporte.usuario, reporte.valor_centavos ]
+    assert_match "contó $400.00", reporte.motivo
+    assert_match "sin cerrar", reporte.descripcion
+    post caja_cerrar_path, params: { contado: "400.00" }
+    assert_equal 1, Revision.count, "contar lo mismo otra vez no repite el reporte"
+    post entrar_path, params: { usuario: "supervisora", password: "secreto1" }
+    post caja_cerrar_path, params: { denominacion: { "20000" => "1", "10000" => "2" } }
+    assert_match "escribe el motivo", flash[:alert]
     post caja_cerrar_path, params: { denominacion: { "20000" => "1", "10000" => "2" }, motivo: "faltó un billete" }
     assert_redirected_to caja_resumen_path(corte)
     assert_match "queda por revisar", flash[:notice]
@@ -136,6 +146,11 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to caja_resumen_path(cortes(:tienda_abierto))
     assert_match "queda por revisar", flash[:notice]
     assert_match "La regla del corte falló", Revision.last.motivo
+    Ajuste.guardar!("caja.tope_diferencia" => "50")
+    post caja_abrir_path, params: { fondo: "500" }
+    post caja_cerrar_path, params: { contado: "100.00" }
+    assert_match "Así no se cierra", flash[:alert], "la de fábrica frena"
+    assert_match(/Intento de cierre frenado.*\nLa regla del corte falló/m, Revision.last.motivo)
   end
 
   test "devolución solo con ticket" do

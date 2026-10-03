@@ -13,11 +13,11 @@ module ReglaCorte
   DE_FABRICA = <<~LISP
     ; Closing the cash drawer. (difference) is counted minus expected: negative means missing money.
     ; Answer (allow), (to-review "why") or (reject "why").
+    ; Out of the limit it stops: only someone allowed to accept differences can close, and it goes to review.
     (if (or (= (limit) 0)
-            (<= (abs (difference)) (limit))
-            (authorized))
+            (<= (abs (difference)) (limit)))
         (allow)
-        (to-review :over-limit))
+        (reject :over-limit))
   LISP
 
   # Las palabras clave que el núcleo sabe decir en el idioma de quien cierra.

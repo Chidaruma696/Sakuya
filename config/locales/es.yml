@@ -261,7 +261,7 @@ es:
       sin_efectivo: no hay tanto efectivo en la gaveta (%{monto})
       ya_cerrado: el corte ya está cerrado
       falta_motivo: '%{motivo}: escribe el motivo'
-      rechazado: '%{motivo}. Así no se cierra: vuelve a contar o que cierre alguien con permiso para diferencias'
+      rechazado: '%{motivo}. Así no se cierra: vuelve a contar o que cierre alguien con permiso para diferencias. Queda reportado.'
       sin_caja_en_almacen: "%{sucursal} es un almacén: ahí no hay caja"
     caja:
       clave_ticket: hace falta la clave del ticket
@@ -396,6 +396,7 @@ es:
       venta_linea: 'Precio bajado en %{folio}: %{producto} a %{precio} (catálogo %{catalogo})'
       factura_proveedor: Factura %{folio} de %{proveedor} con más de lo recibido
       corte: Corte %{folio} cerrado con diferencia de %{diferencia}
+      corte_frenado: 'Corte %{folio} sin cerrar: intento frenado'
   estados:
     pendiente: pendiente
     aprobada: aprobada
@@ -483,6 +484,9 @@ es:
     efectivo_contado: Efectivo contado
     suma: Suma
     tope_diferencia_aviso: La diferencia pasa de %{monto}.
+    tope_frena: 'No se puede cerrar así: vuelve a contar o llama a alguien con permiso para diferencias. El intento queda reportado.'
+    tope_queda_por_revisar: Se cierra con tu motivo y queda por revisar.
+    cierre_frenado: 'Intento de cierre frenado: contó %{contado}, diferencia de %{diferencia} (%{motivo})'
     motivo_diferencia: Motivo de la diferencia
     regla_propia_aviso: 'El negocio tiene su propia regla para el cierre: si la diferencia pide motivo, escríbelo aquí.'
     cortes_cerrados: Cortes cerrados
