@@ -7,4 +7,7 @@ class FacturaProveedorLinea < ApplicationRecord
   validates :cajas, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   before_validation { self.importe_centavos = Dinero.importe(cantidad, precio_centavos) if cantidad && precio_centavos }
+
+  # El formulario captura el precio en pesos.
+  def precio = precio_centavos && BigDecimal(precio_centavos) / 100
 end

@@ -8,6 +8,8 @@ class FacturaProveedor < ApplicationRecord
   belongs_to :sucursal
   belongs_to :usuario
   has_many :lineas, class_name: "FacturaProveedorLinea", dependent: :destroy, inverse_of: :factura
+  # Solo para que el formulario nombre sus renglones como lineas_attributes; los renglones los arma el núcleo.
+  accepts_nested_attributes_for :lineas
   has_many :recepciones, dependent: :nullify
   has_many :pagos, class_name: "PagoProveedor", dependent: :restrict_with_error
   has_many :movimientos, class_name: "MovimientoProveedor", dependent: :restrict_with_error

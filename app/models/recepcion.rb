@@ -8,6 +8,8 @@ class Recepcion < ApplicationRecord
   belongs_to :factura, class_name: "FacturaProveedor", foreign_key: :factura_proveedor_id, optional: true
   belongs_to :usuario
   has_many :lineas, class_name: "RecepcionLinea", dependent: :destroy, inverse_of: :recepcion
+  # Solo para que el formulario nombre sus renglones como lineas_attributes; los renglones los arma el núcleo.
+  accepts_nested_attributes_for :lineas
   has_many :movimientos, as: :referencia
 
   before_validation :asignar_folio, on: :create
