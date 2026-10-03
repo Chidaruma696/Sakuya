@@ -965,6 +965,11 @@ en:
       cancelado: Transfer %{folio} cancelled
       motivo: 'Transfer %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancellation of %{folio}: %{motivo}'
+  reglas:
+    errores:
+      sin_decision: 'the rule must end in (allow), (to-review "why") or (reject "why"), and it ended in %{valor}'
+      motivo: to-review and reject need the reason, as a string or a keyword
+      motivo_desconocido: 'unknown reason :%{motivo}; the ones I know: :%{motivos}'
   regla_corte:
     titulo: Cash closing in Lisp
     ayuda: When the session is closed, this rule looks at the count and decides whether it closes, goes to review or is stopped. Test saves nothing; each saved version stays in the list below.
@@ -1007,10 +1012,6 @@ en:
     fallo: 'The cash count rule failed and the built-in one decided: %{error}'
     motivos:
       over_limit: the difference (%{diferencia}) exceeds the limit (%{tope})
-    errores:
-      sin_decision: 'the cash count rule must end in (allow), (to-review "why") or (reject "why"), and it ended in %{valor}'
-      motivo: to-review and reject need the reason, as a string or a keyword
-      motivo_desconocido: 'unknown reason :%{motivo}; the ones I know: :%{motivos}'
   tablero:
     titulo: Dashboard in Lisp
     ayuda: The home dashboard is a program. Change which figures show and in what order, compute your own and pick the lists below. Trying doesn't save anything; every saved version stays in the list below.

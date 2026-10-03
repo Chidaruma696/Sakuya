@@ -965,6 +965,11 @@ de:
       cancelado: Umlagerung %{folio} storniert
       motivo: 'Umlagerung %{folio}: %{origen} → %{destino}'
       cancelacion: 'Storno von %{folio}: %{motivo}'
+  reglas:
+    errores:
+      sin_decision: 'die Regel muss mit (allow), (to-review "Grund") oder (reject "Grund") enden und endete mit %{valor}'
+      motivo: to-review und reject brauchen den Grund, als Zeichenkette oder Schlüsselwort
+      motivo_desconocido: 'unbekannter Grund :%{motivo}; bekannt sind: :%{motivos}'
   regla_corte:
     titulo: Kassenabschluss in Lisp
     ayuda: Beim Abschluss prüft diese Regel die Zählung und entscheidet, ob abgeschlossen wird, ob es zur Prüfung geht oder ob gestoppt wird. Testen speichert nichts; jede gespeicherte Version steht in der Liste unten.
@@ -1007,10 +1012,6 @@ de:
     fallo: 'Die Regel für den Kassenabschluss ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
     motivos:
       over_limit: die Differenz (%{diferencia}) übersteigt die Grenze (%{tope})
-    errores:
-      sin_decision: 'die Regel für den Kassenabschluss muss mit (allow), (to-review "Grund") oder (reject "Grund") enden und endete mit %{valor}'
-      motivo: to-review und reject brauchen den Grund, als Zeichenkette oder Schlüsselwort
-      motivo_desconocido: 'unbekannter Grund :%{motivo}; bekannt sind: :%{motivos}'
   tablero:
     titulo: Übersicht in Lisp
     ayuda: Die Übersicht ist ein Programm. Ändere, welche Zahlen in welcher Reihenfolge erscheinen, berechne eigene und wähle die Listen darunter. Ausprobieren speichert nichts; jede gespeicherte Version bleibt unten in der Liste.
