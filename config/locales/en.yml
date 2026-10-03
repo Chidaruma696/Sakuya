@@ -90,6 +90,7 @@ en:
       regla_corte: Cash closing in Lisp
       regla_precio: Price in Lisp
       regla_retiro: Withdrawals in Lisp
+      regla_movimiento: Stock in Lisp
     secciones_ayuda:
       para_ti: Applied the moment you pick one; saved on your user, they follow you to any computer.
       negocio: The business details as they appear on the ticket, with the ticket next to it exactly as it will print. Applies to every branch.
@@ -302,6 +303,7 @@ en:
       sin_origen: a charge comes from a count, a review or a trip
       ya_esta: the charge is already %{estado}
     inventario:
+      movimiento_frenado: '%{motivo}. It cannot be moved like this: have someone allowed to adjust do it. It has been reported.'
       cantidad_cero: the quantity must be greater than zero
       insuficiente: 'Not enough stock of %{producto} at %{sucursal}: there is %{hay}, %{piden} requested'
     revision:
@@ -402,6 +404,7 @@ en:
       factura_proveedor: Invoice %{folio} from %{proveedor} with more than received
       corte: Session %{folio} closed with a difference of %{diferencia}
       frenado: Attempt stopped in session %{folio}
+      frenado_producto: 'Movement stopped: %{producto}'
       corte_abierto: Session %{folio}, open
   estados:
     pendiente: pending
@@ -594,12 +597,13 @@ en:
     avisos:
       marcado: Charge to %{quien} marked as %{estado}
   inventario:
+    movimiento_frenado: '%{tipo} of %{cantidad} stopped (%{motivo}): %{regla}'
     existencias: Stock
     kardex: Ledger
     sin_existencias: No stock yet.
     sin_movimientos: No movements.
     entrada_o_ajuste: Receipt or adjustment
-    queda_por_revisar: It is recorded anyway and goes to end-of-day review.
+    queda_por_revisar: Without permission to adjust, the movement is stopped and reported.
     registrar: Record
   promociones:
     tipos:
@@ -987,6 +991,32 @@ en:
     lee: What it reads (in pesos)
     contesta: What it answers
     ejemplo: Example
+  regla_movimiento:
+    titulo: Stock in Lisp
+    ayuda: Before a loose entry, an adjustment or waste, this rule looks at what, how much and why, and decides whether it moves, goes to review or is stopped. Sakuya requires a reason and enough stock before asking. Test saves nothing.
+    fallo: 'The stock rule failed and the built-in one decided: %{error}'
+    motivos:
+      needs_permission: permission to adjust is needed
+    caso:
+      tipo: Movement
+      motivo_ejemplo: went bad
+      autorizado: Done by someone allowed to adjust
+    veredictos:
+      allow: It moves
+      review: It moves and goes to review
+      reject: It is stopped
+    funciones:
+      kind: ':in entry, :adjust-in adjustment (+), :adjust-out adjustment (−), :waste waste'
+      quantity: the quantity
+      stock: what there is before moving it
+      product: the product code
+      value: what it is worth at list price
+      reason: the written reason
+      authorized: whether the person may adjust
+    allow: it moves
+    to_review: it moves and goes to review
+    reject: it does not move and the attempt is reported
+    nucleo: Someone allowed to adjust can always do it; for them, stopping means review.
   regla_retiro:
     titulo: Withdrawals in Lisp
     ayuda: Before cash leaves the drawer, this rule looks at how much and why, and decides whether it goes out, goes to review or is stopped. Sakuya requires a reason and enough cash before asking. Test saves nothing.

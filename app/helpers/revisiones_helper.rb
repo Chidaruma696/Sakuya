@@ -6,6 +6,7 @@ module RevisionesHelper
     when Movimiento then kardex_inventario_path(producto_id: r.producto_id, sucursal_id: r.sucursal_id)
     when Retiro then caja_corte_path
     when VentaLinea then caja_ticket_path(r.venta)
+    when Producto then kardex_inventario_path(producto_id: r.id, sucursal_id: revision.sucursal_id)
     else revisiones_path
     end
   end

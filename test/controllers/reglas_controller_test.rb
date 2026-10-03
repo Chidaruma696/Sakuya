@@ -70,6 +70,22 @@ class ReglasControllerTest < ActionDispatch::IntegrationTest
     assert_equal "banco\nretiro grande", Revision.last.motivo
   end
 
+  test "inventario: el editor prueba, y una regla que deja pasar a la cajera sin permiso no deja nada por revisar" do
+    get regla_editar_path("movimiento")
+    assert_select "select#tipo option[selected][value=merma]"
+    post regla_guardar_path("movimiento"), params: { probar: "1", codigo: "(if (= (kind) :waste) (to-review \"merma\") (allow))", producto: "CATS", tipo: "merma" }
+    assert_select "#decision", /Se mueve y queda por revisar: merma/
+    post regla_guardar_path("movimiento"), params: { codigo: "(if (= (kind) :in) (allow) (reject :needs-permission))" }
+    post regla_guardar_path("retiro"), params: { codigo: "(allow)" }
+    post entrar_path, params: { usuario: "cajera", password: "secreto1" }
+    post movimientos_inventario_path, params: { producto_id: productos(:catsup).id, tipo: "entrada", cantidad: "2", motivo: "llegó" }
+    assert_redirected_to kardex_inventario_path(producto_id: productos(:catsup).id, sucursal_id: sucursales(:tienda).id)
+    assert_no_match "por revisar", Movimiento.last.motivo
+    post caja_retirar_path, params: { monto: "100", motivo: "caja fuerte" }
+    assert_equal 1, cortes(:tienda_abierto).retiros.count
+    assert_equal 0, Revision.count
+  end
+
   test "sin reglas.editar no se entra" do
     post entrar_path, params: { usuario: "cajera", password: "secreto1" }
     get regla_editar_path("corte")

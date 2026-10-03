@@ -47,14 +47,16 @@ class RevisionesTest < ActionDispatch::IntegrationTest
     assert_equal 0, Cargo.count
   end
 
-  test "un ajuste de inventario sin el permiso se hace igual y queda por revisar" do
+  test "una merma sin el permiso no se hace y el intento queda en revisión, con enlace al kardex" do
     post entrar_path, params: { usuario: "cajera", password: "secreto1" }
     Inventario.mover!(sucursal: @tienda, producto: productos(:catsup), tipo: "entrada", cantidad: 4, usuario: usuarios(:admin))
     post movimientos_inventario_path, params: { producto_id: productos(:catsup).id, tipo: "merma", cantidad: "2", motivo: "se rompieron" }
-    movimiento = Movimiento.last
-    assert_equal "merma", movimiento.tipo
-    assert_equal movimiento, Revision.last.revisable
-    assert_equal 8_400, Revision.last.valor_centavos
+    assert_equal "entrada", Movimiento.last.tipo, "la merma no se asentó"
+    assert_equal [ productos(:catsup), 8_400, true ], [ Revision.last.revisable, Revision.last.valor_centavos, Revision.last.frenado ]
     assert_equal 2, Revision.pendientes.count
+    delete salir_path
+    post entrar_path, params: { usuario: "admin", password: "secreto1" }
+    get revisiones_path(sucursal_id: "todas")
+    assert_select "a[href=?]", kardex_inventario_path(producto_id: productos(:catsup).id, sucursal_id: @tienda.id), /Movimiento frenado/
   end
 end

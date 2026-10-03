@@ -90,6 +90,7 @@ de:
       regla_corte: Kassenabschluss in Lisp
       regla_precio: Preis in Lisp
       regla_retiro: Entnahmen in Lisp
+      regla_movimiento: Bestand in Lisp
     secciones_ayuda:
       para_ti: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
       negocio: Die Betriebsdaten, wie sie auf dem Ticket stehen, mit dem Ticket daneben genau so, wie es gedruckt wird. Gilt für alle Filialen.
@@ -302,6 +303,7 @@ de:
       sin_origen: eine Belastung stammt aus einer Zählung, einer Prüfung oder einer Fahrt
       ya_esta: die Belastung ist bereits %{estado}
     inventario:
+      movimiento_frenado: '%{motivo}. So kann nicht gebucht werden: jemand mit Berechtigung für Korrekturen muss es tun. Es wurde gemeldet.'
       cantidad_cero: die Menge muss größer als null sein
       insuficiente: 'Nicht genug Bestand von %{producto} in %{sucursal}: vorhanden %{hay}, angefragt %{piden}'
     revision:
@@ -402,6 +404,7 @@ de:
       factura_proveedor: Rechnung %{folio} von %{proveedor} mit mehr als erhalten
       corte: Abschnitt %{folio} mit einer Differenz von %{diferencia} geschlossen
       frenado: Versuch im Kassenabschnitt %{folio} gestoppt
+      frenado_producto: 'Bewegung gestoppt: %{producto}'
       corte_abierto: Kassenabschnitt %{folio}, offen
   estados:
     pendiente: offen
@@ -594,12 +597,13 @@ de:
     avisos:
       marcado: Belastung von %{quien} als %{estado} markiert
   inventario:
+    movimiento_frenado: '%{tipo} von %{cantidad} gestoppt (%{motivo}): %{regla}'
     existencias: Bestand
     kardex: Lagerbuch
     sin_existencias: Noch kein Bestand.
     sin_movimientos: Keine Bewegungen.
     entrada_o_ajuste: Eingang oder Korrektur
-    queda_por_revisar: Wird trotzdem erfasst und geht zur Tagesprüfung.
+    queda_por_revisar: Ohne Berechtigung für Korrekturen wird die Bewegung gestoppt und gemeldet.
     registrar: Erfassen
   promociones:
     tipos:
@@ -987,6 +991,32 @@ de:
     lee: Was sie liest (in Pesos)
     contesta: Was sie antwortet
     ejemplo: Beispiel
+  regla_movimiento:
+    titulo: Bestand in Lisp
+    ayuda: Vor einem losen Zugang, einer Korrektur oder Schwund prüft diese Regel was, wie viel und warum und entscheidet, ob gebucht wird, ob es zur Prüfung geht oder ob gestoppt wird. Grund und genug Bestand verlangt Sakuya vorher. Testen speichert nichts.
+    fallo: 'Die Bestandsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    motivos:
+      needs_permission: es braucht eine Berechtigung für Korrekturen
+    caso:
+      tipo: Bewegung
+      motivo_ejemplo: verdorben
+      autorizado: Durch jemanden mit Berechtigung für Korrekturen
+    veredictos:
+      allow: Wird gebucht
+      review: Wird gebucht und geprüft
+      reject: Wird gestoppt
+    funciones:
+      kind: ':in Zugang, :adjust-in Korrektur (+), :adjust-out Korrektur (−), :waste Schwund'
+      quantity: die Menge
+      stock: der Bestand vor der Buchung
+      product: der Produktcode
+      value: der Wert zum Listenpreis
+      reason: der geschriebene Grund
+      authorized: ob die Person korrigieren darf
+    allow: wird gebucht
+    to_review: wird gebucht und geprüft
+    reject: wird nicht gebucht und der Versuch gemeldet
+    nucleo: Wer korrigieren darf, kann es immer; für diese Person heißt Stoppen Prüfung.
   regla_retiro:
     titulo: Entnahmen in Lisp
     ayuda: Bevor Bargeld die Lade verlässt, prüft diese Regel wie viel und wofür und entscheidet, ob es entnommen wird, ob es zur Prüfung geht oder ob gestoppt wird. Grund und genug Bargeld verlangt Sakuya vorher. Testen speichert nichts.

@@ -90,6 +90,7 @@ es:
       regla_corte: Cierre de caja en Lisp
       regla_precio: Precio en Lisp
       regla_retiro: Retiros en Lisp
+      regla_movimiento: Inventario en Lisp
     secciones_ayuda:
       para_ti: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
       negocio: Los datos del negocio como salen en el ticket, con el ticket al lado tal cual va a imprimirse. Vale para todas las sucursales.
@@ -302,6 +303,7 @@ es:
       sin_origen: el cargo viene de un conteo, de una revisión o de un viaje
       ya_esta: el cargo ya está %{estado}
     inventario:
+      movimiento_frenado: '%{motivo}. Así no se mueve: que lo haga alguien con permiso para ajustar. Queda reportado.'
       cantidad_cero: la cantidad debe ser mayor que cero
       insuficiente: 'Existencia insuficiente de %{producto} en %{sucursal}: hay %{hay}, se piden %{piden}'
     revision:
@@ -402,6 +404,7 @@ es:
       factura_proveedor: Factura %{folio} de %{proveedor} con más de lo recibido
       corte: Corte %{folio} cerrado con diferencia de %{diferencia}
       frenado: Intento frenado en el corte %{folio}
+      frenado_producto: 'Movimiento frenado: %{producto}'
       corte_abierto: Corte %{folio}, abierto
   estados:
     pendiente: pendiente
@@ -594,12 +597,13 @@ es:
     avisos:
       marcado: Cargo de %{quien} marcado como %{estado}
   inventario:
+    movimiento_frenado: 'Movimiento frenado, %{tipo} de %{cantidad} (%{motivo}): %{regla}'
     existencias: Existencias
     kardex: Kardex
     sin_existencias: Sin existencias todavía.
     sin_movimientos: Sin movimientos.
     entrada_o_ajuste: Entrada o ajuste
-    queda_por_revisar: Se registra igual y queda por revisar al final del día.
+    queda_por_revisar: Sin permiso para ajustar, el movimiento se frena y queda reportado.
     registrar: Registrar
   promociones:
     tipos:
@@ -987,6 +991,32 @@ es:
     lee: Lo que lee (en pesos)
     contesta: Lo que contesta
     ejemplo: Ejemplo
+  regla_movimiento:
+    titulo: Inventario en Lisp
+    ayuda: Antes de una entrada suelta, un ajuste o una merma, esta regla mira qué, cuánto y por qué, y decide si se mueve, si queda por revisar o si se frena. Que haya motivo y existencias lo exige Sakuya antes de preguntar. Probar no guarda nada.
+    fallo: 'La regla de inventario falló y decidió la de fábrica: %{error}'
+    motivos:
+      needs_permission: hace falta permiso para ajustar
+    caso:
+      tipo: Movimiento
+      motivo_ejemplo: se echó a perder
+      autorizado: Lo hace alguien con permiso para ajustar
+    veredictos:
+      allow: Se mueve
+      review: Se mueve y queda por revisar
+      reject: Se frena
+    funciones:
+      kind: ':in entrada, :adjust-in ajuste (+), :adjust-out ajuste (−), :waste merma'
+      quantity: la cantidad
+      stock: lo que hay antes de moverlo
+      product: la clave del producto
+      value: lo que vale a precio de catálogo
+      reason: el motivo escrito
+      authorized: si quien lo hace tiene permiso para ajustar
+    allow: se mueve
+    to_review: se mueve y queda por revisar
+    reject: no se mueve y deja reportado el intento
+    nucleo: Quien tiene permiso para ajustar nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
   regla_retiro:
     titulo: Retiros en Lisp
     ayuda: Antes de sacar efectivo de la gaveta, esta regla mira cuánto y para qué, y decide si sale, si queda por revisar o si se frena. Que haya motivo y efectivo suficiente lo exige Sakuya antes de preguntar. Probar no guarda nada.

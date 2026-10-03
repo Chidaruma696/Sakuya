@@ -18,7 +18,7 @@
       <%= f.text_field :motivo, value: @movimiento.motivo, required: true, class: "entrada" %>
     </div>
   </div>
-  <% unless puede?("inventario.ajustar") %>
+  <% unless puede?("inventario.ajustar") || Regla.vigente("movimiento") %>
     <p class="text-xs text-stone-600"><%= t("inventario.queda_por_revisar") %></p>
   <% end %>
   <%= f.submit t("inventario.registrar"), class: "btn btn-primary btn-lg" %>
