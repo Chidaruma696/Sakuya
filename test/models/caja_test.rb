@@ -66,14 +66,21 @@ class CajaTest < ActiveSupport::TestCase
     assert_equal 0, Venta.count
   end
 
-  test "bajar el precio queda a nombre de quien tiene el permiso (o sin nadie, por revisar) y nunca baja de la mitad" do
+  test "bajar el precio: sin permiso se frena y se reporta; con permiso pasa a su nombre y queda por revisar; nunca de la mitad" do
     linea = { producto_id: @catsup.id, cantidad: 1, precio_centavos: 3_000 }
-    sola = cobrar([ linea ], [ { forma: "efectivo", monto_centavos: 3_000 } ])
-    assert_nil sola.lineas.first.autorizado_por, "sin permiso se cobra igual; el controlador lo deja por revisar"
-    assert_equal 3_000, sola.lineas.first.precio_centavos
+    e = assert_raises(Caja::Frenado) { cobrar([ linea ], [ { forma: "efectivo", monto_centavos: 3_000 } ]) }
+    assert_match "Cátsup 1 kg a $30.00 (toca $42.00)", e.message
+    assert_equal 0, Venta.count
+    reporte = Revision.last
+    assert reporte.frenado?
+    assert_equal [ cortes(:tienda_abierto), @cajera, 1_200 ], [ reporte.revisable, reporte.usuario, reporte.valor_centavos ]
+    assert_raises(Caja::Frenado) { cobrar([ linea ], [ { forma: "efectivo", monto_centavos: 3_000 } ]) }
+    assert_equal 1, Revision.count, "el mismo intento no se reporta dos veces"
     venta = cobrar([ linea ], [ { forma: "efectivo", monto_centavos: 3_000 } ], autorizador: usuarios(:supervisora))
     assert_equal usuarios(:supervisora), venta.lineas.first.autorizado_por
     assert_equal 4_200, venta.lineas.first.catalogo_centavos
+    assert_equal venta.lineas.first, Revision.last.revisable, "con permiso también se reporta"
+    assert_not Revision.last.frenado?
     assert_raises(Caja::Error) { cobrar([ { producto_id: @catsup.id, cantidad: 1, precio_centavos: 2_000 } ], [ { forma: "efectivo", monto_centavos: 2_000 } ], autorizador: usuarios(:supervisora)) }
   end
 
@@ -138,10 +145,28 @@ class CajaTest < ActiveSupport::TestCase
     sin = cobrar([ { producto_id: @catsup.id, cantidad: 2 } ])
     assert_nil sin.lineas.first.promocion
     assert_equal 4_200, sin.lineas.first.precio_centavos
-    assert_nil cobrar([ { producto_id: @catsup.id, cantidad: 3, precio_centavos: 3_400 } ]).lineas.first.autorizado_por
+    assert_raises(Caja::Frenado, "abajo de la promoción también es bajar") { cobrar([ { producto_id: @catsup.id, cantidad: 3, precio_centavos: 3_400 } ]) }
     con = cobrar([ { producto_id: @catsup.id, cantidad: 3, precio_centavos: 3_400 } ], nil, autorizador: usuarios(:supervisora))
     assert_nil con.lineas.first.promocion
     assert_equal usuarios(:supervisora), con.lineas.first.autorizado_por
+  end
+
+  test "una regla del precio propia: rebajas chicas pasan, medianas se revisan y la cátsup nunca baja" do
+    Regla.create!(gancho: "precio", usuario: usuarios(:admin), codigo: <<~LISP)
+      (cond ((= (discount) 0) (allow))
+            ((= (product) "CATS") (reject "la cátsup no se rebaja"))
+            ((<= (discount) 5) (allow))
+            (else (to-review "rebaja mediana")))
+    LISP
+    kilo = @pechuga.precio_centavos_en(@tienda)
+    venta = cobrar([ { producto_id: @pechuga.id, cantidad: 1, precio_centavos: (kilo * 0.96).round } ])
+    assert_equal 0, Revision.count, "4 % pasa sin más"
+    venta = cobrar([ { producto_id: @pechuga.id, cantidad: 1, precio_centavos: (kilo * 0.9).round } ])
+    assert_equal [ venta.lineas.first, "rebaja mediana" ], [ Revision.last.revisable, Revision.last.motivo.split(": ").last ]
+    assert_match "la cátsup no se rebaja", assert_raises(Caja::Frenado) { cobrar([ { producto_id: @catsup.id, cantidad: 1, precio_centavos: 4_100 } ]) }.message
+    Regla.create!(gancho: "precio", usuario: usuarios(:admin), codigo: "(no-existe)")
+    2.times { cobrar([ @pesada ]) }
+    assert_equal 1, Revision.where("motivo LIKE ?", "La regla del precio falló%").count, "el fallo se reporta una vez por corte"
   end
 
   test "dinero: formato y redondeo" do

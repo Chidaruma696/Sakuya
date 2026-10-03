@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_30_000002) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_000001) do
   create_table "ajustes", force: :cascade do |t|
     t.string "clave", null: false
     t.datetime "created_at", null: false
@@ -403,6 +403,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_30_000002) do
   create_table "revisiones", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "estado", default: "pendiente", null: false
+    t.boolean "frenado", default: false, null: false
     t.string "motivo", null: false
     t.string "nota"
     t.integer "revisable_id", null: false

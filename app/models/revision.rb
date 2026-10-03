@@ -19,8 +19,14 @@ class Revision < ApplicationRecord
   scope :pendientes, -> { where(estado: "pendiente") }
   scope :resueltas, -> { where.not(estado: "pendiente") }
 
-  def self.abrir!(registro, usuario:, sucursal:, motivo:, valor_centavos: 0)
-    create!(revisable: registro, usuario: usuario, sucursal: sucursal, motivo: motivo, valor_centavos: valor_centavos.to_i)
+  # frenado: la operación no pasó (una regla la frenó) y lo que se revisa es el intento; va
+  # colgado del corte donde ocurrió. Un intento frenado igual a uno pendiente no se repite, ni
+  # lo que se pida `sin_repetir` (el fallo de una regla, que saldría en cada venta).
+  def self.abrir!(registro, usuario:, sucursal:, motivo:, valor_centavos: 0, frenado: false, sin_repetir: false)
+    if (frenado || sin_repetir) && (igual = pendientes.find_by(revisable: registro, usuario: usuario, motivo: motivo, frenado: frenado))
+      return igual
+    end
+    create!(revisable: registro, usuario: usuario, sucursal: sucursal, motivo: motivo, valor_centavos: valor_centavos.to_i, frenado: frenado)
   end
 
   # Lo que vale la mercancía de la operación, a precio de catálogo de la sucursal.
@@ -48,12 +54,13 @@ class Revision < ApplicationRecord
 
   # Qué fue lo que se hizo, en una línea.
   def descripcion
+    return I18n.t("revisiones.desc.frenado", folio: revisable.to_s) if frenado?
     case revisable
     when Movimiento then I18n.t("revisiones.desc.movimiento", tipo: revisable.nombre_tipo, cantidad: cantidad_de(revisable))
     when Retiro then I18n.t("revisiones.desc.retiro", monto: Dinero.pesos(revisable.monto_centavos), folio: revisable.corte.folio)
     when FacturaProveedor then I18n.t("revisiones.desc.factura_proveedor", folio: revisable.folio, proveedor: revisable.proveedor.nombre)
     when Corte
-      return I18n.t("revisiones.desc.corte_frenado", folio: revisable.folio) if revisable.diferencia_centavos.nil?
+      return I18n.t("revisiones.desc.corte_abierto", folio: revisable.folio) if revisable.abierto?
       I18n.t("revisiones.desc.corte", folio: revisable.folio, diferencia: Dinero.pesos(revisable.diferencia_centavos))
     when VentaLinea
       I18n.t("revisiones.desc.venta_linea", folio: revisable.venta.folio, producto: revisable.producto.nombre, precio: Dinero.pesos(revisable.precio_centavos), catalogo: Dinero.pesos(revisable.catalogo_centavos))

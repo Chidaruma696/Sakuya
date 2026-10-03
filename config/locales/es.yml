@@ -281,6 +281,7 @@ es:
       piezas_enteras: "%{producto} va por piezas enteras"
       sin_precio: "%{producto}: sin precio en %{sucursal}; pídelo a la matriz antes de venderlo"
       piso_precio: "%{producto}: el precio no puede bajar del %{piso} % del catálogo (%{monto})"
+      precio_frenado: '%{cobro}: %{motivo}. Así no se cobra: deja el precio que toca o que cobre alguien con permiso para bajar precios. Queda reportado.'
       falta_dinero: 'falta dinero: el ticket es %{total} y se pagan %{pago}'
       no_efectivo_excede: una transferencia o depósito no puede pasarse del total
       sin_ticket_devolucion: 'Sin ticket no hay devolución: no se encontró «%{codigo}»'
@@ -397,7 +398,8 @@ es:
       venta_linea: 'Precio bajado en %{folio}: %{producto} a %{precio} (catálogo %{catalogo})'
       factura_proveedor: Factura %{folio} de %{proveedor} con más de lo recibido
       corte: Corte %{folio} cerrado con diferencia de %{diferencia}
-      corte_frenado: 'Corte %{folio} sin cerrar: intento frenado'
+      frenado: Intento frenado en el corte %{folio}
+      corte_abierto: Corte %{folio}, abierto
   estados:
     pendiente: pendiente
     aprobada: aprobada
@@ -488,6 +490,7 @@ es:
     tope_frena: 'No se puede cerrar así: vuelve a contar o llama a alguien con permiso para diferencias. El intento queda reportado.'
     tope_queda_por_revisar: Se cierra con tu motivo y queda por revisar.
     cierre_frenado: 'Intento de cierre frenado: contó %{contado}, diferencia de %{diferencia} (%{motivo})'
+    cobro: '%{producto} a %{precio} (toca %{regular})'
     motivo_diferencia: Motivo de la diferencia
     regla_propia_aviso: 'El negocio tiene su propia regla para el cierre: si la diferencia pide motivo, escríbelo aquí.'
     cortes_cerrados: Cortes cerrados
@@ -532,7 +535,6 @@ es:
     sin_ventas: Sin ventas.
     avisos:
       abierta: Caja abierta con fondo de %{fondo}
-      bajo_precio: Bajó %{producto} de %{de} a %{a} en %{folio}
       corte_cerrado: 'Corte %{folio} cerrado: esperado %{esperado}, contado %{contado}, diferencia %{diferencia}'
       retiro: Retiro de %{monto} registrado
       queda_por_revisar: "; queda por revisar"
@@ -970,6 +972,10 @@ es:
       sin_decision: 'la regla tiene que terminar en (allow), (to-review "motivo") o (reject "motivo"), y terminó en %{valor}'
       motivo: to-review y reject piden el motivo, como cadena o palabra clave
       motivo_desconocido: 'no conozco el motivo :%{motivo}; los que sé decir: :%{motivos}'
+  regla_precio:
+    fallo: 'La regla del precio falló y decidió la de fábrica: %{error}'
+    motivos:
+      below_price: por debajo del precio que toca
   regla_corte:
     titulo: Cierre de caja en Lisp
     ayuda: Al cerrar el corte, esta regla mira cómo salió el conteo y decide si se cierra, si queda por revisar o si se frena. Probar no guarda nada; al guardar, cada versión queda en la lista de abajo.

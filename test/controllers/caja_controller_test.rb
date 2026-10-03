@@ -9,22 +9,31 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     Inventario.mover!(sucursal: @tienda, producto: productos(:pechuga), tipo: "entrada", cantidad: 2, usuario: usuarios(:cajera))
   end
 
-  test "la cajera baja un precio sin permiso: se cobra igual y el renglón queda por revisar con lo que dejó de cobrar" do
-    post caja_cobrar_path, params: { clave: "rebaja", lineas: [ { producto_id: productos(:catsup).id, cantidad: 2, precio_centavos: 3_000 } ].to_json,
-                                     pagos: [ { forma: "efectivo", monto_centavos: 6_000 } ].to_json }, headers: { "Accept" => "application/json" }
-    assert_response :ok
-    venta = Venta.find_by!(clave: "rebaja")
-    assert_nil venta.lineas.first.autorizado_por
+  test "la cajera baja un precio sin permiso: no se cobra y el intento queda reportado; la supervisora sí cobra y queda por revisar" do
+    rebaja = { lineas: [ { producto_id: productos(:catsup).id, cantidad: 2, precio_centavos: 3_000 } ].to_json,
+               pagos: [ { forma: "efectivo", monto_centavos: 6_000 } ].to_json }
+    post caja_cobrar_path, params: rebaja.merge(clave: "rebaja"), headers: { "Accept" => "application/json" }
+    assert_response :unprocessable_entity
+    assert_match "Así no se cobra", response.parsed_body["error"]
+    assert_nil Venta.find_by(clave: "rebaja")
     r = Revision.last
-    assert_equal venta.lineas.first, r.revisable
+    assert r.frenado?
     assert_equal 2_400, r.valor_centavos, "2 × (42.00 − 30.00)"
-    assert_match "Precio bajado", r.descripcion
+    assert_match "Intento frenado en el corte", r.descripcion
     get revisiones_path
     assert_response :forbidden, "la cajera no revisa"
+    delete salir_path
+    post entrar_path, params: { usuario: "supervisora", password: "secreto1" }
+    post caja_cobrar_path, params: rebaja.merge(clave: "rebaja2"), headers: { "Accept" => "application/json" }
+    assert_response :ok
+    venta = Venta.find_by!(clave: "rebaja2")
+    assert_equal usuarios(:supervisora), venta.lineas.first.autorizado_por
+    assert_equal venta.lineas.first, Revision.last.revisable
     delete salir_path
     post entrar_path, params: { usuario: "admin", password: "secreto1" }
     get revisiones_path(sucursal_id: "todas")
     assert_select "td", /Precio bajado en B-/
+    assert_select "td", /Intento frenado/
   end
 
   test "vender: escanea, cobra por JSON, imprime ticket y aparece en ventas" do
@@ -95,7 +104,8 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     reporte = Revision.last
     assert_equal [ corte, usuarios(:cajera), 10_000 ], [ reporte.revisable, reporte.usuario, reporte.valor_centavos ]
     assert_match "contó $400.00", reporte.motivo
-    assert_match "sin cerrar", reporte.descripcion
+    assert_match "Intento frenado en el corte", reporte.descripcion
+    assert reporte.frenado?
     post caja_cerrar_path, params: { contado: "400.00" }
     assert_equal 1, Revision.count, "contar lo mismo otra vez no repite el reporte"
     post entrar_path, params: { usuario: "supervisora", password: "secreto1" }

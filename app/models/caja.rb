@@ -3,6 +3,17 @@
 module Caja
   class Error < StandardError; end
 
+  # La regla del precio frenó un renglón: no se cobra nada y el intento queda reportado.
+  class Frenado < Error
+    attr_reader :reporte, :valor_centavos
+
+    def initialize(mensaje, reporte:, valor_centavos:)
+      super(mensaje)
+      @reporte = reporte
+      @valor_centavos = valor_centavos
+    end
+  end
+
   # lineas: [{ producto_id:, cantidad:, precio_centavos: }]
   # pagos:  [{ forma:, monto_centavos: }]
   # clave:  identificador único del ticket generado por la caja; repetir la misma clave devuelve la misma venta.
@@ -15,8 +26,10 @@ module Caja
     raise Error, I18n.t("errores.caja.excede_limite", monto: Dinero.pesos(sucursal.limite_efectivo_centavos)) if corte.excede_limite?
     raise Error, I18n.t("errores.caja.ticket_vacio") if lineas.blank?
 
+    codigo = Regla.vigente("precio")&.codigo
+    fallos = []
     Venta.transaction do
-      preparadas = lineas.map { |l| preparar_linea(sucursal, l, autorizador) }
+      preparadas = lineas.map { |l| preparar_linea(sucursal, l, autorizador, codigo, fallos) }
       total = preparadas.sum { |l| l[:importe_centavos] }
       pagos_ok = preparar_pagos(pagos, total)
       cambio = pagos_ok.sum { |p| p[:monto_centavos] } - total
@@ -25,15 +38,22 @@ module Caja
                             folio: Folio.siguiente!(sucursal, "venta"), codigo: codigo_ticket(sucursal),
                             total_centavos: total, cambio_centavos: cambio, fecha_negocio: Date.current)
       preparadas.each do |l|
+        revisar, valor = l.extract!(:revisar, :valor_revision).values_at(:revisar, :valor_revision)
         linea = venta.lineas.create!(l)
         Inventario.mover!(sucursal: sucursal, producto: linea.producto, tipo: "venta", cantidad: linea.cantidad,
                           usuario: usuario, referencia: venta, motivo: venta.folio)
+        Revision.abrir!(linea, usuario: usuario, sucursal: sucursal, motivo: revisar, valor_centavos: valor) if revisar
       end
       pagos_ok.each { |p| venta.pagos.create!(p) }
+      # Si la regla del negocio tronó decidió la de fábrica; el fallo se reporta una vez por corte.
+      fallos.uniq.each { |f| Revision.abrir!(corte, usuario: usuario, sucursal: sucursal, motivo: I18n.t("regla_precio.fallo", error: f), sin_repetir: true) }
       venta
     end
   rescue Inventario::SinExistencia => e
     raise Error, I18n.t("errores.caja.no_se_vende_sin", mensaje: e.message)
+  rescue Frenado => e
+    Revision.abrir!(corte, usuario: usuario, sucursal: sucursal, motivo: e.reporte, valor_centavos: e.valor_centavos, frenado: true)
+    raise
   end
 
   # lineas: [{ venta_linea_id:, cantidad: }]. El dinero sale de la gaveta del corte abierto.
@@ -63,7 +83,7 @@ module Caja
     end
   end
 
-  def self.preparar_linea(sucursal, l, autorizador)
+  def self.preparar_linea(sucursal, l, autorizador, codigo, fallos)
     producto = Producto.activos.find(l[:producto_id])
     cantidad = BigDecimal(l[:cantidad].to_s).round(3)
     raise Error, I18n.t("errores.caja.cantidad_invalida", producto: producto.nombre) unless cantidad.positive?
@@ -74,16 +94,25 @@ module Caja
     promo_precio, promocion = Promocion.mejor(producto, sucursal, cantidad, catalogo)
     legitimo = promo_precio || catalogo
     precio = l[:precio_centavos].present? ? l[:precio_centavos].to_i : legitimo
-    # Bajar el precio: nunca por debajo del piso; a nombre de quien tiene el permiso, o sin nadie
-    # (y entonces el controlador lo deja por revisar).
-    autoriza = nil
     if precio < legitimo
-      piso = Ajuste.entero("caja.piso_precio") / 100.0 # nunca por debajo del piso, ni con permiso
+      piso = Ajuste.entero("caja.piso_precio") / 100.0 # nunca por debajo del piso, ni con permiso ni con regla
       raise Error, I18n.t("errores.caja.piso_precio", producto: producto.nombre, piso: Ajuste.entero("caja.piso_precio"), monto: Dinero.pesos((catalogo * piso).ceil)) if precio < catalogo * piso
-      autoriza = autorizador if autorizador&.puede?("caja.bajar_precio")
+    end
+    # Lo demás lo decide la regla del precio. Si frena y quien autoriza tiene caja.bajar_precio,
+    # pasa a su nombre pero queda por revisar: nadie se queda sin poder vender.
+    autorizado = autorizador&.puede?("caja.bajar_precio") || false
+    datos = ReglaPrecio::Datos.new(producto: producto, cantidad: cantidad, precio: precio, catalogo: catalogo, regular: legitimo, autorizado: autorizado)
+    decision = ReglaPrecio.decidir(datos, codigo: codigo)
+    fallos << decision.error if decision.error
+    cobro = I18n.t("caja.cobro", producto: producto.nombre, precio: Dinero.pesos(precio), regular: Dinero.pesos(legitimo))
+    valor = Dinero.importe(cantidad, [ legitimo - precio, 0 ].max)
+    if decision.rechaza? && !autorizado
+      raise Frenado.new(I18n.t("errores.caja.precio_frenado", cobro: cobro, motivo: decision.motivo), reporte: "#{cobro}: #{decision.motivo}", valor_centavos: valor)
     end
     { producto: producto, cantidad: cantidad, precio_centavos: precio, catalogo_centavos: catalogo,
-      importe_centavos: Dinero.importe(cantidad, precio), autorizado_por: autoriza, promocion: (precio == promo_precio ? promocion : nil) }
+      importe_centavos: Dinero.importe(cantidad, precio), autorizado_por: (autorizador if autorizado && precio < legitimo),
+      promocion: (precio == promo_precio ? promocion : nil),
+      revisar: (decision.permite? ? nil : "#{cobro}: #{decision.motivo}"), valor_revision: valor }
   end
   private_class_method :preparar_linea
 

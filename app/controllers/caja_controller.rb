@@ -29,12 +29,9 @@ class CajaController < ApplicationController
     lineas = JSON.parse(params[:lineas].to_s).map { |l| l.symbolize_keys.slice(:producto_id, :cantidad, :precio_centavos) }
     pagos = JSON.parse(params[:pagos].to_s).map(&:symbolize_keys)
     autoriza = autorizador_o_revision("caja.bajar_precio")
+    # Los precios los juzga la regla del precio dentro de Caja: lo que frena no se cobra, y lo que
+    # pide revisión se cobra y queda por revisar.
     venta = Caja.cobrar!(sucursal: sucursal_actual, usuario: usuario_actual, lineas: lineas, pagos: pagos, clave: params[:clave], autorizador: autoriza)
-    # Bajó precios sin tener el permiso: cada renglón queda por revisar con lo que dejó de cobrar.
-    venta.lineas.where(autorizado_por: nil).where("precio_centavos < catalogo_centavos").includes(:producto).each do |l|
-      revisar_si_hace_falta(l, nil, motivo: t("caja.avisos.bajo_precio", producto: l.producto.nombre, de: Dinero.pesos(l.catalogo_centavos), a: Dinero.pesos(l.precio_centavos), folio: venta.folio),
-                            valor_centavos: Dinero.importe(l.cantidad, l.catalogo_centavos - l.precio_centavos))
-    end
     render json: { url: caja_ticket_path(venta, imprimir: 1), folio: venta.folio, cambio: Dinero.pesos(venta.cambio_centavos) }
   rescue Caja::Error, JSON::ParserError, ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid => e
     render json: { error: e.message }, status: :unprocessable_entity
@@ -141,13 +138,11 @@ class CajaController < ApplicationController
 
   private
 
-  # Un cierre frenado no se pierde: queda en Revisión a nombre de quien contó. Si vuelve a contar
-  # lo mismo no se repite el reporte.
+  # Un cierre frenado no se pierde: queda en Revisión a nombre de quien contó.
   def reportar_cierre_frenado(contado, diferencia, decision)
     texto = t("caja.cierre_frenado", contado: Dinero.pesos(contado), diferencia: Dinero.pesos(diferencia), motivo: decision.motivo)
     texto += "\n#{t("regla_corte.fallo", error: decision.error)}" if decision.error
-    return if Revision.pendientes.exists?(revisable: @corte, usuario: usuario_actual, motivo: texto)
-    Revision.abrir!(@corte, usuario: usuario_actual, sucursal: sucursal_actual, motivo: texto, valor_centavos: diferencia.abs)
+    Revision.abrir!(@corte, usuario: usuario_actual, sucursal: sucursal_actual, motivo: texto, valor_centavos: diferencia.abs, frenado: true)
   end
 
   def cargar_corte

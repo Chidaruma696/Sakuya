@@ -281,6 +281,7 @@ en:
       piezas_enteras: "%{producto} is sold in whole pieces"
       sin_precio: "%{producto}: no price at %{sucursal}; ask head office before selling it"
       piso_precio: "%{producto}: the price cannot go below %{piso} % of the catalog (%{monto})"
+      precio_frenado: '%{cobro}: %{motivo}. It cannot be charged like this: keep the regular price or have someone allowed to lower prices charge it. It has been reported.'
       falta_dinero: 'not enough money: the ticket is %{total} and %{pago} is being paid'
       no_efectivo_excede: a transfer or deposit cannot exceed the total
       sin_ticket_devolucion: 'No receipt, no return: “%{codigo}” was not found'
@@ -397,7 +398,8 @@ en:
       venta_linea: 'Price lowered on %{folio}: %{producto} to %{precio} (catalog %{catalogo})'
       factura_proveedor: Invoice %{folio} from %{proveedor} with more than received
       corte: Session %{folio} closed with a difference of %{diferencia}
-      corte_frenado: 'Session %{folio} not closed: attempt stopped'
+      frenado: Attempt stopped in session %{folio}
+      corte_abierto: Session %{folio}, open
   estados:
     pendiente: pending
     aprobada: approved
@@ -488,6 +490,7 @@ en:
     tope_frena: 'It cannot be closed like this: count again or call someone allowed to accept differences. The attempt is reported.'
     tope_queda_por_revisar: It closes with your reason and goes to review.
     cierre_frenado: 'Closing attempt stopped: counted %{contado}, difference of %{diferencia} (%{motivo})'
+    cobro: '%{producto} at %{precio} (should be %{regular})'
     motivo_diferencia: Reason for the difference
     regla_propia_aviso: 'This business has its own closing rule: if the difference needs a reason, write it here.'
     cortes_cerrados: Closed sessions
@@ -532,7 +535,6 @@ en:
     sin_ventas: No sales.
     avisos:
       abierta: Register opened with a float of %{fondo}
-      bajo_precio: Lowered %{producto} from %{de} to %{a} on %{folio}
       corte_cerrado: 'Session %{folio} closed: expected %{esperado}, counted %{contado}, difference %{diferencia}'
       retiro: Cash drop of %{monto} recorded
       queda_por_revisar: "; goes to review"
@@ -970,6 +972,10 @@ en:
       sin_decision: 'the rule must end in (allow), (to-review "why") or (reject "why"), and it ended in %{valor}'
       motivo: to-review and reject need the reason, as a string or a keyword
       motivo_desconocido: 'unknown reason :%{motivo}; the ones I know: :%{motivos}'
+  regla_precio:
+    fallo: 'The price rule failed and the built-in one decided: %{error}'
+    motivos:
+      below_price: below the regular price
   regla_corte:
     titulo: Cash closing in Lisp
     ayuda: When the session is closed, this rule looks at the count and decides whether it closes, goes to review or is stopped. Test saves nothing; each saved version stays in the list below.

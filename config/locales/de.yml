@@ -281,6 +281,7 @@ de:
       piezas_enteras: "%{producto} geht nur in ganzen Stücken"
       sin_precio: "%{producto}: kein Preis in %{sucursal}; vor dem Verkauf bei der Zentrale anfragen"
       piso_precio: "%{producto}: der Preis darf nicht unter %{piso} % des Katalogs fallen (%{monto})"
+      precio_frenado: '%{cobro}: %{motivo}. So kann nicht kassiert werden: regulären Preis lassen oder jemanden mit Berechtigung für Preissenkungen kassieren lassen. Es wurde gemeldet.'
       falta_dinero: 'Geld fehlt: das Ticket ist %{total} und gezahlt werden %{pago}'
       no_efectivo_excede: Überweisung oder Einzahlung dürfen die Summe nicht übersteigen
       sin_ticket_devolucion: 'Ohne Beleg keine Rückgabe: „%{codigo}“ nicht gefunden'
@@ -397,7 +398,8 @@ de:
       venta_linea: 'Preis gesenkt in %{folio}: %{producto} auf %{precio} (Katalog %{catalogo})'
       factura_proveedor: Rechnung %{folio} von %{proveedor} mit mehr als erhalten
       corte: Abschnitt %{folio} mit einer Differenz von %{diferencia} geschlossen
-      corte_frenado: 'Abschnitt %{folio} nicht abgeschlossen: Versuch gestoppt'
+      frenado: Versuch im Kassenabschnitt %{folio} gestoppt
+      corte_abierto: Kassenabschnitt %{folio}, offen
   estados:
     pendiente: offen
     aprobada: freigegeben
@@ -488,6 +490,7 @@ de:
     tope_frena: 'So kann nicht abgeschlossen werden: neu zählen oder jemanden mit Berechtigung für Differenzen rufen. Der Versuch wird gemeldet.'
     tope_queda_por_revisar: Wird mit deinem Grund abgeschlossen und geht zur Prüfung.
     cierre_frenado: 'Abschlussversuch gestoppt: gezählt %{contado}, Differenz von %{diferencia} (%{motivo})'
+    cobro: '%{producto} zu %{precio} (regulär %{regular})'
     motivo_diferencia: Grund der Differenz
     regla_propia_aviso: 'Dieses Geschäft hat eine eigene Abschlussregel: wenn die Differenz einen Grund braucht, hier eintragen.'
     cortes_cerrados: Geschlossene Abschnitte
@@ -532,7 +535,6 @@ de:
     sin_ventas: Keine Verkäufe.
     avisos:
       abierta: Kasse geöffnet mit Wechselgeld %{fondo}
-      bajo_precio: "%{producto} von %{de} auf %{a} gesenkt in %{folio}"
       corte_cerrado: 'Abschnitt %{folio} geschlossen: Soll %{esperado}, gezählt %{contado}, Differenz %{diferencia}'
       retiro: Abschöpfung von %{monto} erfasst
       queda_por_revisar: "; geht zur Prüfung"
@@ -970,6 +972,10 @@ de:
       sin_decision: 'die Regel muss mit (allow), (to-review "Grund") oder (reject "Grund") enden und endete mit %{valor}'
       motivo: to-review und reject brauchen den Grund, als Zeichenkette oder Schlüsselwort
       motivo_desconocido: 'unbekannter Grund :%{motivo}; bekannt sind: :%{motivos}'
+  regla_precio:
+    fallo: 'Die Preisregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    motivos:
+      below_price: unter dem regulären Preis
   regla_corte:
     titulo: Kassenabschluss in Lisp
     ayuda: Beim Abschluss prüft diese Regel die Zählung und entscheidet, ob abgeschlossen wird, ob es zur Prüfung geht oder ob gestoppt wird. Testen speichert nichts; jede gespeicherte Version steht in der Liste unten.
