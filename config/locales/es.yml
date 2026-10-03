@@ -88,6 +88,7 @@ es:
       compras: Compras
       tablero: Tablero en Lisp
       regla_corte: Cierre de caja en Lisp
+      regla_precio: Precio en Lisp
     secciones_ayuda:
       para_ti: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
       negocio: Los datos del negocio como salen en el ticket, con el ticket al lado tal cual va a imprimirse. Vale para todas las sucursales.
@@ -972,22 +973,53 @@ es:
       sin_decision: 'la regla tiene que terminar en (allow), (to-review "motivo") o (reject "motivo"), y terminó en %{valor}'
       motivo: to-review y reject piden el motivo, como cadena o palabra clave
       motivo_desconocido: 'no conozco el motivo :%{motivo}; los que sé decir: :%{motivos}'
-  regla_precio:
-    fallo: 'La regla del precio falló y decidió la de fábrica: %{error}'
-    motivos:
-      below_price: por debajo del precio que toca
-  regla_corte:
-    titulo: Cierre de caja en Lisp
-    ayuda: Al cerrar el corte, esta regla mira cómo salió el conteo y decide si se cierra, si queda por revisar o si se frena. Probar no guarda nada; al guardar, cada versión queda en la lista de abajo.
     versiones: Versiones
     vigente: vigente
     restaurar: Volver a esta
     sin_versiones: 'Todavía no hay versiones: se usa la regla de fábrica.'
     avisos:
-      guardado: Regla del cierre guardada.
+      guardado: Regla guardada.
       restaurado: Se volvió a la versión del %{fecha}.
+    caso: Caso de prueba
+    lee: Lo que lee (en pesos)
+    contesta: Lo que contesta
+    ejemplo: Ejemplo
+  regla_precio:
+    titulo: Precio en Lisp
+    ayuda: Cada renglón que se cobra pasa por esta regla, que mira el precio y decide si se cobra, si queda por revisar o si se frena. El piso de Ajustes › Caja no lo cruza ninguna regla. Probar no guarda nada.
+    sin_productos: no hay productos con precio para probar
+    fallo: 'La regla del precio falló y decidió la de fábrica: %{error}'
+    motivos:
+      below_price: por debajo del precio que toca
     caso:
-      titulo: Caso de prueba
+      producto: Clave del producto
+      cantidad: Cantidad
+      precio: Precio que se cobra
+      toca: 'Toca: %{regular} (catálogo %{catalogo})'
+      autorizado: Cobra alguien con permiso para bajar precios
+    veredictos:
+      allow: Se cobra
+      review: Se cobra y queda por revisar
+      reject: Se frena
+    funciones:
+      price: lo que se cobra
+      list_price: el catálogo de la sucursal
+      regular_price: lo que toca (promoción o catálogo)
+      discount: cuánto por ciento abajo de lo que toca
+      quantity: la cantidad
+      product: la clave del producto
+      authorized: si quien cobra tiene permiso para bajar precios
+    allow: se cobra
+    to_review: se cobra y queda por revisar
+    reject: no se cobra y deja reportado el intento
+    nucleo: Quien tiene permiso para bajar precios nunca se queda sin poder cobrar; para esa persona, frenar es revisar.
+  regla_corte:
+    titulo: Cierre de caja en Lisp
+    ayuda: Al cerrar el corte, esta regla mira cómo salió el conteo y decide si se cierra, si queda por revisar o si se frena. Probar no guarda nada; al guardar, cada versión queda en la lista de abajo.
+    fallo: 'La regla del corte falló y decidió la de fábrica: %{error}'
+    motivos:
+      over_limit: la diferencia (%{diferencia}) pasa del tope (%{tope})
+    caso:
       esperado: Esperado en gaveta
       contado: Contado
       autorizado: Cierra alguien con permiso para diferencias
@@ -995,29 +1027,22 @@ es:
       allow: Se cierra
       review: Se cierra y queda por revisar
       reject: Se frena
-    referencia:
-      lee: Lo que lee (en pesos)
-      contesta: Lo que contesta
-      funciones:
-        difference: contado − esperado; negativo = falta
-        counted: lo contado
-        expected: lo que debía haber
-        float: el fondo
-        sales: ventas del corte
-        cash_sales: efectivo de ventas
-        returns: devoluciones
-        withdrawals: retiros
-        limit: el tope de Ajustes › Caja (0 = sin tope)
-        tickets: tickets del corte
-        authorized: si quien cierra tiene permiso para diferencias
-      allow: se cierra
-      to_review: pide motivo y queda por revisar
-      reject: frena y deja reportado el intento
-      nucleo: Quien tiene permiso para diferencias nunca se queda sin poder cerrar; para esa persona, frenar es revisar.
-      ejemplo: Ejemplo
-    fallo: 'La regla del corte falló y decidió la de fábrica: %{error}'
-    motivos:
-      over_limit: la diferencia (%{diferencia}) pasa del tope (%{tope})
+    funciones:
+      difference: contado − esperado; negativo = falta
+      counted: lo contado
+      expected: lo que debía haber
+      float: el fondo
+      sales: ventas del corte
+      cash_sales: efectivo de ventas
+      returns: devoluciones
+      withdrawals: retiros
+      limit: el tope de Ajustes › Caja (0 = sin tope)
+      tickets: tickets del corte
+      authorized: si quien cierra tiene permiso para diferencias
+    allow: se cierra
+    to_review: pide motivo y queda por revisar
+    reject: frena y deja reportado el intento
+    nucleo: Quien tiene permiso para diferencias nunca se queda sin poder cerrar; para esa persona, frenar es revisar.
   tablero:
     titulo: Tablero en Lisp
     ayuda: El tablero de Inicio es un programa. Cambia qué cifras salen y en qué orden, calcula las tuyas y elige las listas de abajo. Probar no guarda nada; al guardar, cada versión queda en la lista de abajo.

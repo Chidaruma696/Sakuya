@@ -88,6 +88,7 @@ en:
       compras: Purchasing
       tablero: Dashboard in Lisp
       regla_corte: Cash closing in Lisp
+      regla_precio: Price in Lisp
     secciones_ayuda:
       para_ti: Applied the moment you pick one; saved on your user, they follow you to any computer.
       negocio: The business details as they appear on the ticket, with the ticket next to it exactly as it will print. Applies to every branch.
@@ -972,22 +973,53 @@ en:
       sin_decision: 'the rule must end in (allow), (to-review "why") or (reject "why"), and it ended in %{valor}'
       motivo: to-review and reject need the reason, as a string or a keyword
       motivo_desconocido: 'unknown reason :%{motivo}; the ones I know: :%{motivos}'
-  regla_precio:
-    fallo: 'The price rule failed and the built-in one decided: %{error}'
-    motivos:
-      below_price: below the regular price
-  regla_corte:
-    titulo: Cash closing in Lisp
-    ayuda: When the session is closed, this rule looks at the count and decides whether it closes, goes to review or is stopped. Test saves nothing; each saved version stays in the list below.
     versiones: Versions
     vigente: current
     restaurar: Go back to this one
     sin_versiones: 'No versions yet: the built-in rule is used.'
     avisos:
-      guardado: Closing rule saved.
+      guardado: Rule saved.
       restaurado: Went back to the version from %{fecha}.
+    caso: Test case
+    lee: What it reads (in pesos)
+    contesta: What it answers
+    ejemplo: Example
+  regla_precio:
+    titulo: Price in Lisp
+    ayuda: Every line charged at the till goes through this rule, which looks at the price and decides whether it is charged, goes to review or is stopped. No rule can cross the floor from Settings › Till. Test saves nothing.
+    sin_productos: there are no products with a price to test with
+    fallo: 'The price rule failed and the built-in one decided: %{error}'
+    motivos:
+      below_price: below the regular price
     caso:
-      titulo: Test case
+      producto: Product code
+      cantidad: Quantity
+      precio: Price charged
+      toca: 'Regular: %{regular} (list %{catalogo})'
+      autorizado: Charged by someone allowed to lower prices
+    veredictos:
+      allow: It is charged
+      review: It is charged and goes to review
+      reject: It is stopped
+    funciones:
+      price: what is charged
+      list_price: the branch list price
+      regular_price: the regular price (promotion or list)
+      discount: how many percent below the regular price
+      quantity: the quantity
+      product: the product code
+      authorized: whether the person charging may lower prices
+    allow: it is charged
+    to_review: it is charged and goes to review
+    reject: it is not charged and the attempt is reported
+    nucleo: Someone allowed to lower prices can always charge; for them, stopping means review.
+  regla_corte:
+    titulo: Cash closing in Lisp
+    ayuda: When the session is closed, this rule looks at the count and decides whether it closes, goes to review or is stopped. Test saves nothing; each saved version stays in the list below.
+    fallo: 'The cash count rule failed and the built-in one decided: %{error}'
+    motivos:
+      over_limit: the difference (%{diferencia}) exceeds the limit (%{tope})
+    caso:
       esperado: Expected in drawer
       contado: Counted
       autorizado: Closed by someone allowed to accept differences
@@ -995,29 +1027,22 @@ en:
       allow: It closes
       review: It closes and goes to review
       reject: It is stopped
-    referencia:
-      lee: What it reads (in pesos)
-      contesta: What it answers
-      funciones:
-        difference: counted − expected; negative = missing
-        counted: what was counted
-        expected: what should be there
-        float: the float
-        sales: session sales
-        cash_sales: cash from sales
-        returns: returns
-        withdrawals: withdrawals
-        limit: the limit from Settings › Till (0 = no limit)
-        tickets: session tickets
-        authorized: whether the person closing may accept differences
-      allow: it closes
-      to_review: asks for a reason and goes to review
-      reject: stops it and reports the attempt
-      nucleo: Someone allowed to accept differences can always close; for them, stopping means review.
-      ejemplo: Example
-    fallo: 'The cash count rule failed and the built-in one decided: %{error}'
-    motivos:
-      over_limit: the difference (%{diferencia}) exceeds the limit (%{tope})
+    funciones:
+      difference: counted − expected; negative = missing
+      counted: what was counted
+      expected: what should be there
+      float: the float
+      sales: session sales
+      cash_sales: cash from sales
+      returns: returns
+      withdrawals: withdrawals
+      limit: the limit from Settings › Till (0 = no limit)
+      tickets: session tickets
+      authorized: whether the person closing may accept differences
+    allow: it closes
+    to_review: asks for a reason and goes to review
+    reject: stops it and reports the attempt
+    nucleo: Someone allowed to accept differences can always close; for them, stopping means review.
   tablero:
     titulo: Dashboard in Lisp
     ayuda: The home dashboard is a program. Change which figures show and in what order, compute your own and pick the lists below. Trying doesn't save anything; every saved version stays in the list below.

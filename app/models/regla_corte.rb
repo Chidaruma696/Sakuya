@@ -72,10 +72,23 @@ module ReglaCorte
     def pesos(centavos) = BigDecimal(centavos.to_i) / 100
   end
 
-  # Un cierre de mentira para el botón Probar del editor: un corte sin guardar con ese fondo y sin
-  # ventas, contado con lo que se diga. No toca la base.
-  def self.probar(codigo, esperado_centavos:, contado_centavos:, autorizado:)
-    corte = Corte.new(fondo_centavos: esperado_centavos.to_i)
-    evaluar(codigo, Datos.new(corte, contado_centavos, autorizado: autorizado))
+  # El caso de prueba del editor: lo que se espera en la gaveta (de entrada, lo del corte abierto),
+  # lo que se contó y si cierra alguien con permiso.
+  def self.caso(params, sucursal)
+    esperado = params[:esperado].present? ? Dinero.centavos(params[:esperado]) : (Corte.abierto_en(sucursal)&.efectivo_esperado_centavos || 50_000)
+    contado = params[:contado].present? ? Dinero.centavos(params[:contado]) : esperado
+    { esperado: esperado, contado: contado, autorizado: params[:autorizado] == "1" }
   end
+
+  # Un cierre de mentira: un corte sin guardar con ese fondo y sin ventas. No toca la base.
+  def self.probar(codigo, caso)
+    evaluar(codigo, Datos.new(Corte.new(fondo_centavos: caso[:esperado]), caso[:contado], autorizado: caso[:autorizado]))
+  end
+
+  FUNCIONES = %w[difference counted expected float sales cash-sales returns withdrawals limit tickets authorized].freeze
+  EJEMPLO = <<~LISP
+    (cond ((> (difference) 0) (to-review "Extra money"))
+          ((< (difference) -200) (reject :over-limit))
+          (else (allow)))
+  LISP
 end

@@ -2,7 +2,7 @@
 <% secciones = [ [ "para_ti", "person-gear" ] ] %>
 <% secciones += [ [ "negocio", "receipt" ], [ "folios", "123" ], [ "modulos", "grid-1x2" ], [ "caja", "cash-stack" ] ] if puede?("admin.usuarios") %>
 <% secciones << [ "compras", "truck" ] if puede?("admin.usuarios") && Modulo.activo?("compras") %>
-<% avanzadas = puede?("reglas.editar") ? [ [ "tablero", "braces", tablero_editar_path ], [ "regla_corte", "cash-coin", regla_corte_editar_path ] ] : [] %>
+<% avanzadas = puede?("reglas.editar") ? [ [ "tablero", "braces", tablero_editar_path ], [ "regla_corte", "cash-coin", regla_editar_path("corte") ], [ "regla_precio", "tag", regla_editar_path("precio") ] ] : [] %>
 <% clase = ->(activa) { "flex items-center gap-3 rounded-md px-3 py-2 text-sm whitespace-nowrap #{activa ? 'bg-white font-semibold text-marca-900 shadow-sm ring-1 ring-marca-200' : 'text-stone-700 hover:bg-white'}" } %>
 <nav class="lg:sticky lg:top-[calc(var(--cinta-alto,0px)+1rem)] lg:self-start" aria-label="<%= t("ajustes.titulo") %>">
   <h1 class="mb-3 px-2 text-2xl font-bold"><%= t("ajustes.titulo") %></h1>

@@ -88,6 +88,7 @@ de:
       compras: Einkauf
       tablero: Übersicht in Lisp
       regla_corte: Kassenabschluss in Lisp
+      regla_precio: Preis in Lisp
     secciones_ayuda:
       para_ti: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
       negocio: Die Betriebsdaten, wie sie auf dem Ticket stehen, mit dem Ticket daneben genau so, wie es gedruckt wird. Gilt für alle Filialen.
@@ -972,22 +973,53 @@ de:
       sin_decision: 'die Regel muss mit (allow), (to-review "Grund") oder (reject "Grund") enden und endete mit %{valor}'
       motivo: to-review und reject brauchen den Grund, als Zeichenkette oder Schlüsselwort
       motivo_desconocido: 'unbekannter Grund :%{motivo}; bekannt sind: :%{motivos}'
-  regla_precio:
-    fallo: 'Die Preisregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
-    motivos:
-      below_price: unter dem regulären Preis
-  regla_corte:
-    titulo: Kassenabschluss in Lisp
-    ayuda: Beim Abschluss prüft diese Regel die Zählung und entscheidet, ob abgeschlossen wird, ob es zur Prüfung geht oder ob gestoppt wird. Testen speichert nichts; jede gespeicherte Version steht in der Liste unten.
     versiones: Versionen
     vigente: aktuell
     restaurar: Zu dieser zurück
     sin_versiones: 'Noch keine Versionen: es gilt die Standardregel.'
     avisos:
-      guardado: Abschlussregel gespeichert.
+      guardado: Regel gespeichert.
       restaurado: Zur Version vom %{fecha} zurückgekehrt.
+    caso: Testfall
+    lee: Was sie liest (in Pesos)
+    contesta: Was sie antwortet
+    ejemplo: Beispiel
+  regla_precio:
+    titulo: Preis in Lisp
+    ayuda: Jede kassierte Zeile läuft durch diese Regel, die den Preis prüft und entscheidet, ob kassiert wird, ob es zur Prüfung geht oder ob gestoppt wird. Die Untergrenze aus Einstellungen › Kasse überschreitet keine Regel. Testen speichert nichts.
+    sin_productos: es gibt keine Produkte mit Preis zum Testen
+    fallo: 'Die Preisregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    motivos:
+      below_price: unter dem regulären Preis
     caso:
-      titulo: Testfall
+      producto: Produktcode
+      cantidad: Menge
+      precio: Kassierter Preis
+      toca: 'Regulär: %{regular} (Liste %{catalogo})'
+      autorizado: Kassiert von jemandem mit Berechtigung für Preissenkungen
+    veredictos:
+      allow: Wird kassiert
+      review: Wird kassiert und geprüft
+      reject: Wird gestoppt
+    funciones:
+      price: was kassiert wird
+      list_price: der Listenpreis der Filiale
+      regular_price: der reguläre Preis (Aktion oder Liste)
+      discount: wie viel Prozent unter dem regulären Preis
+      quantity: die Menge
+      product: der Produktcode
+      authorized: ob die kassierende Person Preise senken darf
+    allow: wird kassiert
+    to_review: wird kassiert und geprüft
+    reject: wird nicht kassiert und der Versuch gemeldet
+    nucleo: Wer Preise senken darf, kann immer kassieren; für diese Person heißt Stoppen Prüfung.
+  regla_corte:
+    titulo: Kassenabschluss in Lisp
+    ayuda: Beim Abschluss prüft diese Regel die Zählung und entscheidet, ob abgeschlossen wird, ob es zur Prüfung geht oder ob gestoppt wird. Testen speichert nichts; jede gespeicherte Version steht in der Liste unten.
+    fallo: 'Die Regel für den Kassenabschluss ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    motivos:
+      over_limit: die Differenz (%{diferencia}) übersteigt die Grenze (%{tope})
+    caso:
       esperado: Erwartet in der Lade
       contado: Gezählt
       autorizado: Abschluss durch jemanden mit Berechtigung für Differenzen
@@ -995,29 +1027,22 @@ de:
       allow: Wird abgeschlossen
       review: Wird abgeschlossen und geprüft
       reject: Wird gestoppt
-    referencia:
-      lee: Was sie liest (in Pesos)
-      contesta: Was sie antwortet
-      funciones:
-        difference: gezählt − erwartet; negativ = fehlt
-        counted: das Gezählte
-        expected: was da sein sollte
-        float: das Wechselgeld
-        sales: Verkäufe des Abschnitts
-        cash_sales: Bargeld aus Verkäufen
-        returns: Rückgaben
-        withdrawals: Entnahmen
-        limit: die Grenze aus Einstellungen › Kasse (0 = ohne Grenze)
-        tickets: Tickets des Abschnitts
-        authorized: ob die abschließende Person Differenzen annehmen darf
-      allow: wird abgeschlossen
-      to_review: verlangt einen Grund und geht zur Prüfung
-      reject: stoppt und meldet den Versuch
-      nucleo: Wer Differenzen annehmen darf, kann immer abschließen; für diese Person heißt Stoppen Prüfung.
-      ejemplo: Beispiel
-    fallo: 'Die Regel für den Kassenabschluss ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
-    motivos:
-      over_limit: die Differenz (%{diferencia}) übersteigt die Grenze (%{tope})
+    funciones:
+      difference: gezählt − erwartet; negativ = fehlt
+      counted: das Gezählte
+      expected: was da sein sollte
+      float: das Wechselgeld
+      sales: Verkäufe des Abschnitts
+      cash_sales: Bargeld aus Verkäufen
+      returns: Rückgaben
+      withdrawals: Entnahmen
+      limit: die Grenze aus Einstellungen › Kasse (0 = ohne Grenze)
+      tickets: Tickets des Abschnitts
+      authorized: ob die abschließende Person Differenzen annehmen darf
+    allow: wird abgeschlossen
+    to_review: verlangt einen Grund und geht zur Prüfung
+    reject: stoppt und meldet den Versuch
+    nucleo: Wer Differenzen annehmen darf, kann immer abschließen; für diese Person heißt Stoppen Prüfung.
   tablero:
     titulo: Übersicht in Lisp
     ayuda: Die Übersicht ist ein Programm. Ändere, welche Zahlen in welcher Reihenfolge erscheinen, berechne eigene und wähle die Listen darunter. Ausprobieren speichert nichts; jede gespeicherte Version bleibt unten in der Liste.

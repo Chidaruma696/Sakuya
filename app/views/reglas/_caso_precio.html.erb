@@ -1,0 +1,9 @@
+<div><label for="producto" class="etiqueta-campo"><%= t("#{textos}.caso.producto") %></label>
+  <%= text_field_tag :producto, caso[:producto]&.clave, id: "producto", class: "w-32 font-mono uppercase" %></div>
+<div><label for="cantidad" class="etiqueta-campo"><%= t("#{textos}.caso.cantidad") %></label>
+  <%= number_field_tag :cantidad, caso[:cantidad].to_s("F"), step: "0.001", min: 0, id: "cantidad", class: "w-24 font-mono" %></div>
+<div><label for="precio" class="etiqueta-campo"><%= t("#{textos}.caso.precio") %></label>
+  <%= number_field_tag :precio, format("%.2f", caso[:precio] / 100r), step: "0.01", min: 0, id: "precio", class: "w-32 font-mono" %></div>
+<% if caso[:producto] %>
+  <p class="pb-2 text-stone-600"><%= caso[:producto].nombre %> · <%= t("#{textos}.caso.toca", regular: pesos(caso[:regular]), catalogo: pesos(caso[:catalogo])) %></p>
+<% end %>

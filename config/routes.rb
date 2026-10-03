@@ -15,8 +15,8 @@ Rails.application.routes.draw do
     post "/", action: :guardar, as: :guardar
     post "versiones/:id/restaurar", action: :restaurar, as: :restaurar
   end
-  # La regla del cierre de caja, igual que el tablero.
-  scope "ajustes/avanzado/corte", controller: "regla_corte", as: "regla_corte" do
+  # Las reglas que deciden (el cierre de caja, el precio…), con un editor común.
+  scope "ajustes/avanzado/reglas/:gancho", controller: "reglas", as: "regla", constraints: { gancho: /corte|precio/ } do
     get "editar", action: :edit, as: :editar
     post "/", action: :guardar, as: :guardar
     post "versiones/:id/restaurar", action: :restaurar, as: :restaurar

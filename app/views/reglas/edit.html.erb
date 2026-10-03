@@ -1,0 +1,65 @@
+<%# Vive dentro de Ajustes, en las opciones avanzadas, junto al tablero. Sirve a todas las reglas que deciden; cada una pone su caso de prueba. %>
+<% textos = "regla_#{@gancho}" %>
+<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+<%= render "ajustes/menu", actual: textos %>
+<section class="min-w-0">
+<h2 class="mb-1 text-xl font-bold"><%= t("#{textos}.titulo") %></h2>
+<p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("#{textos}.ayuda") %></p>
+
+<div class="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_22rem]">
+  <%= form_with url: regla_guardar_path(@gancho), id: "form_regla", class: "formulario space-y-4", data: { turbo: false } do |f| %>
+    <label for="codigo" class="etiqueta-campo"><%= t("tablero.programa") %></label>
+    <%= text_area_tag :codigo, @codigo, id: "codigo", rows: 14, spellcheck: false, autocomplete: "off", class: "codigo w-full px-3 py-2" %>
+    <% if @error_programa %>
+      <p class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><i class="bi bi-exclamation-triangle-fill text-corbata-700"></i> <%= @error_programa %></p>
+    <% end %>
+
+    <fieldset class="rounded-lg border border-stone-200 bg-white px-4 py-3">
+      <legend class="px-1 text-sm font-semibold"><%= t("reglas.caso") %></legend>
+      <div class="flex flex-wrap items-end gap-4 text-sm">
+        <%= render "reglas/caso_#{@gancho}", caso: @caso, textos: textos %>
+        <label class="flex items-center gap-2 pb-2"><%= check_box_tag :autorizado, "1", @caso[:autorizado], id: "autorizado" %> <%= t("#{textos}.caso.autorizado") %></label>
+      </div>
+      <% if @decision %>
+        <% clase = { allow: "border-green-200 bg-green-50 text-green-900", review: "border-amber-200 bg-amber-50 text-amber-900", reject: "border-red-200 bg-red-50 text-red-900" }[@decision.veredicto] %>
+        <p class="mt-3 rounded-lg border px-3 py-2 text-sm <%= clase %>" id="decision">
+          <strong><%= t("#{textos}.veredictos.#{@decision.veredicto}") %></strong><% if @decision.motivo %>: <%= @decision.motivo %><% end %>
+        </p>
+      <% end %>
+    </fieldset>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <%= f.button name: "probar", value: "1", class: "btn btn-secondary" do %><i class="bi bi-play"></i> <%= t("tablero.probar") %><% end %>
+      <%= f.button class: "btn btn-primary" do %><i class="bi bi-check2"></i> <%= t("tablero.guardar") %><% end %>
+    </div>
+  <% end %>
+
+  <aside class="card space-y-4 text-sm">
+    <h2 class="font-semibold"><%= t("tablero.referencia.titulo") %></h2>
+    <div>
+      <h3 class="etiqueta-dato mb-1"><%= t("reglas.lee") %></h3>
+      <ul class="space-y-0.5">
+        <% @modulo::FUNCIONES.each do |nombre| %>
+          <li><code class="codigo text-marca-800">(<%= nombre %>)</code> <span class="text-stone-500"><%= t("#{textos}.funciones.#{nombre.underscore}") %></span></li>
+        <% end %>
+      </ul>
+    </div>
+    <div>
+      <h3 class="etiqueta-dato mb-1"><%= t("reglas.contesta") %></h3>
+      <ul class="space-y-0.5">
+        <li><code class="codigo text-marca-800">(allow)</code> <span class="text-stone-500"><%= t("#{textos}.allow") %></span></li>
+        <li><code class="codigo text-marca-800">(to-review "…")</code> <span class="text-stone-500"><%= t("#{textos}.to_review") %></span></li>
+        <li><code class="codigo text-marca-800">(reject "…")</code> <span class="text-stone-500"><%= t("#{textos}.reject") %></span></li>
+      </ul>
+      <p class="mt-1 text-stone-600"><%= t("#{textos}.nucleo") %></p>
+    </div>
+    <div>
+      <h3 class="etiqueta-dato mb-1"><%= t("reglas.ejemplo") %></h3>
+      <pre class="codigo mt-1 overflow-x-auto rounded-lg bg-stone-50 p-2 text-xs ring-1 ring-stone-200"><%= @modulo::EJEMPLO %></pre>
+    </div>
+  </aside>
+</div>
+
+<%= render "reglas/versiones", versiones: @versiones, ambito: "reglas", restaurar: ->(v) { regla_restaurar_path(@gancho, v) } %>
+</section>
+</div>
