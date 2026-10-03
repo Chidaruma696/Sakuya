@@ -509,6 +509,8 @@ en:
     no_se_pudo: Could not load. Check the connection.
   caja:
     nueva_venta: New sale
+    bajar_escpos: Download ESC/POS
+    escpos_ayuda: The receipt as bytes for a thermal printer
     corte_de_caja: Register session
     corte: Session
     fondo: Float

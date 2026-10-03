@@ -50,6 +50,7 @@ Rails.application.routes.draw do
     post "cobrar", action: :cobrar
     get "ventas", action: :ventas
     get "ventas/:id/ticket", action: :ticket, as: :ticket
+    get "ventas/:id/escpos", action: :escpos, as: :escpos
     get "corte", action: :corte
     post "corte/abrir", action: :abrir, as: :abrir
     post "corte/cerrar", action: :cerrar, as: :cerrar

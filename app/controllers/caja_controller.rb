@@ -51,6 +51,13 @@ class CajaController < ApplicationController
     render layout: "ticket"
   end
 
+  # El mismo ticket en bytes ESC/POS, para una impresora térmica.
+  def escpos
+    autorizar!("caja.vender")
+    venta = Venta.where(sucursal: sucursal_actual).find(params[:id])
+    send_data EscPos.ticket(venta), filename: "#{venta.folio}.bin", type: "application/octet-stream", disposition: params[:bajar] ? "attachment" : "inline"
+  end
+
   # ---- corte
   def corte
     autorizar!("caja.abrir")

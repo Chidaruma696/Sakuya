@@ -50,7 +50,10 @@
     <%= yield %>
     <div class="acciones" <%= "hidden" if @previa %>>
       <button onclick="window.print()"><%= t("comun.imprimir") %></button>
-      <% if @venta %><a href="<%= caja_path %>"><%= t("caja.nueva_venta") %></a><% end %>
+      <% if @venta&.persisted? %>
+        <a href="<%= caja_escpos_path(@venta, bajar: 1) %>" title="<%= t("caja.escpos_ayuda") %>"><%= t("caja.bajar_escpos") %></a>
+        <a href="<%= caja_path %>"><%= t("caja.nueva_venta") %></a>
+      <% end %>
     </div>
     <% if params[:imprimir] %><script>window.addEventListener("load", () => window.print());</script><% end %>
   </body>

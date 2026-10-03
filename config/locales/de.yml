@@ -509,6 +509,8 @@ de:
     no_se_pudo: Konnte nicht laden. Prüfe die Verbindung.
   caja:
     nueva_venta: Neuer Verkauf
+    bajar_escpos: ESC/POS herunterladen
+    escpos_ayuda: Der Bon als Bytes für einen Thermodrucker
     corte_de_caja: Kassenabschnitt
     corte: Abschnitt
     fondo: Wechselgeld

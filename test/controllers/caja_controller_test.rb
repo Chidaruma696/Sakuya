@@ -187,6 +187,17 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     assert_equal 4_200, lupita.saldo_centavos
   end
 
+  test "el ticket se baja en ESC/POS para una térmica" do
+    venta = Caja.cobrar!(sucursal: @tienda, usuario: usuarios(:cajera), clave: "t", lineas: [ { producto_id: productos(:catsup).id, cantidad: 1 } ],
+                         pagos: [ { forma: "efectivo", monto_centavos: 5_000 } ])
+    get caja_ticket_path(venta)
+    assert_select "a[href=?]", caja_escpos_path(venta, bajar: 1)
+    get caja_escpos_path(venta, bajar: 1)
+    assert_equal "application/octet-stream", response.media_type
+    assert_match "#{venta.folio}.bin", response.headers["Content-Disposition"]
+    assert response.body.b.start_with?("\e@".b)
+  end
+
   test "devolución solo con ticket" do
     venta = Caja.cobrar!(sucursal: @tienda, usuario: usuarios(:cajera), clave: "v1", lineas: [ @pesada ], pagos: [ { forma: "efectivo", monto_centavos: 30_000 } ])
     get caja_devolucion_path(codigo: "0000000000000")

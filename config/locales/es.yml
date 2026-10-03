@@ -509,6 +509,8 @@ es:
     no_se_pudo: No se pudo cargar. Revisa la conexión.
   caja:
     nueva_venta: Nueva venta
+    bajar_escpos: Bajar ESC/POS
+    escpos_ayuda: El ticket en bytes para una impresora térmica
     corte_de_caja: Corte de caja
     corte: Corte
     fondo: Fondo
