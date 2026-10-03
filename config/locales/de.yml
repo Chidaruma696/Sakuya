@@ -265,6 +265,9 @@ de:
     cerrada: Abgemeldet
     inicia_para_continuar: Zum Fortfahren anmelden
   errores:
+    impresora:
+      sin_direccion: die Filiale hat keine Adresse für ihren Netzwerk-Thermodrucker
+      no_contesta: 'der Thermodrucker %{direccion} antwortet nicht (%{error})'
     pedido:
       sin_renglones: die Bestellung hat keine Zeilen
       no_abierto: die Bestellung %{folio} ist nicht mehr offen
@@ -511,6 +514,10 @@ de:
     nueva_venta: Neuer Verkauf
     bajar_escpos: ESC/POS herunterladen
     escpos_ayuda: Der Bon als Bytes für einen Thermodrucker
+    imprimir_termica: Auf dem Thermodrucker drucken
+    impreso: Bon gedruckt.
+    sin_serial: 'Dieser Browser kann nicht mit einem Kabeldrucker sprechen; Chrome oder Edge nutzen oder als ESC/POS herunterladen.'
+    elige_impresora: 'Den Drucker mit «Auf dem Thermodrucker drucken» wählen; danach wird nicht mehr gefragt.'
     corte_de_caja: Kassenabschnitt
     corte: Abschnitt
     fondo: Wechselgeld
@@ -661,6 +668,13 @@ de:
       porcentaje: "%{pct} % Rabatt"
       por_cantidad: "%{precio} ab %{desde} %{unidad}"
   admin:
+    impresora: Bondrucker
+    impresora_red: Netzwerk-Thermodrucker (Adresse:Port)
+    impresora_ayuda: 'Nur bei einem Netzwerk-Thermodrucker; fast immer Port 9100.'
+    impresoras:
+      navegador: Mit dem Browser
+      red: Netzwerk-Thermodrucker
+      serial: Thermodrucker per Kabel (Chrome)
     modelos:
       producto: Produkt
       promocion: Aktion

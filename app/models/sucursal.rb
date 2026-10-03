@@ -2,6 +2,8 @@ class Sucursal < ApplicationRecord
   # matriz: la oficina central, de donde sale todo. tienda: vende. almacen: bodega donde la
   # mercancía solo se guarda: sin caja ni conteos; entra y sale por traspasos, y solo va a la matriz.
   TIPOS = %w[matriz tienda almacen].freeze
+  # Cómo imprime los tickets: con el navegador, en una térmica de red o en una por cable (Web Serial).
+  IMPRESORAS = %w[navegador red serial].freeze
 
   has_many :usuarios, dependent: :restrict_with_error
   has_many :folios, dependent: :destroy
@@ -16,6 +18,8 @@ class Sucursal < ApplicationRecord
   validates :codigo, presence: true, uniqueness: true, length: { maximum: 10 }
   validates :nombre, presence: true
   validates :tipo, inclusion: { in: TIPOS }
+  validates :impresora, inclusion: { in: IMPRESORAS }
+  validates :impresora_red, format: { with: /\A[\w.-]+:\d{1,5}\z/ }, if: -> { impresora == "red" }
 
   scope :activas, -> { where(activa: true) }
 

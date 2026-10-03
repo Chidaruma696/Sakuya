@@ -265,6 +265,9 @@ en:
     cerrada: Signed out
     inicia_para_continuar: Sign in to continue
   errores:
+    impresora:
+      sin_direccion: the branch has no address for its network thermal printer
+      no_contesta: 'the thermal printer %{direccion} does not answer (%{error})'
     pedido:
       sin_renglones: the order has no lines
       no_abierto: order %{folio} is no longer open
@@ -511,6 +514,10 @@ en:
     nueva_venta: New sale
     bajar_escpos: Download ESC/POS
     escpos_ayuda: The receipt as bytes for a thermal printer
+    imprimir_termica: Print on the thermal printer
+    impreso: Receipt printed.
+    sin_serial: 'This browser cannot talk to a cable printer; use Chrome or Edge, or download it as ESC/POS.'
+    elige_impresora: 'Choose the printer with «Print on the thermal printer»; after that it is not asked again.'
     corte_de_caja: Register session
     corte: Session
     fondo: Float
@@ -661,6 +668,13 @@ en:
       porcentaje: "%{pct} % off"
       por_cantidad: "%{precio} from %{desde} %{unidad}"
   admin:
+    impresora: Receipt printer
+    impresora_red: Network thermal printer (address:port)
+    impresora_ayuda: 'Only if it prints on a network thermal printer; almost always port 9100.'
+    impresoras:
+      navegador: With the browser
+      red: Network thermal printer
+      serial: Cable thermal printer (Chrome)
     modelos:
       producto: Product
       promocion: Promotion

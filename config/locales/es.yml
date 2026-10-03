@@ -265,6 +265,9 @@ es:
     cerrada: Sesión cerrada
     inicia_para_continuar: Inicia sesión para continuar
   errores:
+    impresora:
+      sin_direccion: la sucursal no tiene la dirección de su térmica de red
+      no_contesta: 'la térmica %{direccion} no contesta (%{error})'
     pedido:
       sin_renglones: el pedido no trae renglones
       no_abierto: el pedido %{folio} ya no está abierto
@@ -511,6 +514,10 @@ es:
     nueva_venta: Nueva venta
     bajar_escpos: Bajar ESC/POS
     escpos_ayuda: El ticket en bytes para una impresora térmica
+    imprimir_termica: Imprimir en la térmica
+    impreso: Ticket impreso.
+    sin_serial: 'Este navegador no puede hablarle a la impresora por cable; usa Chrome o Edge, o bájalo en ESC/POS.'
+    elige_impresora: 'Elige la impresora con «Imprimir en la térmica»; luego ya no se pregunta.'
     corte_de_caja: Corte de caja
     corte: Corte
     fondo: Fondo
@@ -661,6 +668,13 @@ es:
       porcentaje: "%{pct} % de descuento"
       por_cantidad: "%{precio} desde %{desde} %{unidad}"
   admin:
+    impresora: Impresora de tickets
+    impresora_red: Térmica de red (dirección:puerto)
+    impresora_ayuda: 'Solo si imprime en una térmica de red; casi siempre el puerto 9100.'
+    impresoras:
+      navegador: Con el navegador
+      red: Térmica de red
+      serial: Térmica por cable (Chrome)
     modelos:
       producto: Producto
       promocion: Promoción

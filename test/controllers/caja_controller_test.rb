@@ -198,6 +198,31 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     assert response.body.b.start_with?("\e@".b)
   end
 
+  test "el ticket se imprime según la impresora de la sucursal: navegador, red o cable" do
+    venta = Caja.cobrar!(sucursal: @tienda, usuario: usuarios(:cajera), clave: "i", lineas: [ { producto_id: productos(:catsup).id, cantidad: 1 } ],
+                         pagos: [ { forma: "efectivo", monto_centavos: 5_000 } ])
+    get caja_ticket_path(venta, imprimir: 1)
+    assert_match "window.print()", response.body
+    assert_select "#termica", 0
+    @tienda.update!(impresora: "serial")
+    get caja_ticket_path(venta, imprimir: 1)
+    assert_select "#termica"
+    assert_match "navigator.serial", response.body
+    servidor = TCPServer.new("127.0.0.1", 0)
+    recibido = +"".b
+    hilo = Thread.new { c = servidor.accept; recibido << c.read; c.close }
+    @tienda.update!(impresora: "red", impresora_red: "127.0.0.1:#{servidor.addr[1]}")
+    post caja_imprimir_path(venta), headers: { "Accept" => "application/json" }
+    hilo.join(3)
+    assert_response :ok
+    assert recibido.start_with?("\e@".b)
+    assert_includes recibido, venta.folio
+    servidor.close
+    post caja_imprimir_path(venta), headers: { "Accept" => "application/json" }
+    assert_response :unprocessable_entity
+    assert_match "no contesta", response.parsed_body["error"]
+  end
+
   test "devolución solo con ticket" do
     venta = Caja.cobrar!(sucursal: @tienda, usuario: usuarios(:cajera), clave: "v1", lineas: [ @pesada ], pagos: [ { forma: "efectivo", monto_centavos: 30_000 } ])
     get caja_devolucion_path(codigo: "0000000000000")

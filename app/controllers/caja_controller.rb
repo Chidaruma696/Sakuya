@@ -58,6 +58,16 @@ class CajaController < ApplicationController
     send_data EscPos.ticket(venta), filename: "#{venta.folio}.bin", type: "application/octet-stream", disposition: params[:bajar] ? "attachment" : "inline"
   end
 
+  # Imprime el ticket en la térmica de red de la sucursal (JSON: ok o el error).
+  def imprimir
+    autorizar!("caja.vender")
+    venta = Venta.where(sucursal: sucursal_actual).find(params[:id])
+    Impresora.enviar!(sucursal_actual.impresora_red, EscPos.ticket(venta))
+    render json: { ok: true, aviso: t("caja.impreso") }
+  rescue Impresora::Error => e
+    render json: { error: e.message }, status: :unprocessable_entity
+  end
+
   # ---- corte
   def corte
     autorizar!("caja.abrir")

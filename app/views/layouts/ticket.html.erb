@@ -51,10 +51,45 @@
     <div class="acciones" <%= "hidden" if @previa %>>
       <button onclick="window.print()"><%= t("comun.imprimir") %></button>
       <% if @venta&.persisted? %>
+        <% if @venta.sucursal.impresora != "navegador" %><button type="button" id="termica"><%= t("caja.imprimir_termica") %></button><% end %>
         <a href="<%= caja_escpos_path(@venta, bajar: 1) %>" title="<%= t("caja.escpos_ayuda") %>"><%= t("caja.bajar_escpos") %></a>
         <a href="<%= caja_path %>"><%= t("caja.nueva_venta") %></a>
       <% end %>
     </div>
-    <% if params[:imprimir] %><script>window.addEventListener("load", () => window.print());</script><% end %>
+    <% if @venta&.persisted? && @venta.sucursal.impresora != "navegador" %>
+      <p id="estado_impresion" class="acciones" style="font: 14px system-ui, sans-serif;"></p>
+      <%# La térmica: por red la manda el servidor; por cable, el navegador con Web Serial. La primera
+          vez por cable hay que elegir el puerto con un clic; luego el navegador lo recuerda. %>
+      <script>
+        (() => {
+          const modo = <%= raw @venta.sucursal.impresora.to_json %>
+          const estado = document.getElementById("estado_impresion")
+          const textos = <%= raw({ impreso: t("caja.impreso"), sin_serial: t("caja.sin_serial"), elige: t("caja.elige_impresora") }.to_json) %>
+          const porRed = async () => {
+            const r = await fetch(<%= raw caja_imprimir_path(@venta).to_json %>, { method: "POST", headers: { Accept: "application/json", "X-CSRF-Token": <%= raw form_authenticity_token.to_json %> } })
+            const datos = await r.json()
+            estado.textContent = datos.aviso || datos.error
+          }
+          const porCable = async (elegir) => {
+            if (!("serial" in navigator)) { estado.textContent = textos.sin_serial; return }
+            let [puerto] = await navigator.serial.getPorts()
+            if (!puerto) {
+              if (!elegir) { estado.textContent = textos.elige; return }
+              puerto = await navigator.serial.requestPort()
+            }
+            const bytes = new Uint8Array(await (await fetch(<%= raw caja_escpos_path(@venta).to_json %>)).arrayBuffer())
+            await puerto.open({ baudRate: 9600 })
+            const escritor = puerto.writable.getWriter()
+            await escritor.write(bytes)
+            escritor.releaseLock()
+            await puerto.close()
+            estado.textContent = textos.impreso
+          }
+          const imprimir = (elegir) => (modo === "red" ? porRed() : porCable(elegir)).catch((e) => { estado.textContent = e.message })
+          document.getElementById("termica").addEventListener("click", () => imprimir(true))
+          <% if params[:imprimir] %>window.addEventListener("load", () => imprimir(false))<% end %>
+        })()
+      </script>
+    <% elsif params[:imprimir] %><script>window.addEventListener("load", () => window.print());</script><% end %>
   </body>
 </html>

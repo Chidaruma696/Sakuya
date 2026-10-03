@@ -31,7 +31,7 @@ module Admin
     end
 
     def permitidos
-      p = params.require(:sucursal).permit(:codigo, :nombre, :tipo, :activa, :limite_efectivo, :dias_conteo)
+      p = params.require(:sucursal).permit(:codigo, :nombre, :tipo, :activa, :limite_efectivo, :dias_conteo, :impresora, :impresora_red)
       p[:codigo] = p[:codigo].to_s.strip.upcase
       p[:limite_efectivo_centavos] = Dinero.centavos(p.delete(:limite_efectivo)) if p.key?(:limite_efectivo)
       p

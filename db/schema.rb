@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_000007) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_000008) do
   create_table "abonos", force: :cascade do |t|
     t.integer "cliente_id", null: false
     t.integer "corte_id", null: false
@@ -532,6 +532,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000007) do
     t.string "codigo", null: false
     t.datetime "created_at", null: false
     t.integer "dias_conteo"
+    t.string "impresora", default: "navegador", null: false
+    t.string "impresora_red"
     t.integer "limite_efectivo_centavos", default: 300000, null: false
     t.string "nombre", null: false
     t.string "tipo", default: "tienda", null: false
