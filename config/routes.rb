@@ -66,6 +66,9 @@ Rails.application.routes.draw do
 
   get "inventario", to: "inventario#index", as: :inventario
   get "productos/buscar", to: "inventario#buscar", as: :buscar_productos
+  get "reabasto", to: "reabasto#index", as: :reabasto
+  get "reabasto/:sucursal_id/minimos", to: "reabasto#minimos", as: :reabasto_minimos
+  patch "reabasto/:sucursal_id/minimos", to: "reabasto#guardar_minimos"
   resources :traspasos, only: %i[index new create show] do
     member { post :cancelar }
   end

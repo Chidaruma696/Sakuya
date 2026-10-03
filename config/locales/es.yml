@@ -210,10 +210,12 @@ es:
       facturas: Facturas
       proveedores: Proveedores
       granel: Traspasos
+      reabasto: Reabasto
       clientes: Clientes
       pedidos: Pedidos
     botones:
       inicio: Inicio
+      reabastecer: Reabastecer
       clientes: Clientes
       nuevo_cliente: Nuevo cliente
       nuevo_pedido: Nuevo pedido
@@ -1085,6 +1087,23 @@ es:
       retiro_pago: Pago a %{proveedor} %{folio}
       abono_pago: Pago %{folio} (%{forma})
       anulacion_pago: 'Pago anulado: %{motivo}'
+  reabasto:
+    titulo: Reabastecer sucursales
+    ayuda: Lo que a cada sucursal le falta según sus mínimos y máximos. «Armar traspaso» abre un traspaso ya lleno con eso; se revisa, se ajusta y se registra como cualquier otro.
+    minimos: Mínimos y máximos
+    minimos_de: Mínimos y máximos de %{sucursal}
+    minimos_ayuda: Por debajo del mínimo, el reabasto sugiere lo que falta para llegar al máximo (o al mínimo, si no hay máximo). Un mínimo vacío quita el producto.
+    armar: Armar traspaso
+    hay: Hay
+    minimo: Mínimo
+    maximo: Máximo
+    nota_traspaso: Reabasto por mínimos
+    faltan:
+      zero: no le falta nada
+      one: le falta 1 producto
+      other: 'le faltan %{count} productos'
+    avisos:
+      guardados: Mínimos de %{sucursal} guardados.
   traspasos:
     titulo: Traspasos
     traspaso: Traspaso

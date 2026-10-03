@@ -210,10 +210,12 @@ de:
       facturas: Rechnungen
       proveedores: Lieferanten
       granel: Umbuchungen
+      reabasto: Nachschub
       clientes: Kunden
       pedidos: Bestellungen
     botones:
       inicio: Start
+      reabastecer: Nachfüllen
       clientes: Kunden
       nuevo_cliente: Neuer Kunde
       nuevo_pedido: Neue Bestellung
@@ -1085,6 +1087,23 @@ de:
       retiro_pago: Zahlung an %{proveedor} %{folio}
       abono_pago: Zahlung %{folio} (%{forma})
       anulacion_pago: 'Zahlung storniert: %{motivo}'
+  reabasto:
+    titulo: Filialen nachfüllen
+    ayuda: Was jeder Filiale laut Mindest- und Höchstbeständen fehlt. «Umlagerung anlegen» öffnet eine bereits ausgefüllte Umlagerung; sie wird geprüft, angepasst und wie jede andere erfasst.
+    minimos: Mindest- und Höchstbestände
+    minimos_de: Mindest- und Höchstbestände von %{sucursal}
+    minimos_ayuda: Unter dem Mindestbestand schlägt der Nachschub vor, was bis zum Höchstbestand fehlt (oder bis zum Mindestbestand, wenn es keinen Höchstbestand gibt). Ein leerer Mindestbestand entfernt das Produkt.
+    armar: Umlagerung anlegen
+    hay: Bestand
+    minimo: Minimum
+    maximo: Maximum
+    nota_traspaso: Nachschub nach Mindestbeständen
+    faltan:
+      zero: es fehlt nichts
+      one: 1 Produkt fehlt
+      other: '%{count} Produkte fehlen'
+    avisos:
+      guardados: Mindestbestände von %{sucursal} gespeichert.
   traspasos:
     titulo: Umbuchungen
     traspaso: Umlagerung

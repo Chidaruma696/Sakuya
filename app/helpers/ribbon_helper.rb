@@ -55,7 +55,8 @@ module RibbonHelper
       { id: :granel, botones: [
         Boton.new(:traspaso_granel, :new_traspaso_path, "almacenes.traspasar", "boxes"),
         Boton.new(:traspasos, :traspasos_path, "almacenes.traspasar", "list-ul")
-      ] }
+      ] },
+      { id: :reabasto, botones: [ Boton.new(:reabastecer, :reabasto_path, "almacenes.traspasar", "arrow-repeat") ] }
     ] },
     { id: :conteos, grupos: [
       { id: :contar, botones: [

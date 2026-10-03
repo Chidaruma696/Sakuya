@@ -119,7 +119,7 @@ The Lisp is Sakuya's own, written in Ruby (`lib/lisp*.rb`): a reader, an evaluat
 
 ## 🗺️ Roadmap
 
-- **Branch orders to the head office** with minimums and maximums, and customer orders that can hold stock.
+- Customer orders that can hold stock.
 - A till that survives a dropped connection.
 
 <br/>

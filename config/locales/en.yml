@@ -210,10 +210,12 @@ en:
       facturas: Invoices
       proveedores: Suppliers
       granel: Transfers
+      reabasto: Restock
       clientes: Customers
       pedidos: Orders
     botones:
       inicio: Home
+      reabastecer: Restock
       clientes: Customers
       nuevo_cliente: New customer
       nuevo_pedido: New order
@@ -1085,6 +1087,23 @@ en:
       retiro_pago: Payment to %{proveedor} %{folio}
       abono_pago: Payment %{folio} (%{forma})
       anulacion_pago: 'Payment voided: %{motivo}'
+  reabasto:
+    titulo: Restock branches
+    ayuda: What each branch is missing according to its minimums and maximums. «Build transfer» opens a transfer already filled in; it is checked, adjusted and recorded like any other.
+    minimos: Minimums and maximums
+    minimos_de: Minimums and maximums of %{sucursal}
+    minimos_ayuda: Below the minimum, restocking suggests what is missing to reach the maximum (or the minimum, if there is no maximum). An empty minimum removes the product.
+    armar: Build transfer
+    hay: In stock
+    minimo: Minimum
+    maximo: Maximum
+    nota_traspaso: Restock by minimums
+    faltan:
+      zero: nothing missing
+      one: 1 product missing
+      other: '%{count} products missing'
+    avisos:
+      guardados: Minimums of %{sucursal} saved.
   traspasos:
     titulo: Transfers
     traspaso: Transfer

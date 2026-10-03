@@ -14,6 +14,10 @@ Cada gancho lleva un número de contrato (`VERSION` en su módulo) y cada regla 
 
 Además del precio de cada renglón, la venta completa pasa por una regla justo antes de cobrarse: total, productos, formas de pago, hora y día. De fábrica no frena nada, porque los precios ya tienen su regla y una venta normal no es irregular; está para lo que cada negocio necesita (nada de alcohol a deshoras, ventas grandes a revisión). Lo que frena no se cobra y queda reportado en el corte; con el permiso nuevo `caja.forzar_venta` se cobra y queda por revisar. Lo mismo al recibir mercancía: una regla mira qué llega, de quién y con qué papeles (remisión, factura); de fábrica no frena nada, lo que frena no entra y queda reportado en el proveedor, y con `compras.forzar_recepcion` entra por revisar.
 
+## Reabastecer por mínimos y máximos (3 oct 2026)
+
+Cada sucursal tiene mínimos y máximos por producto (Almacenes › Reabastecer). Lo que está por debajo del mínimo se sugiere hasta el máximo, y «Armar traspaso» abre el traspaso de siempre ya lleno: se revisa y se registra igual que cualquiera. No hay un camino aparte que mueva mercancía. Los traspasos siguen siendo instantáneos (sale y entra a la vez), así que no hay "en tránsito" que descontar.
+
 ## Tickets en ESC/POS (3 oct 2026)
 
 El ticket sale también en bytes ESC/POS, el idioma de las térmicas, sin driver de por medio: página de códigos PC850 (acentos, ñ, ¿ y ¡; el € sale como EUR), el total al doble, el EAN-13 del ticket y el corte de papel, a 32 o 48 columnas según el papel. Cada sucursal elige en Admin › Sucursales cómo imprime: con el navegador (como antes), en una térmica de red (el servidor abre su puerto, casi siempre el 9100, y escribe) o en una por cable desde Chrome con Web Serial (la primera vez se elige el puerto; luego el navegador lo recuerda). Siempre se puede bajar el `.bin`. La de red se prueba contra un puerto de mentira; la de cable y una impresora de verdad, sin probar todavía. El logo sale en mapa de bits a 30 mm y el resumen del corte también va a la térmica.

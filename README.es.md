@@ -119,7 +119,7 @@ En `docs/decisiones.md` están las razones de cada decisión; en `docs/arquitect
 
 ## 🗺️ Hoja de ruta
 
-- **Pedidos de sucursal a la matriz** con mínimos y máximos, y que un pedido de cliente pueda apartar existencias.
+- Que un pedido de cliente pueda apartar existencias.
 - Una caja que aguante que se caiga la red.
 
 <br/>

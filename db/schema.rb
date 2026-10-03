@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_000009) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_000010) do
   create_table "abonos", force: :cascade do |t|
     t.integer "cliente_id", null: false
     t.integer "corte_id", null: false
@@ -243,6 +243,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000009) do
     t.datetime "updated_at", null: false
     t.index ["sucursal_id", "prefijo"], name: "index_folios_on_sucursal_id_and_prefijo", unique: true
     t.index ["sucursal_id"], name: "index_folios_on_sucursal_id"
+  end
+
+  create_table "minimos", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.decimal "maximo", precision: 12, scale: 3
+    t.decimal "minimo", precision: 12, scale: 3, null: false
+    t.integer "producto_id", null: false
+    t.integer "sucursal_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["producto_id"], name: "index_minimos_on_producto_id"
+    t.index ["sucursal_id", "producto_id"], name: "index_minimos_on_sucursal_id_and_producto_id", unique: true
+    t.index ["sucursal_id"], name: "index_minimos_on_sucursal_id"
+    t.check_constraint "maximo IS NULL OR maximo >= minimo", name: "minimos_maximo"
+    t.check_constraint "minimo >= 0", name: "minimos_minimo"
   end
 
   create_table "movimientos", force: :cascade do |t|
@@ -681,6 +695,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000009) do
   add_foreign_key "facturas_proveedor", "sucursales"
   add_foreign_key "facturas_proveedor", "usuarios"
   add_foreign_key "folios", "sucursales"
+  add_foreign_key "minimos", "productos"
+  add_foreign_key "minimos", "sucursales"
   add_foreign_key "movimientos", "productos"
   add_foreign_key "movimientos", "sucursales"
   add_foreign_key "movimientos", "usuarios"

@@ -11,9 +11,14 @@ class TraspasosController < ApplicationController
                          .includes(:sucursal_origen, :sucursal_destino, :usuario, lineas: :producto).order(created_at: :desc).limit(100)
   end
 
+  # Con ?destino=ID&sugerido=1 llega armado con lo que esa sucursal necesita para reabastecerse.
   def new
-    @traspaso = Traspaso.new(fecha: Date.current, sucursal_origen: sucursal_actual)
-    @traspaso.lineas.build
+    @traspaso = Traspaso.new(fecha: Date.current, sucursal_origen: sucursal_actual, sucursal_destino_id: params[:destino])
+    if params[:sugerido].present? && (destino = Sucursal.activas.find_by(id: params[:destino]))
+      Minimo.sugerido(destino).each { |producto, cantidad| @traspaso.lineas.build(producto: producto, cantidad: cantidad) }
+      @traspaso.notas = t("reabasto.nota_traspaso")
+    end
+    @traspaso.lineas.build if @traspaso.lineas.empty?
     @origenes = sucursal_actual.matriz? ? Sucursal.activas.order(:nombre) : [ sucursal_actual ]
     @destinos = Sucursal.activas.order(:nombre)
     @productos = Producto.activos.order(:nombre)
