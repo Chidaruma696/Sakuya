@@ -5,3 +5,6 @@
 <div><label for="total" class="etiqueta-campo"><%= t("#{textos}.caso.total") %></label>
   <%= number_field_tag :total, format("%.2f", caso[:total] / 100r), step: "0.01", min: 0, id: "total", class: "w-32 font-mono" %></div>
 <p class="pb-2 text-stone-600"><%= t("#{textos}.caso.candado_#{ReglaFactura.candado? ? 'puesto' : 'quitado'}") %></p>
+<div class="basis-full border-t border-stone-100 pt-3"><label for="factura" class="etiqueta-campo"><%= t("#{textos}.caso.factura") %></label>
+  <%= text_field_tag :factura, caso[:folio_factura], id: "factura", class: "w-40 font-mono" %>
+  <p class="mt-1 text-xs text-stone-500"><%= t("#{textos}.caso.factura_ayuda") %></p></div>

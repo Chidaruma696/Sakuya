@@ -980,6 +980,10 @@ en:
       motivo: 'Transfer %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancellation of %{folio}: %{motivo}'
   reglas:
+    por_permiso: 'The rule stops it, but the person doing it has permission: it goes through and to review.'
+    con_corte_real: With the real open session
+    con_corte_inventado: With a made-up one
+    sin_corte_real: 'There is no open session at this branch: a made-up one is used.'
     contrato: 'contract v%{n}'
     contrato_ayuda: The hook version it was written for
     vieja: 'This rule was written for version %{suya} of the hook and Sakuya is now on %{actual}: check that it reads and answers what the hook expects now, and save it again.'
@@ -999,12 +1003,15 @@ en:
     contesta: What it answers
     ejemplo: Example
   regla_factura:
+    factura_no_existe: 'there is no invoice %{folio}'
     titulo: Invoices in Lisp
     ayuda: Before a supplier invoice is recorded, this rule compares what is invoiced with what the linked receipts brought, and decides whether it is recorded, goes to review or is stopped. Test saves nothing.
     fallo: 'The invoice rule failed and the built-in one decided: %{error}'
     motivos:
       over_received: 'invoicing more than received (%{detalle})'
     caso:
+      factura: Or a real invoice (number)
+      factura_ayuda: Compares it with the receipts linked to it, as when it was recorded.
       productos_de_mas: Products in excess
       valor_de_mas: Value of the excess
       total: Invoice total
@@ -1081,6 +1088,7 @@ en:
     reject: it does not go out and the attempt is reported
     nucleo: Someone allowed to withdraw can always do it; for them, stopping means review.
   regla_precio:
+    venta_no_existe: 'there is no sale %{folio} at this branch'
     titulo: Price in Lisp
     ayuda: Every line charged at the till goes through this rule, which looks at the price and decides whether it is charged, goes to review or is stopped. No rule can cross the floor from Settings › Till. Test saves nothing.
     sin_productos: there are no products with a price to test with
@@ -1088,6 +1096,8 @@ en:
     motivos:
       below_price: below the regular price
     caso:
+      venta: Or a real sale (number)
+      venta_ayuda: Goes through its lines as they were charged; the regular price comes from the list price back then and today's promotions.
       producto: Product code
       cantidad: Quantity
       precio: Price charged

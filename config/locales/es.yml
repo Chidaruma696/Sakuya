@@ -980,6 +980,10 @@ es:
       motivo: 'Traspaso %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancelación de %{folio}: %{motivo}'
   reglas:
+    por_permiso: 'La regla lo frena, pero quien lo hace tiene permiso: pasa y queda por revisar.'
+    con_corte_real: Con el corte abierto de verdad
+    con_corte_inventado: Con uno inventado
+    sin_corte_real: 'No hay corte abierto en esta sucursal: se prueba con uno inventado.'
     contrato: 'contrato v%{n}'
     contrato_ayuda: La versión del gancho para la que se escribió
     vieja: 'Esta regla se escribió para la versión %{suya} del gancho y Sakuya ya va en la %{actual}: revisa que lea y conteste lo de ahora y vuelve a guardarla.'
@@ -999,12 +1003,15 @@ es:
     contesta: Lo que contesta
     ejemplo: Ejemplo
   regla_factura:
+    factura_no_existe: 'no hay una factura %{folio}'
     titulo: Facturas en Lisp
     ayuda: Antes de registrar una factura de proveedor, esta regla compara lo facturado con lo recibido en las recepciones que se ligan, y decide si se registra, si queda por revisar o si se frena. Probar no guarda nada.
     fallo: 'La regla de facturas falló y decidió la de fábrica: %{error}'
     motivos:
       over_received: 'se factura más de lo recibido (%{detalle})'
     caso:
+      factura: O una factura de verdad (folio)
+      factura_ayuda: La compara con las recepciones que tiene ligadas, como al registrarla.
       productos_de_mas: Productos de más
       valor_de_mas: Valor de lo de más
       total: Total de la factura
@@ -1081,6 +1088,7 @@ es:
     reject: no sale y deja reportado el intento
     nucleo: Quien tiene permiso para retirar nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
   regla_precio:
+    venta_no_existe: 'no hay una venta %{folio} en esta sucursal'
     titulo: Precio en Lisp
     ayuda: Cada renglón que se cobra pasa por esta regla, que mira el precio y decide si se cobra, si queda por revisar o si se frena. El piso de Ajustes › Caja no lo cruza ninguna regla. Probar no guarda nada.
     sin_productos: no hay productos con precio para probar
@@ -1088,6 +1096,8 @@ es:
     motivos:
       below_price: por debajo del precio que toca
     caso:
+      venta: O una venta de verdad (folio)
+      venta_ayuda: Repasa sus renglones tal como se cobraron; lo que tocaba sale del catálogo de entonces y las promociones de hoy.
       producto: Clave del producto
       cantidad: Cantidad
       precio: Precio que se cobra

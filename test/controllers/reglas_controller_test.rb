@@ -15,6 +15,7 @@ class ReglasControllerTest < ActionDispatch::IntegrationTest
     post regla_guardar_path("corte"), params: { probar: "1", codigo: codigo, esperado: "500", contado: "480" }
     assert_response :ok
     assert_select "#decision", /Se frena: falta/
+    assert_select "#inventado_si[checked]", 0, "de entrada, el corte de verdad"
     assert_equal 0, Regla.count, "probar no guarda"
 
     post regla_guardar_path("corte"), params: { codigo: "(allow" }
@@ -114,6 +115,34 @@ class ReglasControllerTest < ActionDispatch::IntegrationTest
     get tablero_editar_path
     assert_select "#aviso_vieja"
     assert_equal 1, Regla.create!(gancho: "tablero", codigo: tablero.codigo, usuario: usuarios(:admin)).version
+  end
+
+  test "probar con datos de verdad: el corte abierto, una venta repasada renglón por renglón y una factura registrada" do
+    usuarios(:admin).update!(sucursal: sucursales(:tienda))
+    tienda = sucursales(:tienda)
+    Inventario.mover!(sucursal: tienda, producto: productos(:catsup), tipo: "entrada", cantidad: 5, usuario: usuarios(:admin))
+    venta = Caja.cobrar!(sucursal: tienda, usuario: usuarios(:supervisora), clave: "v", autorizador: usuarios(:supervisora),
+                         lineas: [ { producto_id: productos(:catsup).id, cantidad: 1 }, { producto_id: productos(:catsup).id, cantidad: 1, precio_centavos: 3_000 } ],
+                         pagos: [ { forma: "efectivo", monto_centavos: 7_200 } ])
+    get regla_editar_path("corte")
+    assert_select "input#esperado[readonly][value='572.00']", 1, "fondo de 500 + 72 de la venta"
+    post regla_guardar_path("corte"), params: { probar: "1", codigo: '(if (= (tickets) 1) (allow) (reject "no"))', contado: "572" }
+    assert_select "#decision", /Se cierra/
+    post regla_guardar_path("corte"), params: { probar: "1", codigo: '(if (= (tickets) 1) (allow) (reject "no"))', contado: "572", inventado: "1", esperado: "100" }
+    assert_select "#decision", /Se frena: no/
+
+    post regla_guardar_path("precio"), params: { probar: "1", codigo: ReglaPrecio::DE_FABRICA, venta: venta.folio.downcase }
+    assert_select "#decision p", 2
+    assert_select "#decision p", /a \$42.00 .* Se cobra/m
+    assert_select "#decision p", /a \$30.00 .* Se cobra y queda por revisar.*tiene permiso/m, "la supervisora la autorizó: frenar es revisar"
+    post regla_guardar_path("precio"), params: { probar: "1", codigo: ReglaPrecio::DE_FABRICA, venta: "NO-EXISTE" }
+    assert_select "p", /no hay una venta NO-EXISTE/
+
+    prov = Proveedor.create!(nombre: "Granja", dias_credito: 0)
+    Compras.facturar!(proveedor: prov, sucursal: tienda, usuario: usuarios(:admin), folio: "F-9", fecha: Date.current,
+                      lineas: [ { producto_id: productos(:catsup).id, cantidad: "3", precio: "30" } ])
+    post regla_guardar_path("factura"), params: { probar: "1", codigo: "(if (= (excess-value) 90) (reject :over-received) (allow))", factura: "F-9" }
+    assert_select "#decision", /Se frena: se factura más de lo recibido \(Cátsup 1 kg\)/
   end
 
   test "sin reglas.editar no se entra" do

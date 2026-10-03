@@ -41,13 +41,26 @@ module ReglaFactura
   # El caso de prueba del editor: cuántos productos de más, cuánto valen, el total y si factura
   # alguien con permiso. El candado es el de Ajustes › Compras.
   def self.caso(params, _sucursal)
+    folio = params[:factura].to_s.strip.presence
     { productos_de_mas: params[:productos_de_mas].presence&.to_i || 1, valor_de_mas: params[:valor_de_mas].present? ? Dinero.centavos(params[:valor_de_mas]) : 15_000,
-      total: params[:total].present? ? Dinero.centavos(params[:total]) : 450_000, autorizado: params[:autorizado] == "1" }
+      total: params[:total].present? ? Dinero.centavos(params[:total]) : 450_000, autorizado: params[:autorizado] == "1",
+      folio_factura: folio, factura: (FacturaProveedor.where(folio: folio).order(id: :desc).first if folio) }
   end
 
+  # Con una factura de verdad, la compara con las recepciones que tiene ligadas, como al registrarla.
   def self.probar(codigo, caso)
+    raise Lisp::Error, I18n.t("regla_factura.factura_no_existe", folio: caso[:folio_factura]) if caso[:folio_factura] && !caso[:factura]
+    return evaluar(codigo, datos_de(caso[:factura], caso[:autorizado])) if caso[:factura]
     evaluar(codigo, Datos.new(productos_de_mas: caso[:productos_de_mas], valor_de_mas: caso[:valor_de_mas], total: caso[:total], recepciones: 1,
                               proveedor: "", candado: candado?, autorizado: caso[:autorizado], detalle: ""))
+  end
+
+  def self.datos_de(factura, autorizado)
+    lineas = factura.lineas.map { |l| { producto_id: l.producto_id, cantidad: l.cantidad } }
+    exceso = Compras.excedente(lineas, factura.recepciones.to_a)
+    valor = exceso.sum { |c| Dinero.importe(-c.diferencia, factura.lineas.select { |l| l.producto_id == c.producto.id }.map(&:precio_centavos).max.to_i) }
+    Datos.new(productos_de_mas: exceso.size, valor_de_mas: valor, total: factura.monto_centavos, recepciones: factura.recepciones.size,
+              proveedor: factura.proveedor.nombre, candado: candado?, autorizado: autorizado, detalle: exceso.map { |c| c.producto.nombre }.join(", "))
   end
 
   def self.textos = "regla_factura"
@@ -66,5 +79,5 @@ module ReglaFactura
     }
   end
 
-  private_class_method :funciones, :interpolar, :textos
+  private_class_method :funciones, :interpolar, :textos, :datos_de
 end

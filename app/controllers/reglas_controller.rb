@@ -15,7 +15,8 @@ class ReglasController < ApplicationController
   # «Probar» y «Guardar» van a la misma dirección, como en el tablero; probar lleva probar=1.
   def guardar
     @codigo = params[:codigo].to_s
-    @decision = probar(@codigo)
+    resultado = probar(@codigo)
+    @decisiones = efectivas(resultado.is_a?(Array) ? resultado : [ [ nil, resultado, @caso[:autorizado] ] ]) if resultado
     return render(:edit, status: @error_programa ? :unprocessable_entity : :ok) if params[:probar].present? || @error_programa
     Regla.create!(gancho: @gancho, codigo: @codigo, usuario: usuario_actual)
     redirect_to regla_editar_path(@gancho), notice: t("reglas.avisos.guardado")
@@ -37,6 +38,15 @@ class ReglasController < ApplicationController
     @modulo = GANCHOS.fetch(@gancho)
     @caso = @modulo.caso(params, sucursal_actual)
     @versiones = Regla.de(@gancho).includes(:usuario).limit(15)
+  end
+
+  # Lo que de verdad pasaría: el núcleo no deja a nadie con permiso sin poder hacerlo, así que para
+  # esa persona frenar es revisar. Devuelve [etiqueta, decisión, si cambió por el permiso].
+  def efectivas(lista)
+    lista.map do |etiqueta, decision, autorizado|
+      por_permiso = decision.rechaza? && autorizado
+      [ etiqueta, por_permiso ? decision.with(veredicto: :review) : decision, por_permiso ]
+    end
   end
 
   def probar(codigo)

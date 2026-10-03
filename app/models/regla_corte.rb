@@ -74,17 +74,20 @@ module ReglaCorte
     def pesos(centavos) = BigDecimal(centavos.to_i) / 100
   end
 
-  # El caso de prueba del editor: lo que se espera en la gaveta (de entrada, lo del corte abierto),
-  # lo que se contó y si cierra alguien con permiso.
+  # El caso de prueba del editor: de entrada, el corte abierto de verdad (con sus ventas, retiros y
+  # devoluciones); si no hay o se pide, uno inventado con lo que se espera en la gaveta. Más lo que
+  # se contó y si cierra alguien con permiso.
   def self.caso(params, sucursal)
-    esperado = params[:esperado].present? ? Dinero.centavos(params[:esperado]) : (Corte.abierto_en(sucursal)&.efectivo_esperado_centavos || 50_000)
+    real = Corte.abierto_en(sucursal) unless params[:inventado] == "1"
+    esperado = real&.efectivo_esperado_centavos || (params[:esperado].present? ? Dinero.centavos(params[:esperado]) : 50_000)
     contado = params[:contado].present? ? Dinero.centavos(params[:contado]) : esperado
-    { esperado: esperado, contado: contado, autorizado: params[:autorizado] == "1" }
+    { real: real, hay_real: Corte.abierto_en(sucursal).present?, esperado: esperado, contado: contado, autorizado: params[:autorizado] == "1" }
   end
 
-  # Un cierre de mentira: un corte sin guardar con ese fondo y sin ventas. No toca la base.
+  # Solo lee: con el corte de verdad, lee lo que hay; con el inventado, un corte sin guardar.
   def self.probar(codigo, caso)
-    evaluar(codigo, Datos.new(Corte.new(fondo_centavos: caso[:esperado]), caso[:contado], autorizado: caso[:autorizado]))
+    corte = caso[:real] || Corte.new(fondo_centavos: caso[:esperado])
+    evaluar(codigo, Datos.new(corte, caso[:contado], autorizado: caso[:autorizado]))
   end
 
   FUNCIONES = %w[difference counted expected float sales cash-sales returns withdrawals limit tickets authorized].freeze

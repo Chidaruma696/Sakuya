@@ -980,6 +980,10 @@ de:
       motivo: 'Umlagerung %{folio}: %{origen} → %{destino}'
       cancelacion: 'Storno von %{folio}: %{motivo}'
   reglas:
+    por_permiso: 'Die Regel stoppt es, aber die Person hat die Berechtigung: es geht durch und zur Prüfung.'
+    con_corte_real: Mit dem echten offenen Abschnitt
+    con_corte_inventado: Mit einem erfundenen
+    sin_corte_real: 'In dieser Filiale ist kein Abschnitt offen: es wird ein erfundener verwendet.'
     contrato: 'Vertrag v%{n}'
     contrato_ayuda: Die Version des Hakens, für die sie geschrieben wurde
     vieja: 'Diese Regel wurde für Version %{suya} des Hakens geschrieben, Sakuya ist bei %{actual}: prüfen, ob sie liest und antwortet, was der Haken jetzt erwartet, und erneut speichern.'
@@ -999,12 +1003,15 @@ de:
     contesta: Was sie antwortet
     ejemplo: Beispiel
   regla_factura:
+    factura_no_existe: 'es gibt keine Rechnung %{folio}'
     titulo: Rechnungen in Lisp
     ayuda: Bevor eine Lieferantenrechnung erfasst wird, vergleicht diese Regel das Abgerechnete mit den verknüpften Wareneingängen und entscheidet, ob sie erfasst wird, ob sie zur Prüfung geht oder ob gestoppt wird. Testen speichert nichts.
     fallo: 'Die Rechnungsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
     motivos:
       over_received: 'es wird mehr abgerechnet als erhalten (%{detalle})'
     caso:
+      factura: Oder eine echte Rechnung (Nummer)
+      factura_ayuda: Vergleicht sie mit den verknüpften Wareneingängen, wie beim Erfassen.
       productos_de_mas: Produkte zu viel
       valor_de_mas: Wert des Überschusses
       total: Rechnungssumme
@@ -1081,6 +1088,7 @@ de:
     reject: wird nicht entnommen und der Versuch gemeldet
     nucleo: Wer entnehmen darf, kann es immer; für diese Person heißt Stoppen Prüfung.
   regla_precio:
+    venta_no_existe: 'in dieser Filiale gibt es keinen Verkauf %{folio}'
     titulo: Preis in Lisp
     ayuda: Jede kassierte Zeile läuft durch diese Regel, die den Preis prüft und entscheidet, ob kassiert wird, ob es zur Prüfung geht oder ob gestoppt wird. Die Untergrenze aus Einstellungen › Kasse überschreitet keine Regel. Testen speichert nichts.
     sin_productos: es gibt keine Produkte mit Preis zum Testen
@@ -1088,6 +1096,8 @@ de:
     motivos:
       below_price: unter dem regulären Preis
     caso:
+      venta: Oder ein echter Verkauf (Nummer)
+      venta_ayuda: Geht seine Zeilen so durch, wie sie kassiert wurden; der reguläre Preis kommt aus dem damaligen Listenpreis und den heutigen Aktionen.
       producto: Produktcode
       cantidad: Menge
       precio: Kassierter Preis

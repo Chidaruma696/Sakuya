@@ -7,3 +7,6 @@
 <% if caso[:producto] %>
   <p class="pb-2 text-stone-600"><%= caso[:producto].nombre %> · <%= t("#{textos}.caso.toca", regular: pesos(caso[:regular]), catalogo: pesos(caso[:catalogo])) %></p>
 <% end %>
+<div class="basis-full border-t border-stone-100 pt-3"><label for="venta" class="etiqueta-campo"><%= t("#{textos}.caso.venta") %></label>
+  <%= text_field_tag :venta, caso[:folio_venta], id: "venta", class: "w-40 font-mono uppercase", placeholder: "B-00012" %>
+  <p class="mt-1 text-xs text-stone-500"><%= t("#{textos}.caso.venta_ayuda") %></p></div>

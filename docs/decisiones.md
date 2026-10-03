@@ -4,11 +4,15 @@ Por qué Sakuya es como es. Lo más nuevo, arriba.
 
 ## El cierre de caja ya pregunta a una regla (3 oct 2026)
 
-El segundo gancho, y el primero que decide algo: al cerrar el corte, la regla lee el conteo en pesos (`(difference)`, `(expected)`, `(limit)`, `(authorized)`…) y contesta `(allow)`, `(to-review "motivo")` o `(reject "motivo")`. La de fábrica usa el tope de Ajustes › Caja. Un rechazo frena a la cajera, pero no a quien tiene `caja.diferencia`: para esa persona cuenta como revisión. No me convence del todo, pero una regla mal escrita no puede dejar una caja sin poder cerrarse a las once de la noche. Si la regla truena decide la de fábrica y el fallo se anota en la revisión del corte. Se edita en Ajustes › Opciones avanzadas, junto al tablero, y se prueba con un caso inventado (esperado, contado y si cierra alguien con permiso); probarla contra un corte de verdad queda pendiente.
+El segundo gancho, y el primero que decide algo: al cerrar el corte, la regla lee el conteo en pesos (`(difference)`, `(expected)`, `(limit)`, `(authorized)`…) y contesta `(allow)`, `(to-review "motivo")` o `(reject "motivo")`. La de fábrica usa el tope de Ajustes › Caja. Un rechazo frena a la cajera, pero no a quien tiene `caja.diferencia`: para esa persona cuenta como revisión. No me convence del todo, pero una regla mal escrita no puede dejar una caja sin poder cerrarse a las once de la noche. Si la regla truena decide la de fábrica y el fallo se anota en la revisión del corte. Se edita en Ajustes › Opciones avanzadas, junto al tablero, y se prueba con un caso inventado (esperado, contado y si cierra alguien con permiso); desde el 3 oct también contra el corte abierto de verdad.
 
 ## Cada regla sabe para qué contrato se escribió (3 oct 2026)
 
 Cada gancho lleva un número de contrato (`VERSION` en su módulo) y cada regla guarda con cuál se escribió. Si un día cambia lo que un gancho recibe o espera, se sube el número y las reglas viejas se avisan en su editor en vez de romperse en silencio. Restaurar o importar una versión conserva el número que traía; solo guardar desde el editor la sella con el de hoy. Todavía no hay migraciones automáticas de reglas: avisar es lo mínimo.
+
+## Probar en seco con lo de verdad (3 oct 2026)
+
+Las reglas que deciden se prueban en su editor contra datos reales sin tocar nada: el cierre y los retiros contra el corte abierto de la sucursal, el precio repasando una venta ya cobrada renglón por renglón, las facturas contra una ya registrada y sus recepciones, el inventario con las existencias de hoy. No hizo falta la transacción que se deshace del plan original, porque ninguna regla escribe: solo lee. El editor enseña lo que pasaría de verdad, con el permiso incluido: si la regla frena a alguien que tiene permiso, sale como revisión.
 
 ## El primer gancho es el tablero (30 sept 2026)
 

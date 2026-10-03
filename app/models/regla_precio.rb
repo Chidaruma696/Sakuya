@@ -42,12 +42,27 @@ module ReglaPrecio
     catalogo = producto ? producto.precio_centavos_en(sucursal) : 0
     regular = producto ? (Promocion.mejor(producto, sucursal, cantidad, catalogo)&.first || catalogo) : 0
     precio = params[:precio].present? ? Dinero.centavos(params[:precio]) : regular
-    { producto: producto, cantidad: cantidad, precio: precio, catalogo: catalogo, regular: regular, autorizado: params[:autorizado] == "1" }
+    venta = Venta.where(sucursal: sucursal).find_by(folio: params[:venta].to_s.strip.upcase) if params[:venta].present?
+    { producto: producto, cantidad: cantidad, precio: precio, catalogo: catalogo, regular: regular, autorizado: params[:autorizado] == "1",
+      venta: venta, folio_venta: params[:venta].to_s.strip.upcase.presence, sucursal: sucursal }
   end
 
+  # Con una venta de verdad, repasa sus renglones tal como se cobraron (lo que tocaba se recalcula
+  # con el catálogo de entonces y las promociones de hoy) y devuelve una decisión por renglón.
   def self.probar(codigo, caso)
+    raise Lisp::Error, I18n.t("regla_precio.venta_no_existe", folio: caso[:folio_venta]) if caso[:folio_venta] && !caso[:venta]
+    return probar_venta(codigo, caso) if caso[:venta]
     raise Lisp::Error, I18n.t("regla_precio.sin_productos") unless caso[:producto]
     evaluar(codigo, Datos.new(producto: caso[:producto], cantidad: caso[:cantidad], precio: caso[:precio], catalogo: caso[:catalogo], regular: caso[:regular], autorizado: caso[:autorizado]))
+  end
+
+  def self.probar_venta(codigo, caso)
+    caso[:venta].lineas.includes(:producto, :autorizado_por).map do |l|
+      regular = Promocion.mejor(l.producto, caso[:sucursal], l.cantidad, l.catalogo_centavos)&.first || l.catalogo_centavos
+      datos = Datos.new(producto: l.producto, cantidad: l.cantidad, precio: l.precio_centavos, catalogo: l.catalogo_centavos, regular: regular,
+                        autorizado: caso[:autorizado] || l.autorizado_por.present?)
+      [ I18n.t("caja.cobro", producto: "#{l.producto.nombre} × #{l.cantidad.to_s("F")}", precio: Dinero.pesos(l.precio_centavos), regular: Dinero.pesos(regular)), evaluar(codigo, datos), datos.autorizado ]
+    end
   end
 
   FUNCIONES = %w[price list-price regular-price discount quantity product authorized].freeze
@@ -76,5 +91,5 @@ module ReglaPrecio
     }
   end
 
-  private_class_method :funciones, :interpolar, :textos
+  private_class_method :funciones, :interpolar, :textos, :probar_venta
 end

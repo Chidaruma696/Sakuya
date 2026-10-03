@@ -43,17 +43,19 @@ module ReglaRetiro
               limite: corte.sucursal&.limite_efectivo_centavos.to_i, motivo: motivo.to_s, autorizado: autorizado)
   end
 
-  # El caso de prueba del editor: cuánto sale, cuánto hay, para qué y si retira alguien con permiso.
+  # El caso de prueba del editor: de entrada, contra el corte abierto de verdad (lo que hay y lo ya
+  # retirado); si no hay o se pide, con lo que se diga que hay. Más cuánto sale, para qué y si
+  # retira alguien con permiso.
   def self.caso(params, sucursal)
-    corte = Corte.abierto_en(sucursal)
-    en_gaveta = params[:en_gaveta].present? ? Dinero.centavos(params[:en_gaveta]) : (corte&.efectivo_esperado_centavos || 50_000)
-    { monto: params[:monto].present? ? Dinero.centavos(params[:monto]) : 10_000, en_gaveta: en_gaveta,
-      motivo: params[:motivo].presence || I18n.t("regla_retiro.caso.motivo_ejemplo"), autorizado: params[:autorizado] == "1",
-      limite: sucursal.limite_efectivo_centavos.to_i }
+    real = Corte.abierto_en(sucursal) unless params[:inventado] == "1"
+    en_gaveta = real&.efectivo_esperado_centavos || (params[:en_gaveta].present? ? Dinero.centavos(params[:en_gaveta]) : 50_000)
+    { real: real, hay_real: Corte.abierto_en(sucursal).present?, monto: params[:monto].present? ? Dinero.centavos(params[:monto]) : 10_000, en_gaveta: en_gaveta,
+      retirado: real&.retiros_centavos.to_i, motivo: params[:motivo].presence || I18n.t("regla_retiro.caso.motivo_ejemplo"),
+      autorizado: params[:autorizado] == "1", limite: sucursal.limite_efectivo_centavos.to_i }
   end
 
   def self.probar(codigo, caso)
-    evaluar(codigo, Datos.new(monto: caso[:monto], en_gaveta: caso[:en_gaveta], retirado: 0, limite: caso[:limite], motivo: caso[:motivo], autorizado: caso[:autorizado]))
+    evaluar(codigo, Datos.new(monto: caso[:monto], en_gaveta: caso[:en_gaveta], retirado: caso[:retirado], limite: caso[:limite], motivo: caso[:motivo], autorizado: caso[:autorizado]))
   end
 
   def self.textos = "regla_retiro"

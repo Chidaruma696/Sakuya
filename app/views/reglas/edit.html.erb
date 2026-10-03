@@ -21,11 +21,16 @@
         <%= render @modulo::CASO, caso: @caso, textos: textos %>
         <label class="flex items-center gap-2 pb-2"><%= check_box_tag :autorizado, "1", @caso[:autorizado], id: "autorizado" %> <%= t("#{textos}.caso.autorizado") %></label>
       </div>
-      <% if @decision %>
-        <% clase = { allow: "border-green-200 bg-green-50 text-green-900", review: "border-amber-200 bg-amber-50 text-amber-900", reject: "border-red-200 bg-red-50 text-red-900" }[@decision.veredicto] %>
-        <p class="mt-3 rounded-lg border px-3 py-2 text-sm <%= clase %>" id="decision">
-          <strong><%= t("#{textos}.veredictos.#{@decision.veredicto}") %></strong><% if @decision.motivo %>: <%= @decision.motivo %><% end %>
-        </p>
+      <% if @decisiones %>
+        <div class="mt-3 space-y-1" id="decision">
+          <% @decisiones.each do |etiqueta, decision, por_permiso| %>
+            <% clase = { allow: "border-green-200 bg-green-50 text-green-900", review: "border-amber-200 bg-amber-50 text-amber-900", reject: "border-red-200 bg-red-50 text-red-900" }[decision.veredicto] %>
+            <p class="rounded-lg border px-3 py-2 text-sm <%= clase %>">
+              <% if etiqueta %><span class="text-stone-600"><%= etiqueta %> ·</span> <% end %><strong><%= t("#{textos}.veredictos.#{decision.veredicto}") %></strong><% if decision.motivo %>: <%= decision.motivo %><% end %>
+              <% if por_permiso %><span class="block text-xs"><%= t("reglas.por_permiso") %></span><% end %>
+            </p>
+          <% end %>
+        </div>
       <% end %>
     </fieldset>
 
