@@ -2,11 +2,15 @@
 
 Por qué Sakuya es como es. Lo más nuevo, arriba.
 
+## El cierre de caja ya pregunta a una regla (3 oct 2026)
+
+El segundo gancho, y el primero que decide algo: al cerrar el corte, la regla lee el conteo en pesos (`(difference)`, `(expected)`, `(limit)`, `(authorized)`…) y contesta `(allow)`, `(to-review "motivo")` o `(reject "motivo")`. La de fábrica hace exactamente lo de antes con el tope de Ajustes › Caja, así que nada cambia para quien no la toque. Un rechazo frena a la cajera, pero no a quien tiene `caja.diferencia`: para esa persona cuenta como revisión. No me convence del todo, pero una regla mal escrita no puede dejar una caja sin poder cerrarse a las once de la noche. Si la regla truena decide la de fábrica y el fallo se anota en la revisión del corte. Todavía no hay editor: la regla solo se guarda desde la consola; el editor llega junto al del tablero.
+
 ## El primer gancho es el tablero (30 sept 2026)
 
 El tablero de Inicio es el primer programa en Lisp: solo lee, así que es el lugar sin riesgo para estrenar el lenguaje antes de meterlo en la caja. El programa termina en `(dashboard …)` con `(tile …)` y `(panel …)`; las cifras de fábrica (`:sales`, `:tickets`…) también se leen como funciones para calcular las propias, y el dinero llega en pesos con decimales exactos. Si el programa guardado truena, Inicio enseña el de fábrica y un aviso a quien puede arreglarlo; nunca una página rota. Se edita en Ajustes › Opciones avanzadas, el lugar de todo lo que se programa en Lisp, con vista previa y sin guardar hasta que corre, y cada versión se asienta en `reglas` (solo inserción). Permiso nuevo: `reglas.editar`.
 
-## Las reglas del negocio se escriben en Lisp (30 sept 2026; el lenguaje ya existe, los ganchos de la caja no)
+## Las reglas del negocio se escriben en Lisp (30 sept 2026)
 
 Cada negocio quiere algo distinto en los mismos puntos: uno vende a crédito y otro jamás, uno aguanta cien pesos de diferencia en la caja y otro ni uno, uno deja bajar el precio a la mitad y otro nunca. Meter cada variante como un ajuste más acaba en una pantalla de mil casillas; programarla a mano para cada cliente acaba en mil ramas. La salida es la de Emacs o AutoCAD: un núcleo fijo y un lenguaje dentro para lo que cambia.
 
