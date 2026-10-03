@@ -96,6 +96,7 @@ de:
       regla_recepcion: Wareneingänge in Lisp
       regla_factura: Rechnungen in Lisp
       archivo_reglas: Exportieren und importieren
+      repl: REPL
     secciones_ayuda:
       para_ti: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
       negocio: Die Betriebsdaten, wie sie auf dem Ticket stehen, mit dem Ticket daneben genau so, wie es gedruckt wird. Gilt für alle Filialen.
@@ -1088,6 +1089,41 @@ de:
       cancelado: Umlagerung %{folio} storniert
       motivo: 'Umlagerung %{folio}: %{origen} → %{destino}'
       cancelacion: 'Storno von %{folio}: %{motivo}'
+  repl:
+    titulo: REPL nur zum Lesen
+    ayuda: Stell den Live-Daten Fragen mit demselben Lisp wie die Regeln. Abfragen liefern Listen von Maps, die man filtern, sortieren und summieren kann; eine Liste von Maps erscheint als Tabelle. Von hier aus lässt sich nichts ändern. Daten wie "2026-10-03"; ohne Datum heute.
+    evaluar: Auswerten
+    historial: Zuletzt gefragt
+    consultas: Abfragen
+    herramientas: Zum Bearbeiten der Listen
+    solo_lectura: der REPL liest nur; das hat versucht, in die Datenbank zu schreiben
+    cortado: 'es werden die ersten %{n} gezeigt'
+    filas:
+      one: 1 Zeile
+      other: '%{count} Zeilen'
+    errores:
+      no_es_mapa: 'erwartete eine Map und bekam %{valor}'
+      fecha: 'das Datum %{valor} verstehe ich nicht (so: "2026-10-03")'
+      texto: '%{quien} erwartet Text und bekam %{valor}'
+    funciones:
+      today: das heutige Datum
+      days_ago: das Datum vor n Tagen
+      sales: Verkäufe (Nummer, Datum, Filiale, Kassierer, Kunde, Summe…)
+      sale_lines: verkaufte Zeilen (Produkt, Menge, Preis, Betrag)
+      products: der Katalog
+      stock: Bestand je Filiale, von allem oder einem Produkt
+      customers: Kunden und was sie schulden
+      cash_counts: Kassenabschnitte mit ihrer Differenz
+      reviews: was zur Prüfung ansteht
+      rules: die eigenen Regeln und ihr Vertrag
+      where: die Zeilen, in denen :key das ist
+      sort_by: sortiert aufsteigend
+      sort_by_desc: sortiert absteigend
+      group_by: gruppiert nach :key
+      count_by: wie viele Zeilen je Wert
+      sum_of: summiert die Spalte
+      pluck: nur diese Spalte
+      take: die ersten n
   reglas:
     archivo:
       ayuda: Alle Regeln des Geschäfts in einer einzigen .lisp-Datei, zum Sichern oder für eine andere Installation. Es ist Text, den man lesen und von Hand bearbeiten kann; jede Regel steht unter ihrer Überschrift.

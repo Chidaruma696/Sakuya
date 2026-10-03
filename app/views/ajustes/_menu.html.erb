@@ -8,6 +8,7 @@
                    [ "regla_retiro", "safe", regla_editar_path("retiro") ], [ "regla_movimiento", "box-seam", regla_editar_path("movimiento") ] ] %>
   <% avanzadas += [ [ "regla_recepcion", "truck", regla_editar_path("recepcion") ], [ "regla_factura", "receipt-cutoff", regla_editar_path("factura") ] ] if Modulo.activo?("compras") %>
   <% avanzadas << [ "regla_credito", "person-vcard", regla_editar_path("credito") ] if Modulo.activo?("clientes") %>
+  <% avanzadas << [ "repl", "terminal", repl_path ] %>
   <% avanzadas << [ "archivo_reglas", "file-earmark-code", archivo_reglas_path ] %>
 <% end %>
 <% clase = ->(activa) { "flex items-center gap-3 rounded-md px-3 py-2 text-sm whitespace-nowrap #{activa ? 'bg-white font-semibold text-marca-900 shadow-sm ring-1 ring-marca-200' : 'text-stone-700 hover:bg-white'}" } %>

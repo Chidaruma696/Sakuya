@@ -1,0 +1,26 @@
+# El REPL de solo lectura, en Ajustes › Opciones avanzadas. Lo que se escribe se evalúa contra los
+# datos en vivo (la matriz ve todas las sucursales; una tienda, la suya) y nada se guarda, salvo
+# las últimas preguntas en la sesión para volver a ellas.
+class ReplController < ApplicationController
+  HISTORIAL = 10 # va en la cookie de sesión: pocas y cortas
+
+  before_action { autorizar!("reglas.editar") }
+
+  def show
+    @texto = params[:texto].presence || "(sales)"
+    @historial = session[:repl] || []
+  end
+
+  def evaluar
+    @texto = params[:texto].to_s
+    begin
+      @valor = Repl.evaluar(@texto, sucursales: sucursal_actual.matriz? ? Sucursal.all : [ sucursal_actual ])
+      @evaluado = true
+    rescue Lisp::Error => e
+      @error = e.message
+    end
+    session[:repl] = ([ @texto.strip ] + (session[:repl] || [])).uniq.first(HISTORIAL) if @texto.present? && @texto.size <= 300
+    @historial = session[:repl]
+    render :show, status: @error ? :unprocessable_entity : :ok
+  end
+end

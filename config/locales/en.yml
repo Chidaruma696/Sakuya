@@ -96,6 +96,7 @@ en:
       regla_recepcion: Receipts in Lisp
       regla_factura: Invoices in Lisp
       archivo_reglas: Export and import
+      repl: REPL
     secciones_ayuda:
       para_ti: Applied the moment you pick one; saved on your user, they follow you to any computer.
       negocio: The business details as they appear on the ticket, with the ticket next to it exactly as it will print. Applies to every branch.
@@ -1088,6 +1089,41 @@ en:
       cancelado: Transfer %{folio} cancelled
       motivo: 'Transfer %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancellation of %{folio}: %{motivo}'
+  repl:
+    titulo: Read-only REPL
+    ayuda: Ask the live data questions with the same Lisp as the rules. Queries return lists of maps you can filter, sort and add up; a list of maps shows as a table. Nothing can be changed from here. Dates like "2026-10-03"; without dates, today.
+    evaluar: Evaluate
+    historial: What you asked last
+    consultas: Queries
+    herramientas: To work the lists
+    solo_lectura: the REPL only reads; that tried to write to the database
+    cortado: 'showing the first %{n}'
+    filas:
+      one: 1 row
+      other: '%{count} rows'
+    errores:
+      no_es_mapa: 'expected a map and got %{valor}'
+      fecha: 'I do not understand the date %{valor} (it goes like "2026-10-03")'
+      texto: '%{quien} expects text and got %{valor}'
+    funciones:
+      today: today's date
+      days_ago: the date n days ago
+      sales: sales (number, date, branch, cashier, customer, total…)
+      sale_lines: lines sold (product, quantity, price, amount)
+      products: the catalogue
+      stock: stock per branch, of everything or one product
+      customers: customers and what they owe
+      cash_counts: till sessions with their difference
+      reviews: what is pending review
+      rules: the custom rules and their contract
+      where: the rows where :key is that
+      sort_by: sorts from lowest to highest
+      sort_by_desc: sorts from highest to lowest
+      group_by: groups by :key
+      count_by: how many rows per value
+      sum_of: adds up the column
+      pluck: just that column
+      take: the first n
   reglas:
     archivo:
       ayuda: All the business rules in a single .lisp file, to back them up or take them to another installation. It is text you can read and edit by hand; each rule goes under its header.

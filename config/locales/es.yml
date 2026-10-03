@@ -96,6 +96,7 @@ es:
       regla_recepcion: Recepciones en Lisp
       regla_factura: Facturas en Lisp
       archivo_reglas: Exportar e importar
+      repl: REPL
     secciones_ayuda:
       para_ti: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
       negocio: Los datos del negocio como salen en el ticket, con el ticket al lado tal cual va a imprimirse. Vale para todas las sucursales.
@@ -1088,6 +1089,41 @@ es:
       cancelado: Traspaso %{folio} cancelado
       motivo: 'Traspaso %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancelación de %{folio}: %{motivo}'
+  repl:
+    titulo: REPL de solo lectura
+    ayuda: Pregúntale cosas a los datos en vivo con el mismo Lisp de las reglas. Las consultas devuelven listas de mapas que se filtran, ordenan y suman; una lista de mapas sale como tabla. No se puede cambiar nada desde aquí. Fechas como "2026-10-03"; sin fechas, hoy.
+    evaluar: Evaluar
+    historial: Lo último que preguntaste
+    consultas: Consultas
+    herramientas: Para trabajar las listas
+    solo_lectura: el REPL solo lee; eso intentó escribir en la base
+    cortado: 'se muestran las primeras %{n}'
+    filas:
+      one: 1 fila
+      other: '%{count} filas'
+    errores:
+      no_es_mapa: 'esperaba un mapa y recibió %{valor}'
+      fecha: 'no entiendo la fecha %{valor} (va así: "2026-10-03")'
+      texto: '%{quien} espera texto y recibió %{valor}'
+    funciones:
+      today: la fecha de hoy
+      days_ago: la fecha de hace n días
+      sales: ventas (folio, fecha, sucursal, cajero, cliente, total…)
+      sale_lines: renglones vendidos (producto, cantidad, precio, importe)
+      products: el catálogo
+      stock: existencias por sucursal, de todo o de un producto
+      customers: clientes con lo que deben
+      cash_counts: cortes de caja con su diferencia
+      reviews: lo pendiente de revisar
+      rules: las reglas propias y su contrato
+      where: las filas donde :key vale eso
+      sort_by: ordena de menor a mayor
+      sort_by_desc: ordena de mayor a menor
+      group_by: agrupa por :key
+      count_by: cuántas filas por cada valor
+      sum_of: suma la columna
+      pluck: solo esa columna
+      take: las primeras n
   reglas:
     archivo:
       ayuda: Todas las reglas del negocio en un solo archivo .lisp, para respaldarlas o llevarlas a otra instalación. Es texto que se puede leer y editar a mano; cada regla va debajo de su cabecera.

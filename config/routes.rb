@@ -15,6 +15,9 @@ Rails.application.routes.draw do
     post "/", action: :guardar, as: :guardar
     post "versiones/:id/restaurar", action: :restaurar, as: :restaurar
   end
+  # El REPL de solo lectura: preguntarle cosas a los datos en vivo.
+  get "ajustes/avanzado/repl", to: "repl#show", as: :repl
+  post "ajustes/avanzado/repl", to: "repl#evaluar", as: :repl_evaluar
   # Todas las reglas del negocio en un archivo .lisp: bajarlo y subirlo.
   scope "ajustes/avanzado/archivo", controller: "archivo_reglas" do
     get "/", action: :show, as: :archivo_reglas

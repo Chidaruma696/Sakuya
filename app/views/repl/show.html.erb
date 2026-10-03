@@ -1,0 +1,79 @@
+<%# Vive dentro de Ajustes, en las opciones avanzadas. %>
+<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+<%= render "ajustes/menu", actual: "repl" %>
+<section class="min-w-0">
+<h2 class="mb-1 text-xl font-bold"><%= t("repl.titulo") %></h2>
+<p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("repl.ayuda") %></p>
+
+<div class="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_22rem]">
+  <div class="min-w-0 space-y-4">
+    <%= form_with url: repl_evaluar_path, class: "formulario space-y-3", data: { turbo: false } do |f| %>
+      <%= text_area_tag :texto, @texto, id: "texto", rows: 4, spellcheck: false, autocomplete: "off", class: "codigo w-full px-3 py-2" %>
+      <%= f.button class: "btn btn-primary" do %><i class="bi bi-play"></i> <%= t("repl.evaluar") %><% end %>
+    <% end %>
+
+    <% if @error %>
+      <p class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900" id="error"><i class="bi bi-exclamation-triangle-fill"></i> <%= @error %></p>
+    <% elsif @evaluado %>
+      <div id="resultado">
+        <% if repl_tabla?(@valor) %>
+          <p class="mb-2 text-xs text-stone-500"><%= t("repl.filas", count: [ @valor.size, Repl::FILAS ].min) %><%= " · #{t("repl.cortado", n: Repl::FILAS)}" if @valor.size > Repl::FILAS %></p>
+          <div class="overflow-x-auto">
+            <table class="tabla">
+              <% columnas = repl_columnas(@valor) %>
+              <thead><tr><% columnas.each do |c| %><th class="font-mono">:<%= c %></th><% end %></tr></thead>
+              <tbody>
+                <% @valor.first(Repl::FILAS).each do |fila| %>
+                  <tr><% columnas.each do |c| %><td class="px-3 py-1.5 <%= 'text-right tabular-nums' if fila[c].is_a?(Numeric) %>"><%= repl_celda(fila[c]) %></td><% end %></tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        <% elsif @valor.is_a?(Hash) %>
+          <table class="tabla">
+            <tbody>
+              <% @valor.each do |k, v| %><tr><td class="px-3 py-1.5 font-mono"><%= repl_celda(k) %></td><td class="px-3 py-1.5 <%= 'text-right tabular-nums' if v.is_a?(Numeric) %>"><%= repl_celda(v) %></td></tr><% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <pre class="codigo overflow-x-auto rounded-lg bg-white p-3 text-sm ring-1 ring-stone-200"><%= Lisp.a_texto(@valor) %></pre>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if @historial.any? %>
+      <div>
+        <h3 class="etiqueta-dato mb-1"><%= t("repl.historial") %></h3>
+        <ul class="space-y-0.5 text-sm">
+          <% @historial.each do |h| %><li><%= link_to h.truncate(140), repl_path(texto: h), class: "codigo text-marca-800 hover:underline" %></li><% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+
+  <aside class="card space-y-4 text-sm">
+    <h2 class="font-semibold"><%= t("tablero.referencia.titulo") %></h2>
+    <div>
+      <h3 class="etiqueta-dato mb-1"><%= t("repl.consultas") %></h3>
+      <ul class="space-y-0.5">
+        <% Repl::CONSULTAS.each do |n| %><li><code class="codigo text-marca-800"><%= Repl::FIRMAS[n] %></code> <span class="text-stone-500"><%= t("repl.funciones.#{n.underscore}") %></span></li><% end %>
+      </ul>
+    </div>
+    <div>
+      <h3 class="etiqueta-dato mb-1"><%= t("repl.herramientas") %></h3>
+      <ul class="space-y-0.5">
+        <% Repl::HERRAMIENTAS.each do |n| %><li><code class="codigo text-marca-800"><%= Repl::FIRMAS[n] %></code> <span class="text-stone-500"><%= t("repl.funciones.#{n.underscore}") %></span></li><% end %>
+      </ul>
+    </div>
+    <div>
+      <h3 class="etiqueta-dato mb-1"><%= t("reglas.ejemplo") %></h3>
+      <pre class="codigo mt-1 overflow-x-auto rounded-lg bg-stone-50 p-2 text-xs ring-1 ring-stone-200">(sum-of :total (sales (days-ago 7) (today)))
+(sort-by-desc :balance (customers))
+(count-by :cashier (sales))
+(where :stopped true (reviews))
+(take 5 (sort-by-desc :amount (sale-lines)))</pre>
+    </div>
+  </aside>
+</div>
+</section>
+</div>
