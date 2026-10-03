@@ -12,6 +12,25 @@ class ClientesController < ApplicationController
     @saldos = MovimientoCredito.group(:cliente_id).sum(:monto_centavos)
   end
 
+  # Estado de cuenta: lo que debe, desde cuándo, cada movimiento con su saldo, y recibir un abono.
+  def cuenta
+    @cliente = Cliente.find(params[:id])
+    @cuenta = @cliente.cuenta
+    saldo = 0
+    @movimientos = @cuenta.movimientos.map { |m| [ m, saldo += m.monto_centavos ] }.reverse.first(200)
+    @corte = Corte.abierto_en(sucursal_actual)
+  end
+
+  def abonar
+    autorizar!("clientes.abonar")
+    cliente = Cliente.find(params[:id])
+    abono = Abono.registrar!(cliente: cliente, sucursal: sucursal_actual, usuario: usuario_actual, monto_centavos: Dinero.centavos(params[:monto]),
+                             forma: params[:forma].presence_in(Pago::FORMAS) || "efectivo", notas: params[:notas])
+    redirect_to cuenta_cliente_path(cliente), notice: t("clientes.avisos.abono", folio: abono.folio, monto: Dinero.pesos(abono.monto_centavos), saldo: Dinero.pesos(cliente.saldo_centavos))
+  rescue ArgumentError, ActiveRecord::RecordInvalid => e
+    redirect_to cuenta_cliente_path(cliente), alert: e.message
+  end
+
   def new
     @cliente = Cliente.new
   end

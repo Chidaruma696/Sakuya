@@ -20,6 +20,16 @@ class CuentaCliente
     ultimo && (@hoy - ultimo).to_i
   end
 
+  # Lo que se debe por antigüedad del cargo: { "0-30" => centavos, "31-60" => …, "61-90" => …, "90+" => … }.
+  def antiguedad
+    cubetas = { "0-30" => 0, "31-60" => 0, "61-90" => 0, "90+" => 0 }
+    cargos_vivos.each do |fecha, resta|
+      dias = (@hoy - fecha).to_i
+      cubetas[dias <= 30 ? "0-30" : dias <= 60 ? "31-60" : dias <= 90 ? "61-90" : "90+"] += resta
+    end
+    cubetas
+  end
+
   # [[fecha, lo que queda]] de cada cargo sin cubrir.
   def cargos_vivos
     @cargos_vivos ||= begin

@@ -120,9 +120,11 @@ en:
         conteo: Count
         recepcion: Goods receipt
         traspaso: Transfer
+        abono: Customer payment
       sucursal: Put the branch code in front
     avanzadas: Advanced
   comun:
+    monto: Amount
     cerrar: Close
     guardar: Save
     editar: Edit
@@ -257,6 +259,9 @@ en:
     cerrada: Signed out
     inicia_para_continuar: Sign in to continue
   errores:
+    abono:
+      mayor_que_cero: the payment must be greater than zero
+      sin_caja: there is no open till at %{sucursal} to take the payment
     sin_permiso:
       titulo: No permission
       texto_html: Your role does not include %{clave}. Ask someone with permission to do it or to authorise you.
@@ -469,6 +474,7 @@ en:
     compras.facturar: Enter and cancel supplier invoices
     clientes.ver: See customers
     clientes.editar: Add and edit customers
+    clientes.abonar: Take customer payments at the till
     clientes.forzar_credito: Sell on account even if the credit rule stops it (it goes to review)
     compras.forzar_recepcion: Receive goods the receipts rule stops (it goes to review)
     compras.pagar: Pay suppliers from the till
@@ -523,6 +529,7 @@ en:
     venta_frenada: 'Sale of %{total} stopped: %{motivo}'
     cliente: Customer
     sin_cliente: — no customer —
+    abonos: Customer payments
     credito_frenado: 'On account for %{cliente}, %{monto}, stopped: %{motivo}'
     motivo_diferencia: Reason for the difference
     regla_propia_aviso: 'This business has its own closing rule: if the difference needs a reason, write it here.'
@@ -866,6 +873,18 @@ en:
       factura_proveedor: Supplier invoice
   clientes:
     cuenta:
+      abono: Payment %{folio} (%{forma})
+      titulo: Account of %{nombre}
+      titulo_corto: Account
+      dias: '%{rango} days'
+      abonar: Take a payment
+      registrar_abono: Record payment
+      entra_al_corte: It goes into the till, session %{folio}.
+      sin_caja: There is no open till at this branch; open it to take payments.
+      concepto: Concept
+      cargo: Charge
+      abono_col: Payment
+      sin_movimientos: No movements yet.
       cargo_venta: Sale %{folio}
       devolucion: Return from sale %{folio}
     titulo: Customers
@@ -880,6 +899,7 @@ en:
     inactivo: inactive
     sin_clientes: No customers yet.
     avisos:
+      abono: 'Payment %{folio} of %{monto}; they now owe %{saldo}.'
       creado: Customer %{nombre} added.
       guardado: Customer %{nombre} saved.
   compras:

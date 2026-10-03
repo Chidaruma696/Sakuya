@@ -4,7 +4,7 @@
 <% else %>
   <p class="mb-2 text-sm"><%= link_to t("caja.ver_resumen_abierto"), caja_resumen_path(@corte), target: "_blank", class: "enlace" %></p>
   <div class="grid gap-4 sm:grid-cols-4">
-    <% [ [ t("caja.fondo"), @corte.fondo_centavos ], [ t("caja.ventas"), @corte.total_ventas_centavos ], [ t("caja.efectivo_de_ventas"), @corte.efectivo_ventas_centavos ], [ t("caja.devoluciones"), -@corte.devoluciones_centavos ], [ t("caja.retiros"), -@corte.retiros_centavos ], [ t("caja.en_gaveta"), @corte.efectivo_esperado_centavos ] ].each do |nombre, monto| %>
+    <% [ [ t("caja.fondo"), @corte.fondo_centavos ], [ t("caja.ventas"), @corte.total_ventas_centavos ], [ t("caja.efectivo_de_ventas"), @corte.efectivo_ventas_centavos ], [ t("caja.devoluciones"), -@corte.devoluciones_centavos ], *([ [ t("caja.abonos"), @corte.abonos_efectivo_centavos ] ] if @corte.abonos.any?), [ t("caja.retiros"), -@corte.retiros_centavos ], [ t("caja.en_gaveta"), @corte.efectivo_esperado_centavos ] ].each do |nombre, monto| %>
       <div class="card"><div class="etiqueta-dato"><%= nombre %></div><div class="valor-dato text-2xl"><%= pesos(monto) %></div></div>
     <% end %>
   </div>

@@ -120,9 +120,11 @@ de:
         conteo: Zählung
         recepcion: Wareneingang
         traspaso: Umbuchung
+        abono: Kundenzahlung
       sucursal: Filialkürzel voranstellen
     avanzadas: Erweitert
   comun:
+    monto: Betrag
     cerrar: Schließen
     guardar: Speichern
     editar: Bearbeiten
@@ -257,6 +259,9 @@ de:
     cerrada: Abgemeldet
     inicia_para_continuar: Zum Fortfahren anmelden
   errores:
+    abono:
+      mayor_que_cero: die Zahlung muss größer als null sein
+      sin_caja: in %{sucursal} ist keine Kasse offen, um die Zahlung anzunehmen
     sin_permiso:
       titulo: Keine Berechtigung
       texto_html: Deine Rolle enthält %{clave} nicht. Bitte jemanden mit Berechtigung, es zu tun oder dich freizugeben.
@@ -469,6 +474,7 @@ de:
     compras.facturar: Lieferantenrechnungen erfassen und stornieren
     clientes.ver: Kunden ansehen
     clientes.editar: Kunden anlegen und bearbeiten
+    clientes.abonar: Kundenzahlungen an der Kasse annehmen
     clientes.forzar_credito: Auf Rechnung verkaufen, auch wenn die Kreditregel stoppt (geht zur Prüfung)
     compras.forzar_recepcion: Ware annehmen, die die Eingangsregel stoppt (geht zur Prüfung)
     compras.pagar: Lieferanten aus der Kasse bezahlen
@@ -523,6 +529,7 @@ de:
     venta_frenada: 'Verkauf von %{total} gestoppt: %{motivo}'
     cliente: Kunde
     sin_cliente: — ohne Kunde —
+    abonos: Kundenzahlungen
     credito_frenado: 'Auf Rechnung für %{cliente}, %{monto}, gestoppt: %{motivo}'
     motivo_diferencia: Grund der Differenz
     regla_propia_aviso: 'Dieses Geschäft hat eine eigene Abschlussregel: wenn die Differenz einen Grund braucht, hier eintragen.'
@@ -866,6 +873,18 @@ de:
       factura_proveedor: Lieferantenrechnung
   clientes:
     cuenta:
+      abono: Zahlung %{folio} (%{forma})
+      titulo: Konto von %{nombre}
+      titulo_corto: Konto
+      dias: '%{rango} Tage'
+      abonar: Zahlung annehmen
+      registrar_abono: Zahlung erfassen
+      entra_al_corte: Sie geht in die Kasse, Abschnitt %{folio}.
+      sin_caja: In dieser Filiale ist keine Kasse offen; öffnen, um Zahlungen anzunehmen.
+      concepto: Vorgang
+      cargo: Belastung
+      abono_col: Zahlung
+      sin_movimientos: Noch keine Bewegungen.
       cargo_venta: Verkauf %{folio}
       devolucion: Rückgabe aus Verkauf %{folio}
     titulo: Kunden
@@ -880,6 +899,7 @@ de:
     inactivo: inaktiv
     sin_clientes: Noch keine Kunden.
     avisos:
+      abono: 'Zahlung %{folio} über %{monto}; Schuld jetzt %{saldo}.'
       creado: Kunde %{nombre} angelegt.
       guardado: Kunde %{nombre} gespeichert.
   compras:

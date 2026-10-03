@@ -36,4 +36,30 @@ class ClientesTest < ActionDispatch::IntegrationTest
     get clientes_path
     assert_response :forbidden
   end
+
+  test "estado de cuenta: abonar entra a la gaveta, baja el saldo y la antigüedad se ve" do
+    usuarios(:admin).update!(sucursal: sucursales(:tienda))
+    lupita = Cliente.create!(nombre: "Fonda Lupita")
+    MovimientoCredito.create!(cliente: lupita, sucursal: sucursales(:tienda), usuario: usuarios(:admin), tipo: "cargo", monto_centavos: 30_000, fecha: 45.days.ago.to_date, motivo: "Venta vieja")
+    MovimientoCredito.create!(cliente: lupita, sucursal: sucursales(:tienda), usuario: usuarios(:admin), tipo: "cargo", monto_centavos: 10_000, fecha: Date.current, motivo: "Venta nueva")
+    get cuenta_cliente_path(lupita)
+    assert_select "#saldo", "$400.00"
+    assert_select ".card", /31-60 días\s*\$300.00/
+    corte = Corte.abierto_en(sucursales(:tienda))
+    gaveta = corte.efectivo_esperado_centavos
+    post abonar_cliente_path(lupita), params: { monto: "250", forma: "efectivo" }
+    assert_redirected_to cuenta_cliente_path(lupita)
+    assert_match "ahora debe $150.00", flash[:notice]
+    assert_equal gaveta + 25_000, corte.efectivo_esperado_centavos
+    post abonar_cliente_path(lupita), params: { monto: "50", forma: "transferencia" }
+    assert_equal gaveta + 25_000, corte.efectivo_esperado_centavos, "la transferencia no entra a la gaveta"
+    assert_equal 10_000, lupita.saldo_centavos
+    get cuenta_cliente_path(lupita)
+    assert_select ".card", /31-60 días\s*\$0.00/
+    assert_select "td", /Abono AB-/
+    post abonar_cliente_path(lupita), params: { monto: "0" }
+    assert_match "mayor que cero", flash[:alert]
+    get caja_resumen_path(corte)
+    assert_match "Abonos", response.body
+  end
 end

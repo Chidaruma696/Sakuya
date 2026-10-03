@@ -10,7 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_000004) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_000005) do
+  create_table "abonos", force: :cascade do |t|
+    t.integer "cliente_id", null: false
+    t.integer "corte_id", null: false
+    t.datetime "created_at", null: false
+    t.string "folio", null: false
+    t.string "forma", null: false
+    t.integer "monto_centavos", null: false
+    t.string "notas"
+    t.integer "sucursal_id", null: false
+    t.integer "usuario_id", null: false
+    t.index ["cliente_id"], name: "index_abonos_on_cliente_id"
+    t.index ["corte_id"], name: "index_abonos_on_corte_id"
+    t.index ["sucursal_id", "folio"], name: "index_abonos_on_sucursal_id_and_folio", unique: true
+    t.index ["sucursal_id"], name: "index_abonos_on_sucursal_id"
+    t.index ["usuario_id"], name: "index_abonos_on_usuario_id"
+    t.check_constraint "forma IN ('efectivo', 'transferencia', 'deposito')", name: "abonos_forma"
+    t.check_constraint "monto_centavos > 0", name: "abonos_monto"
+  end
+
   create_table "ajustes", force: :cascade do |t|
     t.string "clave", null: false
     t.datetime "created_at", null: false
@@ -571,6 +590,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000004) do
     t.check_constraint "total_centavos >= 0", name: "ventas_total"
   end
 
+  add_foreign_key "abonos", "clientes"
+  add_foreign_key "abonos", "cortes"
+  add_foreign_key "abonos", "sucursales"
+  add_foreign_key "abonos", "usuarios"
   add_foreign_key "cargos", "conteos"
   add_foreign_key "cargos", "revisiones"
   add_foreign_key "cargos", "sucursales"

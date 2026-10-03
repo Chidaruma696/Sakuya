@@ -14,7 +14,10 @@
         <td class="px-3 py-2"><%= c.telefono %></td><td class="px-3 py-2 font-mono text-xs"><%= c.rfc %></td>
         <td class="px-3 py-2 text-right font-mono"><%= pesos(c.limite_credito_centavos) %></td>
         <td class="px-3 py-2 text-right font-mono"><%= pesos(@saldos[c.id] || 0) %></td>
-        <td class="px-3 py-2 text-right whitespace-nowrap"><%= link_to icono("pencil", t("comun.editar")), edit_cliente_path(c), class: "btn btn-ghost btn-xs" if puede?("clientes.editar") %></td>
+        <td class="px-3 py-2 text-right whitespace-nowrap">
+          <%= link_to icono("wallet2", t("clientes.cuenta.titulo_corto")), cuenta_cliente_path(c), class: "btn btn-secondary btn-xs" %>
+          <%= link_to icono("pencil", t("comun.editar")), edit_cliente_path(c), class: "btn btn-ghost btn-xs" if puede?("clientes.editar") %>
+        </td>
       </tr>
     <% end %>
     <% if @clientes.empty? %><tr><td colspan="6" class="px-3 py-6 text-center text-stone-500"><%= t("clientes.sin_clientes") %></td></tr><% end %>

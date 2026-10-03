@@ -6,7 +6,7 @@ class Rol < ApplicationRecord
   # almacén, no de la caja.
   BASE = {
     "administrador" => [ "*" ],
-    "cajero" => [ "caja.vender", "caja.abrir", "caja.retirar", "inventario.ver" ],
+    "cajero" => [ "caja.vender", "caja.abrir", "caja.retirar", "inventario.ver", "clientes.ver", "clientes.abonar" ],
     "almacenista" => [ "inventario.ver", "compras.recibir", "almacenes.traspasar", "conteos.hacer" ],
     "supervisor" => [ "caja.*", "inventario.*", "compras.*", "almacenes.*", "conteos.*", "clientes.*", "reportes.ver", "revisiones.resolver" ]
   }.freeze

@@ -6,6 +6,7 @@ class Corte < ApplicationRecord
   has_many :ventas, dependent: :restrict_with_error
   has_many :retiros, dependent: :restrict_with_error
   has_many :devoluciones, dependent: :restrict_with_error
+  has_many :abonos, dependent: :restrict_with_error
 
   # { centavos => cuántos } de cómo se contó la gaveta al cerrar; vacío si solo se tecleó el total.
   serialize :desglose, coder: JSON
@@ -66,13 +67,18 @@ class Corte < ApplicationRecord
     devoluciones.sum("total_centavos - a_cuenta_centavos")
   end
 
+  # Lo que pagaron los clientes a su cuenta en efectivo durante el corte.
+  def abonos_efectivo_centavos
+    abonos.where(forma: "efectivo").sum(:monto_centavos)
+  end
+
   def retiros_centavos
     retiros.sum(:monto_centavos)
   end
 
   # Lo que debe haber en la gaveta ahora mismo.
   def efectivo_esperado_centavos
-    fondo_centavos + efectivo_ventas_centavos - devoluciones_centavos - retiros_centavos
+    fondo_centavos + efectivo_ventas_centavos + abonos_efectivo_centavos - devoluciones_centavos - retiros_centavos
   end
 
   def excede_limite?

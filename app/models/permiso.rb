@@ -16,6 +16,7 @@ module Permiso
     "revisiones.resolver" => "Revisar lo que se hizo sin autorización (aprobar, observar, cargar)",
     "clientes.ver" => "Ver clientes",
     "clientes.editar" => "Dar de alta y editar clientes",
+    "clientes.abonar" => "Recibir abonos de clientes en la caja",
     "clientes.forzar_credito" => "Vender a cuenta aunque la regla de crédito lo frene (queda por revisar)",
     "compras.ver" => "Ver proveedores y cuentas por pagar",
     "compras.recibir" => "Recibir mercancía del proveedor",

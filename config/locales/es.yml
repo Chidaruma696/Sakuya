@@ -120,9 +120,11 @@ es:
         conteo: Conteo
         recepcion: Recepción de compra
         traspaso: Traspaso
+        abono: Abono
       sucursal: Anteponer el código de la sucursal
     avanzadas: Opciones avanzadas
   comun:
+    monto: Monto
     cerrar: Cerrar
     guardar: Guardar
     editar: Editar
@@ -257,6 +259,9 @@ es:
     cerrada: Sesión cerrada
     inicia_para_continuar: Inicia sesión para continuar
   errores:
+    abono:
+      mayor_que_cero: el abono tiene que ser mayor que cero
+      sin_caja: no hay caja abierta en %{sucursal} para recibir el abono
     sin_permiso:
       titulo: Sin permiso
       texto_html: Tu rol no incluye %{clave}. Pide a alguien con permiso que lo haga o que te autorice.
@@ -469,6 +474,7 @@ es:
     compras.facturar: Capturar y cancelar facturas del proveedor
     clientes.ver: Ver clientes
     clientes.editar: Dar de alta y editar clientes
+    clientes.abonar: Recibir abonos de clientes en la caja
     clientes.forzar_credito: Vender a cuenta aunque la regla de crédito lo frene (queda por revisar)
     compras.forzar_recepcion: Recibir mercancía que la regla de recepciones frena (queda por revisar)
     compras.pagar: Pagar a proveedores desde la caja
@@ -523,6 +529,7 @@ es:
     venta_frenada: 'Venta de %{total} frenada: %{motivo}'
     cliente: Cliente
     sin_cliente: — sin cliente —
+    abonos: Abonos
     credito_frenado: 'A cuenta de %{cliente} por %{monto} frenado: %{motivo}'
     motivo_diferencia: Motivo de la diferencia
     regla_propia_aviso: 'El negocio tiene su propia regla para el cierre: si la diferencia pide motivo, escríbelo aquí.'
@@ -866,6 +873,18 @@ es:
       factura_proveedor: Factura del proveedor
   clientes:
     cuenta:
+      abono: Abono %{folio} (%{forma})
+      titulo: Cuenta de %{nombre}
+      titulo_corto: Cuenta
+      dias: '%{rango} días'
+      abonar: Recibir un abono
+      registrar_abono: Registrar abono
+      entra_al_corte: Entra a la caja, al corte %{folio}.
+      sin_caja: No hay caja abierta en esta sucursal; ábrela para recibir abonos.
+      concepto: Concepto
+      cargo: Cargo
+      abono_col: Abono
+      sin_movimientos: Todavía no hay movimientos.
       cargo_venta: Venta %{folio}
       devolucion: Devolución de la venta %{folio}
     titulo: Clientes
@@ -880,6 +899,7 @@ es:
     inactivo: inactivo
     sin_clientes: Todavía no hay clientes.
     avisos:
+      abono: 'Abono %{folio} por %{monto}; ahora debe %{saldo}.'
       creado: Cliente %{nombre} dado de alta.
       guardado: Cliente %{nombre} guardado.
   compras:

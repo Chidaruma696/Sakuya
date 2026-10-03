@@ -13,6 +13,7 @@
     <% end %>
     <% if c.ventas_cobradas.sum(:cambio_centavos).positive? %><tr><td></td><td><%= t("caja.cambio") %></td><td class="der">−<%= pesos(c.ventas_cobradas.sum(:cambio_centavos)) %></td></tr><% end %>
     <% if c.devoluciones_centavos.positive? %><tr><td><%= t("caja.devoluciones") %></td><td class="der"><%= c.devoluciones.count %></td><td class="der">−<%= pesos(c.devoluciones_centavos) %></td></tr><% end %>
+    <% if c.abonos.any? %><tr><td><%= t("caja.abonos") %></td><td class="der"><%= c.abonos.count %></td><td class="der"><%= pesos(c.abonos.sum(:monto_centavos)) %></td></tr><% end %>
     <% if c.retiros_centavos.positive? %><tr><td><%= t("caja.retiros") %></td><td class="der"><%= c.retiros.count %></td><td class="der">−<%= pesos(c.retiros_centavos) %></td></tr><% end %>
   </table>
   <div class="linea"></div>
