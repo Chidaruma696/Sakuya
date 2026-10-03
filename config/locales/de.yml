@@ -980,6 +980,9 @@ de:
       motivo: 'Umlagerung %{folio}: %{origen} → %{destino}'
       cancelacion: 'Storno von %{folio}: %{motivo}'
   reglas:
+    contrato: 'Vertrag v%{n}'
+    contrato_ayuda: Die Version des Hakens, für die sie geschrieben wurde
+    vieja: 'Diese Regel wurde für Version %{suya} des Hakens geschrieben, Sakuya ist bei %{actual}: prüfen, ob sie liest und antwortet, was der Haken jetzt erwartet, und erneut speichern.'
     errores:
       sin_decision: 'die Regel muss mit (allow), (to-review "Grund") oder (reject "Grund") enden und endete mit %{valor}'
       motivo: to-review und reject brauchen den Grund, als Zeichenkette oder Schlüsselwort

@@ -6,6 +6,10 @@ Por qué Sakuya es como es. Lo más nuevo, arriba.
 
 El segundo gancho, y el primero que decide algo: al cerrar el corte, la regla lee el conteo en pesos (`(difference)`, `(expected)`, `(limit)`, `(authorized)`…) y contesta `(allow)`, `(to-review "motivo")` o `(reject "motivo")`. La de fábrica usa el tope de Ajustes › Caja. Un rechazo frena a la cajera, pero no a quien tiene `caja.diferencia`: para esa persona cuenta como revisión. No me convence del todo, pero una regla mal escrita no puede dejar una caja sin poder cerrarse a las once de la noche. Si la regla truena decide la de fábrica y el fallo se anota en la revisión del corte. Se edita en Ajustes › Opciones avanzadas, junto al tablero, y se prueba con un caso inventado (esperado, contado y si cierra alguien con permiso); probarla contra un corte de verdad queda pendiente.
 
+## Cada regla sabe para qué contrato se escribió (3 oct 2026)
+
+Cada gancho lleva un número de contrato (`VERSION` en su módulo) y cada regla guarda con cuál se escribió. Si un día cambia lo que un gancho recibe o espera, se sube el número y las reglas viejas se avisan en su editor en vez de romperse en silencio. Restaurar o importar una versión conserva el número que traía; solo guardar desde el editor la sella con el de hoy. Todavía no hay migraciones automáticas de reglas: avisar es lo mínimo.
+
 ## El primer gancho es el tablero (30 sept 2026)
 
 El tablero de Inicio es el primer programa en Lisp: solo lee, así que es el lugar sin riesgo para estrenar el lenguaje antes de meterlo en la caja. El programa termina en `(dashboard …)` con `(tile …)` y `(panel …)`; las cifras de fábrica (`:sales`, `:tickets`…) también se leen como funciones para calcular las propias, y el dinero llega en pesos con decimales exactos. Si el programa guardado truena, Inicio enseña el de fábrica y un aviso a quien puede arreglarlo; nunca una página rota. Se edita en Ajustes › Opciones avanzadas, el lugar de todo lo que se programa en Lisp, con vista previa y sin guardar hasta que corre, y cada versión se asienta en `reglas` (solo inserción). Permiso nuevo: `reglas.editar`.

@@ -3,6 +3,8 @@
 # (ventas, tickets, existencias…) y devuelve la descripción; lo pinta la vista. Si truena, sale
 # el de fábrica y quien puede editarlo ve por qué.
 module Tablero
+  VERSION = 1
+
   DE_FABRICA = <<~LISP
     ; The home dashboard. Each (tile ...) is a figure and each (panel ...) a list.
     ; (tile :sales) uses a built-in figure; (tile "Label" value :money) makes your own.

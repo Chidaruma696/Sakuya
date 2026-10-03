@@ -36,7 +36,7 @@ class TableroController < ApplicationController
 
   def restaurar
     vieja = Regla.de("tablero").find(params[:id])
-    Regla.create!(gancho: "tablero", codigo: vieja.codigo, usuario: usuario_actual)
+    Regla.create!(gancho: "tablero", codigo: vieja.codigo, version: vieja.version, usuario: usuario_actual)
     redirect_to tablero_editar_path, notice: t("tablero.avisos.restaurado", fecha: l(vieja.created_at, format: :short))
   end
 

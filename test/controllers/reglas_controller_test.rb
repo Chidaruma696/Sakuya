@@ -99,6 +99,23 @@ class ReglasControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", regla_editar_path("factura"), 0
   end
 
+  test "cada regla guarda la versión de su contrato; una vieja se avisa y restaurarla no la disfraza de nueva" do
+    vieja = Regla.create!(gancho: "corte", codigo: "(allow)", version: 0, usuario: usuarios(:admin))
+    get regla_editar_path("corte")
+    assert_select "#aviso_vieja", /versión 0 del gancho y Sakuya ya va en la 1/
+    post regla_guardar_path("corte"), params: { codigo: "(allow)" }
+    assert_equal 1, Regla.vigente("corte").version
+    get regla_editar_path("corte")
+    assert_select "#aviso_vieja", 0
+    assert_select "span", /contrato v0/
+    post regla_restaurar_path("corte", vieja)
+    assert_equal 0, Regla.vigente("corte").version
+    tablero = Regla.create!(gancho: "tablero", codigo: "(dashboard)", version: 0, usuario: usuarios(:admin))
+    get tablero_editar_path
+    assert_select "#aviso_vieja"
+    assert_equal 1, Regla.create!(gancho: "tablero", codigo: tablero.codigo, usuario: usuarios(:admin)).version
+  end
+
   test "sin reglas.editar no se entra" do
     post entrar_path, params: { usuario: "cajera", password: "secreto1" }
     get regla_editar_path("corte")

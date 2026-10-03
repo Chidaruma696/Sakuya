@@ -980,6 +980,9 @@ en:
       motivo: 'Transfer %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancellation of %{folio}: %{motivo}'
   reglas:
+    contrato: 'contract v%{n}'
+    contrato_ayuda: The hook version it was written for
+    vieja: 'This rule was written for version %{suya} of the hook and Sakuya is now on %{actual}: check that it reads and answers what the hook expects now, and save it again.'
     errores:
       sin_decision: 'the rule must end in (allow), (to-review "why") or (reject "why"), and it ended in %{valor}'
       motivo: to-review and reject need the reason, as a string or a keyword

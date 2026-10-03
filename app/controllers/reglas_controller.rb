@@ -26,7 +26,7 @@ class ReglasController < ApplicationController
 
   def restaurar
     vieja = Regla.de(@gancho).find(params[:id])
-    Regla.create!(gancho: @gancho, codigo: vieja.codigo, usuario: usuario_actual)
+    Regla.create!(gancho: @gancho, codigo: vieja.codigo, version: vieja.version, usuario: usuario_actual)
     redirect_to regla_editar_path(@gancho), notice: t("reglas.avisos.restaurado", fecha: l(vieja.created_at, format: :short))
   end
 

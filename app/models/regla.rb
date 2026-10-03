@@ -2,7 +2,10 @@
 # guardar es asentar una versión nueva, y volver atrás es asentar la vieja otra vez.
 class Regla < ApplicationRecord
   self.table_name = "reglas"
-  GANCHOS = %w[tablero corte precio retiro movimiento factura].freeze
+  # Cada gancho y el módulo que guarda su contrato (su VERSION).
+  CONTRATOS = { "tablero" => "Tablero", "corte" => "ReglaCorte", "precio" => "ReglaPrecio", "retiro" => "ReglaRetiro",
+                "movimiento" => "ReglaMovimiento", "factura" => "ReglaFactura" }.freeze
+  GANCHOS = CONTRATOS.keys.freeze
 
   belongs_to :usuario
 
@@ -11,8 +14,18 @@ class Regla < ApplicationRecord
 
   scope :de, ->(gancho) { where(gancho: gancho).order(id: :desc) }
 
+  # Al guardar, la del contrato de hoy; al restaurar o importar, la que traía.
+  attribute :version, :integer, default: nil
+  before_validation(on: :create) { self.version ||= self.class.contrato(gancho) if GANCHOS.include?(gancho) }
+
   before_update { raise ActiveRecord::ReadOnlyRecord, "las reglas no se editan: se asienta otra versión" }
   before_destroy { raise ActiveRecord::ReadOnlyRecord, "las reglas no se borran" }
 
   def self.vigente(gancho) = de(gancho).first
+
+  # La versión del contrato que Sakuya tiene hoy para ese gancho.
+  def self.contrato(gancho) = CONTRATOS.fetch(gancho).constantize::VERSION
+
+  # Se escribió para un contrato anterior: puede que ya no lea o conteste lo que el gancho espera.
+  def vieja? = version < self.class.contrato(gancho)
 end

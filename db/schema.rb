@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_000002) do
   create_table "ajustes", force: :cascade do |t|
     t.string "clave", null: false
     t.datetime "created_at", null: false
@@ -382,6 +382,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000001) do
     t.datetime "created_at", null: false
     t.string "gancho", null: false
     t.integer "usuario_id", null: false
+    t.integer "version", default: 1, null: false
     t.index ["gancho", "id"], name: "index_reglas_on_gancho_and_id"
     t.index ["usuario_id"], name: "index_reglas_on_usuario_id"
   end

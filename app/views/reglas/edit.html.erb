@@ -5,6 +5,7 @@
 <section class="min-w-0">
 <h2 class="mb-1 text-xl font-bold"><%= t("#{textos}.titulo") %></h2>
 <p class="mb-4 max-w-3xl text-sm text-stone-600"><%= t("#{textos}.ayuda") %></p>
+<%= render "reglas/aviso_vieja", regla: @versiones.first %>
 
 <div class="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_22rem]">
   <%= form_with url: regla_guardar_path(@gancho), id: "form_regla", class: "formulario space-y-4", data: { turbo: false } do |f| %>

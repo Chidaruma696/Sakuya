@@ -980,6 +980,9 @@ es:
       motivo: 'Traspaso %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancelación de %{folio}: %{motivo}'
   reglas:
+    contrato: 'contrato v%{n}'
+    contrato_ayuda: La versión del gancho para la que se escribió
+    vieja: 'Esta regla se escribió para la versión %{suya} del gancho y Sakuya ya va en la %{actual}: revisa que lea y conteste lo de ahora y vuelve a guardarla.'
     errores:
       sin_decision: 'la regla tiene que terminar en (allow), (to-review "motivo") o (reject "motivo"), y terminó en %{valor}'
       motivo: to-review y reject piden el motivo, como cadena o palabra clave
