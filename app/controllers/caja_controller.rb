@@ -121,10 +121,9 @@ class CajaController < ApplicationController
       Revision.abrir!(@corte, usuario: usuario_actual, sucursal: sucursal_actual, motivo: reporte, valor_centavos: monto, frenado: true)
       raise ArgumentError, t("errores.caja.retiro_frenado", motivo: decision.motivo)
     end
-    autoriza = con_permiso ? usuario_actual : nil
     revisar = decision.permite? && !decision.error ? nil : [ params[:motivo], (decision.motivo unless decision.permite?), (t("regla_retiro.fallo", error: decision.error) if decision.error) ].compact.join("\n")
-    retiro = @corte.retirar!(monto_centavos: monto, motivo: params[:motivo], usuario: usuario_actual, autorizado_por: autoriza)
-    revisar_si_hace_falta(retiro, revisar ? nil : autoriza, motivo: revisar, valor_centavos: retiro.monto_centavos)
+    retiro = @corte.retirar!(monto_centavos: monto, motivo: params[:motivo], usuario: usuario_actual, autorizado_por: (usuario_actual if con_permiso))
+    Revision.abrir!(retiro, usuario: usuario_actual, sucursal: sucursal_actual, motivo: revisar, valor_centavos: retiro.monto_centavos) if revisar
     redirect_to caja_corte_path, notice: t("caja.avisos.retiro", monto: Dinero.pesos(retiro.monto_centavos)) + (revisar ? t("caja.avisos.queda_por_revisar") : "")
   rescue ArgumentError, ActiveRecord::RecordInvalid => e
     redirect_to caja_corte_path, alert: e.message
