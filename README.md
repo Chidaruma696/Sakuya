@@ -101,7 +101,7 @@ Every sensitive spot asks a rule before doing anything: the price of each line, 
       (else (to-review "Medium discount")))
 ```
 
-Out of the box, everything irregular **is stopped and reported**: it does not go through and the attempt lands in Review under the name of whoever tried it. Someone with the permission is never stuck; for them, stopping means going through and to review. Each rule is tested in its editor against the real thing (the open session, a sale already charged, a recorded invoice), keeps the contract version of its hook, and they all travel together in a `.lisp` file to back them up or take them to another business. And to ask the live data questions there is a read-only REPL: `(sort-by-desc :balance (customers))`. What Sakuya does not bring arrives in **plugins**: a `.lisp` file with functions for the rules, reports for the REPL or a new language for the interface.
+Out of the box, everything irregular **is stopped and reported**: it does not go through and the attempt lands in Review under the name of whoever tried it. Someone with the permission is never stuck; for them, stopping means going through and to review. And if the till sold offline, what would have been stopped already happened: it is recorded and reported. Each rule is tested in its editor against the real thing (the open session, a sale already charged, a recorded invoice), keeps the contract version of its hook, and they all travel together in a `.lisp` file to back them up or take them to another business. And to ask the live data questions there is a read-only REPL: `(sort-by-desc :balance (customers))`. What Sakuya does not bring arrives in **plugins**: a `.lisp` file with functions for the rules, reports for the REPL or a new language for the interface.
 
 The Lisp is Sakuya's own, written in Ruby (`lib/lisp*.rb`): a reader, an evaluator with limits on steps and depth, decimals for money, and functions named in English. A program can only call what the app hands it; it cannot touch files, the network or the database directly.
 
@@ -131,7 +131,7 @@ bin/setup        # gems, database, seeds
 bin/dev          # http://localhost:3000
 ```
 
-The seeds only create the base roles; the rest comes from the first run. Tests (195 today): `bin/rails test`.
+The seeds only create the base roles; the rest comes from the first run. Tests (199 today): `bin/rails test`.
 
 - **PostgreSQL:** with `DATABASE_URL=postgres://user:password@server/sakuya` it runs the same; CI tests both databases. To move an installation that has data: load the schema into the empty PostgreSQL and run `bin/rails "sakuya:copiar_base[postgres://…]"`.
 - **Printer:** each branch chooses in Admin › Branches whether it prints with the browser, on a network thermal printer (address:port, almost always 9100) or on a cable one from Chrome. The receipt can also be downloaded as ESC/POS.

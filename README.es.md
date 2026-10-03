@@ -101,7 +101,7 @@ Cada punto delicado le pregunta a una regla antes de hacer nada: el precio de ca
       (else (to-review "Rebaja mediana")))
 ```
 
-De fábrica, todo lo irregular **se frena y se reporta**: no pasa y el intento queda en Revisión a nombre de quien lo hizo. Quien tiene el permiso nunca se queda atorado; para esa persona, frenar es pasar y quedar por revisar. Cada regla se prueba en su editor contra lo de verdad (el corte abierto, una venta ya cobrada, una factura registrada), guarda la versión del contrato de su gancho y todas viajan juntas en un archivo `.lisp` para respaldarlas o llevarlas a otro negocio. Y para preguntarle cosas a los datos en vivo hay un REPL de solo lectura: `(sort-by-desc :balance (customers))`. Lo que Sakuya no trae llega en **plugins**: un archivo `.lisp` con funciones para las reglas, informes para el REPL o un idioma nuevo para la interfaz.
+De fábrica, todo lo irregular **se frena y se reporta**: no pasa y el intento queda en Revisión a nombre de quien lo hizo. Quien tiene el permiso nunca se queda atorado; para esa persona, frenar es pasar y quedar por revisar. Y si la caja vendió sin conexión, lo que se habría frenado ya pasó: se registra y se reporta. Cada regla se prueba en su editor contra lo de verdad (el corte abierto, una venta ya cobrada, una factura registrada), guarda la versión del contrato de su gancho y todas viajan juntas en un archivo `.lisp` para respaldarlas o llevarlas a otro negocio. Y para preguntarle cosas a los datos en vivo hay un REPL de solo lectura: `(sort-by-desc :balance (customers))`. Lo que Sakuya no trae llega en **plugins**: un archivo `.lisp` con funciones para las reglas, informes para el REPL o un idioma nuevo para la interfaz.
 
 El Lisp es propio de Sakuya, escrito en Ruby (`lib/lisp*.rb`): un lector, un evaluador con límite de pasos y de profundidad, decimales para el dinero y funciones con nombre en inglés. Un programa solo puede llamar lo que la aplicación le da; no toca archivos, ni la red, ni la base de datos directamente.
 
@@ -131,7 +131,7 @@ bin/setup        # gemas, base de datos, semillas
 bin/dev          # http://localhost:3000
 ```
 
-Las semillas solo crean los roles base; lo demás sale del primer arranque. Tests (195 hoy): `bin/rails test`.
+Las semillas solo crean los roles base; lo demás sale del primer arranque. Tests (199 hoy): `bin/rails test`.
 
 - **PostgreSQL:** con `DATABASE_URL=postgres://usuario:clave@servidor/sakuya` corre igual; la CI prueba las dos bases. Para mudar una instalación con datos: carga el esquema en el PostgreSQL vacío y `bin/rails "sakuya:copiar_base[postgres://…]"`.
 - **Impresora:** cada sucursal elige en Admin › Sucursales si imprime con el navegador, en una térmica de red (dirección:puerto, casi siempre el 9100) o en una por cable desde Chrome. El ticket también se baja en ESC/POS.
