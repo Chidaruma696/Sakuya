@@ -1,0 +1,16 @@
+<%= form_with model: @cliente, class: "formulario" do |f| %>
+  <% if @cliente.errors.any? %><div class="rounded border border-red-300 bg-red-50 p-3 text-sm text-red-800"><%= @cliente.errors.full_messages.join(". ") %></div><% end %>
+  <div class="campos">
+    <div><%= f.label :nombre, class: "etiqueta-campo" %><%= f.text_field :nombre, required: true, autofocus: true, class: "entrada" %></div>
+    <div><%= f.label :telefono, class: "etiqueta-campo" %><%= f.telephone_field :telefono, class: "entrada" %></div>
+    <div><%= f.label :rfc, class: "etiqueta-campo" %><%= f.text_field :rfc, class: "entrada font-mono" %></div>
+    <div><%= f.label :direccion, class: "etiqueta-campo" %><%= f.text_field :direccion, class: "entrada" %></div>
+    <div><%= f.label :limite_credito, class: "etiqueta-campo" %><%= f.number_field :limite_credito, step: "0.01", min: 0, class: "entrada font-mono" %><p class="mt-1 text-xs text-stone-500"><%= t("clientes.limite_ayuda") %></p></div>
+    <div><%= f.label :notas, class: "etiqueta-campo" %><%= f.text_field :notas, class: "entrada" %></div>
+    <% if @cliente.persisted? %><label class="flex items-center gap-2 text-sm"><%= f.check_box :activo, class: "h-4 w-4" %> <%= t("comun.activo") %></label><% end %>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <%= f.submit t("comun.guardar"), class: "btn btn-primary btn-lg" %>
+    <%= link_to t("comun.cancelar"), clientes_path, class: "btn btn-ghost btn-lg" %>
+  </div>
+<% end %>

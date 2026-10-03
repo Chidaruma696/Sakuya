@@ -187,6 +187,7 @@ en:
       ajustes: Settings
       compras: Purchasing
       almacenes: Warehouses
+      clientes: Customers
     grupos:
       ver: View
       revisar: Review
@@ -203,8 +204,11 @@ en:
       facturas: Invoices
       proveedores: Suppliers
       granel: Transfers
+      clientes: Customers
     botones:
       inicio: Home
+      clientes: Customers
+      nuevo_cliente: New customer
       ventas_por_producto: Sales by product
       por_revisar: To review
       ajustes: Settings
@@ -460,6 +464,8 @@ en:
     compras.ver: View suppliers, accounts payable and containers
     compras.recibir: Receive goods from suppliers
     compras.facturar: Enter and cancel supplier invoices
+    clientes.ver: See customers
+    clientes.editar: Add and edit customers
     compras.forzar_recepcion: Receive goods the receipts rule stops (it goes to review)
     compras.pagar: Pay suppliers from the till
     compras.exceder: Record an invoice with more than received (with a reason, it goes to review)
@@ -753,10 +759,13 @@ en:
     almacenes:
       nombre: Warehouses
       que: Warehouses (storage-only sites) and transfers between branches.
+    clientes:
+      nombre: Customers
+      que: Customers, their credit account and payments, and orders.
   giros:
     todo:
       nombre: Everything on
-      que: 'every module: purchasing, warehouses and stock counts.'
+      que: 'all modules: purchases, warehouses, stock counts and customers.'
     tienda:
       nombre: A single shop
       que: Till, stock, purchasing and stock counts.
@@ -820,6 +829,14 @@ en:
       ajuste:
         clave: Key
         valor: Value
+      cliente:
+        nombre: Name
+        telefono: Phone
+        rfc: Tax ID
+        direccion: Address
+        notas: Notes
+        limite_credito: Credit limit
+        activo: Active
       proveedor:
         nombre: Name
         rfc: Tax ID
@@ -836,8 +853,23 @@ en:
       rol: Role
       conteo: Count
       proveedor: Supplier
+      cliente: Customer
       recepcion: Receipt
       factura_proveedor: Supplier invoice
+  clientes:
+    titulo: Customers
+    nuevo: New customer
+    editar: Edit customer
+    buscar: Search by name
+    telefono: Phone
+    rfc: Tax ID
+    limite_credito: Credit limit
+    limite_ayuda: The credit rule reads it as (limit). Out of the box nobody gets credit; the rule decides whether it is used.
+    inactivo: inactive
+    sin_clientes: No customers yet.
+    avisos:
+      creado: Customer %{nombre} added.
+      guardado: Customer %{nombre} saved.
   compras:
     proveedores: Suppliers
     proveedor: Supplier

@@ -187,6 +187,7 @@ de:
       ajustes: Einstellungen
       compras: Einkauf
       almacenes: Lager
+      clientes: Kunden
     grupos:
       ver: Ansehen
       revisar: Prüfen
@@ -203,8 +204,11 @@ de:
       facturas: Rechnungen
       proveedores: Lieferanten
       granel: Umbuchungen
+      clientes: Kunden
     botones:
       inicio: Start
+      clientes: Kunden
+      nuevo_cliente: Neuer Kunde
       ventas_por_producto: Verkäufe je Produkt
       por_revisar: Zu prüfen
       ajustes: Einstellungen
@@ -460,6 +464,8 @@ de:
     compras.ver: Lieferanten, Verbindlichkeiten und Leergut sehen
     compras.recibir: Ware vom Lieferanten annehmen
     compras.facturar: Lieferantenrechnungen erfassen und stornieren
+    clientes.ver: Kunden ansehen
+    clientes.editar: Kunden anlegen und bearbeiten
     compras.forzar_recepcion: Ware annehmen, die die Eingangsregel stoppt (geht zur Prüfung)
     compras.pagar: Lieferanten aus der Kasse bezahlen
     compras.exceder: Eine Rechnung mit mehr als erhalten erfassen (mit Grund, geht zur Prüfung)
@@ -753,10 +759,13 @@ de:
     almacenes:
       nombre: Lager
       que: Lager (reine Lagerorte) und Umbuchungen zwischen Filialen.
+    clientes:
+      nombre: Kunden
+      que: Kunden, ihr Kreditkonto und Zahlungen, und Bestellungen.
   giros:
     todo:
       nombre: Alles an
-      que: 'alle Module: Einkauf, Lager und Inventur.'
+      que: 'alle Module: Einkauf, Lager, Inventur und Kunden.'
     tienda:
       nombre: Ein Laden
       que: Kasse, Bestand, Einkauf und Inventur.
@@ -820,6 +829,14 @@ de:
       ajuste:
         clave: Schlüssel
         valor: Wert
+      cliente:
+        nombre: Name
+        telefono: Telefon
+        rfc: Steuernummer
+        direccion: Adresse
+        notas: Notizen
+        limite_credito: Kreditlimit
+        activo: Aktiv
       proveedor:
         nombre: Name
         rfc: Steuernummer
@@ -836,8 +853,23 @@ de:
       rol: Rolle
       conteo: Zählung
       proveedor: Lieferant
+      cliente: Kunde
       recepcion: Wareneingang
       factura_proveedor: Lieferantenrechnung
+  clientes:
+    titulo: Kunden
+    nuevo: Neuer Kunde
+    editar: Kunde bearbeiten
+    buscar: Nach Name suchen
+    telefono: Telefon
+    rfc: Steuernummer
+    limite_credito: Kreditlimit
+    limite_ayuda: Die Kreditregel liest es als (limit). Standardmäßig bekommt niemand Kredit; die Regel entscheidet, ob es genutzt wird.
+    inactivo: inaktiv
+    sin_clientes: Noch keine Kunden.
+    avisos:
+      creado: Kunde %{nombre} angelegt.
+      guardado: Kunde %{nombre} gespeichert.
   compras:
     proveedores: Lieferanten
     proveedor: Lieferant

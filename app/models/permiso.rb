@@ -14,6 +14,8 @@ module Permiso
     "conteos.cargos" => "Cobrar o perdonar cargos",
     "reportes.ver" => "Ver el tablero y los reportes",
     "revisiones.resolver" => "Revisar lo que se hizo sin autorización (aprobar, observar, cargar)",
+    "clientes.ver" => "Ver clientes",
+    "clientes.editar" => "Dar de alta y editar clientes",
     "compras.ver" => "Ver proveedores y cuentas por pagar",
     "compras.recibir" => "Recibir mercancía del proveedor",
     "compras.facturar" => "Capturar y cancelar facturas del proveedor",

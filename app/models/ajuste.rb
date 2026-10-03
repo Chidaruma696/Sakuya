@@ -29,7 +29,8 @@ class Ajuste < ApplicationRecord
     **Folio::DOCUMENTOS.to_h { |doc, letra| [ "folios.#{doc}", letra ] },
     "modulos.compras" => "1",           # módulos opcionales: "1" encendido, "0" apagado (ver Modulo)
     "modulos.almacenes" => "1",
-    "modulos.conteos" => "1"
+    "modulos.conteos" => "1",
+    "modulos.clientes" => "0"           # de fábrica apagado: se enciende en Ajustes › Módulos
   }.freeze
   ENTEROS = %w[caja.piso_precio caja.limite_gaveta caja.tope_diferencia ticket.ancho].freeze
   DENOMINACIONES = /\A\d+(\.\d{1,2})?(,\d+(\.\d{1,2})?)*\z/

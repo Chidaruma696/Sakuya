@@ -8,7 +8,7 @@ class Rol < ApplicationRecord
     "administrador" => [ "*" ],
     "cajero" => [ "caja.vender", "caja.abrir", "caja.retirar", "inventario.ver" ],
     "almacenista" => [ "inventario.ver", "compras.recibir", "almacenes.traspasar", "conteos.hacer" ],
-    "supervisor" => [ "caja.*", "inventario.*", "compras.*", "almacenes.*", "conteos.*", "reportes.ver", "revisiones.resolver" ]
+    "supervisor" => [ "caja.*", "inventario.*", "compras.*", "almacenes.*", "conteos.*", "clientes.*", "reportes.ver", "revisiones.resolver" ]
   }.freeze
 
   validates :nombre, presence: true, uniqueness: true

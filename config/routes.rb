@@ -61,6 +61,9 @@ Rails.application.routes.draw do
   get "inventario/movimiento/nuevo", to: "inventario#nuevo_movimiento", as: :nuevo_movimiento_inventario
   post "inventario/movimiento", to: "inventario#crear_movimiento", as: :movimientos_inventario
 
+  # Clientes: el catálogo; su cuenta y sus pedidos cuelgan de aquí
+  resources :clientes, only: %i[index new create edit update]
+
   # Compras: proveedores, recepción, facturas y cuentas por pagar
   resources :proveedores, except: %i[show destroy]
   resources :recepciones, only: %i[index new create show] do

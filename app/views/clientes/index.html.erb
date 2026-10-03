@@ -1,0 +1,21 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("clientes.titulo") %></h1>
+  <%= link_to icono("plus-lg", t("clientes.nuevo")), new_cliente_path, class: "btn btn-primary" if puede?("clientes.editar") %>
+</div>
+<%= form_with url: clientes_path, method: :get, class: "mb-4 flex gap-2" do %>
+  <%= search_field_tag :q, params[:q], placeholder: t("clientes.buscar"), class: "entrada max-w-sm" %>
+<% end %>
+<table class="tabla">
+  <thead><tr><th><%= t("comun.nombre") %></th><th><%= t("clientes.telefono") %></th><th><%= t("clientes.rfc") %></th><th class="text-right"><%= t("clientes.limite_credito") %></th><th></th></tr></thead>
+  <tbody>
+    <% @clientes.each do |c| %>
+      <tr class="<%= 'text-stone-400' unless c.activo %>">
+        <td class="px-3 py-2 font-medium"><%= c.nombre %><%= " (#{t("clientes.inactivo")})" unless c.activo %></td>
+        <td class="px-3 py-2"><%= c.telefono %></td><td class="px-3 py-2 font-mono text-xs"><%= c.rfc %></td>
+        <td class="px-3 py-2 text-right font-mono"><%= pesos(c.limite_credito_centavos) %></td>
+        <td class="px-3 py-2 text-right whitespace-nowrap"><%= link_to icono("pencil", t("comun.editar")), edit_cliente_path(c), class: "btn btn-ghost btn-xs" if puede?("clientes.editar") %></td>
+      </tr>
+    <% end %>
+    <% if @clientes.empty? %><tr><td colspan="5" class="px-3 py-6 text-center text-stone-500"><%= t("clientes.sin_clientes") %></td></tr><% end %>
+  </tbody>
+</table>

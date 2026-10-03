@@ -187,6 +187,7 @@ es:
       ajustes: Ajustes
       compras: Compras
       almacenes: Almacenes
+      clientes: Clientes
     grupos:
       ver: Ver
       revisar: Revisar
@@ -203,8 +204,11 @@ es:
       facturas: Facturas
       proveedores: Proveedores
       granel: Traspasos
+      clientes: Clientes
     botones:
       inicio: Inicio
+      clientes: Clientes
+      nuevo_cliente: Nuevo cliente
       ventas_por_producto: Ventas por producto
       por_revisar: Por revisar
       ajustes: Ajustes
@@ -460,6 +464,8 @@ es:
     compras.ver: Ver proveedores, cuentas por pagar y envases
     compras.recibir: Recibir mercancía del proveedor
     compras.facturar: Capturar y cancelar facturas del proveedor
+    clientes.ver: Ver clientes
+    clientes.editar: Dar de alta y editar clientes
     compras.forzar_recepcion: Recibir mercancía que la regla de recepciones frena (queda por revisar)
     compras.pagar: Pagar a proveedores desde la caja
     compras.exceder: Registrar una factura con más de lo recibido (con motivo, queda por revisar)
@@ -753,10 +759,13 @@ es:
     almacenes:
       nombre: Almacenes
       que: Almacenes (bodegas que solo guardan mercancía) y traspasos entre sucursales.
+    clientes:
+      nombre: Clientes
+      que: Clientes, su cuenta de crédito y abonos, y pedidos.
   giros:
     todo:
       nombre: Todo encendido
-      que: 'todos los módulos: compras, almacenes y conteos.'
+      que: 'todos los módulos: compras, almacenes, conteos y clientes.'
     tienda:
       nombre: Una tienda
       que: Caja, inventario, compras y conteos.
@@ -820,6 +829,14 @@ es:
       ajuste:
         clave: Clave
         valor: Valor
+      cliente:
+        nombre: Nombre
+        telefono: Teléfono
+        rfc: RFC / identificación fiscal
+        direccion: Dirección
+        notas: Notas
+        limite_credito: Límite de crédito
+        activo: Activo
       proveedor:
         nombre: Nombre
         rfc: RFC / identificación fiscal
@@ -836,8 +853,23 @@ es:
       rol: Rol
       conteo: Conteo
       proveedor: Proveedor
+      cliente: Cliente
       recepcion: Recepción
       factura_proveedor: Factura del proveedor
+  clientes:
+    titulo: Clientes
+    nuevo: Nuevo cliente
+    editar: Editar cliente
+    buscar: Buscar por nombre
+    telefono: Teléfono
+    rfc: RFC
+    limite_credito: Límite de crédito
+    limite_ayuda: Lo lee la regla de crédito como (limit). De fábrica no se fía a nadie; la regla decide si se usa.
+    inactivo: inactivo
+    sin_clientes: Todavía no hay clientes.
+    avisos:
+      creado: Cliente %{nombre} dado de alta.
+      guardado: Cliente %{nombre} guardado.
   compras:
     proveedores: Proveedores
     proveedor: Proveedor

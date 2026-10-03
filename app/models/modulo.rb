@@ -3,12 +3,12 @@
 # arrancar y se puede cambiar después en Ajustes. Cada módulo es un conjunto aparte: sus tablas,
 # sus permisos, su pestaña. DEPENDE y ALGUNO quedan listos para cuando un módulo cuelgue de otro.
 module Modulo
-  OPCIONALES = %w[compras almacenes conteos].freeze
+  OPCIONALES = %w[compras almacenes conteos clientes].freeze
   DEPENDE = {}.freeze
   # Necesita al menos uno de la lista encendido.
   ALGUNO = {}.freeze
   # Prefijos de permiso que cuelgan de cada módulo (los demás permisos van siempre).
-  PERMISOS = { "compras" => %w[compras], "almacenes" => %w[almacenes], "conteos" => %w[conteos] }.freeze
+  PERMISOS = { "compras" => %w[compras], "almacenes" => %w[almacenes], "conteos" => %w[conteos], "clientes" => %w[clientes] }.freeze
   # Preset por giro.
   GIROS = {
     "tienda" => %w[compras conteos],

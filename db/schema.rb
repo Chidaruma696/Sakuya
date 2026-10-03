@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_000002) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_000003) do
   create_table "ajustes", force: :cascade do |t|
     t.string "clave", null: false
     t.datetime "created_at", null: false
@@ -38,6 +38,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000002) do
     t.index ["usuario_id"], name: "index_cargos_on_usuario_id"
     t.check_constraint "estado IN ('pendiente', 'cobrado', 'perdonado')", name: "cargos_estado"
     t.check_constraint "monto_centavos > 0", name: "cargos_monto"
+  end
+
+  create_table "clientes", force: :cascade do |t|
+    t.boolean "activo", default: true, null: false
+    t.datetime "created_at", null: false
+    t.string "direccion"
+    t.integer "limite_credito_centavos", default: 0, null: false
+    t.string "nombre", null: false
+    t.string "notas"
+    t.string "rfc"
+    t.string "telefono"
+    t.datetime "updated_at", null: false
+    t.index ["nombre"], name: "index_clientes_on_nombre"
   end
 
   create_table "codigos_barras", force: :cascade do |t|

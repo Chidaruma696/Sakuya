@@ -41,6 +41,12 @@ module RibbonHelper
       ] },
       { id: :proveedores, botones: [ Boton.new(:proveedores, :proveedores_path, "compras.ver", "truck") ] }
     ] },
+    { id: :clientes, grupos: [
+      { id: :clientes, botones: [
+        Boton.new(:clientes, :clientes_path, "clientes.ver", "people"),
+        Boton.new(:nuevo_cliente, :new_cliente_path, "clientes.editar", "person-plus")
+      ] }
+    ] },
     { id: :almacenes, grupos: [
       { id: :granel, botones: [
         Boton.new(:traspaso_granel, :new_traspaso_path, "almacenes.traspasar", "boxes"),
