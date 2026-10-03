@@ -4,7 +4,7 @@ Por qué Sakuya es como es. Lo más nuevo, arriba.
 
 ## El cierre de caja ya pregunta a una regla (3 oct 2026)
 
-El segundo gancho, y el primero que decide algo: al cerrar el corte, la regla lee el conteo en pesos (`(difference)`, `(expected)`, `(limit)`, `(authorized)`…) y contesta `(allow)`, `(to-review "motivo")` o `(reject "motivo")`. La de fábrica usa el tope de Ajustes › Caja. Un rechazo frena a la cajera, pero no a quien tiene `caja.diferencia`: para esa persona cuenta como revisión. No me convence del todo, pero una regla mal escrita no puede dejar una caja sin poder cerrarse a las once de la noche. Si la regla truena decide la de fábrica y el fallo se anota en la revisión del corte. Todavía no hay editor: la regla solo se guarda desde la consola; el editor llega junto al del tablero.
+El segundo gancho, y el primero que decide algo: al cerrar el corte, la regla lee el conteo en pesos (`(difference)`, `(expected)`, `(limit)`, `(authorized)`…) y contesta `(allow)`, `(to-review "motivo")` o `(reject "motivo")`. La de fábrica usa el tope de Ajustes › Caja. Un rechazo frena a la cajera, pero no a quien tiene `caja.diferencia`: para esa persona cuenta como revisión. No me convence del todo, pero una regla mal escrita no puede dejar una caja sin poder cerrarse a las once de la noche. Si la regla truena decide la de fábrica y el fallo se anota en la revisión del corte. Se edita en Ajustes › Opciones avanzadas, junto al tablero, y se prueba con un caso inventado (esperado, contado y si cierra alguien con permiso); probarla contra un corte de verdad queda pendiente.
 
 ## El primer gancho es el tablero (30 sept 2026)
 

@@ -57,7 +57,7 @@ module ReglaCorte
       "withdrawals" => -> { datos.pesos(datos.corte.retiros_centavos) },
       "limit" => -> { datos.pesos(Corte.tope_diferencia_centavos) },
       "tickets" => -> { datos.corte.ventas.count },
-      "authorized" => -> { datos.usuario.puede?("caja.diferencia") },
+      "authorized" => -> { datos.autorizado? },
       "allow" => -> { Decision.new(veredicto: :allow, motivo: nil, error: nil) },
       "to-review" => ->(motivo) { Decision.new(veredicto: :review, motivo: motivo(motivo, datos), error: nil) },
       "reject" => ->(motivo) { Decision.new(veredicto: :reject, motivo: motivo(motivo, datos), error: nil) }
@@ -76,10 +76,28 @@ module ReglaCorte
 
   private_class_method :funciones, :motivo
 
-  # El conteo que se está cerrando, en centavos; el programa lo lee en pesos.
-  Datos = Struct.new(:corte, :contado, :usuario) do
+  # El conteo que se está cerrando, en centavos; el programa lo lee en pesos. Para probar en el
+  # editor, `autorizado` dice a mano si quien cierra tiene permiso.
+  class Datos
+    attr_reader :corte, :contado
+
+    def initialize(corte, contado, usuario = nil, autorizado: nil)
+      @corte = corte
+      @contado = contado.to_i
+      @usuario = usuario
+      @autorizado = autorizado
+    end
+
     def esperado = @esperado ||= corte.efectivo_esperado_centavos
     def diferencia = contado - esperado
+    def autorizado? = @autorizado.nil? ? @usuario.puede?("caja.diferencia") : @autorizado
     def pesos(centavos) = BigDecimal(centavos.to_i) / 100
+  end
+
+  # Un cierre de mentira para el botón Probar del editor: un corte sin guardar con ese fondo y sin
+  # ventas, contado con lo que se diga. No toca la base.
+  def self.probar(codigo, esperado_centavos:, contado_centavos:, autorizado:)
+    corte = Corte.new(fondo_centavos: esperado_centavos.to_i)
+    evaluar(codigo, Datos.new(corte, contado_centavos, autorizado: autorizado))
   end
 end

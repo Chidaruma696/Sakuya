@@ -87,6 +87,7 @@ de:
       folios: Nummerierung
       compras: Einkauf
       tablero: Übersicht in Lisp
+      regla_corte: Kassenabschluss in Lisp
     secciones_ayuda:
       para_ti: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
       negocio: Die Betriebsdaten, wie sie auf dem Ticket stehen, mit dem Ticket daneben genau so, wie es gedruckt wird. Gilt für alle Filialen.
@@ -965,6 +966,44 @@ de:
       motivo: 'Umlagerung %{folio}: %{origen} → %{destino}'
       cancelacion: 'Storno von %{folio}: %{motivo}'
   regla_corte:
+    titulo: Kassenabschluss in Lisp
+    ayuda: Beim Abschluss prüft diese Regel die Zählung und entscheidet, ob abgeschlossen wird, ob es zur Prüfung geht oder ob gestoppt wird. Testen speichert nichts; jede gespeicherte Version steht in der Liste unten.
+    versiones: Versionen
+    vigente: aktuell
+    restaurar: Zu dieser zurück
+    sin_versiones: 'Noch keine Versionen: es gilt die Standardregel.'
+    avisos:
+      guardado: Abschlussregel gespeichert.
+      restaurado: Zur Version vom %{fecha} zurückgekehrt.
+    caso:
+      titulo: Testfall
+      esperado: Erwartet in der Lade
+      contado: Gezählt
+      autorizado: Abschluss durch jemanden mit Berechtigung für Differenzen
+    veredictos:
+      allow: Wird abgeschlossen
+      review: Wird abgeschlossen und geprüft
+      reject: Wird gestoppt
+    referencia:
+      lee: Was sie liest (in Pesos)
+      contesta: Was sie antwortet
+      funciones:
+        difference: gezählt − erwartet; negativ = fehlt
+        counted: das Gezählte
+        expected: was da sein sollte
+        float: das Wechselgeld
+        sales: Verkäufe des Abschnitts
+        cash_sales: Bargeld aus Verkäufen
+        returns: Rückgaben
+        withdrawals: Entnahmen
+        limit: die Grenze aus Einstellungen › Kasse (0 = ohne Grenze)
+        tickets: Tickets des Abschnitts
+        authorized: ob die abschließende Person Differenzen annehmen darf
+      allow: wird abgeschlossen
+      to_review: verlangt einen Grund und geht zur Prüfung
+      reject: stoppt und meldet den Versuch
+      nucleo: Wer Differenzen annehmen darf, kann immer abschließen; für diese Person heißt Stoppen Prüfung.
+      ejemplo: Beispiel
     fallo: 'Die Regel für den Kassenabschluss ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
     motivos:
       over_limit: die Differenz (%{diferencia}) übersteigt die Grenze (%{tope})

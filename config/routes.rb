@@ -15,6 +15,12 @@ Rails.application.routes.draw do
     post "/", action: :guardar, as: :guardar
     post "versiones/:id/restaurar", action: :restaurar, as: :restaurar
   end
+  # La regla del cierre de caja, igual que el tablero.
+  scope "ajustes/avanzado/corte", controller: "regla_corte", as: "regla_corte" do
+    get "editar", action: :edit, as: :editar
+    post "/", action: :guardar, as: :guardar
+    post "versiones/:id/restaurar", action: :restaurar, as: :restaurar
+  end
   resources :revisiones, only: %i[index] do
     member { post :resolver }
   end

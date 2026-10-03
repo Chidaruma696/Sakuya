@@ -87,6 +87,7 @@ en:
       folios: Numbering
       compras: Purchasing
       tablero: Dashboard in Lisp
+      regla_corte: Cash closing in Lisp
     secciones_ayuda:
       para_ti: Applied the moment you pick one; saved on your user, they follow you to any computer.
       negocio: The business details as they appear on the ticket, with the ticket next to it exactly as it will print. Applies to every branch.
@@ -965,6 +966,44 @@ en:
       motivo: 'Transfer %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancellation of %{folio}: %{motivo}'
   regla_corte:
+    titulo: Cash closing in Lisp
+    ayuda: When the session is closed, this rule looks at the count and decides whether it closes, goes to review or is stopped. Test saves nothing; each saved version stays in the list below.
+    versiones: Versions
+    vigente: current
+    restaurar: Go back to this one
+    sin_versiones: 'No versions yet: the built-in rule is used.'
+    avisos:
+      guardado: Closing rule saved.
+      restaurado: Went back to the version from %{fecha}.
+    caso:
+      titulo: Test case
+      esperado: Expected in drawer
+      contado: Counted
+      autorizado: Closed by someone allowed to accept differences
+    veredictos:
+      allow: It closes
+      review: It closes and goes to review
+      reject: It is stopped
+    referencia:
+      lee: What it reads (in pesos)
+      contesta: What it answers
+      funciones:
+        difference: counted − expected; negative = missing
+        counted: what was counted
+        expected: what should be there
+        float: the float
+        sales: session sales
+        cash_sales: cash from sales
+        returns: returns
+        withdrawals: withdrawals
+        limit: the limit from Settings › Till (0 = no limit)
+        tickets: session tickets
+        authorized: whether the person closing may accept differences
+      allow: it closes
+      to_review: asks for a reason and goes to review
+      reject: stops it and reports the attempt
+      nucleo: Someone allowed to accept differences can always close; for them, stopping means review.
+      ejemplo: Example
     fallo: 'The cash count rule failed and the built-in one decided: %{error}'
     motivos:
       over_limit: the difference (%{diferencia}) exceeds the limit (%{tope})

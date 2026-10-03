@@ -69,21 +69,6 @@
   </section>
 <% end %>
 
-<section class="mt-8">
-  <h2 class="mb-2 text-lg font-semibold"><%= t("tablero.versiones") %></h2>
-  <table class="tabla">
-    <thead><tr><th><%= t("comun.fecha") %></th><th><%= t("comun.quien") %></th><th></th></tr></thead>
-    <tbody>
-      <% @versiones.each_with_index do |v, i| %>
-        <tr>
-          <td class="px-3 py-2"><%= l v.created_at, format: :short %><% if i.zero? %> <span class="badge"><%= t("tablero.vigente") %></span><% end %></td>
-          <td class="px-3 py-2"><%= v.usuario %></td>
-          <td class="px-3 py-2 text-right"><% unless i.zero? %><%= button_to t("tablero.restaurar"), tablero_restaurar_path(v), class: "btn btn-secondary btn-xs" %><% end %></td>
-        </tr>
-      <% end %>
-      <% if @versiones.empty? %><tr><td colspan="3" class="px-3 py-6 text-center text-stone-500"><%= t("tablero.sin_versiones") %></td></tr><% end %>
-    </tbody>
-  </table>
-</section>
+<%= render "reglas/versiones", versiones: @versiones, ambito: "tablero", restaurar: ->(v) { tablero_restaurar_path(v) } %>
 </section>
 </div>

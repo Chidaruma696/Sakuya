@@ -87,6 +87,7 @@ es:
       folios: Folios
       compras: Compras
       tablero: Tablero en Lisp
+      regla_corte: Cierre de caja en Lisp
     secciones_ayuda:
       para_ti: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
       negocio: Los datos del negocio como salen en el ticket, con el ticket al lado tal cual va a imprimirse. Vale para todas las sucursales.
@@ -965,6 +966,44 @@ es:
       motivo: 'Traspaso %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancelación de %{folio}: %{motivo}'
   regla_corte:
+    titulo: Cierre de caja en Lisp
+    ayuda: Al cerrar el corte, esta regla mira cómo salió el conteo y decide si se cierra, si queda por revisar o si se frena. Probar no guarda nada; al guardar, cada versión queda en la lista de abajo.
+    versiones: Versiones
+    vigente: vigente
+    restaurar: Volver a esta
+    sin_versiones: 'Todavía no hay versiones: se usa la regla de fábrica.'
+    avisos:
+      guardado: Regla del cierre guardada.
+      restaurado: Se volvió a la versión del %{fecha}.
+    caso:
+      titulo: Caso de prueba
+      esperado: Esperado en gaveta
+      contado: Contado
+      autorizado: Cierra alguien con permiso para diferencias
+    veredictos:
+      allow: Se cierra
+      review: Se cierra y queda por revisar
+      reject: Se frena
+    referencia:
+      lee: Lo que lee (en pesos)
+      contesta: Lo que contesta
+      funciones:
+        difference: contado − esperado; negativo = falta
+        counted: lo contado
+        expected: lo que debía haber
+        float: el fondo
+        sales: ventas del corte
+        cash_sales: efectivo de ventas
+        returns: devoluciones
+        withdrawals: retiros
+        limit: el tope de Ajustes › Caja (0 = sin tope)
+        tickets: tickets del corte
+        authorized: si quien cierra tiene permiso para diferencias
+      allow: se cierra
+      to_review: pide motivo y queda por revisar
+      reject: frena y deja reportado el intento
+      nucleo: Quien tiene permiso para diferencias nunca se queda sin poder cerrar; para esa persona, frenar es revisar.
+      ejemplo: Ejemplo
     fallo: 'La regla del corte falló y decidió la de fábrica: %{error}'
     motivos:
       over_limit: la diferencia (%{diferencia}) pasa del tope (%{tope})
