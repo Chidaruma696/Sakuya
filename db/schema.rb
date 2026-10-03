@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_000006) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_000007) do
   create_table "abonos", force: :cascade do |t|
     t.integer "cliente_id", null: false
     t.integer "corte_id", null: false
@@ -363,6 +363,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000006) do
     t.check_constraint "estado IN ('abierto', 'entregado', 'cancelado')", name: "pedidos_estado"
   end
 
+  create_table "plugins", force: :cascade do |t|
+    t.boolean "activo", default: false, null: false
+    t.string "autor"
+    t.text "codigo", null: false
+    t.datetime "created_at", null: false
+    t.string "descripcion"
+    t.string "identificador", null: false
+    t.string "nombre", null: false
+    t.datetime "updated_at", null: false
+    t.integer "usuario_id", null: false
+    t.string "version"
+    t.index ["identificador"], name: "index_plugins_on_identificador", unique: true
+    t.index ["usuario_id"], name: "index_plugins_on_usuario_id"
+  end
+
   create_table "precios_sucursal", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "precio_centavos", null: false
@@ -676,6 +691,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000006) do
   add_foreign_key "pedidos", "sucursales"
   add_foreign_key "pedidos", "usuarios"
   add_foreign_key "pedidos", "ventas"
+  add_foreign_key "plugins", "usuarios"
   add_foreign_key "precios_sucursal", "productos"
   add_foreign_key "precios_sucursal", "sucursales"
   add_foreign_key "promociones", "productos"

@@ -97,6 +97,7 @@ en:
       regla_factura: Invoices in Lisp
       archivo_reglas: Export and import
       repl: REPL
+      plugins: Plugins
     secciones_ayuda:
       para_ti: Applied the moment you pick one; saved on your user, they follow you to any computer.
       negocio: The business details as they appear on the ticket, with the ticket next to it exactly as it will print. Applies to every branch.
@@ -1124,6 +1125,46 @@ en:
       sum_of: adds up the column
       pluck: just that column
       take: the first n
+  plugins:
+    titulo: Plugins in Lisp
+    ayuda: A plugin is a .lisp file that brings what Sakuya does not bring out of the box. It can bring functions that every rule, the dashboard and the REPL can use, reports for the REPL and a new language for the interface. It only declares; installing it reads it but runs nothing, and it arrives switched off. If you remove one your rules use, those rules fail and the built-in one decides.
+    encendido: on
+    apagado: 'off'
+    encender: Switch on
+    apagar: Switch off
+    quitar: Remove
+    subido: 'uploaded %{fecha} by %{quien}'
+    no_se_lee: This plugin can no longer be read; upload it again or remove it.
+    sin_plugins: No plugins installed yet.
+    subir: Install or update a plugin
+    subir_ayuda: If there is already one with the same identifier, it is updated and keeps whether it was on.
+    instalar: Install
+    trae:
+      funciones:
+        one: 1 function
+        other: '%{count} functions'
+      informes:
+        one: 1 report
+        other: '%{count} reports'
+      traducciones:
+        one: 1 language
+        other: '%{count} languages'
+    avisos:
+      instalado: 'Plugin %{nombre} installed. It arrives off: switch it on to use it.'
+      actualizado: Plugin %{nombre} updated.
+      encendido: Plugin %{nombre} switched on.
+      apagado: Plugin %{nombre} switched off.
+      quitado: Plugin %{nombre} removed.
+      no_se_instalo: 'Not installed: %{error}'
+    errores:
+      cabecera: 'the file must start with (plugin "identifier" …)'
+      identificador: 'the identifier %{id} will not do: lowercase, digits and dashes, 2 to 31'
+      dato: 'I do not understand %{dato} in the header; it takes (name "…"), and also %{datos}'
+      forma: 'a plugin only declares define, report and translation; not this: %{forma}'
+      prefijo: '%{nombre} must carry the plugin prefix: %{id}/…'
+      informe: 'a report goes like this: (report "Title" (query …))'
+      traduccion: 'a translation goes like this: (translation "fr" "Français" ("key" "text") …)'
+      par: 'each text goes like this: ("key" "text"), and this does not: %{par}'
   reglas:
     archivo:
       ayuda: All the business rules in a single .lisp file, to back them up or take them to another installation. It is text you can read and edit by hand; each rule goes under its header.

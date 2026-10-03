@@ -43,15 +43,15 @@ module Tablero
 
   # Arma el tablero con el programa del negocio (o el de fábrica). Devuelve (piezas, error).
   def self.armar(datos, codigo: Regla.vigente("tablero")&.codigo)
-    return [ evaluar(DE_FABRICA, datos), nil ] if codigo.blank?
+    return [ evaluar(DE_FABRICA, datos, plugins: false), nil ] if codigo.blank?
     [ evaluar(codigo, datos), nil ]
   rescue Lisp::Error => e
-    [ evaluar(DE_FABRICA, datos), e.message ]
+    [ evaluar(DE_FABRICA, datos, plugins: false), e.message ]
   end
 
   # Evalúa un programa y devuelve sus piezas, o levanta Lisp::Error con lo que falló.
-  def self.evaluar(codigo, datos)
-    resultado = Lisp.ejecutar(codigo, funciones: funciones(datos), pasos: 20_000)
+  def self.evaluar(codigo, datos, plugins: true)
+    resultado = Lisp.ejecutar(codigo, funciones: funciones(datos), pasos: 20_000, preludio: plugins ? Plugin.preludio : [])
     unless resultado.is_a?(Hash) && resultado[:tipo] == :dashboard
       raise Lisp::Error, I18n.t("tablero.errores.sin_dashboard")
     end

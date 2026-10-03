@@ -28,11 +28,13 @@ module Lisp
   # ya evaluados y, si lo pide, el evaluador (para las que llaman a otras funciones, como map).
   Nativa = Data.define(:nombre, :aridad, :bloque, :con_evaluador)
 
-  # Lee y evalúa todo el texto; devuelve el valor de la última expresión.
-  def self.ejecutar(texto, funciones: {}, pasos: 10_000, profundidad: 100)
+  # Lee y evalúa todo el texto; devuelve el valor de la última expresión. `preludio` son formas ya
+  # leídas que se evalúan antes, en el mismo entorno (las funciones de los plugins).
+  def self.ejecutar(texto, funciones: {}, pasos: 10_000, profundidad: 100, preludio: [])
     entorno = Entorno.new(Base.entorno)
     funciones.each { |nombre, f| entorno.definir(nombre.to_s, f.is_a?(Nativa) ? f : Base.nativa(nombre.to_s, f)) }
     evaluador = Evaluador.new(pasos: pasos, profundidad: profundidad)
+    preludio.each { |forma| evaluador.evaluar(forma, entorno) }
     Lector.leer(texto).reduce(nil) { |_, forma| evaluador.evaluar(forma, entorno) }
   end
 

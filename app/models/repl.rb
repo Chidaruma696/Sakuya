@@ -25,7 +25,7 @@ module Repl
 
   # Evalúa el texto y devuelve el valor; levanta Lisp::Error con lo que falló.
   def self.evaluar(texto, sucursales:)
-    solo_lectura { Lisp.ejecutar(texto, funciones: funciones(sucursales), pasos: PASOS) }
+    solo_lectura { Lisp.ejecutar(texto, funciones: funciones(sucursales), pasos: PASOS, preludio: Plugin.preludio) }
   end
 
   # Corre el bloque con las escrituras bloqueadas en la base; si algo intenta escribir, es un error.

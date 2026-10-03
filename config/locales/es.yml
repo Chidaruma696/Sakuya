@@ -97,6 +97,7 @@ es:
       regla_factura: Facturas en Lisp
       archivo_reglas: Exportar e importar
       repl: REPL
+      plugins: Plugins
     secciones_ayuda:
       para_ti: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
       negocio: Los datos del negocio como salen en el ticket, con el ticket al lado tal cual va a imprimirse. Vale para todas las sucursales.
@@ -1124,6 +1125,46 @@ es:
       sum_of: suma la columna
       pluck: solo esa columna
       take: las primeras n
+  plugins:
+    titulo: Plugins en Lisp
+    ayuda: Un plugin es un archivo .lisp que trae lo que Sakuya no trae de fábrica. Puede traer funciones que luego usan todas las reglas, el tablero y el REPL, informes para el REPL y un idioma nuevo para la interfaz. Solo declara; al instalarlo se lee pero no se ejecuta, y llega apagado. Si quitas uno que usan tus reglas, esas reglas fallan y decide la de fábrica.
+    encendido: encendido
+    apagado: apagado
+    encender: Encender
+    apagar: Apagar
+    quitar: Quitar
+    subido: 'subido %{fecha} por %{quien}'
+    no_se_lee: Este plugin ya no se puede leer; súbelo de nuevo o quítalo.
+    sin_plugins: Todavía no hay plugins instalados.
+    subir: Instalar o poner al día un plugin
+    subir_ayuda: Si ya hay uno con el mismo identificador, se pone al día y conserva si estaba encendido.
+    instalar: Instalar
+    trae:
+      funciones:
+        one: 1 función
+        other: '%{count} funciones'
+      informes:
+        one: 1 informe
+        other: '%{count} informes'
+      traducciones:
+        one: 1 idioma
+        other: '%{count} idiomas'
+    avisos:
+      instalado: 'Plugin %{nombre} instalado. Llega apagado: enciéndelo para usarlo.'
+      actualizado: Plugin %{nombre} puesto al día.
+      encendido: Plugin %{nombre} encendido.
+      apagado: Plugin %{nombre} apagado.
+      quitado: Plugin %{nombre} quitado.
+      no_se_instalo: 'No se instaló: %{error}'
+    errores:
+      cabecera: 'el archivo tiene que empezar con (plugin "identificador" …)'
+      identificador: 'el identificador %{id} no sirve: minúsculas, números y guiones, de 2 a 31'
+      dato: 'no entiendo %{dato} en la cabecera; van (name "…"), y también %{datos}'
+      forma: 'un plugin solo declara define, report y translation; esto no: %{forma}'
+      prefijo: '%{nombre} tiene que llevar el prefijo del plugin: %{id}/…'
+      informe: 'un informe va así: (report "Título" (consulta …))'
+      traduccion: 'una traducción va así: (translation "fr" "Français" ("clave" "texto") …)'
+      par: 'cada texto va así: ("clave" "texto"), y esto no: %{par}'
   reglas:
     archivo:
       ayuda: Todas las reglas del negocio en un solo archivo .lisp, para respaldarlas o llevarlas a otra instalación. Es texto que se puede leer y editar a mano; cada regla va debajo de su cabecera.

@@ -1,0 +1,57 @@
+<%# Vive dentro de Ajustes, en las opciones avanzadas. %>
+<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+<%= render "ajustes/menu", actual: "plugins" %>
+<section class="min-w-0 space-y-6">
+  <div>
+    <h2 class="mb-1 text-xl font-bold"><%= t("plugins.titulo") %></h2>
+    <p class="max-w-3xl text-sm text-stone-600"><%= t("plugins.ayuda") %></p>
+  </div>
+
+  <% if @plugins.any? %>
+    <div class="space-y-3">
+      <% @plugins.each do |p| %>
+        <% leido = (p.leido rescue nil) %>
+        <div class="card text-sm" id="plugin_<%= p.identificador %>">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h3 class="font-semibold"><%= p.nombre %> <span class="font-mono text-xs text-stone-500"><%= p.identificador %><%= " · v#{p.version}" if p.version.present? %></span>
+                <span class="badge"><%= t(p.activo ? "plugins.encendido" : "plugins.apagado") %></span></h3>
+              <% if p.descripcion.present? %><p class="text-stone-600"><%= p.descripcion %></p><% end %>
+              <p class="text-xs text-stone-500"><%= [ p.autor.presence, t("plugins.subido", fecha: l(p.updated_at, format: :short), quien: p.usuario) ].compact.join(" · ") %></p>
+            </div>
+            <div class="flex gap-2">
+              <%= button_to t(p.activo ? "plugins.apagar" : "plugins.encender"), alternar_plugin_path(p), class: "btn #{p.activo ? 'btn-secondary' : 'btn-primary'} btn-sm" %>
+              <%= button_to t("plugins.quitar"), plugin_path(p), method: :delete, class: "btn btn-ghost btn-sm" %>
+            </div>
+          </div>
+          <% if leido %>
+            <ul class="mt-2 space-y-0.5 text-stone-700">
+              <% if leido.funciones.any? %><li><%= t("plugins.trae.funciones", count: leido.funciones.size) %>: <code class="codigo text-marca-800"><%= leido.funciones.map { |f| Lisp.a_texto(f[1]) }.join("  ") %></code></li><% end %>
+              <% if leido.informes.any? %><li><%= t("plugins.trae.informes", count: leido.informes.size) %>: <%= leido.informes.map(&:titulo).join(", ") %></li><% end %>
+              <% if leido.traducciones.any? %><li><%= t("plugins.trae.traducciones", count: leido.traducciones.size) %>: <%= leido.traducciones.map { |tr| "#{tr.nombre} (#{tr.textos.size})" }.join(", ") %></li><% end %>
+            </ul>
+          <% else %>
+            <p class="mt-2 text-red-800"><%= t("plugins.no_se_lee") %></p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-sm text-stone-500"><%= t("plugins.sin_plugins") %></p>
+  <% end %>
+
+  <div class="card space-y-3 text-sm">
+    <h3 class="font-semibold"><%= t("plugins.subir") %></h3>
+    <p class="text-stone-600"><%= t("plugins.subir_ayuda") %></p>
+    <%= form_with url: plugins_path, multipart: true, class: "flex flex-wrap items-center gap-3" do |f| %>
+      <%= f.file_field :archivo, accept: ".lisp,text/plain", required: true %>
+      <%= f.button class: "btn btn-primary" do %><i class="bi bi-upload"></i> <%= t("plugins.instalar") %><% end %>
+    <% end %>
+  </div>
+
+  <div class="card space-y-2 text-sm">
+    <h3 class="font-semibold"><%= t("reglas.ejemplo") %></h3>
+    <pre class="codigo overflow-x-auto rounded-lg bg-stone-50 p-3 text-xs ring-1 ring-stone-200"><%= Plugin::EJEMPLO %></pre>
+  </div>
+</section>
+</div>

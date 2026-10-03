@@ -15,6 +15,10 @@ Rails.application.routes.draw do
     post "/", action: :guardar, as: :guardar
     post "versiones/:id/restaurar", action: :restaurar, as: :restaurar
   end
+  # Plugins en Lisp: funciones para las reglas, informes para el REPL y traducciones.
+  resources :plugins, only: %i[index create destroy], path: "ajustes/avanzado/plugins" do
+    member { post :alternar }
+  end
   # El REPL de solo lectura: preguntarle cosas a los datos en vivo.
   get "ajustes/avanzado/repl", to: "repl#show", as: :repl
   post "ajustes/avanzado/repl", to: "repl#evaluar", as: :repl_evaluar

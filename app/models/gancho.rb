@@ -13,16 +13,17 @@ module Gancho
     def rechaza? = veredicto == :reject
   end
 
+  # La de fábrica corre sin plugins: si uno de ellos rompe algo, lo de fábrica sigue en pie.
   def decidir_con(codigo, datos)
-    return evaluar(self::DE_FABRICA, datos) if codigo.blank?
+    return evaluar(self::DE_FABRICA, datos, plugins: false) if codigo.blank?
     evaluar(codigo, datos)
   rescue Lisp::Error => e
-    evaluar(self::DE_FABRICA, datos).with(error: e.message)
+    evaluar(self::DE_FABRICA, datos, plugins: false).with(error: e.message)
   end
 
   # Evalúa un programa; levanta Lisp::Error si no termina en una decisión.
-  def evaluar(codigo, datos)
-    resultado = Lisp.ejecutar(codigo, funciones: funciones(datos).merge(decisiones(datos)))
+  def evaluar(codigo, datos, plugins: true)
+    resultado = Lisp.ejecutar(codigo, funciones: funciones(datos).merge(decisiones(datos)), preludio: plugins ? Plugin.preludio : [])
     resultado.is_a?(Decision) ? resultado : raise(Lisp::Error, I18n.t("reglas.errores.sin_decision", valor: Lisp.a_texto(resultado)))
   end
 

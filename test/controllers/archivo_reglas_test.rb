@@ -4,7 +4,7 @@ class ArchivoReglasTest < ActionDispatch::IntegrationTest
   setup { post entrar_path, params: { usuario: "admin", password: "secreto1" } }
 
   def subir(texto)
-    archivo = Rack::Test::UploadedFile.new(StringIO.new(texto), "text/plain", original_filename: "reglas.lisp")
+    archivo = Rack::Test::UploadedFile.new(StringIO.new(texto.dup), "text/plain", original_filename: "reglas.lisp")
     post importar_reglas_path, params: { archivo: archivo }
   end
 

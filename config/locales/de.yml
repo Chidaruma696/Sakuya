@@ -97,6 +97,7 @@ de:
       regla_factura: Rechnungen in Lisp
       archivo_reglas: Exportieren und importieren
       repl: REPL
+      plugins: Plugins
     secciones_ayuda:
       para_ti: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
       negocio: Die Betriebsdaten, wie sie auf dem Ticket stehen, mit dem Ticket daneben genau so, wie es gedruckt wird. Gilt für alle Filialen.
@@ -1124,6 +1125,46 @@ de:
       sum_of: summiert die Spalte
       pluck: nur diese Spalte
       take: die ersten n
+  plugins:
+    titulo: Plugins in Lisp
+    ayuda: Ein Plugin ist eine .lisp-Datei, die bringt, was Sakuya standardmäßig nicht hat. Es kann Funktionen bringen, die alle Regeln, das Dashboard und der REPL nutzen, Berichte für den REPL und eine neue Sprache für die Oberfläche. Es deklariert nur; beim Installieren wird es gelesen, aber nichts ausgeführt, und es kommt ausgeschaltet. Entfernst du eines, das deine Regeln nutzen, schlagen diese fehl und die Standardregel entscheidet.
+    encendido: an
+    apagado: aus
+    encender: Einschalten
+    apagar: Ausschalten
+    quitar: Entfernen
+    subido: 'hochgeladen %{fecha} von %{quien}'
+    no_se_lee: Dieses Plugin lässt sich nicht mehr lesen; erneut hochladen oder entfernen.
+    sin_plugins: Noch keine Plugins installiert.
+    subir: Plugin installieren oder aktualisieren
+    subir_ayuda: Gibt es schon eines mit derselben Kennung, wird es aktualisiert und bleibt an oder aus wie zuvor.
+    instalar: Installieren
+    trae:
+      funciones:
+        one: 1 Funktion
+        other: '%{count} Funktionen'
+      informes:
+        one: 1 Bericht
+        other: '%{count} Berichte'
+      traducciones:
+        one: 1 Sprache
+        other: '%{count} Sprachen'
+    avisos:
+      instalado: 'Plugin %{nombre} installiert. Es kommt ausgeschaltet: zum Nutzen einschalten.'
+      actualizado: Plugin %{nombre} aktualisiert.
+      encendido: Plugin %{nombre} eingeschaltet.
+      apagado: Plugin %{nombre} ausgeschaltet.
+      quitado: Plugin %{nombre} entfernt.
+      no_se_instalo: 'Nicht installiert: %{error}'
+    errores:
+      cabecera: 'die Datei muss mit (plugin "kennung" …) beginnen'
+      identificador: 'die Kennung %{id} taugt nicht: Kleinbuchstaben, Ziffern und Bindestriche, 2 bis 31'
+      dato: '%{dato} in der Überschrift verstehe ich nicht; erlaubt sind (name "…") und auch %{datos}'
+      forma: 'ein Plugin deklariert nur define, report und translation; das nicht: %{forma}'
+      prefijo: '%{nombre} muss das Präfix des Plugins tragen: %{id}/…'
+      informe: 'ein Bericht geht so: (report "Titel" (Abfrage …))'
+      traduccion: 'eine Übersetzung geht so: (translation "fr" "Français" ("schlüssel" "text") …)'
+      par: 'jeder Text geht so: ("schlüssel" "text"), und das nicht: %{par}'
   reglas:
     archivo:
       ayuda: Alle Regeln des Geschäfts in einer einzigen .lisp-Datei, zum Sichern oder für eine andere Installation. Es ist Text, den man lesen und von Hand bearbeiten kann; jede Regel steht unter ihrer Überschrift.
