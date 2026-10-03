@@ -29,7 +29,7 @@
 ---
 
 > [!NOTE]
-> Sakuya lleva un negocio pequeño desde **un solo servidor**, para la matriz y sus sucursales. El núcleo es fijo; lo que cada negocio hace distinto (quién vende a crédito, cuánta diferencia en la caja es demasiada, hasta dónde puede bajar un precio) está pensado para vivir en reglas escritas en Lisp, como Emacs vive dentro de Emacs Lisp. La primera pieza, el tablero de Inicio, ya funciona; las reglas de la caja son lo siguiente.
+> Sakuya lleva un negocio pequeño desde **un solo servidor**, para la matriz y sus sucursales. El núcleo es fijo; lo que cada negocio hace distinto (quién vende a crédito, cuánta diferencia en la caja es demasiada, hasta dónde puede bajar un precio) está pensado para vivir en reglas escritas en Lisp, como Emacs vive dentro de Emacs Lisp. El tablero de Inicio y las reglas de la caja, el inventario y las compras ya funcionan.
 
 > [!IMPORTANT]
 > **Sakuya es software experimental en su primera fase.** Puede tener errores y bastantes cosas van a cambiar entre versiones. Si quieres probarlo en tu negocio, adelante: hazlo con calma, respalda la base de datos a menudo y conserva tu sistema actual hasta que se gane tu confianza. Se comparte tal cual, sin garantía (como dice la [licencia Apache 2.0](LICENSE)), y no puedo hacerme responsable de lo que pase por su uso ni de los errores que tenga. Si encuentras uno, abrir un [issue](https://github.com/Chidaruma696/Sakuya/issues) ayuda mucho.
@@ -85,13 +85,29 @@ Cambia el orden, quita lo que no miras o calcula tus propias cifras:
 
 Se edita en **Ajustes › Opciones avanzadas › Tablero en Lisp**, con una vista previa que se puede llenar con cifras de prueba. No se guarda nada hasta que corre, se conservan todas las versiones, y si alguna guardada llega a romperse, aparece el tablero de fábrica.
 
+<br/>
+
+## ⚖️ Las reglas que deciden
+
+Cada punto delicado le pregunta a una regla antes de hacer nada: el precio de cada renglón, la venta entera antes de cobrarla, el cierre del corte, los retiros, las entradas, ajustes y mermas, lo que llega del proveedor y su factura. La regla contesta `(allow)`, `(to-review "motivo")` o `(reject "motivo")`:
+
+```lisp
+; Precio: rebajas chicas pasan, medianas se revisan, la cátsup nunca baja
+(cond ((= (discount) 0) (allow))
+      ((= (product) "CATS") (reject "La cátsup no se rebaja"))
+      ((<= (discount) 5) (allow))
+      (else (to-review "Rebaja mediana")))
+```
+
+De fábrica, todo lo irregular **se frena y se reporta**: no pasa y el intento queda en Revisión a nombre de quien lo hizo. Quien tiene el permiso nunca se queda atorado; para esa persona, frenar es pasar y quedar por revisar. Cada regla se prueba en su editor contra lo de verdad (el corte abierto, una venta ya cobrada, una factura registrada), guarda la versión del contrato de su gancho y todas viajan juntas en un archivo `.lisp` para respaldarlas o llevarlas a otro negocio.
+
 El Lisp es propio de Sakuya, escrito en Ruby (`lib/lisp*.rb`): un lector, un evaluador con límite de pasos y de profundidad, decimales para el dinero y funciones con nombre en inglés. Un programa solo puede llamar lo que la aplicación le da; no toca archivos, ni la red, ni la base de datos directamente.
 
 <br/>
 
 ## 🧭 Diseño
 
-- **La regla propone, el núcleo dispone.** Una regla responde con una decisión (`(allow)`, `(reject "motivo")`, `(to-review "motivo")`, un precio) y el núcleo la aplica por sus caminos de siempre, así que ninguna regla puede saltarse el kardex ni editar un libro.
+- **La regla propone, el núcleo dispone.** Una regla responde con una decisión (`(allow)`, `(reject "motivo")`, `(to-review "motivo")`) y el núcleo la aplica por sus caminos de siempre, así que ninguna regla puede saltarse el kardex ni editar un libro.
 - **Estricto de fábrica.** Lo que necesita a un supervisor lo espera. El negocio que lo quiera más suelto lo dice en una regla, y esa regla lleva versión y se prueba en seco contra datos reales antes de entrar en vigor.
 - **Los ganchos son un contrato.** Cerrar una venta, el precio de un renglón, la diferencia del corte, recibir mercancía: cada gancho lleva versión, para que actualizar Sakuya no rompa las reglas de un negocio.
 - **Una transacción por operación, dinero en centavos enteros, libros a los que solo se añade.** Cancelar compensa; nada se edita en su sitio.
@@ -102,7 +118,7 @@ En `docs/decisiones.md` están las razones de cada decisión; en `docs/arquitect
 
 ## 🗺️ Hoja de ruta
 
-- **Reglas en Lisp en la caja**, con el diseño de arriba, editadas junto al tablero en Opciones avanzadas.
+- **Un REPL de solo lectura** en el navegador, para preguntarle cosas a los datos en vivo.
 - **Clientes y crédito, y pedidos**, como módulos propios (el crédito prohibido de fábrica, permitido por regla).
 - **Plugins en Lisp**, incluidas traducciones de la interfaz a otros idiomas.
 - Impresión por ESC/POS, una caja que aguante que se caiga la red, PostgreSQL para muchas sucursales.

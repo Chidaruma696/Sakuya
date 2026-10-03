@@ -29,7 +29,7 @@
 ---
 
 > [!NOTE]
-> Sakuya runs a small business from **one server**, for the head office and its branches. The core is fixed; what each business does differently (who sells on credit, how big a till difference is too big, how low a price can go) is meant to live in rules written in Lisp, the way Emacs lives inside Emacs Lisp. The first piece of that, the home dashboard, already works; the rules at the till are next.
+> Sakuya runs a small business from **one server**, for the head office and its branches. The core is fixed; what each business does differently (who sells on credit, how big a till difference is too big, how low a price can go) is meant to live in rules written in Lisp, the way Emacs lives inside Emacs Lisp. The home dashboard and the rules at the till, in the stock and in purchases already work.
 
 > [!IMPORTANT]
 > **Sakuya is experimental software in its early phase.** It may have bugs, and a lot will change between versions. If you want to try it in your business, you are welcome to: do it calmly, back up your database often, and keep your current system until it earns your trust. It is shared as is, without warranty (as the [Apache 2.0 licence](LICENSE) says), and I cannot take responsibility for what happens through its use or for any errors it may have. If you find one, opening an [issue](https://github.com/Chidaruma696/Sakuya/issues) helps a lot.
@@ -85,13 +85,29 @@ Change the order, drop what you don't look at, or compute your own figures:
 
 It is edited in **Settings › Advanced options › Dashboard in Lisp**, with a preview that can be filled with sample figures. Nothing is saved until it runs, every version is kept, and if a saved one ever breaks, the factory dashboard shows instead.
 
+<br/>
+
+## ⚖️ Rules that decide
+
+Every sensitive spot asks a rule before doing anything: the price of each line, the whole sale before charging it, closing the session, withdrawals, loose entries, adjustments and waste, what arrives from the supplier and its invoice. The rule answers `(allow)`, `(to-review "reason")` or `(reject "reason")`:
+
+```lisp
+; Price: small discounts pass, medium ones go to review, ketchup never goes down
+(cond ((= (discount) 0) (allow))
+      ((= (product) "CATS") (reject "Ketchup is never discounted"))
+      ((<= (discount) 5) (allow))
+      (else (to-review "Medium discount")))
+```
+
+Out of the box, everything irregular **is stopped and reported**: it does not go through and the attempt lands in Review under the name of whoever tried it. Someone with the permission is never stuck; for them, stopping means going through and to review. Each rule is tested in its editor against the real thing (the open session, a sale already charged, a recorded invoice), keeps the contract version of its hook, and they all travel together in a `.lisp` file to back them up or take them to another business.
+
 The Lisp is Sakuya's own, written in Ruby (`lib/lisp*.rb`): a reader, an evaluator with limits on steps and depth, decimals for money, and functions named in English. A program can only call what the app hands it; it cannot touch files, the network or the database directly.
 
 <br/>
 
 ## 🧭 Design
 
-- **The rule proposes, the core disposes.** A rule answers with a decision (`(allow)`, `(reject "reason")`, `(to-review "reason")`, a price) and the core applies it through its usual paths, so no rule can skip the stock ledger or edit a book.
+- **The rule proposes, the core disposes.** A rule answers with a decision (`(allow)`, `(reject "reason")`, `(to-review "reason")`) and the core applies it through its usual paths, so no rule can skip the stock ledger or edit a book.
 - **Strict by default.** What needs a supervisor waits for one. A business that wants it looser says so in a rule, and that rule is versioned and tested dry against real data before it goes live.
 - **Hooks are a contract.** Closing a sale, the price of a line, the till difference, receiving goods: each hook has a version, so updating Sakuya does not break a business's rules.
 - **One transaction per operation, money in integer cents, ledgers that are only appended to.** Voiding compensates; nothing is edited in place.
@@ -102,7 +118,7 @@ The Lisp is Sakuya's own, written in Ruby (`lib/lisp*.rb`): a reader, an evaluat
 
 ## 🗺️ Roadmap
 
-- **Rules in Lisp at the till**, with the design above, edited next to the dashboard in Advanced options.
+- **A read-only REPL** in the browser, to ask the live data questions.
 - **Customers and credit, and orders**, as modules of their own (credit forbidden out of the box, allowed by rule).
 - **Plugins in Lisp**, including translations of the interface into other languages.
 - Printing to ESC/POS, a till that survives a dropped connection, PostgreSQL for many branches.
