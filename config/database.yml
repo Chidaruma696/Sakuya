@@ -6,7 +6,8 @@
 #
 # SQLite de fábrica: una tienda o unas pocas sucursales sin más. Para muchas sucursales pegando a la
 # vez, PostgreSQL: basta con DATABASE_URL=postgres://usuario:clave@servidor/base (manda sobre lo de
-# aquí). Las pruebas corren contra las dos en la CI.
+# aquí). Las pruebas corren contra las dos en la CI. Para mudar los datos de una a otra:
+# bin/rails "sakuya:copiar_base[postgres://…]" (con el esquema ya cargado en el destino).
 default: &default
   adapter: sqlite3
   max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>

@@ -20,7 +20,7 @@ El ticket sale también en bytes ESC/POS, el idioma de las térmicas, sin driver
 
 ## PostgreSQL cuando hacen falta muchas sucursales (3 oct 2026)
 
-SQLite sigue siendo lo de fábrica: un archivo, nada que administrar, y aguanta una tienda. Para muchas sucursales pegando a la vez, Sakuya corre igual en PostgreSQL con solo poner `DATABASE_URL`; no hizo falta tocar una línea de lógica, porque todo va por Active Record y las pocas consultas a mano son SQL común (los candados son `SELECT … FOR UPDATE` y los folios, un `UPDATE` atómico). Para que siga así, la CI corre todas las pruebas contra las dos bases. Pendiente: pasar los datos de una instalación con SQLite a PostgreSQL.
+SQLite sigue siendo lo de fábrica: un archivo, nada que administrar, y aguanta una tienda. Para muchas sucursales pegando a la vez, Sakuya corre igual en PostgreSQL con solo poner `DATABASE_URL`; no hizo falta tocar una línea de lógica, porque todo va por Active Record y las pocas consultas a mano son SQL común (los candados son `SELECT … FOR UPDATE` y los folios, un `UPDATE` atómico). Para que siga así, la CI corre todas las pruebas contra las dos bases. Para mudar una instalación que ya tiene datos: se carga el esquema en el PostgreSQL vacío y `bin/rails "sakuya:copiar_base[postgres://…]"` copia tabla por tabla en orden de llaves, ajusta las secuencias y compara los conteos; si el destino ya tiene datos, no toca nada.
 
 ## Plugins en Lisp (3 oct 2026)
 
