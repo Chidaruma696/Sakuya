@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_000011) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_000012) do
   create_table "abonos", force: :cascade do |t|
     t.integer "cliente_id", null: false
     t.integer "corte_id", null: false
@@ -646,10 +646,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000011) do
     t.string "estado", default: "cobrada", null: false
     t.date "fecha_negocio", null: false
     t.string "folio", null: false
+    t.boolean "fuera_de_linea", default: false, null: false
     t.integer "sucursal_id", null: false
     t.integer "total_centavos", null: false
     t.datetime "updated_at", null: false
     t.integer "usuario_id", null: false
+    t.datetime "vendida_en"
     t.index ["clave"], name: "index_ventas_on_clave", unique: true
     t.index ["cliente_id"], name: "index_ventas_on_cliente_id"
     t.index ["codigo"], name: "index_ventas_on_codigo", unique: true

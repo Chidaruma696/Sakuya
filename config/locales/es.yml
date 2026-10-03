@@ -320,6 +320,8 @@ es:
       venta_frenada: '%{motivo}. Así no se cobra: que la cobre alguien con permiso. Queda reportado.'
       credito_frenado: '%{motivo}. Así no se fía: que lo autorice alguien con permiso, o que pague de otra forma. Queda reportado.'
       a_cuenta_sin_cliente: para vender a cuenta hay que elegir el cliente
+      a_cuenta_sin_conexion: vender a cuenta necesita conexión
+      vendida_en_rara: la hora de la venta sin conexión no cuadra (más de 7 días o en el futuro)
       falta_dinero: 'falta dinero: el ticket es %{total} y se pagan %{pago}'
       no_efectivo_excede: una transferencia o depósito no puede pasarse del total
       sin_ticket_devolucion: 'Sin ticket no hay devolución: no se encontró «%{codigo}»'
@@ -555,6 +557,8 @@ es:
     sin_cliente: — sin cliente —
     abonos: Abonos
     credito_frenado: 'A cuenta de %{cliente} por %{monto} frenado: %{motivo}'
+    sin_conexion_aviso: 'Venta sin conexión que de otra forma se habría frenado: %{aviso}'
+    sin_conexion_excede_limite: la gaveta ya pasaba del tope de efectivo
     motivo_diferencia: Motivo de la diferencia
     regla_propia_aviso: 'El negocio tiene su propia regla para el cierre: si la diferencia pide motivo, escríbelo aquí.'
     cortes_cerrados: Cortes cerrados

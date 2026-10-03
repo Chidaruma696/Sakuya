@@ -19,31 +19,45 @@ module Caja
   # clave:  identificador único del ticket generado por la caja; repetir la misma clave devuelve la misma venta.
   # cliente: a quién se le vende (hace falta para vender a cuenta).
   # pedido: el pedido que se está cobrando; lo que él apartó sí se puede vender.
-  def self.cobrar!(sucursal:, usuario:, lineas:, pagos:, clave:, autorizador: nil, cliente: nil, pedido: nil)
+  # vendida_en: si la venta se hizo sin conexión y se sube ahora, cuándo se hizo. La mercancía ya
+  # salió, así que nada se frena: lo que una regla habría frenado (o lo apartado, o el tope de
+  # efectivo) se registra y queda reportado. A cuenta no se vende sin conexión.
+  def self.cobrar!(sucursal:, usuario:, lineas:, pagos:, clave:, autorizador: nil, cliente: nil, pedido: nil, vendida_en: nil)
     raise Error, I18n.t("errores.caja.clave_ticket") if clave.blank?
     if (previa = Venta.find_by(clave: clave))
       return previa
     end
+    sin_conexion = vendida_en.present?
     corte = Corte.abierto_en(sucursal) or raise Error, I18n.t("errores.caja.sin_caja", sucursal: sucursal.nombre)
-    raise Error, I18n.t("errores.caja.excede_limite", monto: Dinero.pesos(sucursal.limite_efectivo_centavos)) if corte.excede_limite?
+    raise Error, I18n.t("errores.caja.excede_limite", monto: Dinero.pesos(sucursal.limite_efectivo_centavos)) if corte.excede_limite? && !sin_conexion
     raise Error, I18n.t("errores.caja.ticket_vacio") if lineas.blank?
 
     codigo = Regla.vigente("precio")&.codigo
     fallos = [] # [clave del texto, error] de las reglas que tronaron
+    avisos = [] # sin conexión: lo que se habría frenado
 
     Venta.transaction do
-      preparadas = lineas.map { |l| preparar_linea(sucursal, l, autorizador, codigo, fallos) }
-      Apartado.comprobar!(sucursal, preparadas.map { |l| [ l[:producto], l[:cantidad] ] }, excepto: pedido)
+      preparadas = lineas.map { |l| preparar_linea(sucursal, l, autorizador, codigo, fallos, sin_conexion) }
+      begin
+        Apartado.comprobar!(sucursal, preparadas.map { |l| [ l[:producto], l[:cantidad] ] }, excepto: pedido)
+      rescue Apartado::Error => e
+        raise unless sin_conexion
+        avisos << e.message
+      end
       total = preparadas.sum { |l| l[:importe_centavos] }
       pagos_ok = preparar_pagos(pagos, total)
       cambio = pagos_ok.sum { |p| p[:monto_centavos] } - total
       a_cuenta = pagos_ok.select { |p| p[:forma] == Pago::A_CUENTA }.sum { |p| p[:monto_centavos] }
-      revisar_venta = juzgar_venta!(preparadas, pagos_ok, total, cambio, usuario, fallos)
+      raise Error, I18n.t("errores.caja.a_cuenta_sin_conexion") if sin_conexion && a_cuenta.positive?
+      revisar_venta = juzgar_venta!(preparadas, pagos_ok, total, cambio, usuario, fallos, sin_conexion)
       revisar_credito = juzgar_credito!(cliente, a_cuenta, total, usuario, fallos) if a_cuenta.positive?
+      avisos << I18n.t("caja.sin_conexion_excede_limite") if sin_conexion && corte.excede_limite?
+      revisar_venta = [ revisar_venta, *avisos.map { |a| I18n.t("caja.sin_conexion_aviso", aviso: a) } ].compact.join("\n").presence
 
       venta = Venta.create!(sucursal: sucursal, corte: corte, usuario: usuario, clave: clave, cliente: cliente,
                             folio: Folio.siguiente!(sucursal, "venta"), codigo: codigo_ticket(sucursal),
-                            total_centavos: total, cambio_centavos: cambio, fecha_negocio: Date.current)
+                            total_centavos: total, cambio_centavos: cambio, fecha_negocio: (vendida_en || Time.current).to_date,
+                            fuera_de_linea: sin_conexion, vendida_en: vendida_en)
       preparadas.each do |l|
         revisar, valor = l.extract!(:revisar, :valor_revision).values_at(:revisar, :valor_revision)
         linea = venta.lineas.create!(l)
@@ -102,7 +116,7 @@ module Caja
     end
   end
 
-  def self.preparar_linea(sucursal, l, autorizador, codigo, fallos)
+  def self.preparar_linea(sucursal, l, autorizador, codigo, fallos, sin_conexion = false)
     producto = Producto.activos.find(l[:producto_id])
     cantidad = BigDecimal(l[:cantidad].to_s).round(3)
     raise Error, I18n.t("errores.caja.cantidad_invalida", producto: producto.nombre) unless cantidad.positive?
@@ -125,24 +139,27 @@ module Caja
     fallos << [ "regla_precio.fallo", decision.error ] if decision.error
     cobro = I18n.t("caja.cobro", producto: producto.nombre, precio: Dinero.pesos(precio), regular: Dinero.pesos(legitimo))
     valor = Dinero.importe(cantidad, [ legitimo - precio, 0 ].max)
-    if decision.rechaza? && !autorizado
+    if decision.rechaza? && !autorizado && !sin_conexion
       raise Frenado.new(I18n.t("errores.caja.precio_frenado", cobro: cobro, motivo: decision.motivo), reporte: "#{cobro}: #{decision.motivo}", valor_centavos: valor)
     end
+    sin_conexion_frenaria = decision.rechaza? && !autorizado
     { producto: producto, cantidad: cantidad, precio_centavos: precio, catalogo_centavos: catalogo,
       importe_centavos: Dinero.importe(cantidad, precio), autorizado_por: (autorizador if autorizado && precio < legitimo),
       promocion: (precio == promo_precio ? promocion : nil),
-      revisar: (decision.permite? ? nil : "#{cobro}: #{decision.motivo}"), valor_revision: valor }
+      revisar: (decision.permite? ? nil : (sin_conexion_frenaria ? I18n.t("caja.sin_conexion_aviso", aviso: "#{cobro}: #{decision.motivo}") : "#{cobro}: #{decision.motivo}")),
+      valor_revision: valor }
   end
   private_class_method :preparar_linea
 
   # La venta entera, antes de cobrarla, por la regla de ventas. Si frena y quien cobra no tiene
   # caja.forzar_venta, no se cobra y queda reportado; si no, devuelve el motivo para revisarla (o nil).
-  def self.juzgar_venta!(preparadas, pagos, total, cambio, usuario, fallos)
+  def self.juzgar_venta!(preparadas, pagos, total, cambio, usuario, fallos, sin_conexion = false)
     autorizado = usuario.puede?("caja.forzar_venta")
     datos = ReglaVenta.datos(preparadas, pagos, total: total, cambio: cambio, autorizado: autorizado)
     decision = ReglaVenta.decidir(datos, codigo: Regla.vigente("venta")&.codigo)
     fallos << [ "regla_venta.fallo", decision.error ] if decision.error
     if decision.rechaza? && !autorizado
+      return I18n.t("caja.sin_conexion_aviso", aviso: decision.motivo) if sin_conexion
       raise Frenado.new(I18n.t("errores.caja.venta_frenada", motivo: decision.motivo), reporte: I18n.t("caja.venta_frenada", total: Dinero.pesos(total), motivo: decision.motivo), valor_centavos: total)
     end
     decision.permite? ? nil : decision.motivo

@@ -25,16 +25,36 @@ class CajaController < ApplicationController
     render json: datos
   end
 
+  # El catálogo de la sucursal para que la caja lo guarde y siga vendiendo sin conexión: lo mismo
+  # que da escanear, para todos los productos con precio, con sus códigos.
+  def catalogo
+    autorizar!("caja.vender")
+    codigos = CodigoBarras.pluck(:producto_id, :codigo).group_by(&:first).transform_values { |cs| cs.map(&:last) }
+    productos = Producto.activos.order(:nombre).filter_map do |p|
+      datos = datos_pos(p) or next
+      datos.merge(clave: p.clave, plu: p.plu, codigos: codigos.fetch(p.id, []))
+    end
+    render json: { sucursal_id: sucursal_actual.id, generado: Time.current.iso8601, productos: productos }
+  end
+
+  # Un token fresco para subir lo que se vendió sin conexión (la página guardada trae uno viejo).
+  def token
+    autorizar!("caja.vender")
+    render json: { token: form_authenticity_token }
+  end
+
   def cobrar
     autorizar!("caja.vender")
     lineas = JSON.parse(params[:lineas].to_s).map { |l| l.symbolize_keys.slice(:producto_id, :cantidad, :precio_centavos) }
     pagos = JSON.parse(params[:pagos].to_s).map(&:symbolize_keys)
+    vendida_en = vendida_sin_conexion
     autoriza = autorizador_o_revision("caja.bajar_precio")
     # Los precios los juzga la regla del precio dentro de Caja: lo que frena no se cobra, y lo que
     # pide revisión se cobra y queda por revisar.
     cliente = Cliente.activos.find_by(id: params[:cliente_id]) if params[:cliente_id].present? && Modulo.activo?("clientes")
     pedido = Pedido.abiertos.where(sucursal: sucursal_actual).find_by(id: params[:pedido_id]) if params[:pedido_id].present?
-    venta = Caja.cobrar!(sucursal: sucursal_actual, usuario: usuario_actual, lineas: lineas, pagos: pagos, clave: params[:clave], autorizador: autoriza, cliente: cliente, pedido: pedido)
+    venta = Caja.cobrar!(sucursal: sucursal_actual, usuario: usuario_actual, lineas: lineas, pagos: pagos, clave: params[:clave], autorizador: autoriza,
+                         cliente: cliente, pedido: pedido, vendida_en: vendida_en)
     pedido&.entregar!(venta)
     render json: { url: caja_ticket_path(venta, imprimir: 1), folio: venta.folio, cambio: Dinero.pesos(venta.cambio_centavos) }
   rescue Caja::Error, JSON::ParserError, ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid => e
@@ -177,6 +197,16 @@ class CajaController < ApplicationController
   end
 
   private
+
+  # La hora en que la caja vendió sin conexión; vale de los últimos 7 días hasta ahora.
+  def vendida_sin_conexion
+    return if params[:vendida_en].blank?
+    hora = Time.zone.iso8601(params[:vendida_en].to_s)
+    raise Caja::Error, t("errores.caja.vendida_en_rara") unless hora.between?(7.days.ago, 5.minutes.from_now)
+    hora
+  rescue ArgumentError
+    raise Caja::Error, t("errores.caja.vendida_en_rara")
+  end
 
   def corte_para_resumen
     raise SinPermiso, "caja.abrir" unless puede?("caja.abrir") || puede?("reportes.ver")

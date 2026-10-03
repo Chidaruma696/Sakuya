@@ -320,6 +320,8 @@ de:
       venta_frenada: '%{motivo}. So kann nicht kassiert werden: jemand mit Berechtigung muss kassieren. Es wurde gemeldet.'
       credito_frenado: '%{motivo}. So gibt es keinen Kredit: jemand mit Berechtigung muss es freigeben, oder anders bezahlen. Es wurde gemeldet.'
       a_cuenta_sin_cliente: für einen Verkauf auf Rechnung muss der Kunde gewählt werden
+      a_cuenta_sin_conexion: Verkauf auf Rechnung braucht eine Verbindung
+      vendida_en_rara: die Zeit des Offline-Verkaufs passt nicht (mehr als 7 Tage oder in der Zukunft)
       falta_dinero: 'Geld fehlt: das Ticket ist %{total} und gezahlt werden %{pago}'
       no_efectivo_excede: Überweisung oder Einzahlung dürfen die Summe nicht übersteigen
       sin_ticket_devolucion: 'Ohne Beleg keine Rückgabe: „%{codigo}“ nicht gefunden'
@@ -555,6 +557,8 @@ de:
     sin_cliente: — ohne Kunde —
     abonos: Kundenzahlungen
     credito_frenado: 'Auf Rechnung für %{cliente}, %{monto}, gestoppt: %{motivo}'
+    sin_conexion_aviso: 'Offline-Verkauf, der sonst gestoppt worden wäre: %{aviso}'
+    sin_conexion_excede_limite: die Lade war schon über der Bargeldgrenze
     motivo_diferencia: Grund der Differenz
     regla_propia_aviso: 'Dieses Geschäft hat eine eigene Abschlussregel: wenn die Differenz einen Grund braucht, hier eintragen.'
     cortes_cerrados: Geschlossene Abschnitte

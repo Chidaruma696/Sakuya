@@ -320,6 +320,8 @@ en:
       venta_frenada: '%{motivo}. It cannot be charged like this: have someone with permission charge it. It has been reported.'
       credito_frenado: '%{motivo}. No credit like this: have someone with permission authorise it, or pay another way. It has been reported.'
       a_cuenta_sin_cliente: to sell on account you must choose the customer
+      a_cuenta_sin_conexion: selling on account needs a connection
+      vendida_en_rara: the time of the offline sale does not add up (more than 7 days or in the future)
       falta_dinero: 'not enough money: the ticket is %{total} and %{pago} is being paid'
       no_efectivo_excede: a transfer or deposit cannot exceed the total
       sin_ticket_devolucion: 'No receipt, no return: “%{codigo}” was not found'
@@ -555,6 +557,8 @@ en:
     sin_cliente: — no customer —
     abonos: Customer payments
     credito_frenado: 'On account for %{cliente}, %{monto}, stopped: %{motivo}'
+    sin_conexion_aviso: 'Sale made offline that would otherwise have been stopped: %{aviso}'
+    sin_conexion_excede_limite: the drawer was already over the cash limit
     motivo_diferencia: Reason for the difference
     regla_propia_aviso: 'This business has its own closing rule: if the difference needs a reason, write it here.'
     cortes_cerrados: Closed sessions
