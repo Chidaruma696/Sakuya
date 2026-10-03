@@ -29,7 +29,7 @@ class Corte < ApplicationRecord
     Ajuste["caja.denominaciones"].delete(" ").split(",").map { |d| Dinero.centavos(d) }.select(&:positive?).uniq.sort.reverse
   end
 
-  # Diferencia (contado − esperado) a partir de la cual el cierre pide motivo; 0 = sin tope.
+  # Diferencia (contado − esperado) a partir de la cual la regla de fábrica del corte pide motivo; 0 = sin tope.
   def self.tope_diferencia_centavos
     Ajuste.entero("caja.tope_diferencia") * 100
   end
@@ -95,12 +95,6 @@ class Corte < ApplicationRecord
     esperado = efectivo_esperado_centavos
     update!(estado: "cerrado", contado_centavos: contado, esperado_centavos: esperado, desglose: limpio.presence,
             diferencia_centavos: contado - esperado, cerrado_en: Time.current, cerrado_por: usuario)
-  end
-
-  # ¿La diferencia del cierre se pasa del tope del negocio?
-  def self.excede_tope?(diferencia_centavos)
-    tope = tope_diferencia_centavos
-    tope.positive? && diferencia_centavos.abs > tope
   end
 
   # "3 × $500, 8 × $100", para enseñar cómo se contó.

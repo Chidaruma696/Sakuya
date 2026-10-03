@@ -41,7 +41,13 @@
           <div><div class="etiqueta-dato"><%= t("caja.suma") %></div><div class="valor-dato text-lg" data-gaveta-target="suma"><%= pesos(0) %></div></div>
           <div><div class="etiqueta-dato"><%= t("caja.diferencia") %></div><div class="valor-dato text-lg" data-gaveta-target="diferencia"><%= pesos(-@corte.efectivo_esperado_centavos) %></div></div>
         </div>
-        <% if Corte.tope_diferencia_centavos.positive? %>
+        <%# Con una regla propia la pantalla no sabe qué va a pedir: el motivo se enseña siempre y es opcional. %>
+        <% if Regla.vigente("corte") %>
+          <div>
+            <p class="mb-1 text-xs text-stone-600"><%= t("caja.regla_propia_aviso") %></p>
+            <%= f.text_field :motivo, placeholder: t("caja.motivo_diferencia"), class: "w-full rounded border border-stone-300 px-3 py-2" %>
+          </div>
+        <% elsif Corte.tope_diferencia_centavos.positive? %>
           <div class="hidden" data-gaveta-target="motivo">
             <p class="mb-1 text-xs text-amber-700"><%= t("caja.tope_diferencia_aviso", monto: pesos(Corte.tope_diferencia_centavos)) %><%= " " + t("caja.retiro_por_revisar") unless puede?("caja.diferencia") %></p>
             <%= f.text_field :motivo, placeholder: t("caja.motivo_diferencia"), class: "w-full rounded border border-stone-300 px-3 py-2" %>

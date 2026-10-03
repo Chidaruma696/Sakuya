@@ -114,6 +114,30 @@ class CajaControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, Revision.count
   end
 
+  test "la regla del corte rechaza: la cajera no cierra, la supervisora sí y queda por revisar" do
+    corte = cortes(:tienda_abierto)
+    Regla.create!(gancho: "corte", codigo: '(if (< (difference) 0) (reject "falta dinero") (allow))', usuario: usuarios(:admin))
+    get caja_corte_path
+    assert_match "su propia regla para el cierre", response.body, "con regla propia el motivo se enseña siempre"
+    post caja_cerrar_path, params: { contado: "490.00", motivo: "ni modo" }
+    assert_match "falta dinero. Así no se cierra", flash[:alert]
+    assert corte.reload.abierto?
+    post entrar_path, params: { usuario: "supervisora", password: "secreto1" }
+    post caja_cerrar_path, params: { contado: "490.00" }
+    assert_match "falta dinero: escribe el motivo", flash[:alert]
+    post caja_cerrar_path, params: { contado: "490.00", motivo: "se contó dos veces" }
+    assert_redirected_to caja_resumen_path(corte)
+    assert_equal "se contó dos veces", Revision.last.motivo
+  end
+
+  test "si la regla del corte truena decide la de fábrica y el fallo queda en revisión" do
+    Regla.create!(gancho: "corte", codigo: "(no-existe)", usuario: usuarios(:admin))
+    post caja_cerrar_path, params: { contado: "500.00" }
+    assert_redirected_to caja_resumen_path(cortes(:tienda_abierto))
+    assert_match "queda por revisar", flash[:notice]
+    assert_match "La regla del corte falló", Revision.last.motivo
+  end
+
   test "devolución solo con ticket" do
     venta = Caja.cobrar!(sucursal: @tienda, usuario: usuarios(:cajera), clave: "v1", lineas: [ @pesada ], pagos: [ { forma: "efectivo", monto_centavos: 30_000 } ])
     get caja_devolucion_path(codigo: "0000000000000")

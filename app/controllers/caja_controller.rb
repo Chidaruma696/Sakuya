@@ -65,20 +65,24 @@ class CajaController < ApplicationController
     redirect_to caja_corte_path, alert: e.message
   end
 
-  # Se cuenta por billetes y monedas (denominacion[centavos] = cuántos) o se teclea el total. Si la
-  # diferencia se pasa del tope y quien cierra no tiene caja.diferencia, hace falta motivo y cae a revisión.
+  # Se cuenta por billetes y monedas (denominacion[centavos] = cuántos) o se teclea el total. La
+  # diferencia la juzga la regla del corte (ReglaCorte): si pide revisión hace falta motivo, y si
+  # rechaza no se cierra, salvo que cierre alguien con caja.diferencia (entonces queda por revisar).
   def cerrar
     autorizar!("caja.abrir")
     raise ArgumentError, t("errores.caja.sin_caja_simple") unless @corte
     desglose = params.fetch(:denominacion, {}).to_unsafe_h.select { |_, c| c.to_i.positive? }
     contado = desglose.any? ? Corte.sumar(desglose) : Dinero.centavos(params[:contado])
     diferencia = contado - @corte.efectivo_esperado_centavos
-    autoriza = Corte.excede_tope?(diferencia) ? autorizador_o_revision("caja.diferencia") : usuario_actual
-    if autoriza.nil? && params[:motivo].blank?
-      raise ArgumentError, t("errores.corte.diferencia_sin_motivo", diferencia: Dinero.pesos(diferencia), tope: Dinero.pesos(Corte.tope_diferencia_centavos))
-    end
+    decision = ReglaCorte.decidir(@corte, contado_centavos: contado, usuario: usuario_actual)
+    raise ArgumentError, t("errores.corte.rechazado", motivo: decision.motivo) if decision.rechaza? && !puede?("caja.diferencia")
+    autoriza = decision.permite? ? usuario_actual : nil
+    raise ArgumentError, t("errores.corte.falta_motivo", motivo: decision.motivo) if autoriza.nil? && params[:motivo].blank?
+    # Si la regla del negocio tronó decidió la de fábrica, y el fallo se asienta en la revisión del corte.
+    motivo = [ params[:motivo], (t("regla_corte.fallo", error: decision.error) if decision.error) ].compact_blank.join("\n")
+    autoriza = nil if decision.error
     @corte.cerrar!(contado_centavos: contado, usuario: usuario_actual, desglose: desglose)
-    revisar_si_hace_falta(@corte, autoriza, motivo: params[:motivo], valor_centavos: diferencia.abs)
+    revisar_si_hace_falta(@corte, autoriza, motivo: motivo, valor_centavos: diferencia.abs)
     aviso = t("caja.avisos.corte_cerrado", folio: @corte.folio, esperado: Dinero.pesos(@corte.esperado_centavos), contado: Dinero.pesos(@corte.contado_centavos), diferencia: Dinero.pesos(@corte.diferencia_centavos))
     redirect_to caja_resumen_path(@corte), notice: aviso + (autoriza ? "" : t("caja.avisos.queda_por_revisar"))
   rescue ArgumentError, ActiveRecord::RecordInvalid => e

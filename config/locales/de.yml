@@ -260,7 +260,8 @@ de:
       cerrado: der Kassenabschnitt ist geschlossen
       sin_efectivo: so viel Bargeld ist nicht in der Lade (%{monto})
       ya_cerrado: der Kassenabschnitt ist bereits geschlossen
-      diferencia_sin_motivo: 'die Differenz (%{diferencia}) übersteigt die Grenze (%{tope}): Grund angeben'
+      falta_motivo: '%{motivo}: Grund angeben'
+      rechazado: '%{motivo}. So kann nicht abgeschlossen werden: neu zählen oder jemanden mit Berechtigung für Differenzen abschließen lassen'
       sin_caja_en_almacen: "%{sucursal} ist ein Lager: dort gibt es keine Kasse"
     caja:
       clave_ticket: der Ticketschlüssel fehlt
@@ -483,6 +484,7 @@ de:
     suma: Summe
     tope_diferencia_aviso: Die Differenz übersteigt %{monto}.
     motivo_diferencia: Grund der Differenz
+    regla_propia_aviso: 'Dieses Geschäft hat eine eigene Abschlussregel: wenn die Differenz einen Grund braucht, hier eintragen.'
     cortes_cerrados: Geschlossene Abschnitte
     resumen: Tagesübersicht
     ver_resumen: Übersicht
@@ -958,6 +960,14 @@ de:
       cancelado: Umlagerung %{folio} storniert
       motivo: 'Umlagerung %{folio}: %{origen} → %{destino}'
       cancelacion: 'Storno von %{folio}: %{motivo}'
+  regla_corte:
+    fallo: 'Die Regel für den Kassenabschluss ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    motivos:
+      over_limit: die Differenz (%{diferencia}) übersteigt die Grenze (%{tope})
+    errores:
+      sin_decision: 'die Regel für den Kassenabschluss muss mit (allow), (to-review "Grund") oder (reject "Grund") enden und endete mit %{valor}'
+      motivo: to-review und reject brauchen den Grund, als Zeichenkette oder Schlüsselwort
+      motivo_desconocido: 'unbekannter Grund :%{motivo}; bekannt sind: :%{motivos}'
   tablero:
     titulo: Übersicht in Lisp
     ayuda: Die Übersicht ist ein Programm. Ändere, welche Zahlen in welcher Reihenfolge erscheinen, berechne eigene und wähle die Listen darunter. Ausprobieren speichert nichts; jede gespeicherte Version bleibt unten in der Liste.

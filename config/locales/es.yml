@@ -260,7 +260,8 @@ es:
       cerrado: el corte está cerrado
       sin_efectivo: no hay tanto efectivo en la gaveta (%{monto})
       ya_cerrado: el corte ya está cerrado
-      diferencia_sin_motivo: 'la diferencia (%{diferencia}) pasa del tope (%{tope}): escribe el motivo'
+      falta_motivo: '%{motivo}: escribe el motivo'
+      rechazado: '%{motivo}. Así no se cierra: vuelve a contar o que cierre alguien con permiso para diferencias'
       sin_caja_en_almacen: "%{sucursal} es un almacén: ahí no hay caja"
     caja:
       clave_ticket: hace falta la clave del ticket
@@ -483,6 +484,7 @@ es:
     suma: Suma
     tope_diferencia_aviso: La diferencia pasa de %{monto}.
     motivo_diferencia: Motivo de la diferencia
+    regla_propia_aviso: 'El negocio tiene su propia regla para el cierre: si la diferencia pide motivo, escríbelo aquí.'
     cortes_cerrados: Cortes cerrados
     resumen: Resumen del día
     ver_resumen: Resumen
@@ -958,6 +960,14 @@ es:
       cancelado: Traspaso %{folio} cancelado
       motivo: 'Traspaso %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancelación de %{folio}: %{motivo}'
+  regla_corte:
+    fallo: 'La regla del corte falló y decidió la de fábrica: %{error}'
+    motivos:
+      over_limit: la diferencia (%{diferencia}) pasa del tope (%{tope})
+    errores:
+      sin_decision: 'la regla del corte tiene que terminar en (allow), (to-review "motivo") o (reject "motivo"), y terminó en %{valor}'
+      motivo: to-review y reject piden el motivo, como cadena o palabra clave
+      motivo_desconocido: 'no conozco el motivo :%{motivo}; los que sé decir: :%{motivos}'
   tablero:
     titulo: Tablero en Lisp
     ayuda: El tablero de Inicio es un programa. Cambia qué cifras salen y en qué orden, calcula las tuyas y elige las listas de abajo. Probar no guarda nada; al guardar, cada versión queda en la lista de abajo.

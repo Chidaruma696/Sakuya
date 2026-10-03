@@ -28,11 +28,9 @@ class CorteTest < ActiveSupport::TestCase
     assert_equal "", @corte.desglose_texto
   end
 
-  test "el tope de diferencia vale 0 de fábrica (sin tope) y se compara en valor absoluto" do
-    assert_not Corte.excede_tope?(-99_999)
+  test "el tope de diferencia vale 0 de fábrica (sin tope)" do
+    assert_equal 0, Corte.tope_diferencia_centavos
     Ajuste.guardar!("caja.tope_diferencia" => "50")
     assert_equal 5_000, Corte.tope_diferencia_centavos
-    assert_not Corte.excede_tope?(5_000)
-    assert Corte.excede_tope?(-5_001)
   end
 end
