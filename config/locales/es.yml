@@ -121,6 +121,7 @@ es:
         recepcion: Recepción de compra
         traspaso: Traspaso
         abono: Abono
+        pedido: Pedido de cliente
       sucursal: Anteponer el código de la sucursal
     avanzadas: Opciones avanzadas
   comun:
@@ -208,10 +209,13 @@ es:
       proveedores: Proveedores
       granel: Traspasos
       clientes: Clientes
+      pedidos: Pedidos
     botones:
       inicio: Inicio
       clientes: Clientes
       nuevo_cliente: Nuevo cliente
+      nuevo_pedido: Nuevo pedido
+      pedidos: Pedidos
       ventas_por_producto: Ventas por producto
       por_revisar: Por revisar
       ajustes: Ajustes
@@ -259,6 +263,9 @@ es:
     cerrada: Sesión cerrada
     inicia_para_continuar: Inicia sesión para continuar
   errores:
+    pedido:
+      sin_renglones: el pedido no trae renglones
+      no_abierto: el pedido %{folio} ya no está abierto
     abono:
       mayor_que_cero: el abono tiene que ser mayor que cero
       sin_caja: no hay caja abierta en %{sucursal} para recibir el abono
@@ -474,6 +481,7 @@ es:
     compras.facturar: Capturar y cancelar facturas del proveedor
     clientes.ver: Ver clientes
     clientes.editar: Dar de alta y editar clientes
+    clientes.pedidos: Tomar y cancelar pedidos de clientes
     clientes.abonar: Recibir abonos de clientes en la caja
     clientes.forzar_credito: Vender a cuenta aunque la regla de crédito lo frene (queda por revisar)
     compras.forzar_recepcion: Recibir mercancía que la regla de recepciones frena (queda por revisar)
@@ -844,6 +852,10 @@ es:
       ajuste:
         clave: Clave
         valor: Valor
+      pedido:
+        cliente: Cliente
+        fecha_entrega: Entrega
+        notas: Notas
       cliente:
         nombre: Nombre
         telefono: Teléfono
@@ -871,6 +883,28 @@ es:
       cliente: Cliente
       recepcion: Recepción
       factura_proveedor: Factura del proveedor
+  pedidos:
+    titulo: Pedidos
+    nuevo: Nuevo pedido
+    pedido: Pedido %{folio}
+    ayuda: Lo que el cliente quiere y para cuándo. No aparta existencias ni lleva precio; se cobra en la caja cuando pasa por él, con las reglas de siempre.
+    entrega: Entrega
+    que: Qué
+    guardar: Guardar pedido
+    cobrar: Cobrar en caja
+    cancelar: Cancelar pedido
+    cobrando: 'Cobrando el pedido %{folio} de %{cliente}.'
+    cobrado_en: Cobrado en la venta
+    cancelado_por: 'Cancelado: %{motivo}'
+    primero_cliente: Primero da de alta al cliente
+    sin_pedidos: No hay pedidos aquí.
+    estados:
+      abierto: Abiertos
+      entregado: Entregados
+      cancelado: Cancelados
+    avisos:
+      creado: Pedido %{folio} de %{cliente} guardado.
+      cancelado: Pedido %{folio} cancelado.
   clientes:
     cuenta:
       abono: Abono %{folio} (%{forma})

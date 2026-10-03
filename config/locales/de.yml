@@ -121,6 +121,7 @@ de:
         recepcion: Wareneingang
         traspaso: Umbuchung
         abono: Kundenzahlung
+        pedido: Kundenbestellung
       sucursal: Filialkürzel voranstellen
     avanzadas: Erweitert
   comun:
@@ -208,10 +209,13 @@ de:
       proveedores: Lieferanten
       granel: Umbuchungen
       clientes: Kunden
+      pedidos: Bestellungen
     botones:
       inicio: Start
       clientes: Kunden
       nuevo_cliente: Neuer Kunde
+      nuevo_pedido: Neue Bestellung
+      pedidos: Bestellungen
       ventas_por_producto: Verkäufe je Produkt
       por_revisar: Zu prüfen
       ajustes: Einstellungen
@@ -259,6 +263,9 @@ de:
     cerrada: Abgemeldet
     inicia_para_continuar: Zum Fortfahren anmelden
   errores:
+    pedido:
+      sin_renglones: die Bestellung hat keine Zeilen
+      no_abierto: die Bestellung %{folio} ist nicht mehr offen
     abono:
       mayor_que_cero: die Zahlung muss größer als null sein
       sin_caja: in %{sucursal} ist keine Kasse offen, um die Zahlung anzunehmen
@@ -474,6 +481,7 @@ de:
     compras.facturar: Lieferantenrechnungen erfassen und stornieren
     clientes.ver: Kunden ansehen
     clientes.editar: Kunden anlegen und bearbeiten
+    clientes.pedidos: Kundenbestellungen aufnehmen und stornieren
     clientes.abonar: Kundenzahlungen an der Kasse annehmen
     clientes.forzar_credito: Auf Rechnung verkaufen, auch wenn die Kreditregel stoppt (geht zur Prüfung)
     compras.forzar_recepcion: Ware annehmen, die die Eingangsregel stoppt (geht zur Prüfung)
@@ -844,6 +852,10 @@ de:
       ajuste:
         clave: Schlüssel
         valor: Wert
+      pedido:
+        cliente: Kunde
+        fecha_entrega: Lieferung
+        notas: Notizen
       cliente:
         nombre: Name
         telefono: Telefon
@@ -871,6 +883,28 @@ de:
       cliente: Kunde
       recepcion: Wareneingang
       factura_proveedor: Lieferantenrechnung
+  pedidos:
+    titulo: Bestellungen
+    nuevo: Neue Bestellung
+    pedido: Bestellung %{folio}
+    ayuda: Was der Kunde will und bis wann. Sie reserviert keinen Bestand und hat keinen Preis; kassiert wird an der Kasse beim Abholen, mit den üblichen Regeln.
+    entrega: Lieferung
+    que: Was
+    guardar: Bestellung speichern
+    cobrar: An der Kasse kassieren
+    cancelar: Bestellung stornieren
+    cobrando: 'Bestellung %{folio} von %{cliente} wird kassiert.'
+    cobrado_en: Kassiert im Verkauf
+    cancelado_por: 'Storniert: %{motivo}'
+    primero_cliente: Zuerst den Kunden anlegen
+    sin_pedidos: Hier gibt es keine Bestellungen.
+    estados:
+      abierto: Offen
+      entregado: Geliefert
+      cancelado: Storniert
+    avisos:
+      creado: Bestellung %{folio} von %{cliente} gespeichert.
+      cancelado: Bestellung %{folio} storniert.
   clientes:
     cuenta:
       abono: Zahlung %{folio} (%{forma})

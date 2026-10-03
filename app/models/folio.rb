@@ -6,7 +6,7 @@ class Folio < ApplicationRecord
 
   # Qué documentos numeran y con qué prefijo salen de fábrica.
   DOCUMENTOS = {
-    "venta" => "B", "corte" => "C", "devolucion" => "D", "conteo" => "K", "recepcion" => "RC", "traspaso" => "TG", "abono" => "AB"
+    "venta" => "B", "corte" => "C", "devolucion" => "D", "conteo" => "K", "recepcion" => "RC", "traspaso" => "TG", "abono" => "AB", "pedido" => "P"
   }.freeze
   MODOS = %w[por_documento unico].freeze
   PREFIJO = /\A[A-Z0-9]{0,4}\z/

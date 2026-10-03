@@ -1,0 +1,25 @@
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-bold"><%= t("pedidos.titulo") %></h1>
+  <%= link_to icono("plus-lg", t("pedidos.nuevo")), new_pedido_path, class: "btn btn-primary" if puede?("clientes.pedidos") %>
+</div>
+<div class="mb-4 flex gap-2 text-sm">
+  <% Pedido::ESTADOS.each do |e| %>
+    <%= link_to t("pedidos.estados.#{e}"), pedidos_path(estado: e), class: "btn btn-sm #{e == @estado ? 'btn-primary' : 'btn-secondary'}" %>
+  <% end %>
+</div>
+<table class="tabla">
+  <thead><tr><th><%= t("comun.folio") %></th><th><%= t("caja.cliente") %></th><th><%= t("pedidos.entrega") %></th><th><%= t("pedidos.que") %></th><th><%= t("comun.quien") %></th><th></th></tr></thead>
+  <tbody>
+    <% @pedidos.each do |p| %>
+      <tr>
+        <td class="px-3 py-2 font-mono"><%= link_to p.folio, pedido_path(p), class: "enlace" %></td>
+        <td class="px-3 py-2"><%= p.cliente %></td>
+        <td class="px-3 py-2 <%= 'text-red-700' if p.abierto? && p.fecha_entrega && p.fecha_entrega < Date.current %>"><%= p.fecha_entrega ? l(p.fecha_entrega) : "—" %></td>
+        <td class="px-3 py-2 text-stone-600"><%= p.lineas.map { |l| "#{cantidad(l.cantidad, l.producto)} #{l.producto.nombre}" }.join(", ") %></td>
+        <td class="px-3 py-2"><%= p.usuario %></td>
+        <td class="px-3 py-2 text-right"><%= link_to icono("cart3", t("pedidos.cobrar")), caja_path(pedido: p.id), class: "btn btn-success btn-xs" if p.abierto? && puede?("caja.vender") %></td>
+      </tr>
+    <% end %>
+    <% if @pedidos.empty? %><tr><td colspan="6" class="px-3 py-6 text-center text-stone-500"><%= t("pedidos.sin_pedidos") %></td></tr><% end %>
+  </tbody>
+</table>

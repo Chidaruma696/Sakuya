@@ -49,12 +49,13 @@ Un sistema, una base de datos y **módulos que se encienden o se apagan según e
 | Área | Qué hace | Regla que impone |
 |---|---|---|
 | **Caja** | Vender por código de barras, PLU o clave, pagos mixtos, ticket con su propio código, corte contado por billetes y monedas, retiros. | Devoluciones solo con ticket. La caja se cierra contando el dinero. |
-| **Inventario** | Existencias por sucursal y producto, entradas y ajustes a mano. | El kardex es de solo inserción. Un ajuste hecho sin permiso pasa a revisión. |
+| **Inventario** | Existencias por sucursal y producto, entradas y ajustes a mano. | El kardex es de solo inserción. Un ajuste sin permiso se frena y queda reportado. |
 | **Administración** | Productos, códigos de barras, precios por sucursal, promociones, usuarios, roles, sucursales. | Administración es el catálogo; Ajustes es cómo trabaja el negocio. Son pantallas distintas. |
-| **Revisión** | Todo lo que se hace sin el permiso adecuado. | Se puede hacer, con motivo, y espera a que un supervisor lo apruebe o se lo cargue a alguien. |
+| **Revisión** | Lo que una regla frenó y lo que pasó con permiso pero hay que mirar. | Nada irregular se pierde: un supervisor lo aprueba u observa, y puede cargárselo a alguien. |
 | **Compras** *(módulo)* | Proveedores, recepción de mercancía, facturas del proveedor, cuentas por pagar, pago desde la caja. | Solo la factura crea deuda. El dinero sale de la caja por un único camino. |
 | **Almacenes** *(módulo)* | Sucursales que solo guardan y traspasos entre sucursales. | Un almacén no tiene caja. Un traspaso sale y entra en una sola transacción. |
 | **Conteos** *(módulo)* | Conteos totales o parciales, escaneando piezas por su código; lo que va por kilo, litro o metro se teclea. | El conteo manda, y el faltante se carga al responsable. |
+| **Clientes** *(módulo, apagado de fábrica)* | Clientes, venta a cuenta, abonos en la caja, estado de cuenta y pedidos que se cobran en la caja. | De fábrica no se fía a nadie: el crédito lo decide una regla en Lisp. |
 
 Roles de fábrica: administrador, cajero (vender, abrir caja, retiros, ver inventario), almacenista y supervisor. La interfaz habla inglés, español y alemán.
 
@@ -119,7 +120,7 @@ En `docs/decisiones.md` están las razones de cada decisión; en `docs/arquitect
 ## 🗺️ Hoja de ruta
 
 - **Un REPL de solo lectura** en el navegador, para preguntarle cosas a los datos en vivo.
-- **Clientes y crédito, y pedidos**, como módulos propios (el crédito prohibido de fábrica, permitido por regla).
+- **Pedidos de sucursal a la matriz** con mínimos y máximos, y que un pedido de cliente pueda apartar existencias.
 - **Plugins en Lisp**, incluidas traducciones de la interfaz a otros idiomas.
 - Impresión por ESC/POS, una caja que aguante que se caiga la red, PostgreSQL para muchas sucursales.
 

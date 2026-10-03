@@ -68,6 +68,9 @@ Rails.application.routes.draw do
       post :abonar
     end
   end
+  resources :pedidos, only: %i[index new create show] do
+    member { post :cancelar }
+  end
 
   # Compras: proveedores, recepción, facturas y cuentas por pagar
   resources :proveedores, except: %i[show destroy]

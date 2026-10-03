@@ -16,7 +16,9 @@ Además del precio de cada renglón, la venta completa pasa por una regla justo 
 
 ## Clientes y crédito, con el crédito en Lisp (3 oct 2026)
 
-Los clientes vuelven como módulo propio, apagado de fábrica. Vender a cuenta es una forma de pago más ("A cuenta", que no mete dinero a la gaveta) y carga la cuenta del cliente, un libro de solo inserción. En vez de traer tipos de crédito fijos (contado, nota por nota, límite, semanal…), la decisión es un gancho en Lisp que lee saldo, límite, lo vencido a N días y los días sin abonar: de fábrica no se fía a nadie, y la regla de ejemplo es la del límite. Lo que frena no se cobra y queda reportado; con `clientes.forzar_credito` se fía y queda por revisar. Devolver algo vendido a cuenta baja primero la deuda de esa venta y solo lo demás sale de la gaveta.
+Los clientes vuelven como módulo propio, apagado de fábrica. Vender a cuenta es una forma de pago más ("A cuenta", que no mete dinero a la gaveta) y carga la cuenta del cliente, un libro de solo inserción. En vez de traer tipos de crédito fijos (contado, nota por nota, límite, semanal…), la decisión es un gancho en Lisp que lee saldo, límite, lo vencido a N días y los días sin abonar: de fábrica no se fía a nadie, y la regla de ejemplo es la del límite. Lo que frena no se cobra y queda reportado; con `clientes.forzar_credito` se fía y queda por revisar. Devolver algo vendido a cuenta baja primero la deuda de esa venta y solo lo demás sale de la gaveta. Los abonos entran a la caja abierta (el efectivo, a la gaveta del corte) y el estado de cuenta enseña lo que se debe por antigüedad.
+
+Los pedidos de clientes son lo mínimo: qué quiere y para cuándo. No apartan existencias ni llevan precio; se cobran en la caja ("Cobrar en caja" arma el ticket con su cliente) y pasan por las reglas de siempre, y al cobrarse quedan entregados y ligados a su venta. Los pedidos de una sucursal a la matriz con mínimos y máximos quedan para después.
 
 ## Las reglas viajan en un archivo .lisp (3 oct 2026)
 

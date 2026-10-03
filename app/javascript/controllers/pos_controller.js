@@ -5,11 +5,16 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["codigo", "cuerpo", "total", "efectivo", "transferencia", "deposito", "cambio", "aviso",
                     "pendiente", "pendienteNombre", "pendienteCantidad", "botonCobrar", "cliente", "credito"]
-  static values = { escanearUrl: String, cobrarUrl: String, clave: String }
+  static values = { escanearUrl: String, cobrarUrl: String, clave: String, pedido: Object }
 
   connect() {
     this.lineas = []
     this.pendienteProducto = null
+    // Cobrar un pedido: el ticket llega armado con sus renglones y su cliente.
+    if (this.pedidoValue.lineas) {
+      this.pedidoValue.lineas.forEach(l => this.agregar(l))
+      if (this.hasClienteTarget) this.clienteTarget.value = this.pedidoValue.cliente_id
+    }
     this.render()
   }
 
@@ -139,7 +144,9 @@ export default class extends Controller {
     cuerpo.append("pagos", JSON.stringify(pagos))
     cuerpo.append("clave", this.claveValue)
     if (this.hasClienteTarget) cuerpo.append("cliente_id", this.clienteTarget.value)
-    cuerpo.append("authenticity_token", document.querySelector("meta[name=csrf-token]").content)
+    if (this.pedidoValue.id) cuerpo.append("pedido_id", this.pedidoValue.id)
+    const token = document.querySelector("meta[name=csrf-token]")?.content
+    if (token) cuerpo.append("authenticity_token", token)
     this.botonCobrarTarget.disabled = true
     try {
       const r = await fetch(this.cobrarUrlValue, { method: "POST", body: cuerpo, headers: { Accept: "application/json" } })

@@ -4,6 +4,7 @@ class Cliente < ApplicationRecord
   has_many :movimientos_credito, class_name: "MovimientoCredito", dependent: :restrict_with_error
   has_many :ventas, dependent: :restrict_with_error
   has_many :abonos, dependent: :restrict_with_error
+  has_many :pedidos, dependent: :restrict_with_error
 
   validates :nombre, presence: true
   validates :limite_credito_centavos, numericality: { only_integer: true, greater_than_or_equal_to: 0 }

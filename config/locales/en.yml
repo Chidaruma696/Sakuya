@@ -121,6 +121,7 @@ en:
         recepcion: Goods receipt
         traspaso: Transfer
         abono: Customer payment
+        pedido: Customer order
       sucursal: Put the branch code in front
     avanzadas: Advanced
   comun:
@@ -208,10 +209,13 @@ en:
       proveedores: Suppliers
       granel: Transfers
       clientes: Customers
+      pedidos: Orders
     botones:
       inicio: Home
       clientes: Customers
       nuevo_cliente: New customer
+      nuevo_pedido: New order
+      pedidos: Orders
       ventas_por_producto: Sales by product
       por_revisar: To review
       ajustes: Settings
@@ -259,6 +263,9 @@ en:
     cerrada: Signed out
     inicia_para_continuar: Sign in to continue
   errores:
+    pedido:
+      sin_renglones: the order has no lines
+      no_abierto: order %{folio} is no longer open
     abono:
       mayor_que_cero: the payment must be greater than zero
       sin_caja: there is no open till at %{sucursal} to take the payment
@@ -474,6 +481,7 @@ en:
     compras.facturar: Enter and cancel supplier invoices
     clientes.ver: See customers
     clientes.editar: Add and edit customers
+    clientes.pedidos: Take and cancel customer orders
     clientes.abonar: Take customer payments at the till
     clientes.forzar_credito: Sell on account even if the credit rule stops it (it goes to review)
     compras.forzar_recepcion: Receive goods the receipts rule stops (it goes to review)
@@ -844,6 +852,10 @@ en:
       ajuste:
         clave: Key
         valor: Value
+      pedido:
+        cliente: Customer
+        fecha_entrega: Delivery
+        notas: Notes
       cliente:
         nombre: Name
         telefono: Phone
@@ -871,6 +883,28 @@ en:
       cliente: Customer
       recepcion: Receipt
       factura_proveedor: Supplier invoice
+  pedidos:
+    titulo: Orders
+    nuevo: New order
+    pedido: Order %{folio}
+    ayuda: What the customer wants and for when. It does not hold stock or carry prices; it is charged at the till when they pick it up, with the usual rules.
+    entrega: Delivery
+    que: What
+    guardar: Save order
+    cobrar: Charge at the till
+    cancelar: Cancel order
+    cobrando: 'Charging order %{folio} for %{cliente}.'
+    cobrado_en: Charged in sale
+    cancelado_por: 'Cancelled: %{motivo}'
+    primero_cliente: Add the customer first
+    sin_pedidos: No orders here.
+    estados:
+      abierto: Open
+      entregado: Delivered
+      cancelado: Cancelled
+    avisos:
+      creado: Order %{folio} for %{cliente} saved.
+      cancelado: Order %{folio} cancelled.
   clientes:
     cuenta:
       abono: Payment %{folio} (%{forma})

@@ -45,6 +45,10 @@ module RibbonHelper
       { id: :clientes, botones: [
         Boton.new(:clientes, :clientes_path, "clientes.ver", "people"),
         Boton.new(:nuevo_cliente, :new_cliente_path, "clientes.editar", "person-plus")
+      ] },
+      { id: :pedidos, botones: [
+        Boton.new(:nuevo_pedido, :new_pedido_path, "clientes.pedidos", "journal-plus"),
+        Boton.new(:pedidos, :pedidos_path, "clientes.ver", "journal-text")
       ] }
     ] },
     { id: :almacenes, grupos: [

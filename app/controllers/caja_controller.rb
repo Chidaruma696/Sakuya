@@ -4,9 +4,15 @@ class CajaController < ApplicationController
   before_action :cargar_corte
 
   # ---- vender
+  # Con ?pedido=ID, el ticket llega armado con lo del pedido y su cliente.
   def index
     autorizar!("caja.vender")
     @clave = SecureRandom.uuid
+    return unless params[:pedido].present? && Modulo.activo?("clientes")
+    @pedido = Pedido.abiertos.where(sucursal: sucursal_actual).includes(lineas: :producto).find_by(id: params[:pedido])
+    return unless @pedido
+    @pedido_pos = { id: @pedido.id, folio: @pedido.folio, cliente_id: @pedido.cliente_id,
+                    lineas: @pedido.lineas.filter_map { |l| datos_pos(l.producto)&.merge(cantidad: l.cantidad.to_f) } }
   end
 
   # Qué es lo que se escaneó o tecleó, para el ticket (JSON).
@@ -14,14 +20,9 @@ class CajaController < ApplicationController
     autorizar!("caja.vender")
     r = Escaneo.resolver(params[:codigo])
     return render json: { error: "No se encontró «#{params[:codigo]}»" }, status: :not_found unless r
-    p = r.producto
-    catalogo = p.precio_centavos_en(sucursal_actual)
-    return render json: { error: t("errores.caja.sin_precio", producto: p.nombre, sucursal: sucursal_actual.nombre) }, status: :unprocessable_entity unless catalogo.positive?
-    promos = Promocion.para(p, sucursal_actual).select(&:vigente?).map do |pr|
-      { tipo: pr.tipo, cantidad_minima: pr.cantidad_minima, precio_centavos: pr.precio_centavos, porcentaje: pr.porcentaje, nombre: pr.nombre }
-    end
-    render json: { producto_id: p.id, nombre: p.nombre, unidad: p.unidad, decimales: p.decimales,
-                   precio_centavos: catalogo, promociones: promos }
+    datos = datos_pos(r.producto)
+    return render json: { error: t("errores.caja.sin_precio", producto: r.producto.nombre, sucursal: sucursal_actual.nombre) }, status: :unprocessable_entity unless datos
+    render json: datos
   end
 
   def cobrar
@@ -33,6 +34,7 @@ class CajaController < ApplicationController
     # pide revisión se cobra y queda por revisar.
     cliente = Cliente.activos.find_by(id: params[:cliente_id]) if params[:cliente_id].present? && Modulo.activo?("clientes")
     venta = Caja.cobrar!(sucursal: sucursal_actual, usuario: usuario_actual, lineas: lineas, pagos: pagos, clave: params[:clave], autorizador: autoriza, cliente: cliente)
+    Pedido.abiertos.where(sucursal: sucursal_actual).find_by(id: params[:pedido_id])&.entregar!(venta) if params[:pedido_id].present?
     render json: { url: caja_ticket_path(venta, imprimir: 1), folio: venta.folio, cambio: Dinero.pesos(venta.cambio_centavos) }
   rescue Caja::Error, JSON::ParserError, ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid => e
     render json: { error: e.message }, status: :unprocessable_entity
@@ -149,6 +151,16 @@ class CajaController < ApplicationController
   end
 
   private
+
+  # Lo que la pantalla de caja necesita de un producto para armar su renglón; nil si no tiene precio aquí.
+  def datos_pos(p)
+    catalogo = p.precio_centavos_en(sucursal_actual)
+    return unless catalogo.positive?
+    promos = Promocion.para(p, sucursal_actual).select(&:vigente?).map do |pr|
+      { tipo: pr.tipo, cantidad_minima: pr.cantidad_minima, precio_centavos: pr.precio_centavos, porcentaje: pr.porcentaje, nombre: pr.nombre }
+    end
+    { producto_id: p.id, nombre: p.nombre, unidad: p.unidad, decimales: p.decimales, precio_centavos: catalogo, promociones: promos }
+  end
 
   # Un cierre frenado no se pierde: queda en Revisión a nombre de quien contó.
   def reportar_cierre_frenado(contado, diferencia, decision)

@@ -49,12 +49,13 @@ One system, one database, and **modules that turn on or off per business**. The 
 | Area | What it does | Rule it enforces |
 |---|---|---|
 | **Till** | Sell by barcode, PLU or code, split payments, receipts with their own barcode, cash count by denomination, cash drops. | Returns only with the receipt. The till is closed by counting the cash. |
-| **Stock** | Stock per branch and product, manual entries and adjustments. | The stock ledger (kardex) is insert-only. An adjustment made without permission goes to review. |
+| **Stock** | Stock per branch and product, manual entries and adjustments. | The stock ledger (kardex) is insert-only. An adjustment without permission is stopped and reported. |
 | **Administration** | Products, barcodes, prices per branch, promotions, users, roles, branches. | Admin is the catalogue; Settings is how the business works. They are separate screens. |
-| **Review** | Everything done without the right permission. | It can be done, with a reason, and it waits for a supervisor to approve it or charge it to someone. |
+| **Review** | What a rule stopped, and what went through with permission but needs a look. | Nothing irregular gets lost: a supervisor approves it or flags it, and can charge it to someone. |
 | **Purchasing** *(module)* | Suppliers, receiving goods, supplier invoices, accounts payable, paying from the till. | The invoice is the only thing that creates debt. Cash leaves the till by one path. |
 | **Warehouses** *(module)* | Storage-only branches and transfers between branches. | A warehouse has no till. A transfer goes out and in within one transaction. |
 | **Stock counts** *(module)* | Full or partial counts, scanning pieces by their code; what goes by kilo, litre or metre is typed. | The count rules, and the shortfall is charged to whoever is responsible. |
+| **Customers** *(module, off by default)* | Customers, selling on account, payments at the till, account statements and orders charged at the till. | Out of the box nobody gets credit: a rule in Lisp decides. |
 
 Factory roles: administrator, cashier (sell, open the till, cash drops, see stock), warehouse keeper and supervisor. The interface speaks English, Spanish and German.
 
@@ -119,7 +120,7 @@ The Lisp is Sakuya's own, written in Ruby (`lib/lisp*.rb`): a reader, an evaluat
 ## 🗺️ Roadmap
 
 - **A read-only REPL** in the browser, to ask the live data questions.
-- **Customers and credit, and orders**, as modules of their own (credit forbidden out of the box, allowed by rule).
+- **Branch orders to the head office** with minimums and maximums, and customer orders that can hold stock.
 - **Plugins in Lisp**, including translations of the interface into other languages.
 - Printing to ESC/POS, a till that survives a dropped connection, PostgreSQL for many branches.
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_000005) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_000006) do
   create_table "abonos", force: :cascade do |t|
     t.integer "cliente_id", null: false
     t.integer "corte_id", null: false
@@ -334,6 +334,35 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000005) do
     t.check_constraint "estado IN ('vigente', 'anulado')", name: "pagos_proveedor_estado"
   end
 
+  create_table "pedido_lineas", force: :cascade do |t|
+    t.decimal "cantidad", precision: 12, scale: 3, null: false
+    t.integer "pedido_id", null: false
+    t.integer "producto_id", null: false
+    t.index ["pedido_id"], name: "index_pedido_lineas_on_pedido_id"
+    t.index ["producto_id"], name: "index_pedido_lineas_on_producto_id"
+    t.check_constraint "cantidad > 0", name: "pedido_lineas_cantidad"
+  end
+
+  create_table "pedidos", force: :cascade do |t|
+    t.integer "cliente_id", null: false
+    t.datetime "created_at", null: false
+    t.string "estado", default: "abierto", null: false
+    t.date "fecha_entrega"
+    t.string "folio", null: false
+    t.string "motivo_cancelacion"
+    t.string "notas"
+    t.integer "sucursal_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "usuario_id", null: false
+    t.integer "venta_id"
+    t.index ["cliente_id"], name: "index_pedidos_on_cliente_id"
+    t.index ["sucursal_id", "folio"], name: "index_pedidos_on_sucursal_id_and_folio", unique: true
+    t.index ["sucursal_id"], name: "index_pedidos_on_sucursal_id"
+    t.index ["usuario_id"], name: "index_pedidos_on_usuario_id"
+    t.index ["venta_id"], name: "index_pedidos_on_venta_id"
+    t.check_constraint "estado IN ('abierto', 'entregado', 'cancelado')", name: "pedidos_estado"
+  end
+
   create_table "precios_sucursal", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "precio_centavos", null: false
@@ -641,6 +670,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000005) do
   add_foreign_key "pagos_proveedor", "sucursales"
   add_foreign_key "pagos_proveedor", "usuarios"
   add_foreign_key "pagos_proveedor", "usuarios", column: "anulado_por_id"
+  add_foreign_key "pedido_lineas", "pedidos"
+  add_foreign_key "pedido_lineas", "productos"
+  add_foreign_key "pedidos", "clientes"
+  add_foreign_key "pedidos", "sucursales"
+  add_foreign_key "pedidos", "usuarios"
+  add_foreign_key "pedidos", "ventas"
   add_foreign_key "precios_sucursal", "productos"
   add_foreign_key "precios_sucursal", "sucursales"
   add_foreign_key "promociones", "productos"

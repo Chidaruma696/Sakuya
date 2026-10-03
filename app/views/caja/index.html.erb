@@ -4,11 +4,14 @@
   <% if @corte.excede_limite? %>
     <div class="mb-4 rounded border-l-4 border-red-600 bg-red-50 p-3 text-sm"><%= t("caja.excede_limite_html", monto: pesos(sucursal_actual.limite_efectivo_centavos), enlace: link_to(t("caja.haz_un_retiro"), caja_corte_path, class: "enlace")) %></div>
   <% end %>
-  <div class="grid gap-4 lg:grid-cols-3" data-controller="pos" data-pos-escanear-url-value="<%= caja_escanear_path %>" data-pos-cobrar-url-value="<%= caja_cobrar_path %>" data-pos-clave-value="<%= @clave %>">
+  <div class="grid gap-4 lg:grid-cols-3" data-controller="pos" data-pos-escanear-url-value="<%= caja_escanear_path %>" data-pos-cobrar-url-value="<%= caja_cobrar_path %>" data-pos-clave-value="<%= @clave %>"<% if @pedido_pos %> data-pos-pedido-value="<%= @pedido_pos.to_json %>"<% end %>>
     <div class="lg:col-span-2">
       <div class="mb-3 flex gap-3">
         <input data-pos-target="codigo" data-action="keydown.enter->pos#escanear" autofocus autocomplete="off" placeholder="<%= t("caja.escanea_o_teclea") %>" class="flex-1 rounded border border-stone-300 px-3 py-3 font-mono text-lg">
       </div>
+      <% if @pedido %>
+        <div class="mb-2 rounded bg-blue-50 px-3 py-2 text-sm text-blue-900" id="cobrando_pedido"><%= t("pedidos.cobrando", folio: @pedido.folio, cliente: @pedido.cliente) %></div>
+      <% end %>
       <div id="aviso" data-pos-target="aviso" class="mb-2 empty:hidden rounded bg-red-50 px-3 py-2 text-sm text-red-800"></div>
       <div data-pos-target="pendiente" class="mb-2 hidden rounded bg-blue-50 p-3 text-sm">
         <span data-pos-target="pendienteNombre" class="font-semibold"></span> ·
