@@ -93,3 +93,35 @@ jobs:
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test
 
+
+  # Las mismas pruebas contra PostgreSQL, para las instalaciones con muchas sucursales.
+  test_postgres:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: sakuya
+          POSTGRES_PASSWORD: prueba
+        ports:
+          - 5432:5432
+        options: --health-cmd "pg_isready -U sakuya" --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libvips libpq-dev
+
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://sakuya:prueba@localhost:5432/sakuya_test
+        run: bin/rails db:test:prepare test

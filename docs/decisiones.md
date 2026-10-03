@@ -14,6 +14,10 @@ Cada gancho lleva un número de contrato (`VERSION` en su módulo) y cada regla 
 
 Además del precio de cada renglón, la venta completa pasa por una regla justo antes de cobrarse: total, productos, formas de pago, hora y día. De fábrica no frena nada, porque los precios ya tienen su regla y una venta normal no es irregular; está para lo que cada negocio necesita (nada de alcohol a deshoras, ventas grandes a revisión). Lo que frena no se cobra y queda reportado en el corte; con el permiso nuevo `caja.forzar_venta` se cobra y queda por revisar. Lo mismo al recibir mercancía: una regla mira qué llega, de quién y con qué papeles (remisión, factura); de fábrica no frena nada, lo que frena no entra y queda reportado en el proveedor, y con `compras.forzar_recepcion` entra por revisar.
 
+## PostgreSQL cuando hacen falta muchas sucursales (3 oct 2026)
+
+SQLite sigue siendo lo de fábrica: un archivo, nada que administrar, y aguanta una tienda. Para muchas sucursales pegando a la vez, Sakuya corre igual en PostgreSQL con solo poner `DATABASE_URL`; no hizo falta tocar una línea de lógica, porque todo va por Active Record y las pocas consultas a mano son SQL común (los candados son `SELECT … FOR UPDATE` y los folios, un `UPDATE` atómico). Para que siga así, la CI corre todas las pruebas contra las dos bases. Pendiente: pasar los datos de una instalación con SQLite a PostgreSQL.
+
 ## Plugins en Lisp (3 oct 2026)
 
 Un plugin es un archivo `.lisp` que solo declara: una cabecera `(plugin "id" …)`, funciones con el prefijo del plugin (`(define (fonda/margen …) …)`) que luego usan todas las reglas, el tablero y el REPL, informes con nombre que salen como botones en el REPL, y traducciones (`(translation "fr" "Français" ("clave" "texto") …)`). Al instalarlo se lee y se revisa, pero no se ejecuta nada; cualquier otra forma se rechaza, y llega apagado. Las funciones llevan prefijo para no pisar las de Sakuya ni las de otro plugin. Lo de fábrica corre sin plugins: si un plugin rompe algo, la regla del negocio falla y decide la de fábrica, como con cualquier error.

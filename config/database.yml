@@ -4,6 +4,9 @@
 #   Ensure the SQLite 3 gem is defined in your Gemfile
 #   gem "sqlite3"
 #
+# SQLite de fábrica: una tienda o unas pocas sucursales sin más. Para muchas sucursales pegando a la
+# vez, PostgreSQL: basta con DATABASE_URL=postgres://usuario:clave@servidor/base (manda sobre lo de
+# aquí). Las pruebas corren contra las dos en la CI.
 default: &default
   adapter: sqlite3
   max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>

@@ -120,7 +120,7 @@ En `docs/decisiones.md` están las razones de cada decisión; en `docs/arquitect
 ## 🗺️ Hoja de ruta
 
 - **Pedidos de sucursal a la matriz** con mínimos y máximos, y que un pedido de cliente pueda apartar existencias.
-- Impresión por ESC/POS, una caja que aguante que se caiga la red, PostgreSQL para muchas sucursales.
+- Impresión por ESC/POS y una caja que aguante que se caiga la red.
 
 <br/>
 

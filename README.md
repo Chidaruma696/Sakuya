@@ -120,7 +120,7 @@ The Lisp is Sakuya's own, written in Ruby (`lib/lisp*.rb`): a reader, an evaluat
 ## 🗺️ Roadmap
 
 - **Branch orders to the head office** with minimums and maximums, and customer orders that can hold stock.
-- Printing to ESC/POS, a till that survives a dropped connection, PostgreSQL for many branches.
+- Printing to ESC/POS and a till that survives a dropped connection.
 
 <br/>
 
