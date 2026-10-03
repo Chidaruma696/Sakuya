@@ -14,6 +14,10 @@ Cada gancho lleva un número de contrato (`VERSION` en su módulo) y cada regla 
 
 Además del precio de cada renglón, la venta completa pasa por una regla justo antes de cobrarse: total, productos, formas de pago, hora y día. De fábrica no frena nada, porque los precios ya tienen su regla y una venta normal no es irregular; está para lo que cada negocio necesita (nada de alcohol a deshoras, ventas grandes a revisión). Lo que frena no se cobra y queda reportado en el corte; con el permiso nuevo `caja.forzar_venta` se cobra y queda por revisar. Lo mismo al recibir mercancía: una regla mira qué llega, de quién y con qué papeles (remisión, factura); de fábrica no frena nada, lo que frena no entra y queda reportado en el proveedor, y con `compras.forzar_recepcion` entra por revisar.
 
+## Las reglas viajan en un archivo .lisp (3 oct 2026)
+
+Ajustes › Opciones avanzadas › Exportar e importar baja todas las reglas vigentes en un solo archivo de texto, cada una debajo de una cabecera `;;; hook: corte (contract 1)`, y lo vuelve a subir. Se eligió texto plano y no JSON porque se lee y se edita a mano, y se puede pasar de un negocio a otro como quien comparte un init de Emacs. Al subir, lo que cambió se asienta como versión nueva con la versión de contrato que trae; si una sola regla no se lee, no entra ninguna.
+
 ## Probar en seco con lo de verdad (3 oct 2026)
 
 Las reglas que deciden se prueban en su editor contra datos reales sin tocar nada: el cierre y los retiros contra el corte abierto de la sucursal, el precio repasando una venta ya cobrada renglón por renglón, las facturas contra una ya registrada y sus recepciones, el inventario con las existencias de hoy. No hizo falta la transacción que se deshace del plan original, porque ninguna regla escribe: solo lee. El editor enseña lo que pasaría de verdad, con el permiso incluido: si la regla frena a alguien que tiene permiso, sale como revisión.

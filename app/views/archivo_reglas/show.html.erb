@@ -1,0 +1,33 @@
+<%# Vive dentro de Ajustes, en las opciones avanzadas: todas las reglas en un archivo. %>
+<div class="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+<%= render "ajustes/menu", actual: "archivo_reglas" %>
+<section class="min-w-0 space-y-6">
+  <div>
+    <h2 class="mb-1 text-xl font-bold"><%= t("ajustes.secciones.archivo_reglas") %></h2>
+    <p class="max-w-3xl text-sm text-stone-600"><%= t("reglas.archivo.ayuda") %></p>
+  </div>
+
+  <div class="card space-y-3 text-sm">
+    <h3 class="font-semibold"><%= t("reglas.archivo.exportar") %></h3>
+    <% if @vigentes.any? %>
+      <ul class="space-y-0.5">
+        <% @vigentes.each do |r| %>
+          <li><%= t("ajustes.secciones.#{r.gancho == "tablero" ? r.gancho : "regla_#{r.gancho}"}") %> <span class="text-xs text-stone-500"><%= t("reglas.contrato", n: r.version) %> · <%= l r.created_at, format: :short %> · <%= r.usuario %></span></li>
+        <% end %>
+      </ul>
+      <%= link_to exportar_reglas_path, class: "btn btn-secondary" do %><i class="bi bi-download"></i> <%= t("reglas.archivo.bajar") %><% end %>
+    <% else %>
+      <p class="text-stone-500"><%= t("reglas.archivo.todas_de_fabrica") %></p>
+    <% end %>
+  </div>
+
+  <div class="card space-y-3 text-sm">
+    <h3 class="font-semibold"><%= t("reglas.archivo.importar") %></h3>
+    <p class="text-stone-600"><%= t("reglas.archivo.importar_ayuda") %></p>
+    <%= form_with url: importar_reglas_path, multipart: true, class: "flex flex-wrap items-center gap-3" do |f| %>
+      <%= f.file_field :archivo, accept: ".lisp,text/plain", required: true %>
+      <%= f.button class: "btn btn-primary" do %><i class="bi bi-upload"></i> <%= t("reglas.archivo.subir") %><% end %>
+    <% end %>
+  </div>
+</section>
+</div>

@@ -94,6 +94,7 @@ de:
       regla_movimiento: Bestand in Lisp
       regla_recepcion: Wareneingänge in Lisp
       regla_factura: Rechnungen in Lisp
+      archivo_reglas: Exportieren und importieren
     secciones_ayuda:
       para_ti: Gelten sofort bei der Auswahl; werden in deinem Benutzer gespeichert und gelten an jedem Gerät.
       negocio: Die Betriebsdaten, wie sie auf dem Ticket stehen, mit dem Ticket daneben genau so, wie es gedruckt wird. Gilt für alle Filialen.
@@ -990,6 +991,21 @@ de:
       motivo: 'Umlagerung %{folio}: %{origen} → %{destino}'
       cancelacion: 'Storno von %{folio}: %{motivo}'
   reglas:
+    archivo:
+      ayuda: Alle Regeln des Geschäfts in einer einzigen .lisp-Datei, zum Sichern oder für eine andere Installation. Es ist Text, den man lesen und von Hand bearbeiten kann; jede Regel steht unter ihrer Überschrift.
+      exportar: Aktuelle Regeln herunterladen
+      bajar: Datei herunterladen
+      todas_de_fabrica: Noch keine eigenen Regeln; alles nutzt die Standardregeln.
+      importar: Datei hochladen
+      importar_ayuda: Jede geänderte Regel wird als neue Version gespeichert, mit der Vertragsversion, die sie mitbringt. Ist eine nicht lesbar, wird keine importiert.
+      subir: Importieren
+      sin_archivo: Datei auswählen.
+      vacio: die Datei enthält keine Regeln (jede steht unter ";;; hook:")
+      gancho: 'unbekannter Haken %{gancho}'
+      repetido: 'der Haken %{gancho} kommt zweimal vor'
+      no_se_importo: 'Nichts importiert: %{error}'
+      importadas: 'Importiert: %{ganchos}.'
+      sin_cambios: Die Datei enthält dieselben Regeln wie jetzt; nichts geändert.
     por_permiso: 'Die Regel stoppt es, aber die Person hat die Berechtigung: es geht durch und zur Prüfung.'
     con_corte_real: Mit dem echten offenen Abschnitt
     con_corte_inventado: Mit einem erfundenen

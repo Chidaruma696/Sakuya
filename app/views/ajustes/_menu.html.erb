@@ -7,6 +7,7 @@
   <% avanzadas = [ [ "tablero", "braces", tablero_editar_path ], [ "regla_corte", "cash-coin", regla_editar_path("corte") ], [ "regla_precio", "tag", regla_editar_path("precio") ], [ "regla_venta", "cart-check", regla_editar_path("venta") ],
                    [ "regla_retiro", "safe", regla_editar_path("retiro") ], [ "regla_movimiento", "box-seam", regla_editar_path("movimiento") ] ] %>
   <% avanzadas += [ [ "regla_recepcion", "truck", regla_editar_path("recepcion") ], [ "regla_factura", "receipt-cutoff", regla_editar_path("factura") ] ] if Modulo.activo?("compras") %>
+  <% avanzadas << [ "archivo_reglas", "file-earmark-code", archivo_reglas_path ] %>
 <% end %>
 <% clase = ->(activa) { "flex items-center gap-3 rounded-md px-3 py-2 text-sm whitespace-nowrap #{activa ? 'bg-white font-semibold text-marca-900 shadow-sm ring-1 ring-marca-200' : 'text-stone-700 hover:bg-white'}" } %>
 <nav class="lg:sticky lg:top-[calc(var(--cinta-alto,0px)+1rem)] lg:self-start" aria-label="<%= t("ajustes.titulo") %>">

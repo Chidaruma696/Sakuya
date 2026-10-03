@@ -94,6 +94,7 @@ es:
       regla_movimiento: Inventario en Lisp
       regla_recepcion: Recepciones en Lisp
       regla_factura: Facturas en Lisp
+      archivo_reglas: Exportar e importar
     secciones_ayuda:
       para_ti: Se aplican al momento al elegir; se guardan en tu usuario y te siguen en cualquier equipo.
       negocio: Los datos del negocio como salen en el ticket, con el ticket al lado tal cual va a imprimirse. Vale para todas las sucursales.
@@ -990,6 +991,21 @@ es:
       motivo: 'Traspaso %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancelación de %{folio}: %{motivo}'
   reglas:
+    archivo:
+      ayuda: Todas las reglas del negocio en un solo archivo .lisp, para respaldarlas o llevarlas a otra instalación. Es texto que se puede leer y editar a mano; cada regla va debajo de su cabecera.
+      exportar: Bajar las reglas vigentes
+      bajar: Bajar el archivo
+      todas_de_fabrica: Todavía no hay reglas propias; todo usa lo de fábrica.
+      importar: Subir un archivo
+      importar_ayuda: Cada regla que cambie se asienta como versión nueva, con la versión de contrato que traiga. Si alguna no se puede leer, no se importa ninguna.
+      subir: Importar
+      sin_archivo: Elige un archivo.
+      vacio: el archivo no trae ninguna regla (cada una va debajo de ";;; hook:")
+      gancho: 'no conozco el gancho %{gancho}'
+      repetido: 'el gancho %{gancho} viene dos veces'
+      no_se_importo: 'No se importó nada: %{error}'
+      importadas: 'Importadas: %{ganchos}.'
+      sin_cambios: El archivo trae las mismas reglas que ya están; no cambió nada.
     por_permiso: 'La regla lo frena, pero quien lo hace tiene permiso: pasa y queda por revisar.'
     con_corte_real: Con el corte abierto de verdad
     con_corte_inventado: Con uno inventado

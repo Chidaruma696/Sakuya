@@ -15,6 +15,12 @@ Rails.application.routes.draw do
     post "/", action: :guardar, as: :guardar
     post "versiones/:id/restaurar", action: :restaurar, as: :restaurar
   end
+  # Todas las reglas del negocio en un archivo .lisp: bajarlo y subirlo.
+  scope "ajustes/avanzado/archivo", controller: "archivo_reglas" do
+    get "/", action: :show, as: :archivo_reglas
+    get "exportar", action: :exportar, as: :exportar_reglas
+    post "importar", action: :importar, as: :importar_reglas
+  end
   # Las reglas que deciden (el cierre de caja, el precio…), con un editor común.
   scope "ajustes/avanzado/reglas/:gancho", controller: "reglas", as: "regla", constraints: { gancho: /corte|precio|venta|retiro|movimiento|recepcion|factura/ } do
     get "editar", action: :edit, as: :editar

@@ -94,6 +94,7 @@ en:
       regla_movimiento: Stock in Lisp
       regla_recepcion: Receipts in Lisp
       regla_factura: Invoices in Lisp
+      archivo_reglas: Export and import
     secciones_ayuda:
       para_ti: Applied the moment you pick one; saved on your user, they follow you to any computer.
       negocio: The business details as they appear on the ticket, with the ticket next to it exactly as it will print. Applies to every branch.
@@ -990,6 +991,21 @@ en:
       motivo: 'Transfer %{folio}: %{origen} → %{destino}'
       cancelacion: 'Cancellation of %{folio}: %{motivo}'
   reglas:
+    archivo:
+      ayuda: All the business rules in a single .lisp file, to back them up or take them to another installation. It is text you can read and edit by hand; each rule goes under its header.
+      exportar: Download the current rules
+      bajar: Download the file
+      todas_de_fabrica: There are no custom rules yet; everything uses the built-in ones.
+      importar: Upload a file
+      importar_ayuda: Every rule that changed is saved as a new version, with the contract version it carries. If any cannot be read, none is imported.
+      subir: Import
+      sin_archivo: Choose a file.
+      vacio: the file has no rules (each one goes under ";;; hook:")
+      gancho: 'unknown hook %{gancho}'
+      repetido: 'the hook %{gancho} comes twice'
+      no_se_importo: 'Nothing was imported: %{error}'
+      importadas: 'Imported: %{ganchos}.'
+      sin_cambios: The file has the same rules already in place; nothing changed.
     por_permiso: 'The rule stops it, but the person doing it has permission: it goes through and to review.'
     con_corte_real: With the real open session
     con_corte_inventado: With a made-up one
