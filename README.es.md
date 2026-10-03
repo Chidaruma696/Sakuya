@@ -10,13 +10,14 @@
 
 # Sakuya
 
-**咲 · Punto de venta y trastienda para negocios pequeños que se dobla con Lisp: la caja, el inventario por sucursal, las compras, los almacenes y los conteos, con las reglas alrededor escritas en un Lisp pequeño que vive dentro de la aplicación. Ruby on Rails.**
+**咲 · Punto de venta y trastienda para negocios pequeños que se dobla con Lisp: la caja, el inventario por sucursal, las compras, los almacenes, los conteos y los clientes, con las reglas alrededor escritas en un Lisp pequeño que vive dentro de la aplicación. Ruby on Rails.**
 
 <br/>
 
 ![Rails 8.1](https://img.shields.io/badge/rails-8.1-cc0000?style=for-the-badge&logo=rubyonrails&logoColor=white)
 ![Ruby 3.4](https://img.shields.io/badge/ruby-3.4-cc342d?style=for-the-badge&logo=ruby&logoColor=white)
 ![SQLite](https://img.shields.io/badge/sqlite-un%20servidor-003b57?style=for-the-badge&logo=sqlite&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/postgresql-muchas%20sucursales-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Lisp](https://img.shields.io/badge/reglas-lisp-4659a8?style=for-the-badge)
 ![Licencia Apache 2.0](https://img.shields.io/badge/licencia-Apache_2.0-1c2139?style=for-the-badge)
 
@@ -29,7 +30,7 @@
 ---
 
 > [!NOTE]
-> Sakuya lleva un negocio pequeño desde **un solo servidor**, para la matriz y sus sucursales. El núcleo es fijo; lo que cada negocio hace distinto (quién vende a crédito, cuánta diferencia en la caja es demasiada, hasta dónde puede bajar un precio) está pensado para vivir en reglas escritas en Lisp, como Emacs vive dentro de Emacs Lisp. El tablero de Inicio y las reglas de la caja, el inventario y las compras ya funcionan.
+> Sakuya lleva un negocio pequeño desde **un solo servidor**, para la matriz y sus sucursales. El núcleo es fijo; lo que cada negocio hace distinto (a quién se le fía, cuánta diferencia en la caja es demasiada, hasta dónde puede bajar un precio) vive en reglas escritas en Lisp, como Emacs vive dentro de Emacs Lisp: el tablero de Inicio, la caja, el crédito, el inventario y las compras ya preguntan a sus reglas, y lo que falta llega en plugins.
 
 > [!IMPORTANT]
 > **Sakuya es software experimental en su primera fase.** Puede tener errores y bastantes cosas van a cambiar entre versiones. Si quieres probarlo en tu negocio, adelante: hazlo con calma, respalda la base de datos a menudo y conserva tu sistema actual hasta que se gane tu confianza. Se comparte tal cual, sin garantía (como dice la [licencia Apache 2.0](LICENSE)), y no puedo hacerme responsable de lo que pase por su uso ni de los errores que tenga. Si encuentras uno, abrir un [issue](https://github.com/Chidaruma696/Sakuya/issues) ayuda mucho.
@@ -48,16 +49,16 @@ Un sistema, una base de datos y **módulos que se encienden o se apagan según e
 
 | Área | Qué hace | Regla que impone |
 |---|---|---|
-| **Caja** | Vender por código de barras, PLU o clave, pagos mixtos, ticket con su propio código, corte contado por billetes y monedas, retiros. | Devoluciones solo con ticket. La caja se cierra contando el dinero. |
-| **Inventario** | Existencias por sucursal y producto, entradas y ajustes a mano. | El kardex es de solo inserción. Un ajuste sin permiso se frena y queda reportado. |
+| **Caja** | Vender por código de barras, PLU o clave, pagos mixtos, ticket con su propio código (en el navegador o en una térmica ESC/POS de red o por cable), corte contado por billetes y monedas, retiros. | Devoluciones solo con ticket. La caja se cierra contando el dinero. |
+| **Inventario** | Existencias por sucursal y producto (con lo apartado y lo disponible), entradas y ajustes a mano. | El kardex es de solo inserción. Un ajuste sin permiso se frena y queda reportado. |
 | **Administración** | Productos, códigos de barras, precios por sucursal, promociones, usuarios, roles, sucursales. | Administración es el catálogo; Ajustes es cómo trabaja el negocio. Son pantallas distintas. |
 | **Revisión** | Lo que una regla frenó y lo que pasó con permiso pero hay que mirar. | Nada irregular se pierde: un supervisor lo aprueba u observa, y puede cargárselo a alguien. |
 | **Compras** *(módulo)* | Proveedores, recepción de mercancía, facturas del proveedor, cuentas por pagar, pago desde la caja. | Solo la factura crea deuda. El dinero sale de la caja por un único camino. |
-| **Almacenes** *(módulo)* | Sucursales que solo guardan y traspasos entre sucursales. | Un almacén no tiene caja. Un traspaso sale y entra en una sola transacción. |
+| **Almacenes** *(módulo)* | Sucursales que solo guardan, traspasos entre sucursales y reabasto por mínimos y máximos. | Un almacén no tiene caja. Un traspaso sale y entra en una sola transacción. |
 | **Conteos** *(módulo)* | Conteos totales o parciales, escaneando piezas por su código; lo que va por kilo, litro o metro se teclea. | El conteo manda, y el faltante se carga al responsable. |
 | **Clientes** *(módulo, apagado de fábrica)* | Clientes, venta a cuenta, abonos en la caja, estado de cuenta y pedidos que apartan existencias y se cobran en la caja. | De fábrica no se fía a nadie: el crédito lo decide una regla en Lisp. |
 
-Roles de fábrica: administrador, cajero (vender, abrir caja, retiros, ver inventario), almacenista y supervisor. La interfaz habla inglés, español y alemán.
+Roles de fábrica: administrador, cajero (vender, abrir caja, retiros, ver inventario; con el módulo de clientes, también abonos y pedidos), almacenista y supervisor. La interfaz habla inglés, español y alemán, y un plugin le puede enseñar otro idioma.
 
 <br/>
 
@@ -120,6 +121,7 @@ En `docs/decisiones.md` están las razones de cada decisión; en `docs/arquitect
 ## 🗺️ Hoja de ruta
 
 - Una caja que aguante que se caiga la red.
+- Un lugar de donde bajar plugins de la comunidad (hoy se comparten como archivo).
 
 <br/>
 
@@ -130,7 +132,10 @@ bin/setup        # gemas, base de datos, semillas
 bin/dev          # http://localhost:3000
 ```
 
-Las semillas solo crean los roles base; lo demás sale del primer arranque. Tests (124 hoy): `bin/rails test`.
+Las semillas solo crean los roles base; lo demás sale del primer arranque. Tests (195 hoy): `bin/rails test`.
+
+- **PostgreSQL:** con `DATABASE_URL=postgres://usuario:clave@servidor/sakuya` corre igual; la CI prueba las dos bases. Para mudar una instalación con datos: carga el esquema en el PostgreSQL vacío y `bin/rails "sakuya:copiar_base[postgres://…]"`.
+- **Impresora:** cada sucursal elige en Admin › Sucursales si imprime con el navegador, en una térmica de red (dirección:puerto, casi siempre el 9100) o en una por cable desde Chrome. El ticket también se baja en ESC/POS.
 
 <br/>
 

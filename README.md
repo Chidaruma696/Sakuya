@@ -10,13 +10,14 @@
 
 # Sakuya
 
-**咲 · Point of sale and back office for small businesses that bends with Lisp: the till, stock by branch, purchasing, warehouses and stock counts, with the rules around them written in a small Lisp that lives inside the app. Ruby on Rails.**
+**咲 · Point of sale and back office for small businesses that bends with Lisp: the till, stock by branch, purchasing, warehouses, stock counts and customers, with the rules around them written in a small Lisp that lives inside the app. Ruby on Rails.**
 
 <br/>
 
 ![Rails 8.1](https://img.shields.io/badge/rails-8.1-cc0000?style=for-the-badge&logo=rubyonrails&logoColor=white)
 ![Ruby 3.4](https://img.shields.io/badge/ruby-3.4-cc342d?style=for-the-badge&logo=ruby&logoColor=white)
 ![SQLite](https://img.shields.io/badge/sqlite-single%20server-003b57?style=for-the-badge&logo=sqlite&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/postgresql-many%20branches-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Lisp](https://img.shields.io/badge/rules-lisp-4659a8?style=for-the-badge)
 ![Apache 2.0 License](https://img.shields.io/badge/license-Apache_2.0-1c2139?style=for-the-badge)
 
@@ -29,7 +30,7 @@
 ---
 
 > [!NOTE]
-> Sakuya runs a small business from **one server**, for the head office and its branches. The core is fixed; what each business does differently (who sells on credit, how big a till difference is too big, how low a price can go) is meant to live in rules written in Lisp, the way Emacs lives inside Emacs Lisp. The home dashboard and the rules at the till, in the stock and in purchases already work.
+> Sakuya runs a small business from **one server**, for the head office and its branches. The core is fixed; what each business does differently (who gets credit, how big a till difference is too big, how low a price can go) lives in rules written in Lisp, the way Emacs lives inside Emacs Lisp: the home dashboard, the till, credit, stock and purchasing already ask their rules, and what is missing comes in plugins.
 
 > [!IMPORTANT]
 > **Sakuya is experimental software in its early phase.** It may have bugs, and a lot will change between versions. If you want to try it in your business, you are welcome to: do it calmly, back up your database often, and keep your current system until it earns your trust. It is shared as is, without warranty (as the [Apache 2.0 licence](LICENSE) says), and I cannot take responsibility for what happens through its use or for any errors it may have. If you find one, opening an [issue](https://github.com/Chidaruma696/Sakuya/issues) helps a lot.
@@ -48,16 +49,16 @@ One system, one database, and **modules that turn on or off per business**. The 
 
 | Area | What it does | Rule it enforces |
 |---|---|---|
-| **Till** | Sell by barcode, PLU or code, split payments, receipts with their own barcode, cash count by denomination, cash drops. | Returns only with the receipt. The till is closed by counting the cash. |
-| **Stock** | Stock per branch and product, manual entries and adjustments. | The stock ledger (kardex) is insert-only. An adjustment without permission is stopped and reported. |
+| **Till** | Sell by barcode, PLU or code, split payments, receipts with their own barcode (in the browser or on an ESC/POS thermal printer, network or cable), cash count by denomination, cash drops. | Returns only with the receipt. The till is closed by counting the cash. |
+| **Stock** | Stock per branch and product (with what is held and what is available), manual entries and adjustments. | The stock ledger (kardex) is insert-only. An adjustment without permission is stopped and reported. |
 | **Administration** | Products, barcodes, prices per branch, promotions, users, roles, branches. | Admin is the catalogue; Settings is how the business works. They are separate screens. |
 | **Review** | What a rule stopped, and what went through with permission but needs a look. | Nothing irregular gets lost: a supervisor approves it or flags it, and can charge it to someone. |
 | **Purchasing** *(module)* | Suppliers, receiving goods, supplier invoices, accounts payable, paying from the till. | The invoice is the only thing that creates debt. Cash leaves the till by one path. |
-| **Warehouses** *(module)* | Storage-only branches and transfers between branches. | A warehouse has no till. A transfer goes out and in within one transaction. |
+| **Warehouses** *(module)* | Storage-only branches, transfers between branches and restocking by minimums and maximums. | A warehouse has no till. A transfer goes out and in within one transaction. |
 | **Stock counts** *(module)* | Full or partial counts, scanning pieces by their code; what goes by kilo, litre or metre is typed. | The count rules, and the shortfall is charged to whoever is responsible. |
 | **Customers** *(module, off by default)* | Customers, selling on account, payments at the till, account statements and orders that hold stock and are charged at the till. | Out of the box nobody gets credit: a rule in Lisp decides. |
 
-Factory roles: administrator, cashier (sell, open the till, cash drops, see stock), warehouse keeper and supervisor. The interface speaks English, Spanish and German.
+Factory roles: administrator, cashier (sell, open the till, cash drops, see stock; with the customers module, also payments and orders), warehouse keeper and supervisor. The interface speaks English, Spanish and German, and a plugin can teach it another language.
 
 <br/>
 
@@ -120,6 +121,7 @@ The Lisp is Sakuya's own, written in Ruby (`lib/lisp*.rb`): a reader, an evaluat
 ## 🗺️ Roadmap
 
 - A till that survives a dropped connection.
+- A place to download community plugins (today they are shared as a file).
 
 <br/>
 
@@ -130,7 +132,10 @@ bin/setup        # gems, database, seeds
 bin/dev          # http://localhost:3000
 ```
 
-The seeds only create the base roles; the rest comes from the first run. Tests (124 today): `bin/rails test`.
+The seeds only create the base roles; the rest comes from the first run. Tests (195 today): `bin/rails test`.
+
+- **PostgreSQL:** with `DATABASE_URL=postgres://user:password@server/sakuya` it runs the same; CI tests both databases. To move an installation that has data: load the schema into the empty PostgreSQL and run `bin/rails "sakuya:copiar_base[postgres://…]"`.
+- **Printer:** each branch chooses in Admin › Branches whether it prints with the browser, on a network thermal printer (address:port, almost always 9100) or on a cable one from Chrome. The receipt can also be downloaded as ESC/POS.
 
 <br/>
 
