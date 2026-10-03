@@ -17,7 +17,7 @@
     <fieldset class="rounded-lg border border-stone-200 bg-white px-4 py-3">
       <legend class="px-1 text-sm font-semibold"><%= t("reglas.caso") %></legend>
       <div class="flex flex-wrap items-end gap-4 text-sm">
-        <%= render "reglas/caso_#{@gancho}", caso: @caso, textos: textos %>
+        <%= render @modulo::CASO, caso: @caso, textos: textos %>
         <label class="flex items-center gap-2 pb-2"><%= check_box_tag :autorizado, "1", @caso[:autorizado], id: "autorizado" %> <%= t("#{textos}.caso.autorizado") %></label>
       </div>
       <% if @decision %>

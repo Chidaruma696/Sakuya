@@ -28,6 +28,8 @@ module ReglaRetiro
 
   extend Gancho
 
+  CASO = "reglas/caso_retiro".freeze # el caso de prueba del editor
+
   Datos = Data.define(:monto, :en_gaveta, :retirado, :limite, :motivo, :autorizado) do
     def pesos(centavos) = BigDecimal(centavos.to_i) / 100
   end

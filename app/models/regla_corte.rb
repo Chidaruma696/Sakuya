@@ -25,6 +25,8 @@ module ReglaCorte
 
   extend Gancho
 
+  CASO = "reglas/caso_corte".freeze # el caso de prueba del editor
+
   # Decide con la regla vigente (o la de fábrica).
   def self.decidir(corte, contado_centavos:, usuario:, codigo: Regla.vigente("corte")&.codigo)
     decidir_con(codigo, Datos.new(corte, contado_centavos, usuario))

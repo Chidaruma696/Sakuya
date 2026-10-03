@@ -23,6 +23,8 @@ module ReglaPrecio
 
   extend Gancho
 
+  CASO = "reglas/caso_precio".freeze # el caso de prueba del editor
+
   Datos = Data.define(:producto, :cantidad, :precio, :catalogo, :regular, :autorizado) do
     def pesos(centavos) = BigDecimal(centavos.to_i) / 100
     def descuento = regular.positive? && precio < regular ? ((regular - precio) * 100 / BigDecimal(regular)).round(2) : BigDecimal("0")
