@@ -6,7 +6,7 @@ Sakuya es un solo sistema y una sola base de datos, partido en **módulos**. Un 
 
 | Conjunto | Qué es | Tablas propias | Permisos | Pestaña |
 |---|---|---|---|---|
-| **Caja** | Vender, ticket (navegador o térmica ESC/POS por red o cable, según la sucursal), gaveta, cortes, retiros, devoluciones. | ventas, venta_lineas, pagos, cortes, retiros, devoluciones | `caja.*` | Caja |
+| **Caja** | Vender, ticket (navegador o térmica ESC/POS por red o cable, según la sucursal), gaveta, cortes, retiros, devoluciones; sin conexión vende con el catálogo del equipo y encola (`sin_conexion.js`, service worker). | ventas, venta_lineas, pagos, cortes, retiros, devoluciones | `caja.*` | Caja |
 | **Inventario** | Existencias por sucursal y producto, kardex, entradas y ajustes a mano. Es la única puerta para mover existencias (`Inventario.mover!`). | existencias, movimientos | `inventario.*` | Inventario |
 | **Administración** | Catálogos y gente: productos, códigos, promociones, precios por sucursal, usuarios, roles, sucursales. | productos, codigos_barras, promociones, precios_sucursal, usuarios, roles, sucursales | `admin.*` | Admin |
 | **Ajustes** | Preferencias de cada persona (idioma, tema, densidad, letra) y del negocio (ticket, moneda, folios, caja, compras, módulos). Admin da de alta, Ajustes configura. En sus opciones avanzadas vive todo lo que se programa en Lisp. | ajustes | `admin.usuarios` para lo del sistema; `reglas.editar` para lo avanzado | Inicio › Ajustes |

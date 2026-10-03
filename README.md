@@ -49,7 +49,7 @@ One system, one database, and **modules that turn on or off per business**. The 
 
 | Area | What it does | Rule it enforces |
 |---|---|---|
-| **Till** | Sell by barcode, PLU or code, split payments, receipts with their own barcode (in the browser or on an ESC/POS thermal printer, network or cable), cash count by denomination, cash drops. | Returns only with the receipt. The till is closed by counting the cash. |
+| **Till** | Sell by barcode, PLU or code, split payments, receipts with their own barcode (in the browser or on an ESC/POS thermal printer, network or cable), cash count by denomination, cash drops; keeps selling offline and uploads the sales when the network is back. | Returns only with the receipt. The till is closed by counting the cash. |
 | **Stock** | Stock per branch and product (with what is held and what is available), manual entries and adjustments. | The stock ledger (kardex) is insert-only. An adjustment without permission is stopped and reported. |
 | **Administration** | Products, barcodes, prices per branch, promotions, users, roles, branches. | Admin is the catalogue; Settings is how the business works. They are separate screens. |
 | **Review** | What a rule stopped, and what went through with permission but needs a look. | Nothing irregular gets lost: a supervisor approves it or flags it, and can charge it to someone. |
@@ -120,7 +120,6 @@ The Lisp is Sakuya's own, written in Ruby (`lib/lisp*.rb`): a reader, an evaluat
 
 ## 🗺️ Roadmap
 
-- A till that survives a dropped connection.
 - A place to download community plugins (today they are shared as a file).
 
 <br/>
@@ -136,6 +135,7 @@ The seeds only create the base roles; the rest comes from the first run. Tests (
 
 - **PostgreSQL:** with `DATABASE_URL=postgres://user:password@server/sakuya` it runs the same; CI tests both databases. To move an installation that has data: load the schema into the empty PostgreSQL and run `bin/rails "sakuya:copiar_base[postgres://…]"`.
 - **Printer:** each branch chooses in Admin › Branches whether it prints with the browser, on a network thermal printer (address:port, almost always 9100) or on a cable one from Chrome. The receipt can also be downloaded as ESC/POS.
+- **Offline:** the till keeps its page and the catalogue on the device and queues the sales; reloading it with no network needs it served over HTTPS (or on localhost).
 
 <br/>
 

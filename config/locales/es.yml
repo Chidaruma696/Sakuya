@@ -503,6 +503,14 @@ es:
     reglas.editar: Escribir los programas en Lisp del negocio (el tablero)
   js:
     pos:
+      no_en_catalogo: No está en el catálogo guardado en este equipo
+      necesita_conexion: Sin conexión no se vende a cuenta ni se cobra un pedido
+      guardada_sin_conexion: 'Venta guardada sin conexión (%{total}, cambio %{cambio}). Se sube sola al volver la red; el ticket se imprime desde Ventas cuando suba.'
+      sin_conexion: 'Sin conexión: vendiendo con el catálogo guardado'
+      por_subir: '%{n} ventas por subir'
+      por_subir_una: 1 venta por subir
+      corte_pendientes: 'En este equipo hay %{n} ventas hechas sin conexión que no han subido: espera a que suban antes de cerrar el corte.'
+      corte_pendiente: 'En este equipo hay 1 venta hecha sin conexión que no ha subido: espera a que suba antes de cerrar el corte.'
       ticket_vacio: El ticket está vacío
       cantidad: Teclea la cantidad
     unidades:
@@ -522,6 +530,7 @@ es:
     bajar_escpos: Bajar ESC/POS
     escpos_ayuda: El ticket en bytes para una impresora térmica
     imprimir_termica: Imprimir en la térmica
+    subir_ahora: Subir ahora
     impreso: Ticket impreso.
     sin_serial: 'Este navegador no puede hablarle a la impresora por cable; usa Chrome o Edge, o bájalo en ESC/POS.'
     elige_impresora: 'Elige la impresora con «Imprimir en la térmica»; luego ya no se pregunta.'

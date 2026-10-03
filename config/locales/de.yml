@@ -503,6 +503,14 @@ de:
     reglas.editar: Die Lisp-Programme des Geschäfts schreiben (die Übersicht)
   js:
     pos:
+      no_en_catalogo: Es ist nicht im auf diesem Gerät gespeicherten Katalog
+      necesita_conexion: Offline kann nicht auf Rechnung verkauft oder eine Bestellung kassiert werden
+      guardada_sin_conexion: 'Verkauf offline gespeichert (%{total}, Wechselgeld %{cambio}). Er wird hochgeladen, sobald das Netz zurück ist; den Bon nach dem Hochladen unter Verkäufe drucken.'
+      sin_conexion: 'Offline: Verkauf mit dem gespeicherten Katalog'
+      por_subir: '%{n} Verkäufe zum Hochladen'
+      por_subir_una: 1 Verkauf zum Hochladen
+      corte_pendientes: 'Auf diesem Gerät gibt es %{n} offline gemachte Verkäufe, die noch nicht hochgeladen sind: vor dem Abschluss warten.'
+      corte_pendiente: 'Auf diesem Gerät gibt es 1 offline gemachten Verkauf, der noch nicht hochgeladen ist: vor dem Abschluss warten.'
       ticket_vacio: Das Ticket ist leer
       cantidad: Menge eintippen
     unidades:
@@ -522,6 +530,7 @@ de:
     bajar_escpos: ESC/POS herunterladen
     escpos_ayuda: Der Bon als Bytes für einen Thermodrucker
     imprimir_termica: Auf dem Thermodrucker drucken
+    subir_ahora: Jetzt hochladen
     impreso: Bon gedruckt.
     sin_serial: 'Dieser Browser kann nicht mit einem Kabeldrucker sprechen; Chrome oder Edge nutzen oder als ESC/POS herunterladen.'
     elige_impresora: 'Den Drucker mit «Auf dem Thermodrucker drucken» wählen; danach wird nicht mehr gefragt.'

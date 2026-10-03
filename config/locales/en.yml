@@ -503,6 +503,14 @@ en:
     reglas.editar: Write the business's Lisp programs (the dashboard)
   js:
     pos:
+      no_en_catalogo: It is not in the catalogue saved on this device
+      necesita_conexion: Offline you cannot sell on account or charge an order
+      guardada_sin_conexion: 'Sale saved offline (%{total}, change %{cambio}). It uploads by itself when the network is back; print the receipt from Sales once it is up.'
+      sin_conexion: 'Offline: selling with the saved catalogue'
+      por_subir: '%{n} sales to upload'
+      por_subir_una: 1 sale to upload
+      corte_pendientes: 'This device has %{n} sales made offline that have not been uploaded: wait for them before closing the session.'
+      corte_pendiente: 'This device has 1 sale made offline that has not been uploaded: wait for it before closing the session.'
       ticket_vacio: The ticket is empty
       cantidad: Type the quantity
     unidades:
@@ -522,6 +530,7 @@ en:
     bajar_escpos: Download ESC/POS
     escpos_ayuda: The receipt as bytes for a thermal printer
     imprimir_termica: Print on the thermal printer
+    subir_ahora: Upload now
     impreso: Receipt printed.
     sin_serial: 'This browser cannot talk to a cable printer; use Chrome or Edge, or download it as ESC/POS.'
     elige_impresora: 'Choose the printer with «Print on the thermal printer»; after that it is not asked again.'

@@ -26,6 +26,7 @@
         </ul>
       <% end %>
     </div>
+    <div hidden id="ventas_pendientes" data-controller="ventas-pendientes" class="rounded border-l-4 border-amber-500 bg-amber-50 p-3 text-sm text-amber-900"></div>
     <div class="card" data-controller="gaveta" data-gaveta-esperado-value="<%= @corte.efectivo_esperado_centavos %>" data-gaveta-tope-value="<%= Corte.tope_diferencia_centavos %>" data-gaveta-simbolo-value="<%= Ajuste.simbolo %>">
       <h2 class="mb-2 font-semibold"><%= t("caja.cerrar_corte") %></h2>
       <p class="mb-2 text-sm text-stone-600"><%= t("caja.cerrar_corte_ayuda") %></p>

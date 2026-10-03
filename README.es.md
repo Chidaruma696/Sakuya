@@ -49,7 +49,7 @@ Un sistema, una base de datos y **módulos que se encienden o se apagan según e
 
 | Área | Qué hace | Regla que impone |
 |---|---|---|
-| **Caja** | Vender por código de barras, PLU o clave, pagos mixtos, ticket con su propio código (en el navegador o en una térmica ESC/POS de red o por cable), corte contado por billetes y monedas, retiros. | Devoluciones solo con ticket. La caja se cierra contando el dinero. |
+| **Caja** | Vender por código de barras, PLU o clave, pagos mixtos, ticket con su propio código (en el navegador o en una térmica ESC/POS de red o por cable), corte contado por billetes y monedas, retiros; sigue vendiendo sin conexión y sube las ventas al volver la red. | Devoluciones solo con ticket. La caja se cierra contando el dinero. |
 | **Inventario** | Existencias por sucursal y producto (con lo apartado y lo disponible), entradas y ajustes a mano. | El kardex es de solo inserción. Un ajuste sin permiso se frena y queda reportado. |
 | **Administración** | Productos, códigos de barras, precios por sucursal, promociones, usuarios, roles, sucursales. | Administración es el catálogo; Ajustes es cómo trabaja el negocio. Son pantallas distintas. |
 | **Revisión** | Lo que una regla frenó y lo que pasó con permiso pero hay que mirar. | Nada irregular se pierde: un supervisor lo aprueba u observa, y puede cargárselo a alguien. |
@@ -120,7 +120,6 @@ En `docs/decisiones.md` están las razones de cada decisión; en `docs/arquitect
 
 ## 🗺️ Hoja de ruta
 
-- Una caja que aguante que se caiga la red.
 - Un lugar de donde bajar plugins de la comunidad (hoy se comparten como archivo).
 
 <br/>
@@ -136,6 +135,7 @@ Las semillas solo crean los roles base; lo demás sale del primer arranque. Test
 
 - **PostgreSQL:** con `DATABASE_URL=postgres://usuario:clave@servidor/sakuya` corre igual; la CI prueba las dos bases. Para mudar una instalación con datos: carga el esquema en el PostgreSQL vacío y `bin/rails "sakuya:copiar_base[postgres://…]"`.
 - **Impresora:** cada sucursal elige en Admin › Sucursales si imprime con el navegador, en una térmica de red (dirección:puerto, casi siempre el 9100) o en una por cable desde Chrome. El ticket también se baja en ESC/POS.
+- **Sin conexión:** la caja guarda su página y el catálogo en el equipo y encola las ventas; para recargarla sin red hace falta servirla por HTTPS (o en localhost).
 
 <br/>
 

@@ -1,15 +1,25 @@
 import { Controller } from "@hotwired/stimulus"
+import { guardarCatalogo, catalogo, encolar, pendientes, quitar, buscar, claveNueva, pedir } from "sin_conexion"
 
 // El ticket en pantalla: escanea, arma líneas, calcula para mostrar y manda todo al servidor,
-// que es quien de verdad cobra y recalcula.
+// que es quien de verdad cobra y recalcula. Sin conexión sigue vendiendo con el catálogo guardado
+// en el equipo y encola las ventas; al volver la red se suben solas, una por una.
 export default class extends Controller {
   static targets = ["codigo", "cuerpo", "total", "efectivo", "transferencia", "deposito", "cambio", "aviso",
-                    "pendiente", "pendienteNombre", "pendienteCantidad", "botonCobrar", "cliente", "credito"]
-  static values = { escanearUrl: String, cobrarUrl: String, clave: String, pedido: Object }
+                    "pendiente", "pendienteNombre", "pendienteCantidad", "botonCobrar", "cliente", "credito", "conexion"]
+  static values = { escanearUrl: String, cobrarUrl: String, catalogoUrl: String, tokenUrl: String, sucursal: Number, clave: String, pedido: Object }
 
   connect() {
     this.lineas = []
     this.pendienteProducto = null
+    // La página puede venir de la caché (sin conexión): cada ticket estrena clave en el equipo.
+    this.clave = claveNueva()
+    this.alCambiarRed = () => { this.pintarConexion(); if (navigator.onLine) this.sincronizar() }
+    window.addEventListener("online", this.alCambiarRed)
+    window.addEventListener("offline", this.alCambiarRed)
+    this.reloj = setInterval(() => this.sincronizar(), 30_000)
+    this.actualizarCatalogo()
+    this.sincronizar()
     // Cobrar un pedido: el ticket llega armado con sus renglones y su cliente.
     if (this.pedidoValue.lineas) {
       this.pedidoValue.lineas.forEach(l => this.agregar(l))
@@ -18,14 +28,28 @@ export default class extends Controller {
     this.render()
   }
 
+  disconnect() {
+    window.removeEventListener("online", this.alCambiarRed)
+    window.removeEventListener("offline", this.alCambiarRed)
+    clearInterval(this.reloj)
+  }
+
   async escanear(event) {
     event.preventDefault()
     const codigo = this.codigoTarget.value.trim()
     if (!codigo) return
     this.codigoTarget.value = ""
-    const r = await fetch(`${this.escanearUrlValue}?codigo=${encodeURIComponent(codigo)}`, { headers: { Accept: "application/json" } })
-    const datos = await r.json()
-    if (!r.ok) { this.avisar(datos.error); return }
+    const r = await pedir(`${this.escanearUrlValue}?codigo=${encodeURIComponent(codigo)}`, { headers: { Accept: "application/json" } })
+    let datos
+    if (r) {
+      datos = await r.json()
+      if (!r.ok) { this.avisar(datos.error); return }
+    } else {
+      // Sin conexión: el catálogo guardado en el equipo
+      datos = buscar(await catalogo(this.sucursalValue), codigo)
+      if (!datos) { this.avisar(T.pos.no_en_catalogo); return }
+      this.pintarConexion(false)
+    }
     this.avisar("")
     if (datos.unidad !== "pieza") {
       // Kilo, litro o metro: se teclea la cantidad
@@ -142,14 +166,15 @@ export default class extends Controller {
     const cuerpo = new FormData()
     cuerpo.append("lineas", JSON.stringify(this.lineas.map(l => ({ producto_id: l.producto_id, cantidad: l.cantidad, precio_centavos: l.manual ? l.precio : null }))))
     cuerpo.append("pagos", JSON.stringify(pagos))
-    cuerpo.append("clave", this.claveValue)
+    cuerpo.append("clave", this.clave)
     if (this.hasClienteTarget) cuerpo.append("cliente_id", this.clienteTarget.value)
     if (this.pedidoValue.id) cuerpo.append("pedido_id", this.pedidoValue.id)
     const token = document.querySelector("meta[name=csrf-token]")?.content
     if (token) cuerpo.append("authenticity_token", token)
     this.botonCobrarTarget.disabled = true
     try {
-      const r = await fetch(this.cobrarUrlValue, { method: "POST", body: cuerpo, headers: { Accept: "application/json" } })
+      const r = await pedir(this.cobrarUrlValue, { method: "POST", body: cuerpo, headers: { Accept: "application/json" } })
+      if (!r) { await this.guardarSinConexion(cuerpo, total, efectivo + otros - total); return }
       const datos = await r.json()
       if (!r.ok) { this.avisar(datos.error); return }
       window.location.assign(datos.url)
@@ -167,5 +192,68 @@ export default class extends Controller {
     this.codigoTarget.focus()
   }
 
-  avisar(texto) { this.avisoTarget.textContent = texto }
+  // Los avisos son errores en rojo; `bien` los pinta en verde (una venta guardada sin conexión).
+  avisar(texto, bien = false) {
+    this.avisoTarget.textContent = texto
+    for (const c of ["bg-red-50", "text-red-800"]) this.avisoTarget.classList.toggle(c, !bien)
+    for (const c of ["bg-green-50", "text-green-800"]) this.avisoTarget.classList.toggle(c, bien)
+  }
+
+  // ---- sin conexión
+
+  async actualizarCatalogo() {
+    if (!this.hasCatalogoUrlValue) return
+    const r = await pedir(this.catalogoUrlValue, { headers: { Accept: "application/json" } })
+    if (r?.ok) await guardarCatalogo(await r.json())
+  }
+
+  // El cobro no llegó al servidor: la venta queda en el equipo con su clave y la hora en que se hizo.
+  async guardarSinConexion(cuerpo, total, cambio) {
+    if (this.aCuenta() > 0 || this.pedidoValue.id) { this.avisar(T.pos.necesita_conexion); return }
+    await encolar({ clave: this.clave, lineas: cuerpo.get("lineas"), pagos: cuerpo.get("pagos"), cliente_id: cuerpo.get("cliente_id") || "",
+                    vendida_en: new Date().toISOString(), total })
+    const aviso = T.pos.guardada_sin_conexion.replace("%{total}", this.pesos(total)).replace("%{cambio}", this.pesos(Math.max(cambio, 0)))
+    this.vaciar()
+    this.clave = claveNueva()
+    this.avisar(aviso, true)
+    this.pintarConexion(false)
+  }
+
+  // Sube la cola, la más vieja primero. Una que el servidor rechaza se queda con su error (no se
+  // pierde); si se cae la red a la mitad, sigue la próxima vez.
+  async sincronizar() {
+    if (this.subiendo) return
+    this.subiendo = true
+    try {
+      const cola = (await pendientes()).sort((a, b) => a.vendida_en.localeCompare(b.vendida_en))
+      if (cola.length === 0) return
+      const t = await pedir(this.tokenUrlValue, { headers: { Accept: "application/json" } })
+      if (!t?.ok) return
+      const { token } = await t.json()
+      for (const v of cola) {
+        const cuerpo = new FormData()
+        for (const campo of ["clave", "lineas", "pagos", "cliente_id", "vendida_en"]) cuerpo.append(campo, v[campo] || "")
+        cuerpo.append("authenticity_token", token)
+        const r = await pedir(this.cobrarUrlValue, { method: "POST", body: cuerpo, headers: { Accept: "application/json" } })
+        if (!r) break
+        if (r.ok) await quitar(v.clave)
+        else await encolar({ ...v, error: (await r.json().catch(() => ({}))).error || String(r.status) })
+      }
+    } finally {
+      this.subiendo = false
+      this.pintarConexion()
+    }
+  }
+
+  async pintarConexion(enLinea = navigator.onLine) {
+    if (!this.hasConexionTarget) return
+    const cola = await pendientes().catch(() => [])
+    const errores = cola.filter((v) => v.error)
+    const partes = []
+    if (!enLinea) partes.push(T.pos.sin_conexion)
+    if (cola.length) partes.push(cola.length === 1 ? T.pos.por_subir_una : T.pos.por_subir.replace("%{n}", cola.length))
+    this.conexionTarget.hidden = partes.length === 0
+    this.conexionTarget.querySelector("[data-texto]").textContent = partes.join(" · ")
+    this.conexionTarget.querySelector("[data-errores]").textContent = errores.map((v) => `${this.pesos(v.total)}: ${v.error}`).join(" · ")
+  }
 }

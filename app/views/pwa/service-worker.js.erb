@@ -1,6 +1,8 @@
-// Service worker de Sakuya. Hoy hace lo mínimo para que la app se pueda instalar y para que los
-// archivos estáticos (CSS, JS, fuentes, iconos) salgan de la caché: la app sigue necesitando el
-// servidor para todo lo demás. Si no hay red y se pide una página, se enseña /offline.html.
+// Service worker de Sakuya: que la app se pueda instalar, que los archivos estáticos (CSS, JS,
+// fuentes, iconos) salgan de la caché y que la caja abra sin conexión (la página de caja se guarda
+// cada vez que se abre con red; sin red sale la guardada, y la caja vende con el catálogo del
+// equipo). Para lo demás hace falta el servidor: sin red, se enseña /offline.html. Los navegadores
+// solo dejan usar service workers en HTTPS o en localhost.
 // La caché lleva el commit: cada versión nueva estrena caché y tira la vieja al activarse.
 const CACHE = "sakuya-<%= Sakuya::COMMIT %>"
 const OFFLINE = "/offline.html"
@@ -20,6 +22,14 @@ self.addEventListener("fetch", (event) => {
   // Assets con huella en el nombre: no cambian nunca, de la caché primero.
   if (url.pathname.startsWith("/assets/") || /\.(png|ico|woff2?)$/.test(url.pathname)) {
     event.respondWith(caches.open(CACHE).then(async (c) => (await c.match(request)) || fetch(request).then((r) => { if (r.ok) c.put(request, r.clone()); return r })))
+    return
+  }
+  // La caja: a la red y se guarda; sin red, la guardada.
+  if (url.pathname === "/caja" && (request.mode === "navigate" || request.headers.get("Accept")?.includes("text/html"))) {
+    event.respondWith(fetch(request).then((r) => {
+      if (r.ok && !r.redirected && !url.search) { const copia = r.clone(); caches.open(CACHE).then((c) => c.put("/caja", copia)) }
+      return r
+    }).catch(async () => (await caches.match("/caja")) || caches.match(OFFLINE)))
     return
   }
   // Páginas: siempre a la red; sin red, la página de "sin conexión".
