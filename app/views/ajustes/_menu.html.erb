@@ -4,7 +4,7 @@
 <% secciones << [ "compras", "truck" ] if puede?("admin.usuarios") && Modulo.activo?("compras") %>
 <% avanzadas = [] %>
 <% if puede?("reglas.editar") %>
-  <% avanzadas = [ [ "tablero", "braces", tablero_editar_path ], [ "regla_corte", "cash-coin", regla_editar_path("corte") ], [ "regla_precio", "tag", regla_editar_path("precio") ],
+  <% avanzadas = [ [ "tablero", "braces", tablero_editar_path ], [ "regla_corte", "cash-coin", regla_editar_path("corte") ], [ "regla_precio", "tag", regla_editar_path("precio") ], [ "regla_venta", "cart-check", regla_editar_path("venta") ],
                    [ "regla_retiro", "safe", regla_editar_path("retiro") ], [ "regla_movimiento", "box-seam", regla_editar_path("movimiento") ] ] %>
   <% avanzadas << [ "regla_factura", "receipt-cutoff", regla_editar_path("factura") ] if Modulo.activo?("compras") %>
 <% end %>

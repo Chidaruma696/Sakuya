@@ -3,7 +3,7 @@
 # si la regla decide algo con el caso de prueba; restaurar asienta otra vez una vieja. Cada
 # gancho pone su caso de prueba (ver `caso` y `probar` en su módulo).
 class ReglasController < ApplicationController
-  GANCHOS = { "corte" => ReglaCorte, "precio" => ReglaPrecio, "retiro" => ReglaRetiro, "movimiento" => ReglaMovimiento, "factura" => ReglaFactura }.freeze
+  GANCHOS = { "corte" => ReglaCorte, "precio" => ReglaPrecio, "retiro" => ReglaRetiro, "movimiento" => ReglaMovimiento, "factura" => ReglaFactura, "venta" => ReglaVenta }.freeze
 
   before_action { autorizar!("reglas.editar") }
   before_action :cargar

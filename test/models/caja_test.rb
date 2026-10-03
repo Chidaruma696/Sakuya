@@ -169,6 +169,27 @@ class CajaTest < ActiveSupport::TestCase
     assert_equal 1, Revision.where("motivo LIKE ?", "La regla del precio falló%").count, "el fallo se reporta una vez por corte"
   end
 
+  test "una regla de ventas propia: frena por hora y producto, manda a revisión las grandes y la supervisora fuerza" do
+    Regla.create!(gancho: "venta", usuario: usuarios(:admin), codigo: <<~LISP)
+      (cond ((> (quantity-of "cats") 1) (reject "cátsup de una en una"))
+            ((> (total) 100) (to-review "venta grande"))
+            ((> (paid-with :transfer) 0) (to-review "transferencia"))
+            (else (allow)))
+    LISP
+    assert_equal 0, cobrar([ { producto_id: @catsup.id, cantidad: 1 } ]).then { Revision.count }
+    e = assert_raises(Caja::Frenado) { cobrar([ { producto_id: @catsup.id, cantidad: 2 } ]) }
+    assert_match "cátsup de una en una. Así no se cobra", e.message
+    assert_equal [ cortes(:tienda_abierto), 8_400, true ], [ Revision.last.revisable, Revision.last.valor_centavos, Revision.last.frenado ]
+    venta = cobrar([ @pesada ])
+    assert_equal [ venta, "venta grande" ], [ Revision.last.revisable, Revision.last.motivo ]
+    assert_match "Venta #{venta.folio} de $161.25", Revision.last.descripcion
+    cobrar([ { producto_id: @catsup.id, cantidad: 1 } ], [ { forma: "transferencia", monto_centavos: 4_200 } ])
+    assert_equal "transferencia", Revision.last.motivo
+    forzada = Caja.cobrar!(sucursal: @tienda, usuario: usuarios(:supervisora), clave: "f", lineas: [ { producto_id: @catsup.id, cantidad: 2 } ],
+                           pagos: [ { forma: "efectivo", monto_centavos: 8_400 } ])
+    assert_equal [ forzada, "cátsup de una en una" ], [ Revision.last.revisable, Revision.last.motivo ], "con caja.forzar_venta se cobra y queda por revisar"
+  end
+
   test "dinero: formato y redondeo" do
     assert_equal "$1,234.50", Dinero.pesos(123_450)
     assert_equal "−$0.05", Dinero.pesos(-5)

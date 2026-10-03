@@ -27,12 +27,14 @@ module Caja
     raise Error, I18n.t("errores.caja.ticket_vacio") if lineas.blank?
 
     codigo = Regla.vigente("precio")&.codigo
-    fallos = []
+    fallos = [] # [clave del texto, error] de las reglas que tronaron
+
     Venta.transaction do
       preparadas = lineas.map { |l| preparar_linea(sucursal, l, autorizador, codigo, fallos) }
       total = preparadas.sum { |l| l[:importe_centavos] }
       pagos_ok = preparar_pagos(pagos, total)
       cambio = pagos_ok.sum { |p| p[:monto_centavos] } - total
+      revisar_venta = juzgar_venta!(preparadas, pagos_ok, total, cambio, usuario, fallos)
 
       venta = Venta.create!(sucursal: sucursal, corte: corte, usuario: usuario, clave: clave,
                             folio: Folio.siguiente!(sucursal, "venta"), codigo: codigo_ticket(sucursal),
@@ -45,8 +47,9 @@ module Caja
         Revision.abrir!(linea, usuario: usuario, sucursal: sucursal, motivo: revisar, valor_centavos: valor) if revisar
       end
       pagos_ok.each { |p| venta.pagos.create!(p) }
+      Revision.abrir!(venta, usuario: usuario, sucursal: sucursal, motivo: revisar_venta, valor_centavos: total) if revisar_venta
       # Si la regla del negocio tronó decidió la de fábrica; el fallo se reporta una vez por corte.
-      fallos.uniq.each { |f| Revision.abrir!(corte, usuario: usuario, sucursal: sucursal, motivo: I18n.t("regla_precio.fallo", error: f), sin_repetir: true) }
+      fallos.uniq.each { |clave, f| Revision.abrir!(corte, usuario: usuario, sucursal: sucursal, motivo: I18n.t(clave, error: f), sin_repetir: true) }
       venta
     end
   rescue Inventario::SinExistencia => e
@@ -103,7 +106,7 @@ module Caja
     autorizado = autorizador&.puede?("caja.bajar_precio") || false
     datos = ReglaPrecio::Datos.new(producto: producto, cantidad: cantidad, precio: precio, catalogo: catalogo, regular: legitimo, autorizado: autorizado)
     decision = ReglaPrecio.decidir(datos, codigo: codigo)
-    fallos << decision.error if decision.error
+    fallos << [ "regla_precio.fallo", decision.error ] if decision.error
     cobro = I18n.t("caja.cobro", producto: producto.nombre, precio: Dinero.pesos(precio), regular: Dinero.pesos(legitimo))
     valor = Dinero.importe(cantidad, [ legitimo - precio, 0 ].max)
     if decision.rechaza? && !autorizado
@@ -115,6 +118,20 @@ module Caja
       revisar: (decision.permite? ? nil : "#{cobro}: #{decision.motivo}"), valor_revision: valor }
   end
   private_class_method :preparar_linea
+
+  # La venta entera, antes de cobrarla, por la regla de ventas. Si frena y quien cobra no tiene
+  # caja.forzar_venta, no se cobra y queda reportado; si no, devuelve el motivo para revisarla (o nil).
+  def self.juzgar_venta!(preparadas, pagos, total, cambio, usuario, fallos)
+    autorizado = usuario.puede?("caja.forzar_venta")
+    datos = ReglaVenta.datos(preparadas, pagos, total: total, cambio: cambio, autorizado: autorizado)
+    decision = ReglaVenta.decidir(datos, codigo: Regla.vigente("venta")&.codigo)
+    fallos << [ "regla_venta.fallo", decision.error ] if decision.error
+    if decision.rechaza? && !autorizado
+      raise Frenado.new(I18n.t("errores.caja.venta_frenada", motivo: decision.motivo), reporte: I18n.t("caja.venta_frenada", total: Dinero.pesos(total), motivo: decision.motivo), valor_centavos: total)
+    end
+    decision.permite? ? nil : decision.motivo
+  end
+  private_class_method :juzgar_venta!
 
   def self.preparar_pagos(pagos, total)
     limpios = Array(pagos).map { |p| { forma: p[:forma].to_s, monto_centavos: p[:monto_centavos].to_i } }.reject { |p| p[:monto_centavos] <= 0 }

@@ -89,6 +89,7 @@ de:
       tablero: Übersicht in Lisp
       regla_corte: Kassenabschluss in Lisp
       regla_precio: Preis in Lisp
+      regla_venta: Verkäufe in Lisp
       regla_retiro: Entnahmen in Lisp
       regla_movimiento: Bestand in Lisp
       regla_factura: Rechnungen in Lisp
@@ -287,6 +288,7 @@ de:
       piso_precio: "%{producto}: der Preis darf nicht unter %{piso} % des Katalogs fallen (%{monto})"
       precio_frenado: '%{cobro}: %{motivo}. So kann nicht kassiert werden: regulären Preis lassen oder jemanden mit Berechtigung für Preissenkungen kassieren lassen. Es wurde gemeldet.'
       retiro_frenado: '%{motivo}. So kann nicht entnommen werden: jemand mit Berechtigung für Entnahmen muss es tun. Es wurde gemeldet.'
+      venta_frenada: '%{motivo}. So kann nicht kassiert werden: jemand mit Berechtigung muss kassieren. Es wurde gemeldet.'
       falta_dinero: 'Geld fehlt: das Ticket ist %{total} und gezahlt werden %{pago}'
       no_efectivo_excede: Überweisung oder Einzahlung dürfen die Summe nicht übersteigen
       sin_ticket_devolucion: 'Ohne Beleg keine Rückgabe: „%{codigo}“ nicht gefunden'
@@ -408,6 +410,7 @@ de:
       frenado: Versuch im Kassenabschnitt %{folio} gestoppt
       frenado_producto: 'Bewegung gestoppt: %{producto}'
       frenado_proveedor: 'Rechnung gestoppt von %{proveedor}'
+      venta: 'Verkauf %{folio} über %{total}'
       corte_abierto: Kassenabschnitt %{folio}, offen
   estados:
     pendiente: offen
@@ -440,6 +443,7 @@ de:
     caja.retirar: Bargeld in den Tresor legen
     caja.diferencia: Abschluss mit einer Differenz über der Grenze
     caja.bajar_precio: Preis unter Liste freigeben
+    caja.forzar_venta: Einen Verkauf kassieren, den die Verkaufsregel stoppt (geht zur Prüfung)
     caja.devolver: Kundenrückgaben annehmen
     inventario.ver: Bestände und Bewegungen sehen
     inventario.ajustar: Bestände mit Begründung korrigieren
@@ -453,7 +457,7 @@ de:
     compras.recibir: Ware vom Lieferanten annehmen
     compras.facturar: Lieferantenrechnungen erfassen und stornieren
     compras.pagar: Lieferanten aus der Kasse bezahlen
-    compras.exceder: Mehr als erhalten abrechnen, ohne dass es zur Prüfung geht
+    compras.exceder: Eine Rechnung mit mehr als erhalten erfassen (mit Grund, geht zur Prüfung)
     almacenes.traspasar: Umbuchungen zwischen Filialen und Lagern
     reglas.editar: Die Lisp-Programme des Geschäfts schreiben (die Übersicht)
   js:
@@ -501,6 +505,7 @@ de:
     cierre_frenado: 'Abschlussversuch gestoppt: gezählt %{contado}, Differenz von %{diferencia} (%{motivo})'
     cobro: '%{producto} zu %{precio} (regulär %{regular})'
     retiro_frenado: 'Entnahme von %{monto} gestoppt (%{motivo}): %{regla}'
+    venta_frenada: 'Verkauf von %{total} gestoppt: %{motivo}'
     motivo_diferencia: Grund der Differenz
     regla_propia_aviso: 'Dieses Geschäft hat eine eigene Abschlussregel: wenn die Differenz einen Grund braucht, hier eintragen.'
     cortes_cerrados: Geschlossene Abschnitte
@@ -1087,6 +1092,36 @@ de:
     to_review: wird entnommen und geprüft
     reject: wird nicht entnommen und der Versuch gemeldet
     nucleo: Wer entnehmen darf, kann es immer; für diese Person heißt Stoppen Prüfung.
+  regla_venta:
+    titulo: Verkäufe in Lisp
+    ayuda: Mit dem ganzen Ticket, direkt vor dem Kassieren, prüft diese Regel den Verkauf (Summe, Produkte, Zahlungsarten, Uhrzeit) und entscheidet, ob kassiert wird, ob es zur Prüfung geht oder ob gestoppt wird. Standardmäßig stoppt sie nichts; Preise prüft ihre eigene Regel. Testen speichert nichts.
+    fallo: 'Die Verkaufsregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
+    forma: 'paid-with erwartet eine Zahlungsart: :%{formas}'
+    motivos: {}
+    caso:
+      claves: Codes (durch Komma getrennt)
+      total: Summe
+      forma: Zahlungsart
+      hora: Stunde
+      autorizado: Kassiert von jemandem mit Berechtigung, Verkäufe zu erzwingen
+    veredictos:
+      allow: Wird kassiert
+      review: Wird kassiert und geprüft
+      reject: Wird gestoppt
+    funciones:
+      total: die Summe
+      change: das Wechselgeld
+      paid_with: '(paid-with :cash), :transfer oder :deposit: was so bezahlt wurde'
+      lines: wie viele Zeilen
+      products: die Liste der Codes
+      quantity_of: '(quantity-of "CODE"): wie viel von diesem Produkt'
+      hour: die Stunde (0-23)
+      weekday: der Tag (1 Montag … 7 Sonntag)
+      authorized: ob die kassierende Person Verkäufe erzwingen darf
+    allow: wird kassiert
+    to_review: wird kassiert und geprüft
+    reject: wird nicht kassiert und der Versuch gemeldet
+    nucleo: Wer Verkäufe erzwingen darf, kann immer kassieren; für diese Person heißt Stoppen Prüfung.
   regla_precio:
     venta_no_existe: 'in dieser Filiale gibt es keinen Verkauf %{folio}'
     titulo: Preis in Lisp

@@ -145,6 +145,18 @@ class ReglasControllerTest < ActionDispatch::IntegrationTest
     assert_select "#decision", /Se frena: se factura más de lo recibido \(Cátsup 1 kg\)/
   end
 
+  test "ventas: el editor prueba una venta inventada a una hora y una de verdad" do
+    get regla_editar_path("venta")
+    assert_select "textarea#codigo", /\(allow\)/
+    codigo = '(if (and (>= (hour) 22) (> (quantity-of "cats") 0)) (reject "tarde") (allow))'
+    post regla_guardar_path("venta"), params: { probar: "1", codigo: codigo, claves: "cats, pech", hora: "23", total: "50" }
+    assert_select "#decision", /Se frena: tarde/
+    post regla_guardar_path("venta"), params: { probar: "1", codigo: codigo, claves: "cats", hora: "9" }
+    assert_select "#decision", /Se cobra/
+    post regla_guardar_path("venta"), params: { probar: "1", codigo: "(paid-with :card)", claves: "cats" }
+    assert_select "p", /paid-with recibe una forma de pago/
+  end
+
   test "sin reglas.editar no se entra" do
     post entrar_path, params: { usuario: "cajera", password: "secreto1" }
     get regla_editar_path("corte")

@@ -89,6 +89,7 @@ es:
       tablero: Tablero en Lisp
       regla_corte: Cierre de caja en Lisp
       regla_precio: Precio en Lisp
+      regla_venta: Ventas en Lisp
       regla_retiro: Retiros en Lisp
       regla_movimiento: Inventario en Lisp
       regla_factura: Facturas en Lisp
@@ -287,6 +288,7 @@ es:
       piso_precio: "%{producto}: el precio no puede bajar del %{piso} % del catálogo (%{monto})"
       precio_frenado: '%{cobro}: %{motivo}. Así no se cobra: deja el precio que toca o que cobre alguien con permiso para bajar precios. Queda reportado.'
       retiro_frenado: '%{motivo}. Así no se retira: que lo haga alguien con permiso para retirar. Queda reportado.'
+      venta_frenada: '%{motivo}. Así no se cobra: que la cobre alguien con permiso. Queda reportado.'
       falta_dinero: 'falta dinero: el ticket es %{total} y se pagan %{pago}'
       no_efectivo_excede: una transferencia o depósito no puede pasarse del total
       sin_ticket_devolucion: 'Sin ticket no hay devolución: no se encontró «%{codigo}»'
@@ -408,6 +410,7 @@ es:
       frenado: Intento frenado en el corte %{folio}
       frenado_producto: 'Movimiento frenado: %{producto}'
       frenado_proveedor: 'Factura frenada de %{proveedor}'
+      venta: 'Venta %{folio} de %{total}'
       corte_abierto: Corte %{folio}, abierto
   estados:
     pendiente: pendiente
@@ -440,6 +443,7 @@ es:
     caja.retirar: Retirar efectivo a caja fuerte
     caja.diferencia: Cerrar el corte con una diferencia mayor al tope
     caja.bajar_precio: Autorizar un precio por debajo del catálogo
+    caja.forzar_venta: Cobrar una venta que la regla de ventas frena (queda por revisar)
     caja.devolver: Recibir devoluciones de clientes
     inventario.ver: Ver existencias y movimientos
     inventario.ajustar: Ajustar existencias con justificación
@@ -453,7 +457,7 @@ es:
     compras.recibir: Recibir mercancía del proveedor
     compras.facturar: Capturar y cancelar facturas del proveedor
     compras.pagar: Pagar a proveedores desde la caja
-    compras.exceder: Facturar más de lo recibido sin que pase a revisión
+    compras.exceder: Registrar una factura con más de lo recibido (con motivo, queda por revisar)
     almacenes.traspasar: Traspasos entre sucursales y almacenes
     reglas.editar: Escribir los programas en Lisp del negocio (el tablero)
   js:
@@ -501,6 +505,7 @@ es:
     cierre_frenado: 'Intento de cierre frenado: contó %{contado}, diferencia de %{diferencia} (%{motivo})'
     cobro: '%{producto} a %{precio} (toca %{regular})'
     retiro_frenado: 'Retiro de %{monto} frenado (%{motivo}): %{regla}'
+    venta_frenada: 'Venta de %{total} frenada: %{motivo}'
     motivo_diferencia: Motivo de la diferencia
     regla_propia_aviso: 'El negocio tiene su propia regla para el cierre: si la diferencia pide motivo, escríbelo aquí.'
     cortes_cerrados: Cortes cerrados
@@ -1087,6 +1092,36 @@ es:
     to_review: sale y queda por revisar
     reject: no sale y deja reportado el intento
     nucleo: Quien tiene permiso para retirar nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
+  regla_venta:
+    titulo: Ventas en Lisp
+    ayuda: Con el ticket completo, justo antes de cobrar, esta regla mira la venta entera (total, productos, formas de pago, hora) y decide si se cobra, si queda por revisar o si se frena. De fábrica no frena nada; los precios ya los juzga su propia regla. Probar no guarda nada.
+    fallo: 'La regla de ventas falló y decidió la de fábrica: %{error}'
+    forma: 'paid-with recibe una forma de pago: :%{formas}'
+    motivos: {}
+    caso:
+      claves: Claves (separadas por coma)
+      total: Total
+      forma: Forma de pago
+      hora: Hora
+      autorizado: Cobra alguien con permiso para forzar ventas
+    veredictos:
+      allow: Se cobra
+      review: Se cobra y queda por revisar
+      reject: Se frena
+    funciones:
+      total: el total
+      change: el cambio
+      paid_with: '(paid-with :cash), :transfer o :deposit: lo pagado de esa forma'
+      lines: cuántos renglones
+      products: la lista de claves
+      quantity_of: '(quantity-of "CLAVE"): cuánto se lleva de ese producto'
+      hour: la hora (0-23)
+      weekday: el día (1 lunes … 7 domingo)
+      authorized: si quien cobra tiene permiso para forzar ventas
+    allow: se cobra
+    to_review: se cobra y queda por revisar
+    reject: no se cobra y deja reportado el intento
+    nucleo: Quien tiene permiso para forzar ventas nunca se queda sin poder cobrar; para esa persona, frenar es revisar.
   regla_precio:
     venta_no_existe: 'no hay una venta %{folio} en esta sucursal'
     titulo: Precio en Lisp

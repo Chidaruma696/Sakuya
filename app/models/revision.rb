@@ -61,6 +61,7 @@ class Revision < ApplicationRecord
     when Movimiento then I18n.t("revisiones.desc.movimiento", tipo: revisable.nombre_tipo, cantidad: cantidad_de(revisable))
     when Retiro then I18n.t("revisiones.desc.retiro", monto: Dinero.pesos(revisable.monto_centavos), folio: revisable.corte.folio)
     when FacturaProveedor then I18n.t("revisiones.desc.factura_proveedor", folio: revisable.folio, proveedor: revisable.proveedor.nombre)
+    when Venta then I18n.t("revisiones.desc.venta", folio: revisable.folio, total: Dinero.pesos(revisable.total_centavos))
     when Corte
       return I18n.t("revisiones.desc.corte_abierto", folio: revisable.folio) if revisable.abierto?
       I18n.t("revisiones.desc.corte", folio: revisable.folio, diferencia: Dinero.pesos(revisable.diferencia_centavos))

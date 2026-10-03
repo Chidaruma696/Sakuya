@@ -10,6 +10,10 @@ El segundo gancho, y el primero que decide algo: al cerrar el corte, la regla le
 
 Cada gancho lleva un número de contrato (`VERSION` en su módulo) y cada regla guarda con cuál se escribió. Si un día cambia lo que un gancho recibe o espera, se sube el número y las reglas viejas se avisan en su editor en vez de romperse en silencio. Restaurar o importar una versión conserva el número que traía; solo guardar desde el editor la sella con el de hoy. Todavía no hay migraciones automáticas de reglas: avisar es lo mínimo.
 
+## La venta entera también pregunta (3 oct 2026)
+
+Además del precio de cada renglón, la venta completa pasa por una regla justo antes de cobrarse: total, productos, formas de pago, hora y día. De fábrica no frena nada, porque los precios ya tienen su regla y una venta normal no es irregular; está para lo que cada negocio necesita (nada de alcohol a deshoras, ventas grandes a revisión). Lo que frena no se cobra y queda reportado en el corte; con el permiso nuevo `caja.forzar_venta` se cobra y queda por revisar.
+
 ## Probar en seco con lo de verdad (3 oct 2026)
 
 Las reglas que deciden se prueban en su editor contra datos reales sin tocar nada: el cierre y los retiros contra el corte abierto de la sucursal, el precio repasando una venta ya cobrada renglón por renglón, las facturas contra una ya registrada y sus recepciones, el inventario con las existencias de hoy. No hizo falta la transacción que se deshace del plan original, porque ninguna regla escribe: solo lee. El editor enseña lo que pasaría de verdad, con el permiso incluido: si la regla frena a alguien que tiene permiso, sale como revisión.
