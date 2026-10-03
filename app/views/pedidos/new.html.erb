@@ -10,6 +10,7 @@
     </div>
     <div><%= f.label :fecha_entrega, t("pedidos.entrega"), class: "etiqueta-campo" %><%= f.date_field :fecha_entrega, class: "entrada" %></div>
     <div><%= f.label :notas, t("comun.notas"), class: "etiqueta-campo" %><%= f.text_field :notas, class: "entrada" %></div>
+    <label class="flex items-center gap-2 text-sm" title="<%= t("pedidos.apartar_ayuda") %>"><%= f.check_box :apartar, class: "h-4 w-4" %> <%= t("pedidos.apartar") %></label>
   </div>
   <div class="rounded-lg border border-stone-200 p-4">
     <div class="mb-3 flex flex-wrap items-center gap-3">

@@ -14,6 +14,10 @@ Cada gancho lleva un número de contrato (`VERSION` en su módulo) y cada regla 
 
 Además del precio de cada renglón, la venta completa pasa por una regla justo antes de cobrarse: total, productos, formas de pago, hora y día. De fábrica no frena nada, porque los precios ya tienen su regla y una venta normal no es irregular; está para lo que cada negocio necesita (nada de alcohol a deshoras, ventas grandes a revisión). Lo que frena no se cobra y queda reportado en el corte; con el permiso nuevo `caja.forzar_venta` se cobra y queda por revisar. Lo mismo al recibir mercancía: una regla mira qué llega, de quién y con qué papeles (remisión, factura); de fábrica no frena nada, lo que frena no entra y queda reportado en el proveedor, y con `compras.forzar_recepcion` entra por revisar.
 
+## Los pedidos apartan existencias (3 oct 2026)
+
+Un pedido abierto aparta en su sucursal lo que pide: eso no se vende en la caja ni sale en un traspaso hasta que el pedido se cobra (su propia venta sí lo toma) o se cancela. Si no alcanza lo disponible, el pedido no se guarda y dice qué falta; se puede guardar sin apartar, para pedidos a futuro. Mermas y ajustes sí pueden tocar lo apartado, porque registran algo que ya pasó, y entonces lo disponible puede quedar en negativo y se ve. El inventario enseña lo apartado y lo disponible, `(stock)` en el REPL también, y el reabasto cuenta lo disponible.
+
 ## Reabastecer por mínimos y máximos (3 oct 2026)
 
 Cada sucursal tiene mínimos y máximos por producto (Almacenes › Reabastecer). Lo que está por debajo del mínimo se sugiere hasta el máximo, y «Armar traspaso» abre el traspaso de siempre ya lleno: se revisa y se registra igual que cualquiera. No hay un camino aparte que mueva mercancía. Los traspasos siguen siendo instantáneos (sale y entra a la vez), así que no hay "en tránsito" que descontar.

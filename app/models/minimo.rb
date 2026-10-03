@@ -10,12 +10,14 @@ class Minimo < ApplicationRecord
   def tope = maximo || minimo
 
   # Lo que le falta a una sucursal: [[producto, cantidad]] de lo que está por debajo de su mínimo,
-  # para llegar al máximo. Las piezas se redondean hacia arriba.
+  # para llegar al máximo. Cuenta lo disponible (lo apartado para pedidos ya tiene dueño). Las
+  # piezas se redondean hacia arriba.
   def self.sugerido(sucursal)
     existencias = Existencia.where(sucursal: sucursal).pluck(:producto_id, :cantidad).to_h
+    apartado = Apartado.por_producto(sucursal)
     where(sucursal: sucursal).includes(:producto).filter_map do |m|
       next unless m.producto.activo
-      hay = existencias.fetch(m.producto_id, 0)
+      hay = existencias.fetch(m.producto_id, 0) - apartado.fetch(m.producto_id, 0)
       next if hay >= m.minimo
       falta = m.tope - hay
       falta = falta.ceil unless m.producto.fraccionable?

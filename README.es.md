@@ -55,7 +55,7 @@ Un sistema, una base de datos y **módulos que se encienden o se apagan según e
 | **Compras** *(módulo)* | Proveedores, recepción de mercancía, facturas del proveedor, cuentas por pagar, pago desde la caja. | Solo la factura crea deuda. El dinero sale de la caja por un único camino. |
 | **Almacenes** *(módulo)* | Sucursales que solo guardan y traspasos entre sucursales. | Un almacén no tiene caja. Un traspaso sale y entra en una sola transacción. |
 | **Conteos** *(módulo)* | Conteos totales o parciales, escaneando piezas por su código; lo que va por kilo, litro o metro se teclea. | El conteo manda, y el faltante se carga al responsable. |
-| **Clientes** *(módulo, apagado de fábrica)* | Clientes, venta a cuenta, abonos en la caja, estado de cuenta y pedidos que se cobran en la caja. | De fábrica no se fía a nadie: el crédito lo decide una regla en Lisp. |
+| **Clientes** *(módulo, apagado de fábrica)* | Clientes, venta a cuenta, abonos en la caja, estado de cuenta y pedidos que apartan existencias y se cobran en la caja. | De fábrica no se fía a nadie: el crédito lo decide una regla en Lisp. |
 
 Roles de fábrica: administrador, cajero (vender, abrir caja, retiros, ver inventario), almacenista y supervisor. La interfaz habla inglés, español y alemán.
 
@@ -119,7 +119,6 @@ En `docs/decisiones.md` están las razones de cada decisión; en `docs/arquitect
 
 ## 🗺️ Hoja de ruta
 
-- Que un pedido de cliente pueda apartar existencias.
 - Una caja que aguante que se caiga la red.
 
 <br/>

@@ -1,5 +1,6 @@
 <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
-  <h1 class="text-2xl font-bold"><%= t("pedidos.pedido", folio: @pedido.folio) %> <span class="badge"><%= t("pedidos.estados.#{@pedido.estado}") %></span></h1>
+  <h1 class="text-2xl font-bold"><%= t("pedidos.pedido", folio: @pedido.folio) %> <span class="badge"><%= t("pedidos.estados.#{@pedido.estado}") %></span>
+    <% if @pedido.abierto? %><span class="badge"><%= t(@pedido.apartar ? "pedidos.apartado" : "pedidos.sin_apartar") %></span><% end %></h1>
   <%= link_to t("pedidos.titulo"), pedidos_path, class: "btn btn-ghost btn-sm" %>
 </div>
 <div class="mb-4 grid gap-4 sm:grid-cols-3">

@@ -267,12 +267,15 @@ es:
     cerrada: Sesión cerrada
     inicia_para_continuar: Inicia sesión para continuar
   errores:
+    apartado:
+      no_alcanza: '%{producto}: hay %{hay}, pero %{apartado} está apartado para pedidos; disponible %{disponible}'
     impresora:
       sin_direccion: la sucursal no tiene la dirección de su térmica de red
       no_contesta: 'la térmica %{direccion} no contesta (%{error})'
     pedido:
       sin_renglones: el pedido no trae renglones
       no_abierto: el pedido %{folio} ya no está abierto
+      no_alcanza: '%{producto}: pides %{pide} y hay %{disponible} disponible para apartar (o guárdalo sin apartar)'
     abono:
       mayor_que_cero: el abono tiene que ser mayor que cero
       sin_caja: no hay caja abierta en %{sucursal} para recibir el abono
@@ -652,6 +655,8 @@ es:
     avisos:
       marcado: Cargo de %{quien} marcado como %{estado}
   inventario:
+    apartado: Apartado
+    disponible: Disponible
     movimiento_frenado: 'Movimiento frenado, %{tipo} de %{cantidad} (%{motivo}): %{regla}'
     existencias: Existencias
     kardex: Kardex
@@ -911,6 +916,10 @@ es:
     entrega: Entrega
     que: Qué
     guardar: Guardar pedido
+    apartar: Apartar existencias
+    apartar_ayuda: Lo que pide queda apartado y no se vende ni se traspasa hasta cobrarlo o cancelarlo. Sin apartar, para pedidos a futuro.
+    apartado: aparta existencias
+    sin_apartar: sin apartar
     cobrar: Cobrar en caja
     cancelar: Cancelar pedido
     cobrando: 'Cobrando el pedido %{folio} de %{cliente}.'

@@ -3,17 +3,22 @@
   <%= render "selector_sucursal" %>
 </div>
 <table class="tabla">
-  <thead><tr><th class="px-3 py-2"><%= t("comun.clave") %></th><th class="px-3 py-2"><%= t("comun.producto") %></th><th class="px-3 py-2 text-right"><%= t("comun.cantidad") %></th><th class="px-3 py-2"><%= t("comun.unidad") %></th><th class="px-3 py-2"></th></tr></thead>
+  <thead><tr><th class="px-3 py-2"><%= t("comun.clave") %></th><th class="px-3 py-2"><%= t("comun.producto") %></th><th class="px-3 py-2 text-right"><%= t("comun.cantidad") %></th><% if @apartado.any? %><th class="px-3 py-2 text-right"><%= t("inventario.apartado") %></th><th class="px-3 py-2 text-right"><%= t("inventario.disponible") %></th><% end %><th class="px-3 py-2"><%= t("comun.unidad") %></th><th class="px-3 py-2"></th></tr></thead>
   <tbody>
     <% @existencias.each do |e| %>
       <tr class="border-t border-stone-100">
         <td class="px-3 py-2 font-mono"><%= e.producto.clave %></td>
         <td class="px-3 py-2"><%= e.producto.nombre %></td>
         <td class="px-3 py-2 text-right font-mono"><%= number_with_precision(e.cantidad, precision: e.producto.decimales, delimiter: ",") %></td>
+        <% if @apartado.any? %>
+          <% apartado = @apartado.fetch(e.producto_id, 0) %>
+          <td class="px-3 py-2 text-right font-mono text-stone-500"><%= number_with_precision(apartado, precision: e.producto.decimales, delimiter: ",") if apartado.positive? %></td>
+          <td class="px-3 py-2 text-right font-mono"><%= number_with_precision(e.cantidad - apartado, precision: e.producto.decimales, delimiter: ",") %></td>
+        <% end %>
         <td class="px-3 py-2"><%= e.producto.unidad %></td>
         <td class="px-3 py-2 text-right"><%= link_to t("inventario.kardex"), kardex_inventario_path(producto_id: e.producto_id, sucursal_id: @sucursal.id), class: "btn btn-secondary btn-xs" %></td>
       </tr>
     <% end %>
-    <% if @existencias.empty? %><tr><td colspan="5" class="px-3 py-6 text-center text-stone-500"><%= t("inventario.sin_existencias") %></td></tr><% end %>
+    <% if @existencias.empty? %><tr><td colspan="7" class="px-3 py-6 text-center text-stone-500"><%= t("inventario.sin_existencias") %></td></tr><% end %>
   </tbody>
 </table>

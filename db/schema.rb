@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_03_000010) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_03_000011) do
   create_table "abonos", force: :cascade do |t|
     t.integer "cliente_id", null: false
     t.integer "corte_id", null: false
@@ -369,6 +369,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_03_000010) do
   end
 
   create_table "pedidos", force: :cascade do |t|
+    t.boolean "apartar", default: true, null: false
     t.integer "cliente_id", null: false
     t.datetime "created_at", null: false
     t.string "estado", default: "abierto", null: false

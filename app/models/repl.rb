@@ -100,7 +100,12 @@ module Repl
     def existencias(clave = nil)
       e = Existencia.where(sucursal: @sucursales).includes(:sucursal, :producto).joins(:producto).order("productos.nombre")
       e = e.where(productos: { clave: texto!(clave, "stock").upcase }) if clave
-      e.limit(FILAS + 1).map { |x| { branch: x.sucursal.nombre, code: x.producto.clave, product: x.producto.nombre, quantity: BigDecimal(x.cantidad.to_s) } }
+      apartados = @sucursales.to_h { |s| [ s.id, Apartado.por_producto(s) ] }
+      e.limit(FILAS + 1).map do |x|
+        reservado = BigDecimal(apartados.dig(x.sucursal_id, x.producto_id).to_s.presence || "0")
+        { branch: x.sucursal.nombre, code: x.producto.clave, product: x.producto.nombre, quantity: BigDecimal(x.cantidad.to_s),
+          reserved: reservado, available: BigDecimal(x.cantidad.to_s) - reservado }
+      end
     end
 
     def clientes

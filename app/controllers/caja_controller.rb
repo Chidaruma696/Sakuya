@@ -33,8 +33,9 @@ class CajaController < ApplicationController
     # Los precios los juzga la regla del precio dentro de Caja: lo que frena no se cobra, y lo que
     # pide revisión se cobra y queda por revisar.
     cliente = Cliente.activos.find_by(id: params[:cliente_id]) if params[:cliente_id].present? && Modulo.activo?("clientes")
-    venta = Caja.cobrar!(sucursal: sucursal_actual, usuario: usuario_actual, lineas: lineas, pagos: pagos, clave: params[:clave], autorizador: autoriza, cliente: cliente)
-    Pedido.abiertos.where(sucursal: sucursal_actual).find_by(id: params[:pedido_id])&.entregar!(venta) if params[:pedido_id].present?
+    pedido = Pedido.abiertos.where(sucursal: sucursal_actual).find_by(id: params[:pedido_id]) if params[:pedido_id].present?
+    venta = Caja.cobrar!(sucursal: sucursal_actual, usuario: usuario_actual, lineas: lineas, pagos: pagos, clave: params[:clave], autorizador: autoriza, cliente: cliente, pedido: pedido)
+    pedido&.entregar!(venta)
     render json: { url: caja_ticket_path(venta, imprimir: 1), folio: venta.folio, cambio: Dinero.pesos(venta.cambio_centavos) }
   rescue Caja::Error, JSON::ParserError, ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid => e
     render json: { error: e.message }, status: :unprocessable_entity

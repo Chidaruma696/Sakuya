@@ -18,7 +18,8 @@ module Caja
   # pagos:  [{ forma:, monto_centavos: }]; la forma "credito" va a cuenta del cliente.
   # clave:  identificador único del ticket generado por la caja; repetir la misma clave devuelve la misma venta.
   # cliente: a quién se le vende (hace falta para vender a cuenta).
-  def self.cobrar!(sucursal:, usuario:, lineas:, pagos:, clave:, autorizador: nil, cliente: nil)
+  # pedido: el pedido que se está cobrando; lo que él apartó sí se puede vender.
+  def self.cobrar!(sucursal:, usuario:, lineas:, pagos:, clave:, autorizador: nil, cliente: nil, pedido: nil)
     raise Error, I18n.t("errores.caja.clave_ticket") if clave.blank?
     if (previa = Venta.find_by(clave: clave))
       return previa
@@ -32,6 +33,7 @@ module Caja
 
     Venta.transaction do
       preparadas = lineas.map { |l| preparar_linea(sucursal, l, autorizador, codigo, fallos) }
+      Apartado.comprobar!(sucursal, preparadas.map { |l| [ l[:producto], l[:cantidad] ] }, excepto: pedido)
       total = preparadas.sum { |l| l[:importe_centavos] }
       pagos_ok = preparar_pagos(pagos, total)
       cambio = pagos_ok.sum { |p| p[:monto_centavos] } - total
@@ -60,7 +62,7 @@ module Caja
       fallos.uniq.each { |clave, f| Revision.abrir!(corte, usuario: usuario, sucursal: sucursal, motivo: I18n.t(clave, error: f), sin_repetir: true) }
       venta
     end
-  rescue Inventario::SinExistencia => e
+  rescue Inventario::SinExistencia, Apartado::Error => e
     raise Error, I18n.t("errores.caja.no_se_vende_sin", mensaje: e.message)
   rescue Frenado => e
     Revision.abrir!(corte, usuario: usuario, sucursal: sucursal, motivo: e.reporte, valor_centavos: e.valor_centavos, frenado: true)

@@ -267,12 +267,15 @@ en:
     cerrada: Signed out
     inicia_para_continuar: Sign in to continue
   errores:
+    apartado:
+      no_alcanza: '%{producto}: there are %{hay}, but %{apartado} is held for orders; available %{disponible}'
     impresora:
       sin_direccion: the branch has no address for its network thermal printer
       no_contesta: 'the thermal printer %{direccion} does not answer (%{error})'
     pedido:
       sin_renglones: the order has no lines
       no_abierto: order %{folio} is no longer open
+      no_alcanza: '%{producto}: you ask for %{pide} and %{disponible} is available to hold (or save it without holding)'
     abono:
       mayor_que_cero: the payment must be greater than zero
       sin_caja: there is no open till at %{sucursal} to take the payment
@@ -652,6 +655,8 @@ en:
     avisos:
       marcado: Charge to %{quien} marked as %{estado}
   inventario:
+    apartado: Held
+    disponible: Available
     movimiento_frenado: '%{tipo} of %{cantidad} stopped (%{motivo}): %{regla}'
     existencias: Stock
     kardex: Ledger
@@ -911,6 +916,10 @@ en:
     entrega: Delivery
     que: What
     guardar: Save order
+    apartar: Hold stock
+    apartar_ayuda: What it asks for is held and cannot be sold or transferred until it is charged or cancelled. Without holding, for future orders.
+    apartado: holds stock
+    sin_apartar: not holding
     cobrar: Charge at the till
     cancelar: Cancel order
     cobrando: 'Charging order %{folio} for %{cliente}.'

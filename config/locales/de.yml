@@ -267,12 +267,15 @@ de:
     cerrada: Abgemeldet
     inicia_para_continuar: Zum Fortfahren anmelden
   errores:
+    apartado:
+      no_alcanza: '%{producto}: es gibt %{hay}, aber %{apartado} ist für Bestellungen reserviert; verfügbar %{disponible}'
     impresora:
       sin_direccion: die Filiale hat keine Adresse für ihren Netzwerk-Thermodrucker
       no_contesta: 'der Thermodrucker %{direccion} antwortet nicht (%{error})'
     pedido:
       sin_renglones: die Bestellung hat keine Zeilen
       no_abierto: die Bestellung %{folio} ist nicht mehr offen
+      no_alcanza: '%{producto}: du bestellst %{pide} und %{disponible} ist zum Reservieren verfügbar (oder ohne Reservierung speichern)'
     abono:
       mayor_que_cero: die Zahlung muss größer als null sein
       sin_caja: in %{sucursal} ist keine Kasse offen, um die Zahlung anzunehmen
@@ -652,6 +655,8 @@ de:
     avisos:
       marcado: Belastung von %{quien} als %{estado} markiert
   inventario:
+    apartado: Reserviert
+    disponible: Verfügbar
     movimiento_frenado: '%{tipo} von %{cantidad} gestoppt (%{motivo}): %{regla}'
     existencias: Bestand
     kardex: Lagerbuch
@@ -911,6 +916,10 @@ de:
     entrega: Lieferung
     que: Was
     guardar: Bestellung speichern
+    apartar: Bestand reservieren
+    apartar_ayuda: Was bestellt wird, bleibt reserviert und wird weder verkauft noch umgelagert, bis kassiert oder storniert wird. Ohne Reservierung für künftige Bestellungen.
+    apartado: reserviert Bestand
+    sin_apartar: ohne Reservierung
     cobrar: An der Kasse kassieren
     cancelar: Bestellung stornieren
     cobrando: 'Bestellung %{folio} von %{cliente} wird kassiert.'

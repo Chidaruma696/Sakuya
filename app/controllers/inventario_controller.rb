@@ -20,6 +20,7 @@ class InventarioController < ApplicationController
   def index
     @existencias = Existencia.where(sucursal: @sucursal).includes(:producto)
                              .joins(:producto).order("productos.nombre")
+    @apartado = Apartado.por_producto(@sucursal)
   end
 
   def kardex

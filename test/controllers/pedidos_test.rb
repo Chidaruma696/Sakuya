@@ -44,4 +44,15 @@ class PedidosTest < ActionDispatch::IntegrationTest
     assert_select "#cobrando_pedido", 0
     assert_raises(ArgumentError) { pedido.entregar!(Venta.new) }
   end
+
+  test "el inventario enseña lo apartado y lo disponible, y el pedido dice si aparta" do
+    pedido = Pedido.create!(cliente: @lupita, sucursal: sucursales(:tienda), usuario: usuarios(:supervisora), lineas_attributes: [ { producto_id: productos(:catsup).id, cantidad: 4 } ])
+    get inventario_path
+    assert_select "th", "Apartado"
+    assert_select "tr", /CATS.*10.*4.*6/m
+    get pedido_path(pedido)
+    assert_select ".badge", "aparta existencias"
+    get new_pedido_path
+    assert_select "input[type=checkbox][name='pedido[apartar]'][checked]"
+  end
 end

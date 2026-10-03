@@ -35,6 +35,7 @@ class Traspaso < ApplicationRecord
       raise Error, I18n.t("errores.traspaso.externo_solo_a_matriz", almacen: origen.nombre) if origen.almacen? && !destino.matriz?
       limpias = lineas.map { |l| l.to_h.symbolize_keys }.reject { |l| l[:producto_id].blank? || BigDecimal(l[:cantidad].to_s.presence || "0") <= 0 }
       raise Error, I18n.t("errores.compras.sin_renglones") if limpias.empty?
+      Apartado.comprobar!(origen, limpias.map { |l| [ Producto.activos.find(l[:producto_id]), BigDecimal(l[:cantidad].to_s) ] })
       traspaso = create!(sucursal_origen: origen, sucursal_destino: destino, usuario: usuario, notas: notas.presence, fecha: fecha, clave: clave.presence)
       limpias.each do |l|
         producto = Producto.activos.find(l[:producto_id])

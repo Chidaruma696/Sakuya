@@ -19,7 +19,7 @@ class PedidosController < ApplicationController
   end
 
   def create
-    @pedido = Pedido.new(params.require(:pedido).permit(:cliente_id, :fecha_entrega, :notas, lineas_attributes: %i[producto_id cantidad]))
+    @pedido = Pedido.new(params.require(:pedido).permit(:cliente_id, :fecha_entrega, :notas, :apartar, lineas_attributes: %i[producto_id cantidad]))
     @pedido.assign_attributes(sucursal: sucursal_actual, usuario: usuario_actual)
     @pedido.cliente = Cliente.activos.find_by(id: @pedido.cliente_id)
     if @pedido.save
