@@ -100,7 +100,7 @@ Cada punto delicado le pregunta a una regla antes de hacer nada: el precio de ca
       (else (to-review "Rebaja mediana")))
 ```
 
-De fábrica, todo lo irregular **se frena y se reporta**: no pasa y el intento queda en Revisión a nombre de quien lo hizo. Quien tiene el permiso nunca se queda atorado; para esa persona, frenar es pasar y quedar por revisar. Cada regla se prueba en su editor contra lo de verdad (el corte abierto, una venta ya cobrada, una factura registrada), guarda la versión del contrato de su gancho y todas viajan juntas en un archivo `.lisp` para respaldarlas o llevarlas a otro negocio. Y para preguntarle cosas a los datos en vivo hay un REPL de solo lectura: `(sort-by-desc :balance (customers))`.
+De fábrica, todo lo irregular **se frena y se reporta**: no pasa y el intento queda en Revisión a nombre de quien lo hizo. Quien tiene el permiso nunca se queda atorado; para esa persona, frenar es pasar y quedar por revisar. Cada regla se prueba en su editor contra lo de verdad (el corte abierto, una venta ya cobrada, una factura registrada), guarda la versión del contrato de su gancho y todas viajan juntas en un archivo `.lisp` para respaldarlas o llevarlas a otro negocio. Y para preguntarle cosas a los datos en vivo hay un REPL de solo lectura: `(sort-by-desc :balance (customers))`. Lo que Sakuya no trae llega en **plugins**: un archivo `.lisp` con funciones para las reglas, informes para el REPL o un idioma nuevo para la interfaz.
 
 El Lisp es propio de Sakuya, escrito en Ruby (`lib/lisp*.rb`): un lector, un evaluador con límite de pasos y de profundidad, decimales para el dinero y funciones con nombre en inglés. Un programa solo puede llamar lo que la aplicación le da; no toca archivos, ni la red, ni la base de datos directamente.
 
@@ -120,7 +120,6 @@ En `docs/decisiones.md` están las razones de cada decisión; en `docs/arquitect
 ## 🗺️ Hoja de ruta
 
 - **Pedidos de sucursal a la matriz** con mínimos y máximos, y que un pedido de cliente pueda apartar existencias.
-- **Plugins en Lisp**, incluidas traducciones de la interfaz a otros idiomas.
 - Impresión por ESC/POS, una caja que aguante que se caiga la red, PostgreSQL para muchas sucursales.
 
 <br/>

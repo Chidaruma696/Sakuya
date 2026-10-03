@@ -1166,6 +1166,8 @@ es:
       informe: 'un informe va así: (report "Título" (consulta …))'
       traduccion: 'una traducción va así: (translation "fr" "Français" ("clave" "texto") …)'
       par: 'cada texto va así: ("clave" "texto"), y esto no: %{par}'
+      claves: 'no existen estas claves de texto: %{claves}'
+      html: 'estos textos llevan HTML y un plugin no los puede cambiar: %{claves}'
   reglas:
     archivo:
       ayuda: Todas las reglas del negocio en un solo archivo .lisp, para respaldarlas o llevarlas a otra instalación. Es texto que se puede leer y editar a mano; cada regla va debajo de su cabecera.

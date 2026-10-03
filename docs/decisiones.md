@@ -14,6 +14,14 @@ Cada gancho lleva un número de contrato (`VERSION` en su módulo) y cada regla 
 
 Además del precio de cada renglón, la venta completa pasa por una regla justo antes de cobrarse: total, productos, formas de pago, hora y día. De fábrica no frena nada, porque los precios ya tienen su regla y una venta normal no es irregular; está para lo que cada negocio necesita (nada de alcohol a deshoras, ventas grandes a revisión). Lo que frena no se cobra y queda reportado en el corte; con el permiso nuevo `caja.forzar_venta` se cobra y queda por revisar. Lo mismo al recibir mercancía: una regla mira qué llega, de quién y con qué papeles (remisión, factura); de fábrica no frena nada, lo que frena no entra y queda reportado en el proveedor, y con `compras.forzar_recepcion` entra por revisar.
 
+## Plugins en Lisp (3 oct 2026)
+
+Un plugin es un archivo `.lisp` que solo declara: una cabecera `(plugin "id" …)`, funciones con el prefijo del plugin (`(define (fonda/margen …) …)`) que luego usan todas las reglas, el tablero y el REPL, informes con nombre que salen como botones en el REPL, y traducciones (`(translation "fr" "Français" ("clave" "texto") …)`). Al instalarlo se lee y se revisa, pero no se ejecuta nada; cualquier otra forma se rechaza, y llega apagado. Las funciones llevan prefijo para no pisar las de Sakuya ni las de otro plugin. Lo de fábrica corre sin plugins: si un plugin rompe algo, la regla del negocio falla y decide la de fábrica, como con cualquier error.
+
+Las traducciones van por delante de los YAML (un backend de I18n propio en cadena): un plugin puede traer un idioma entero o cambiar textos de uno que ya existe, y lo que no traduce cae al español. Las claves se revisan al instalar (que existan, y que no sean `*_html`, que se pintan sin escapar). Si se apaga el plugin, quien tenía ese idioma vuelve a uno de fábrica.
+
+Pendiente: un lugar de donde bajar plugins de la comunidad. Por ahora se comparten como archivo.
+
 ## Un REPL para preguntarle a los datos (3 oct 2026)
 
 Ajustes › Opciones avanzadas › REPL evalúa Lisp contra los datos en vivo: consultas que devuelven listas de mapas (`(sales)`, `(stock)`, `(customers)`, `(cash-counts)`, `(reviews)`…) y herramientas para filtrarlas, ordenarlas, agruparlas y sumarlas; una lista de mapas sale como tabla. Es de solo lectura dos veces: el Lisp solo llama lo que se le da, y además cada evaluación corre con las escrituras bloqueadas en la base (`while_preventing_writes`), con límite de pasos y de 500 filas. Pide el mismo permiso que editar reglas porque deja ver todo; la matriz ve todas las sucursales y una tienda, la suya. No se guarda nada salvo las últimas preguntas en la sesión. Pendiente, si hace falta: dejar asentado quién preguntó qué.

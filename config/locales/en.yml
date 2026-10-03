@@ -1166,6 +1166,8 @@ en:
       informe: 'a report goes like this: (report "Title" (query …))'
       traduccion: 'a translation goes like this: (translation "fr" "Français" ("key" "text") …)'
       par: 'each text goes like this: ("key" "text"), and this does not: %{par}'
+      claves: 'these text keys do not exist: %{claves}'
+      html: 'these texts carry HTML and a plugin cannot change them: %{claves}'
   reglas:
     archivo:
       ayuda: All the business rules in a single .lisp file, to back them up or take them to another installation. It is text you can read and edit by hand; each rule goes under its header.

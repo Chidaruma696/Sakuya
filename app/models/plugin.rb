@@ -100,6 +100,11 @@ class Plugin < ApplicationRecord
       raise Lisp::Error, I18n.t("plugins.errores.par", par: Lisp.a_texto(par).truncate(60)) unless par.is_a?(Array) && par.size == 2 && par.all?(String)
       par
     end
+    # Las claves *_html se pintan sin escapar: un plugin no las toca.
+    html = textos.keys.select { |clave| clave.end_with?("_html") || clave.split(".").last == "html" }
+    raise Lisp::Error, I18n.t("plugins.errores.html", claves: html.first(5).join(", ")) if html.any?
+    desconocidas = textos.keys.reject { |clave| I18n.exists?(clave, locale: :es) }
+    raise Lisp::Error, I18n.t("plugins.errores.claves", claves: desconocidas.first(5).join(", ")) if desconocidas.any?
     Traduccion.new(idioma: idioma, nombre: nombre, textos: textos)
   end
 

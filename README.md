@@ -100,7 +100,7 @@ Every sensitive spot asks a rule before doing anything: the price of each line, 
       (else (to-review "Medium discount")))
 ```
 
-Out of the box, everything irregular **is stopped and reported**: it does not go through and the attempt lands in Review under the name of whoever tried it. Someone with the permission is never stuck; for them, stopping means going through and to review. Each rule is tested in its editor against the real thing (the open session, a sale already charged, a recorded invoice), keeps the contract version of its hook, and they all travel together in a `.lisp` file to back them up or take them to another business. And to ask the live data questions there is a read-only REPL: `(sort-by-desc :balance (customers))`.
+Out of the box, everything irregular **is stopped and reported**: it does not go through and the attempt lands in Review under the name of whoever tried it. Someone with the permission is never stuck; for them, stopping means going through and to review. Each rule is tested in its editor against the real thing (the open session, a sale already charged, a recorded invoice), keeps the contract version of its hook, and they all travel together in a `.lisp` file to back them up or take them to another business. And to ask the live data questions there is a read-only REPL: `(sort-by-desc :balance (customers))`. What Sakuya does not bring arrives in **plugins**: a `.lisp` file with functions for the rules, reports for the REPL or a new language for the interface.
 
 The Lisp is Sakuya's own, written in Ruby (`lib/lisp*.rb`): a reader, an evaluator with limits on steps and depth, decimals for money, and functions named in English. A program can only call what the app hands it; it cannot touch files, the network or the database directly.
 
@@ -120,7 +120,6 @@ The Lisp is Sakuya's own, written in Ruby (`lib/lisp*.rb`): a reader, an evaluat
 ## 🗺️ Roadmap
 
 - **Branch orders to the head office** with minimums and maximums, and customer orders that can hold stock.
-- **Plugins in Lisp**, including translations of the interface into other languages.
 - Printing to ESC/POS, a till that survives a dropped connection, PostgreSQL for many branches.
 
 <br/>

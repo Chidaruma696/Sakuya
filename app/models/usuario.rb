@@ -10,7 +10,7 @@ class Usuario < ApplicationRecord
   LETRAS = %w[chica normal grande].freeze
 
   validates :nombre, presence: true
-  validates :idioma, inclusion: { in: IDIOMAS }
+  validates :idioma, inclusion: { in: ->(_) { Idiomas.todos } }
   validates :tema, inclusion: { in: TEMAS }
   validates :densidad, inclusion: { in: DENSIDADES }
   validates :letra, inclusion: { in: LETRAS }

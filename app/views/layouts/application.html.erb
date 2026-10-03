@@ -16,7 +16,7 @@
     <link rel="icon" href="/icon-b.png" type="image/png" media="(prefers-color-scheme: light)">
     <link rel="icon" href="/icon-w.png" type="image/png" media="(prefers-color-scheme: dark)">
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <script>window.T = <%= raw I18n.t("js").to_json %>; window.MONEDA = <%= raw({ simbolo: Ajuste.simbolo, codigo: Ajuste["negocio.moneda"] }.to_json) %>;</script>
+    <script>window.T = <%= raw I18n.t("js", locale: :es).deep_merge(I18n.t("js")).to_json %>; window.MONEDA = <%= raw({ simbolo: Ajuste.simbolo, codigo: Ajuste["negocio.moneda"] }.to_json) %>;</script>
     <%= javascript_importmap_tags %>
   </head>
 

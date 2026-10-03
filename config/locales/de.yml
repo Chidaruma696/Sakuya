@@ -1166,6 +1166,8 @@ de:
       informe: 'ein Bericht geht so: (report "Titel" (Abfrage …))'
       traduccion: 'eine Übersetzung geht so: (translation "fr" "Français" ("schlüssel" "text") …)'
       par: 'jeder Text geht so: ("schlüssel" "text"), und das nicht: %{par}'
+      claves: 'diese Textschlüssel gibt es nicht: %{claves}'
+      html: 'diese Texte enthalten HTML und ein Plugin darf sie nicht ändern: %{claves}'
   reglas:
     archivo:
       ayuda: Alle Regeln des Geschäfts in einer einzigen .lisp-Datei, zum Sichern oder für eine andere Installation. Es ist Text, den man lesen und von Hand bearbeiten kann; jede Regel steht unter ihrer Überschrift.
