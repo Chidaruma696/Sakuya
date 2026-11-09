@@ -24,6 +24,46 @@ class CustomersTest < ActionDispatch::IntegrationTest
     assert_not customer.reload.active
   end
 
+  test "the credit type and the cut-off day are chosen on the form, from what the credit rule declares" do
+    get new_customer_path
+    assert_select "form.form select", 0, "no credit rule, nothing to choose"
+    Rule.create!(hook: "credit", code: CreditRule::EXAMPLE, user: users(:admin))
+    get new_customer_path
+    type, day = css_select("form.form select").map { |s| s["name"] } # the names the form really sends
+    assert_equal [ "customer[credit_type]", "customer[cutoff_day]" ], [ type, day ]
+    assert_equal [ "— none —", "Cash only", "Note by note", "Credit limit", "Weekly", "Cash, paying down", "Special" ], css_select("select[name='#{type}'] option").map(&:text)
+    assert_equal [ "", "5" ], css_select("select[name='#{day}'] option").to_a.values_at(0, 6).map { |o| o["value"] }
+
+    post customers_path, params: { "customer[name]" => "Lupita's Diner", type => "note-by-note", day => "5" }
+    assert_redirected_to customers_path
+    customer = Customer.last
+    assert_equal [ "note-by-note", 5, :friday ], [ customer.credit_type, customer.cutoff_day, customer.cutoff_keyword ]
+    post customers_path, params: { "customer[name]" => "No such type", type => "invented" }
+    assert_response :unprocessable_entity
+    Customer.create!(name: "Walk-in")
+
+    get customers_path
+    assert_select "th", "Credit type"
+    assert_select "td", /Note by note\s+Fri/
+    get account_customer_path(customer)
+    assert_select "#credit_type", /Note by note\s+Fri/
+    get edit_customer_path(customer)
+    assert_select "select[name='#{type}'] option[selected]", "Note by note"
+    assert_select "select[name='#{day}'] option[selected]", "Friday"
+
+    # The rule stops declaring it: the customer keeps it, flagged, and the form still offers it.
+    Rule.create!(hook: "credit", code: '(credit-type :cash "Cash only" (reject :cash-only))', user: users(:admin))
+    get customers_path
+    assert_select "td .credit-type-unknown", /note-by-note \(not declared\)/
+    get edit_customer_path(customer)
+    assert_select "select[name='#{type}'] option[selected]", "note-by-note (not declared)"
+    patch customer_path(customer), params: { "customer[phone]" => "555", type => "note-by-note", day => "" }
+    assert_redirected_to customers_path
+    assert_equal [ "note-by-note", nil, "555" ], customer.reload.then { |c| [ c.credit_type, c.cutoff_day, c.phone ] }
+    patch customer_path(customer), params: { type => "" }
+    assert_nil customer.reload.credit_type
+  end
+
   test "with the feature off nobody gets in, and neither does the cashier without permission" do
     Features.store!(Features::OPTIONAL - %w[customers], check: false)
     get customers_path

@@ -1,0 +1,5 @@
+<%# A customer's credit type by its declared name, flagged if the credit rule no longer declares it; then their cut-off day. %>
+<% if customer.credit_type %>
+  <% if types.key?(customer.credit_type) %><%= types[customer.credit_type] %><% else %><span class="credit-type-unknown font-medium text-red-700"><i class="bi bi-exclamation-triangle-fill"></i> <%= t("customers.unknown_credit_type", key: customer.credit_type) %></span><% end %>
+<% end %>
+<% if customer.cutoff_day %><span class="text-xs text-stone-500"><%= t("date.abbr_day_names")[customer.cutoff_day] %></span><% end %>

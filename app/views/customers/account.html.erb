@@ -5,7 +5,8 @@
 
 <div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
   <div class="card"><div class="stat-label"><%= t("customers.owes") %></div><div class="stat-value text-2xl" id="balance"><%= format_money(@account.balance_cents) %></div></div>
-  <div class="card"><div class="stat-label"><%= t("customers.credit_limit") %></div><div class="stat-value text-2xl"><%= format_money(@customer.credit_limit_cents) %></div></div>
+  <div class="card"><div class="stat-label"><%= t("customers.credit_limit") %></div><div class="stat-value text-2xl"><%= format_money(@customer.credit_limit_cents) %></div>
+    <% if @customer.credit_type || @customer.cutoff_day %><div class="mt-1 text-sm" id="credit_type"><%= render "credit_type", customer: @customer, types: @credit_types %></div><% end %></div>
   <% @account.age.each do |bucket, cents| %>
     <div class="card"><div class="stat-label"><%= t("customers.account.days", range: bucket) %></div><div class="stat-value text-xl <%= 'text-red-700' if cents.positive? && bucket != "0-30" %>"><%= format_money(cents) %></div></div>
   <% end %>

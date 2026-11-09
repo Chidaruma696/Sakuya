@@ -10,12 +10,14 @@ class CustomersController < ApplicationController
     @customers = Customer.order(:name).to_a.sort_by { |c| [ c.active ? 0 : 1, c.name.downcase ] }
     @customers = @customers.select { |c| c.name.downcase.include?(params[:q].to_s.downcase.strip) } if params[:q].present?
     @balances = CreditMovement.group(:customer_id).sum(:amount_cents)
+    @credit_types = CreditRule.types
   end
 
   # Account statement: what they owe, since when, every movement with its running balance, and taking an account payment.
   def account
     @customer = Customer.find(params[:id])
     @account = @customer.account
+    @credit_types = CreditRule.types
     balance = 0
     @movements = @account.movements.map { |m| [ m, balance += m.amount_cents ] }.reverse.first(200)
     @shift = Shift.opened_at(current_branch)
@@ -60,6 +62,6 @@ class CustomersController < ApplicationController
   private
 
   def data
-    params.require(:customer).permit(:name, :phone, :tax_id, :address, :notes, :credit_limit, :active)
+    params.require(:customer).permit(:name, :phone, :tax_id, :address, :notes, :credit_limit, :credit_type, :cutoff_day, :active)
   end
 end
