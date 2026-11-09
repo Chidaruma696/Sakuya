@@ -30,12 +30,15 @@ module Lisp
 
   # Reads and evaluates the whole text; returns the value of the last expression. `prelude` holds
   # already read forms evaluated first, in the same environment (the plugins' functions).
-  def self.run(text, functions: {}, steps: 10_000, depth: 100, prelude: [])
+  def self.run(text, **options) = run_forms(Reader.read(text), **options)
+
+  # The same for forms that were already read (a hook that picks which part of a program runs).
+  def self.run_forms(forms, functions: {}, steps: 10_000, depth: 100, prelude: [])
     environment = Environment.new(Base.environment)
     functions.each { |name, f| environment.define(name.to_s, f.is_a?(Native) ? f : Base.native(name.to_s, f)) }
     evaluator = Evaluator.new(steps: steps, depth: depth)
     prelude.each { |form| evaluator.evaluate(form, environment) }
-    Reader.read(text).reduce(nil) { |_, form| evaluator.evaluate(form, environment) }
+    forms.reduce(nil) { |_, form| evaluator.evaluate(form, environment) }
   end
 
   # The value written the way it would be written in the program, for messages and the REPL.

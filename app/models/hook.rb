@@ -22,8 +22,11 @@ module Hook
   end
 
   # Evaluates a program; raises Lisp::Error if it does not end in a decision.
-  def evaluate(code, data, plugins: true)
-    result = Lisp.run(code, functions: functions(data).merge(decisions(data)), prelude: plugins ? Plugin.prelude : [])
+  def evaluate(code, data, plugins: true) = evaluate_forms(Lisp::Reader.read(code), data, plugins: plugins)
+
+  # The same for forms that were already read.
+  def evaluate_forms(forms, data, plugins: true)
+    result = Lisp.run_forms(forms, functions: functions(data).merge(decisions(data)), prelude: plugins ? Plugin.prelude : [])
     result.is_a?(Decision) ? result : raise(Lisp::Error, I18n.t("rules.errors.no_decision", value: Lisp.to_text(result)))
   end
 

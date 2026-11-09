@@ -14,6 +14,10 @@ class CustomerAccount
   # What is owed on charges older than `days` days.
   def overdue_cents(days) = open_charges.select { |date, _| (@today - date).to_i > days }.sum { |_, remaining| remaining }
 
+  # How many charges are still unpaid, and the age in days of the oldest one (-1 if nothing is owed).
+  def open_charge_count = open_charges.size
+  def oldest_charge_days = open_charges.empty? ? -1 : (@today - open_charges.map(&:first).min).to_i
+
   # Days since the last payment; nil if they never paid.
   def days_since_payment
     last = movements.select { |m| m.kind == "account_payment" }.map(&:date).max
