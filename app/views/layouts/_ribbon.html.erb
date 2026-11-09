@@ -37,7 +37,7 @@
       <% groups.each_with_index do |g, i| %>
         <% buttons = g[:buttons].select { |b| button_visible?(b) } %>
         <% next if buttons.empty? %>
-        <% if i.positive? %><span class="mx-1 h-5 w-px bg-stone-200" aria-hidden="true"></span><% end %>
+        <% if i.positive? %><span class="ribbon-divider mx-1 h-5 w-px bg-stone-200" aria-hidden="true"></span><% end %>
         <% buttons.each do |b| %>
           <% route = send(b.route) %>
           <%= link_to route, title: t("ribbon.groups.#{g[:id]}"),

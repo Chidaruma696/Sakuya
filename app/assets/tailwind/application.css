@@ -160,5 +160,9 @@
 :root[data-text-size="small"] { font-size: 14px; }
 :root[data-text-size="large"] { font-size: 18px; }
 
-/* In compact mode the ribbon commands shrink a notch. */
+/* The ribbon commands. In normal density each one is a large icon over its label, like a classic
+   ribbon; in compact mode icon and text go inline, a notch smaller, so the row takes half the height. */
+:root:not([data-density="compact"]) .ribbon-command { flex-direction: column; gap: 0.3rem; min-width: 4.5rem; padding: 0.45rem 0.6rem; font-size: 0.75rem; line-height: 1.15; text-align: center; }
+:root:not([data-density="compact"]) .ribbon-command i { font-size: 1.65rem; }
+:root:not([data-density="compact"]) .ribbon-divider { height: 2.75rem; }
 :root[data-density="compact"] .ribbon-command { padding: 0.25rem 0.5rem; font-size: 0.8125rem; }
