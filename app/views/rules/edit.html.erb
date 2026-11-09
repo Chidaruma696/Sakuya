@@ -14,6 +14,9 @@
     <% if @program_error %>
       <p class="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900"><i class="bi bi-exclamation-triangle-fill text-accent-700"></i> <%= @program_error %></p>
     <% end %>
+    <% if @warning %>
+      <p id="warning" class="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900"><i class="bi bi-exclamation-triangle-fill"></i> <%= @warning %><% if @confirm %> <%= t("rules.confirm") %><%= hidden_field_tag :confirmed, "1" %><% end %></p>
+    <% end %>
 
     <fieldset class="rounded-lg border border-stone-200 bg-white px-4 py-3">
       <legend class="px-1 text-sm font-semibold"><%= t("rules.scenario") %></legend>
@@ -50,6 +53,12 @@
         <% end %>
       </ul>
     </div>
+    <% if @rule_module.const_defined?(:DECLARATION) %>
+      <div>
+        <h3 class="stat-label mb-1"><%= t("rules.declares") %></h3>
+        <p><code class="code text-brand-800"><%= @rule_module::DECLARATION %></code> <span class="text-stone-500"><%= t("#{texts}.declares") %></span></p>
+      </div>
+    <% end %>
     <div>
       <h3 class="stat-label mb-1"><%= t("rules.answers") %></h3>
       <ul class="space-y-0.5">

@@ -17,7 +17,11 @@ class RulesController < ApplicationController
     @code = params[:code].to_s
     result = dry_run(@code)
     @decisions = effective(result.is_a?(Array) ? result : [ [ nil, result, @scenario[:authorized] ] ]) if result
+    @warning = @rule_module.warning(@code) if result && @rule_module.respond_to?(:warning)
     return render(:edit, status: @program_error ? :unprocessable_entity : :ok) if params[:dry_run].present? || @program_error
+    # A hook may have something to say before its rule is saved; saving again confirms it.
+    @confirm = @warning.present? && params[:confirmed] != "1"
+    return render(:edit) if @confirm
     Rule.create!(hook: @hook, code: @code, user: current_user)
     redirect_to rule_edit_path(@hook), notice: t("rules.notices.saved")
   rescue ActiveRecord::RecordInvalid => e

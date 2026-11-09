@@ -186,11 +186,46 @@ class RulesControllerTest < ActionDispatch::IntegrationTest
     get rule_edit_path("credit")
     assert_select "a[href=?]", rule_edit_path("credit")
     assert_select "textarea#code", /reject :no-credit/
-    post rule_save_path("credit"), params: { dry_run: "1", code: CreditRule::EXAMPLE, amount: "500", balance: "0", limit: "1000" }
+    assert_select "aside code", /credit-type :key "Name"/
+    assert_select "aside code", "(open-charges)"
+    assert_select "select#credit_type", 0, "the rule in the editor declares no types yet"
+
+    # A made-up account: type, unpaid charges, age of the oldest and cut-off day.
+    post rule_save_path("credit"), params: { dry_run: "1", code: CreditRule::EXAMPLE, amount: "500", balance: "0", limit: "1000", credit_type: "limit" }
     assert_select "#decision", /Credit given/
+    assert_select "select#credit_type option[selected][value=limit]", "Credit limit"
+    post rule_save_path("credit"), params: { dry_run: "1", code: CreditRule::EXAMPLE, amount: "500", credit_type: "note-by-note", open_charges: "1", oldest_days: "2" }
+    assert_select "#decision", /It is stopped: they have an unpaid note/
+    post rule_save_path("credit"), params: { dry_run: "1", code: CreditRule::EXAMPLE, amount: "500", credit_type: "weekly", open_charges: "1", oldest_days: "7", cutoff_day: Date.current.wday }
+    assert_select "#decision", /It is stopped: their cut-off day passed/
+    post rule_save_path("credit"), params: { dry_run: "1", code: CreditRule::EXAMPLE, amount: "500" }
+    assert_select "#decision", /It is stopped: this customer has no credit type/
+    assert_equal 0, Rule.count
+
+    post rule_save_path("credit"), params: { code: '(credit-type :a "A" (allow)) (credit-type :a "B" (allow))' }
+    assert_response :unprocessable_entity
+    assert_select "p", /credit type :a is declared twice/
+
+    # A real customer: their type, account and cut-off day.
+    post rule_save_path("credit"), params: { code: CreditRule::EXAMPLE }
+    assert_equal [ CreditRule::EXAMPLE, 2 ], [ Rule.current("credit").code, Rule.current("credit").version ]
+    customer.update!(credit_type: "limit", cutoff_day: 5)
     post rule_save_path("credit"), params: { dry_run: "1", code: CreditRule::EXAMPLE, amount: "500", customer_id: customer.id }
     assert_select "#decision", /It is stopped: this sale takes them over their limit \(owes \$0.00, limit \$100.00\)/
-    assert_select "p", /Owes \$0.00 · limit \$100.00/
+    assert_select "p", /Owes \$0.00 · limit \$100.00 · Credit limit · Friday/
+
+    # Dropping a type that customers carry warns first; saving again keeps it.
+    without_limit = '(credit-type :cash "Cash only" (reject :cash-only))'
+    post rule_save_path("credit"), params: { dry_run: "1", code: without_limit }
+    assert_select "#warning", /1 customer has a credit type this rule does not declare — :limit \(1\)/
+    assert_select "#warning input[name=confirmed]", 0
+    post rule_save_path("credit"), params: { code: without_limit }
+    assert_response :ok
+    assert_select "#warning input[name=confirmed][value='1']"
+    assert_equal CreditRule::EXAMPLE, Rule.current("credit").code, "not saved yet"
+    post rule_save_path("credit"), params: { code: without_limit, confirmed: "1" }
+    assert_redirected_to rule_edit_path("credit")
+    assert_equal without_limit, Rule.current("credit").code
   end
 
   test "without rules.edit you cannot get in" do

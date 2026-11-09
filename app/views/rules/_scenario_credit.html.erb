@@ -1,3 +1,4 @@
+<% types = CreditRule.types(@code) %>
 <div><label for="customer_id" class="field-label"><%= t("#{texts}.scenario.customer") %></label>
   <%= select_tag :customer_id, options_for_select([ [ t("#{texts}.scenario.made_up"), "" ] ] + Customer.active.order(:name).limit(300).map { |c| [ c.name, c.id ] }, scenario[:customer]&.id), id: "customer_id" %></div>
 <div><label for="amount" class="field-label"><%= t("#{texts}.scenario.amount") %></label>
@@ -7,6 +8,17 @@
     <%= number_field_tag :balance, format("%.2f", scenario[:balance] / 100r), step: "0.01", id: "balance", class: "w-32 font-mono" %></div>
   <div><label for="limit" class="field-label"><%= t("#{texts}.scenario.limit") %></label>
     <%= number_field_tag :limit, format("%.2f", scenario[:limit] / 100r), step: "0.01", min: 0, id: "limit", class: "w-32 font-mono" %></div>
+  <% if types.any? %>
+    <div><label for="credit_type" class="field-label"><%= t("#{texts}.scenario.credit_type") %></label>
+      <%= select_tag :credit_type, options_for_select([ [ t("customers.no_credit_type"), "" ] ] + types.map { |key, name| [ name, key ] }, scenario[:credit_type]), id: "credit_type" %></div>
+  <% end %>
+  <div><label for="open_charges" class="field-label"><%= t("#{texts}.scenario.open_charges") %></label>
+    <%= number_field_tag :open_charges, scenario[:open_charges], step: 1, min: 0, id: "open_charges", class: "w-24 font-mono" %></div>
+  <div><label for="oldest_days" class="field-label"><%= t("#{texts}.scenario.oldest_days") %></label>
+    <%= number_field_tag :oldest_days, scenario[:oldest_days], step: 1, min: 0, id: "oldest_days", class: "w-24 font-mono" %></div>
+  <div><label for="cutoff_day" class="field-label"><%= t("#{texts}.scenario.cutoff_day") %></label>
+    <%= select_tag :cutoff_day, options_for_select([ [ t("customers.no_cutoff_day"), "" ] ] + t("date.day_names").each_with_index.map { |day, i| [ day, i ] }, scenario[:cutoff_day] && CreditRule::WEEKDAYS.index(scenario[:cutoff_day])), id: "cutoff_day" %></div>
 <% else %>
-  <p class="pb-2 text-stone-600"><%= t("#{texts}.scenario.account", balance: format_money(scenario[:customer].balance_cents), limit: format_money(scenario[:customer].credit_limit_cents)) %></p>
+  <% customer = scenario[:customer] %>
+  <p class="pb-2 text-stone-600"><%= t("#{texts}.scenario.account", balance: format_money(customer.balance_cents), limit: format_money(customer.credit_limit_cents)) %><% if customer.credit_type %> · <%= types[customer.credit_type] || t("customers.unknown_credit_type", key: customer.credit_type) %><% end %><% if customer.cutoff_day %> · <%= t("date.day_names")[customer.cutoff_day] %><% end %></p>
 <% end %>
