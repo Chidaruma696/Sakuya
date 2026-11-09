@@ -4,7 +4,10 @@
 module PluginTranslations
   class Backend < I18n::Backend::Simple
     # translations: [[language, { "key.with.dots" => "text" }], …]
-    def reload!(translations)
+    # Without arguments it is I18n reloading the YAML files (in development, when one changes):
+    # the plugins' texts did not change, so they stay as they are.
+    def reload!(translations = nil)
+      return if translations.nil?
       @translations = Concurrent::Hash.new
       translations.each do |language, texts|
         texts.each { |key, text| store_translations(language, key.split(".").reverse.reduce(text) { |leaf, part| { part => leaf } }) }
