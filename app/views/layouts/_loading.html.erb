@@ -1,0 +1,22 @@
+<%# The "loading" modal: it shows when a page or a form takes more than a moment (application.js
+    switches it on and off). A ring spins around the two knives of the logo, which come together
+    until they cross and then part again. %>
+<div id="loading" class="fixed inset-0 z-[60] flex items-center justify-center bg-stone-900/40" role="status" aria-live="polite" aria-hidden="true">
+  <div class="flex flex-col items-center gap-3 rounded-2xl bg-white px-10 py-7 shadow-2xl ring-1 ring-stone-200">
+    <svg viewBox="-400 -400 800 800" class="h-28 w-28" aria-hidden="true">
+      <circle class="spin-track" r="360" fill="none" stroke-width="26"/>
+      <circle class="spin" r="360" fill="none" stroke-width="26" stroke-linecap="round" stroke-dasharray="560 1702"/>
+      <g transform="scale(0.78)">
+        <% %w[knife-a knife-b].each do |knife| %>
+          <g class="<%= knife %>">
+            <path d="M0,-288 C14,-250 30,-196 32,-150 L32,34 L-32,34 L-32,-150 C-30,-196 -14,-250 0,-288 Z"/>
+            <rect x="-74" y="34" width="148" height="30" rx="13"/>
+            <rect x="-21" y="60" width="42" height="150" rx="10"/>
+            <path fill-rule="evenodd" d="M0,206 a36,36 0 1,0 0.01,0 Z M0,226 a16,16 0 1,0 0.01,0 Z"/>
+          </g>
+        <% end %>
+      </g>
+    </svg>
+    <span class="text-sm font-medium text-stone-600"><%= t("js.loading") %></span>
+  </div>
+</div>

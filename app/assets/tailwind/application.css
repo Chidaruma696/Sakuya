@@ -160,6 +160,25 @@
 :root[data-text-size="small"] { font-size: 14px; }
 :root[data-text-size="large"] { font-size: 18px; }
 
+/* The "loading" modal: hidden until application.js switches it on. The ring spins; the logo's two
+   knives start apart and upright, come together until they cross as in the logo, and part again. */
+#loading { opacity: 0; pointer-events: none; transition: opacity 0.15s; }
+#loading.on { opacity: 1; pointer-events: auto; }
+#loading .spin-track { stroke: var(--color-brand-100); }
+#loading .spin { stroke: var(--color-brand-500); }
+#loading .knife-a, #loading .knife-b { fill: var(--color-brand-800); transform: rotate(-45deg); }
+#loading .knife-b { transform: rotate(45deg); }
+#loading.on .spin { animation: loading-spin 1.1s linear infinite; }
+#loading.on .knife-a { animation: loading-knife-a 1.5s ease-in-out infinite; }
+#loading.on .knife-b { animation: loading-knife-b 1.5s ease-in-out infinite; }
+@keyframes loading-spin { to { transform: rotate(360deg); } }
+@keyframes loading-knife-a { 0%, 100% { transform: translateX(-130px) rotate(0deg); } 45%, 60% { transform: translateX(0) rotate(-45deg); } }
+@keyframes loading-knife-b { 0%, 100% { transform: translateX(130px) rotate(0deg); } 45%, 60% { transform: translateX(0) rotate(45deg); } }
+@media (prefers-reduced-motion: reduce) {
+  #loading.on .spin { animation-duration: 3s; }
+  #loading.on .knife-a, #loading.on .knife-b { animation: none; }
+}
+
 /* The ribbon commands. In normal density each one is a large icon over its label, like a classic
    ribbon; in compact mode icon and text go inline, a notch smaller, so the row takes half the height. */
 :root:not([data-density="compact"]) .ribbon-command { flex-direction: column; gap: 0.3rem; min-width: 4.5rem; padding: 0.45rem 0.6rem; font-size: 0.75rem; line-height: 1.15; text-align: center; }

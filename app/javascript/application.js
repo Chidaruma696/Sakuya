@@ -26,6 +26,28 @@ function notifyUpdate() {
   document.body.appendChild(box)
 }
 
+// The "loading" modal (layouts/_loading): it only shows if a page or a form takes more than a
+// moment, so quick clicks do not flash it. It goes away when the page arrives; a click on it or
+// twenty seconds also dismiss it, in case what came back was a download and no page ever loads.
+let loadingTimer
+const loading = (on) => {
+  clearTimeout(loadingTimer)
+  const box = document.getElementById("loading")
+  if (!box) return
+  if (!on) { box.classList.remove("on"); return }
+  loadingTimer = setTimeout(() => {
+    box.classList.add("on")
+    loadingTimer = setTimeout(() => box.classList.remove("on"), 20000)
+  }, 300)
+}
+document.addEventListener("turbo:visit", () => loading(true))
+document.addEventListener("turbo:submit-start", () => loading(true))
+for (const name of ["turbo:load", "turbo:render", "turbo:submit-end", "turbo:fetch-request-error"]) document.addEventListener(name, () => loading(false))
+// Forms that go without Turbo (the rule editors, the ticket) reload the whole page.
+document.addEventListener("submit", (e) => { if (e.target.dataset?.turbo === "false" && !e.defaultPrevented) loading(true) })
+window.addEventListener("pageshow", () => loading(false))
+document.addEventListener("click", (e) => { if (e.target.closest?.("#loading")) loading(false) })
+
 // Whatever sticks below the ribbon (the order banner, the ticket preview) needs to know how tall it is.
 const measureRibbon = () => document.documentElement.style.setProperty("--ribbon-height", `${document.getElementById("ribbon")?.offsetHeight || 0}px`)
 document.addEventListener("turbo:load", measureRibbon)
