@@ -2,6 +2,12 @@
 
 Why Sakuya is the way it is. Newest first.
 
+## Credit types are declared in the credit rule (9 Nov 2026)
+
+A wholesaler does not give every customer the same credit: one pays note by note, another has a limit, another settles every week on a fixed day. The core still has no list of credit types. The credit rule declares them, `(credit-type :weekly "Weekly" …)`: a key, the name shown in Customers and the rule that decides for customers of that type. Declarations are read, never run, to know which types exist (the way a plugin is read), so the customer form can offer them; on a sale the forms that are not declarations run first and then only the body of the customer's type. A rule without declarations is still one rule for everyone. With types declared, a customer without one, or with one the rule stopped declaring, gets no credit; the list flags it and the editor warns before saving a rule that drops a type in use.
+
+The definition and the policy live in Lisp; what a customer carries (their type, their limit, a weekly cut-off day) is data entered on a screen. The contract goes up to 2 and only adds readings, all from the ledger that was already there: `(open-charges)`, `(oldest-charge-days)`, `(cutoff-day)` and `(days-since :friday)`. Rules saved under contract 1 decide as before and are flagged as old. The editor's example is now six common types (cash only, note by note, credit limit, weekly, cash paying down, special), each covered by a test, and it is only an example: out of the box nobody gets credit and no type exists. The till did not change. Not solved here: two tills selling to the same customer at the same moment can both read the same balance.
+
 ## The code is in English (3 Oct 2026)
 
 Models, columns, routes, locale keys, comments and tests are all in English; only the translations (`config/locales/es.yml`, `de.yml`) are in other languages. Sakuya started with its models and keys in Spanish, which kept anyone who doesn't read Spanish out of the code. The switch was made in one go, with a single new migration that creates the English schema: there were no installations with data to carry over.

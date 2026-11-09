@@ -1,0 +1,36 @@
+schema: spec-driven
+
+context: |
+  Sakuya is a point of sale and back office for small businesses: Rails, one
+  database (SQLite by default, PostgreSQL with DATABASE_URL), split into
+  features that switch on and off per business.
+
+  The core is fixed and the business policy is written in Sakuya's own Lisp
+  (lib/lisp*.rb): the core asks at fixed points (hooks) and a rule answers
+  (allow), (to-review reason) or (reject reason). The rule proposes, the core
+  disposes; no rule writes to the database.
+
+  Read docs/architecture.md and docs/decisions.md before proposing a change.
+
+  Standing rules:
+  - Nothing new comes configured out of the box: the core brings the
+    mechanism, the business writes the policy in Lisp. The built-in defaults
+    are the strict ones.
+  - Stop and report: what is irregular does not go through and the attempt
+    stays in Review under the name of whoever made it; someone with the
+    permission goes through and is left for review.
+  - Insert-only ledgers for money and debt; a single door to the inventory
+    (Inventory.move!).
+  - A new capability is a new feature (docs/architecture.md, "How to add a
+    feature"), switched off by default.
+  - Code, comments, docs, tests and these artifacts are in English; every
+    visible text goes through t(...) in en, es and de.
+  - Every change runs on SQLite and on PostgreSQL.
+
+rules:
+  specs:
+    - Every requirement has verifiable scenarios (WHEN/THEN)
+    - Describe behaviour, not implementation
+  tasks:
+    - Keep each task small enough to land as one commit
+    - Tests come with the task that changes behaviour, not at the end

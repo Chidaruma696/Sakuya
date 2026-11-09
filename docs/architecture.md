@@ -19,7 +19,7 @@ Sakuya is a single system and a single database, split into **features**. A feat
 | **Purchases** | Suppliers, goods receipt (an inflow with supplier and delivery note), supplier invoice with lines, accounts payable, payment from the drawer. No cost in inventory. | suppliers, receipts, receipt_lines, supplier_invoices, supplier_invoice_lines, supplier_movements, supplier_payments | `purchases.*` | Purchases |
 | **Warehouses** | *Warehouse* branches (storage only: no till and no counts), stock transfers between branches and restocking by minimums and maximums (it builds the transfer). | stock_transfers, stock_transfer_lines, minimums (and the `warehouse` kind in branches) | `warehouses.*` | Warehouses |
 | **Stock counts** | Physical counts: pieces are scanned and fractional quantities are typed; the shortage is charged to the person responsible. | stock_counts, stock_count_lines | `stock_counts.*` | Stock counts |
-| **Customers** (off by default) | Customers, selling on account (the "On account" payment method), customer account with ageing, account payments into the till, orders that reserve stock and are charged at the till. | customers, credit_movements, account_payments, orders, order_lines | `customers.*` | Customers |
+| **Customers** (off by default) | Customers with a credit type (declared in the credit rule) and a weekly cut-off day, selling on account (the "On account" payment method), customer account with ageing, account payments into the till, orders that reserve stock and are charged at the till. | customers, credit_movements, account_payments, orders, order_lines | `customers.*` | Customers |
 
 ## Cross-cutting rules
 
@@ -43,7 +43,7 @@ The core asks at fixed points (**hooks**) and a rule written in Sakuya's Lisp (`
 | dashboard | `Dashboard` | which figures and lists show on Home | the usual ones |
 | price | `PriceRule` | every line being charged | below what applies, stops |
 | sale | `SaleRule` | the whole sale before checkout | lets it through |
-| credit | `CreditRule` | what goes on a customer's account | stops (no credit) |
+| credit | `CreditRule` | what goes on a customer's account; it can declare credit types and then the customer's own decides | stops (no credit, no types) |
 | shift | `ShiftRule` | the difference when closing | over the cap, stops |
 | withdrawal | `WithdrawalRule` | taking cash out of the drawer | without permission, stops |
 | movement | `MovementRule` | loose inflows, adjustments and waste | without permission, stops |

@@ -56,7 +56,7 @@ One system, one database, and **modules that turn on or off per business**. The 
 | **Purchasing** *(module)* | Suppliers, receiving goods, supplier invoices, accounts payable, paying from the till. | The invoice is the only thing that creates debt. Cash leaves the till by one path. |
 | **Warehouses** *(module)* | Storage-only branches, transfers between branches and restocking by minimums and maximums. | A warehouse has no till. A transfer goes out and in within one transaction. |
 | **Stock counts** *(module)* | Full or partial counts, scanning pieces by their code; what goes by kilo, litre or metre is typed. | The count rules, and the shortfall is charged to whoever is responsible. |
-| **Customers** *(module, off by default)* | Customers, selling on account, payments at the till, account statements and orders that hold stock and are charged at the till. | Out of the box nobody gets credit: a rule in Lisp decides. |
+| **Customers** *(module, off by default)* | Customers, selling on account, payments at the till, account statements and orders that hold stock and are charged at the till. | Out of the box nobody gets credit: a rule in Lisp decides, and it can declare credit types (note by note, limit, weekly…) to give each customer their own terms. |
 
 Factory roles: administrator, cashier (sell, open the till, cash drops, see stock; with the customers module, also payments and orders), warehouse keeper and supervisor. The interface speaks English, Spanish and German, and a plugin can teach it another language.
 
