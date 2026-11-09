@@ -21,9 +21,18 @@ module EscPos
 
     def center = align(1)
     def left = align(0)
+    def right = align(2)
+
+    # Aligned the way a ticket block asks for: "left", "center" or "right".
+    def aligned(side) = align({ "center" => 1, "right" => 2 }.fetch(side.to_s, 0))
 
     def bold(on = true)
       @bytes << ESC << "E" << (on ? 1 : 0).chr
+      self
+    end
+
+    def underline(on = true)
+      @bytes << ESC << "-" << (on ? 1 : 0).chr
       self
     end
 
@@ -148,32 +157,56 @@ module EscPos
   def self.ticket(sale)
     a = Setting.to_h
     d = Document.new(columns: Setting.integer("ticket.width") == 58 ? 32 : 48)
-    d.center.image(a["ticket.logo"])
-    d.bold.text(a["business.name"].presence || sale.branch&.name).bold(false)
-    [ a["ticket.tagline"], (sale.branch&.name if a["business.name"].present? && sale.branch&.name != a["business.name"]),
-      a["business.address"], a["business.phone"], a["ticket.tax_id"] ].compact_blank.each { |l| d.text(l) }
-    d.left.line
-    d.row("#{I18n.t("common.date")}: #{I18n.l(sale.created_at, format: :short)}", "")
-    d.bold.text("#{I18n.t("common.folio")}: #{sale.folio}").bold(false)
-    d.text("#{I18n.t("till.served_by")}: #{sale.user&.name}") if a["ticket.show_cashier"] == "1"
-    d.text("#{I18n.t("till.customer")}: #{sale.customer.name}") if sale.customer
-    d.line
-    sale.lines.includes(:product, :promotion).each do |l|
-      name = l.product.name
-      name += " (#{l.promotion.name})" if l.promotion
-      name += " *" if l.price_cents < l.catalog_cents
-      d.text(name)
-      d.row("  #{ApplicationController.helpers.quantity(l.quantity, l.product)} x #{Money.format_money(l.price_cents)}", Money.format_money(l.amount_cents))
+    labels = TicketLayout.labels
+    # A line of text the way its block asks for: aligned and, if large, at double size.
+    words = ->(block, text) do
+      next if text.blank?
+      d.aligned(block.align)
+      d.bold if block.bold
+      d.underline if block.underline
+      d.large if block.large
+      d.text(text)
+      d.large(false) if block.large
+      d.underline(false) if block.underline
+      d.bold(false) if block.bold
     end
-    d.line
-    d.bold.large.row(I18n.t("common.total").upcase, Money.format_money(sale.total_cents), columns: d.columns / 2).large(false).bold(false)
-    sale.payments.each { |p| d.row(I18n.t("payment_methods.#{p.payment_method}"), Money.format_money(p.amount_cents)) }
-    d.row(I18n.t("till.change"), Money.format_money(sale.change_cents))
-    d.center.bold.text(I18n.t("sale_statuses.refunded").upcase).bold(false) if sale.status == "refunded"
-    d.line(".")
-    d.text(a["ticket.returns_legend"].presence || I18n.t("till.refunds_only_with_ticket"))
-    d.ean13(sale.code) if a["ticket.show_code"] == "1"
-    d.text(a["business.ticket_footer"]) if a["business.ticket_footer"].present?
+    TicketLayout.current.reject(&:off).each do |block|
+      case block.key
+      when "logo" then d.aligned(block.align).image(a["ticket.logo"])
+      when "name" then words.(block, a["business.name"].presence || sale.branch&.name)
+      when "tagline" then words.(block, a["ticket.tagline"])
+      when "branch" then words.(block, (sale.branch&.name if a["business.name"].present? && sale.branch&.name != a["business.name"]))
+      when "address" then words.(block, a["business.address"])
+      when "phone" then words.(block, a["business.phone"])
+      when "tax_id" then words.(block, a["ticket.tax_id"])
+      when "info"
+        d.left.line
+        d.row("#{labels["date"]}: #{I18n.l(sale.created_at, format: :short)}", "")
+        d.bold.text("#{labels["folio"]}: #{sale.folio}").bold(false)
+        d.text("#{labels["served_by"]}: #{sale.user&.name}") if a["ticket.show_cashier"] == "1"
+        d.text("#{I18n.t("till.customer")}: #{sale.customer.name}") if sale.customer
+      when "lines"
+        d.left.line
+        sale.lines.includes(:product, :promotion).each do |l|
+          name = l.product.name
+          name += " (#{l.promotion.name})" if l.promotion
+          name += " *" if l.price_cents < l.catalog_cents
+          d.text(name)
+          d.row("  #{ApplicationController.helpers.quantity(l.quantity, l.product)} x #{Money.format_money(l.price_cents)}", Money.format_money(l.amount_cents))
+        end
+      when "totals"
+        d.left.line
+        d.bold.large.row(labels["total"], Money.format_money(sale.total_cents), columns: d.columns / 2).large(false).bold(false)
+        sale.payments.each { |p| d.row(I18n.t("payment_methods.#{p.payment_method}"), Money.format_money(p.amount_cents)) }
+        d.row(labels["change"], Money.format_money(sale.change_cents))
+        d.center.bold.text(I18n.t("sale_statuses.refunded").upcase).bold(false) if sale.status == "refunded"
+      when "returns_legend"
+        d.left.line(".")
+        words.(block, a["ticket.returns_legend"].presence || I18n.t("till.refunds_only_with_ticket"))
+      when "barcode" then d.center.ean13(sale.code) if a["ticket.show_code"] == "1"
+      when "footer" then words.(block, a["business.ticket_footer"])
+      end
+    end
     d.cut.to_s
   end
 end

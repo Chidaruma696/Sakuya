@@ -79,6 +79,33 @@ es:
       zoom_fit: Ajustar al ancho
       print_test: Imprimir prueba
       print_test_help: Manda esta muestra a la impresora, tal cual, para probar papel y ancho
+      blocks:
+        logo: Logo
+        name: Nombre del negocio
+        tagline: Lema
+        branch: Sucursal
+        address: Dirección
+        phone: Teléfono
+        tax_id: RFC
+        info: Fecha, folio y cajero
+        lines: Lo vendido
+        totals: Total y pagos
+        returns_legend: Leyenda de devoluciones
+        barcode: Código de barras
+        footer: Pie
+      design:
+        pick: Elige un bloque
+        left: Alinear a la izquierda
+        center: Centrar
+        right: Alinear a la derecha
+        size: Más grande
+        bold: Negrita
+        underline: Subrayado
+        hide: Ocultar
+        hidden: 'Ocultos:'
+        reset: Como viene
+        reset_help: Vuelve al orden, la alineación y el tamaño de fábrica
+        help: Arrastra un bloque sobre el papel para subirlo o bajarlo. Haz clic en él para alinearlo, agrandarlo u ocultarlo. Doble clic en una palabra subrayada (Producto, Cantidad, TOTAL…) para escribirla a tu modo; déjala en blanco para recuperar la original. Una impresora térmica imprime renglón por renglón, así que los bloques se apilan; no pueden ir lado a lado. Se guarda con el botón Guardar.
     currency_help: 'El símbolo va pegado a la cifra en todo el sistema y en el ticket ($, €, Q, S/…). Sin conversiones: una sola moneda por instalación.'
     currency: Moneda
     sections:
@@ -355,6 +382,7 @@ es:
     setting:
       integer: "%{key}: debe ser un número entero"
       logo: el logo debe ser una imagen PNG, JPG o WebP de menos de 300 KB
+      layout: no se pudo leer el diseño del ticket; acomódalo otra vez
       prefix: "%{key}: el prefijo lleva hasta 4 letras o números, sin guion"
       mode_folios: modo de numeración desconocido
       denominations: las denominaciones van separadas por coma, por ejemplo 500,200,100,50,20,10,5,2,1,0.5

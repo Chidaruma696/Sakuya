@@ -12,6 +12,8 @@
           <button type="button" class="btn btn-ghost btn-sm" data-action="ticket-design#removeLogo"><i class="bi bi-x-lg"></i> <%= t("settings.ticket.remove_logo") %></button>
           <p class="text-xs text-stone-500"><%= t("settings.ticket.logo_help") %></p>
           <%= f.hidden_field "setting[ticket.logo]", value: @settings["ticket.logo"], data: { ticket_design_target: "logo" } %>
+          <%= f.hidden_field "setting[ticket.layout]", value: @settings["ticket.layout"], data: { ticket_design_target: "layout" } %>
+          <%= f.hidden_field "setting[ticket.labels]", value: @settings["ticket.labels"], data: { ticket_design_target: "labels" } %>
         </div>
       </div>
       <div class="fields-2">
@@ -68,7 +70,21 @@
         <button type="button" class="btn btn-primary btn-sm ml-2" data-action="ticket-design#print" title="<%= t("settings.ticket.print_test_help") %>"><i class="bi bi-printer"></i> <%= t("settings.ticket.print_test") %></button>
       </span>
     </div>
+    <%# Arranging the blocks: pick one on the paper, then align it, enlarge it or hide it; drag it to move it. %>
+    <div class="mb-2 flex flex-wrap items-center gap-1 rounded border border-stone-200 bg-white px-2 py-1.5 text-sm" id="ticket_tools">
+      <span class="mr-2 min-w-28 font-medium text-stone-600" data-ticket-design-target="selected" data-none="<%= t("settings.ticket.design.pick") %>"><%= t("settings.ticket.design.pick") %></span>
+      <% { "left" => "text-left", "center" => "text-center", "right" => "text-right" }.each do |side, glyph| %>
+        <button type="button" class="btn btn-secondary btn-sm" disabled data-ticket-design-target="tool" data-needs="align" data-side="<%= side %>" data-action="ticket-design#align" title="<%= t("settings.ticket.design.#{side}") %>"><i class="bi bi-<%= glyph %>"></i></button>
+      <% end %>
+      <button type="button" class="btn btn-secondary btn-sm" disabled data-ticket-design-target="tool" data-needs="size" data-style="bold" data-action="ticket-design#style" title="<%= t("settings.ticket.design.bold") %>"><i class="bi bi-type-bold"></i></button>
+      <button type="button" class="btn btn-secondary btn-sm" disabled data-ticket-design-target="tool" data-needs="size" data-style="underline" data-action="ticket-design#style" title="<%= t("settings.ticket.design.underline") %>"><i class="bi bi-type-underline"></i></button>
+      <button type="button" class="btn btn-secondary btn-sm" disabled data-ticket-design-target="tool" data-needs="size" data-style="large" data-action="ticket-design#size" title="<%= t("settings.ticket.design.size") %>"><i class="bi bi-type-h1"></i></button>
+      <button type="button" class="btn btn-secondary btn-sm" disabled data-ticket-design-target="tool" data-needs="hide" data-action="ticket-design#hide" title="<%= t("settings.ticket.design.hide") %>"><i class="bi bi-eye-slash"></i></button>
+      <button type="button" class="btn btn-ghost btn-sm ml-auto" data-action="ticket-design#reset" title="<%= t("settings.ticket.design.reset_help") %>"><i class="bi bi-arrow-counterclockwise"></i> <%= t("settings.ticket.design.reset") %></button>
+    </div>
+    <div class="mb-2 flex flex-wrap items-center gap-1 text-xs" data-ticket-design-target="tray" data-label="<%= t("settings.ticket.design.hidden") %>" data-order="<%= TicketLayout::BLOCKS.keys.join(" ") %>" data-bold="<%= TicketLayout::BOLD.join(" ") %>" data-aligns="<%= TicketLayout::BLOCKS.map { |key, (align, _)| "#{key}:#{align}" }.join(" ") %>"></div>
+    <p class="mb-2 text-xs text-stone-500"><%= t("settings.ticket.design.help") %></p>
     <%# The preview is the real ticket, with its own stylesheet, inside an iframe %>
-    <iframe title="<%= t("settings.ticket.preview") %>" class="h-[75vh] min-h-[560px] w-full rounded border border-stone-300 bg-stone-200" data-action="load->ticket-design#zoomFit" srcdoc="<%= ERB::Util.html_escape(render(template: "settings/ticket_preview", layout: "layouts/ticket", formats: [ :html ]).to_str) %>" data-ticket-design-target="frame"></iframe>
+    <iframe title="<%= t("settings.ticket.preview") %>" class="h-[75vh] min-h-[560px] w-full rounded border border-stone-300 bg-stone-200" data-action="load->ticket-design#ready" srcdoc="<%= ERB::Util.html_escape(render(template: "settings/ticket_preview", layout: "layouts/ticket", formats: [ :html ]).to_str) %>" data-ticket-design-target="frame"></iframe>
   </div>
 </div>

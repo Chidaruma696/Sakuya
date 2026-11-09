@@ -2,6 +2,10 @@
 
 Why Sakuya is the way it is. Newest first.
 
+## The ticket is arranged with the mouse, as a stack of blocks (9 Nov 2026)
+
+In Settings › Business and ticket the preview is now the designer: each part of the ticket (logo, name, tagline, address, what was sold, totals, barcode, footer…) is a block that is dragged up or down on the paper, and a click lets it be aligned, enlarged, set in bold, underlined or hidden. A double click on a fixed word (Product, Quantity, TOTAL…) retypes it in the business's own. It is not a free canvas on purpose: a thermal printer prints line by line, so anything placed freely would look right on screen and come out different on paper. The same layout drives the ticket on screen and the ESC/POS one. Out of the box the ticket is the one it always was, and only what differs from it is stored. Not done yet: two blocks sharing a line, and italics (not every thermal printer has them). The dragging has not been tried on a touch screen.
+
 ## Credit types are declared in the credit rule (9 Nov 2026)
 
 A wholesaler does not give every customer the same credit: one pays note by note, another has a limit, another settles every week on a fixed day. The core still has no list of credit types. The credit rule declares them, `(credit-type :weekly "Weekly" …)`: a key, the name shown in Customers and the rule that decides for customers of that type. Declarations are read, never run, to know which types exist (the way a plugin is read), so the customer form can offer them; on a sale the forms that are not declarations run first and then only the body of the customer's type. A rule without declarations is still one rule for everyone. With types declared, a customer without one, or with one the rule stopped declaring, gets no credit; the list flags it and the editor warns before saving a rule that drops a type in use.

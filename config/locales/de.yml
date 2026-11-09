@@ -79,6 +79,33 @@ de:
       zoom_fit: An Breite anpassen
       print_test: Testdruck
       print_test_help: Schickt diese Vorschau so wie sie ist an den Drucker, um Papier und Breite zu prüfen
+      blocks:
+        logo: Logo
+        name: Name des Geschäfts
+        tagline: Slogan
+        branch: Filiale
+        address: Adresse
+        phone: Telefon
+        tax_id: Steuernummer
+        info: Datum, Beleg und Kassierer
+        lines: Das Verkaufte
+        totals: Summe und Zahlungen
+        returns_legend: Rückgabehinweis
+        barcode: Strichcode
+        footer: Fuß
+      design:
+        pick: Block auswählen
+        left: Links ausrichten
+        center: Zentrieren
+        right: Rechts ausrichten
+        size: Größer
+        bold: Fett
+        underline: Unterstrichen
+        hide: Ausblenden
+        hidden: 'Ausgeblendet:'
+        reset: Wie geliefert
+        reset_help: Zurück zu Reihenfolge, Ausrichtung und Größe ab Werk
+        help: Einen Block auf dem Papier ziehen, um ihn nach oben oder unten zu verschieben. Anklicken, um ihn auszurichten, zu vergrößern oder auszublenden. Doppelklick auf ein unterstrichenes Wort (Produkt, Menge, SUMME…), um es neu zu schreiben; leer lassen bringt das Original zurück. Ein Thermodrucker druckt Zeile für Zeile, deshalb werden Blöcke gestapelt; nebeneinander geht nicht. Gespeichert wird mit dem Speichern-Knopf.
     currency_help: 'Das Symbol steht im ganzen System und auf dem Ticket vor jedem Betrag ($, €, Q, S/…). Keine Umrechnung: eine Währung je Installation.'
     currency: Währung
     sections:
@@ -355,6 +382,7 @@ de:
     setting:
       integer: "%{key}: muss eine ganze Zahl sein"
       logo: das Logo muss ein PNG-, JPG- oder WebP-Bild unter 300 KB sein
+      layout: das Ticket-Layout konnte nicht gelesen werden; bitte neu anordnen
       prefix: "%{key}: das Präfix hat bis zu 4 Buchstaben oder Ziffern, ohne Bindestrich"
       mode_folios: unbekannter Nummerierungsmodus
       denominations: Stückelungen durch Komma getrennt, z. B. 500,200,100,50,20,10,5,2,1,0.5

@@ -79,6 +79,33 @@ en:
       zoom_fit: Fit to width
       print_test: Print test
       print_test_help: Sends this sample to the printer as is, to test paper and width
+      blocks:
+        logo: Logo
+        name: Business name
+        tagline: Tagline
+        branch: Branch
+        address: Address
+        phone: Phone
+        tax_id: Tax ID
+        info: Date, folio and cashier
+        lines: What was sold
+        totals: Total and payments
+        returns_legend: Returns note
+        barcode: Barcode
+        footer: Footer
+      design:
+        pick: Pick a block
+        left: Align left
+        center: Center
+        right: Align right
+        size: Larger
+        bold: Bold
+        underline: Underline
+        hide: Hide
+        hidden: 'Hidden:'
+        reset: As it comes
+        reset_help: Back to the built-in order, alignment and size
+        help: Drag a block on the paper to move it up or down. Click it to align it, enlarge it or hide it. Double-click an underlined word (Product, Quantity, TOTAL…) to retype it; leave it blank to get the original back. A thermal printer prints line by line, so blocks stack; they cannot sit side by side. It is saved with the Save button.
     currency_help: 'The symbol goes next to every amount in the system and on the ticket ($, €, Q, S/…). No conversions: one currency per installation.'
     currency: Currency
     sections:
@@ -355,6 +382,7 @@ en:
     setting:
       integer: "%{key}: must be a whole number"
       logo: the logo must be a PNG, JPG or WebP image under 300 KB
+      layout: the ticket layout could not be read; arrange it again
       prefix: "%{key}: the prefix takes up to 4 letters or digits, no hyphen"
       mode_folios: unknown numbering mode
       denominations: denominations go comma-separated, e.g. 500,200,100,50,20,10,5,2,1,0.5

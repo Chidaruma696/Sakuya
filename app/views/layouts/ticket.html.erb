@@ -16,7 +16,7 @@
       .mono { font-family: "DejaVu Sans Mono", monospace; }
       .italic { font-style: italic; }
       .hidden { display: none; }
-      .logo { text-align: center; margin-bottom: 1.5mm; }
+      .logo { margin-bottom: 1.5mm; }
       .logo img { max-width: 30mm; max-height: 20mm; }
       table { width: 100%; border-collapse: collapse; }
       th, td { padding: 0.5mm 0.6mm; vertical-align: top; }
@@ -28,6 +28,16 @@
       .total { font-size: 11.5pt; }
       .cancelled { color: #000; font-weight: bold; font-size: 16pt; text-align: center; margin: 2mm 0; letter-spacing: 2px; }
       .box { border: 1px dashed #000; padding: 1.2mm 1.6mm; margin: 1.5mm 0; }
+      /* The ticket's blocks (TicketLayout): each one carries its alignment and size. */
+      .a-left { text-align: left; }
+      .a-center { text-align: center; }
+      .a-right { text-align: right; }
+      .block[data-block="name"] { font-size: 10pt; }
+      .block[data-block="returns_legend"] { font-size: 7pt; }
+      .block[data-block="footer"] { margin-top: 1.5mm; }
+      .block.large > * { font-size: 150%; }
+      .block.underline > * { text-decoration: underline; }
+      .block.off { display: none; }
       svg { width: 100%; height: auto; }
       /* Work sheets: type one point larger than the ticket. */
       .sheet { font-size: 9.5pt; }
@@ -42,6 +52,18 @@
       }
       /* Inside the designer the zoom is handled by the page's buttons, not this layout. */
       @media screen { body.preview { padding: 12px; gap: 0; } body.preview .ticket { zoom: 1; } body.preview .actions { display: none; } }
+      /* The designer's grid: every block is a cell that can be grabbed; an empty one says what goes there. */
+      @media screen {
+        body.preview .block { outline: 1px dashed #a8a29e; outline-offset: -1px; margin: 1px 0; min-height: 3.2mm; cursor: grab; }
+        body.preview .block:hover { background: #eef1fb; }
+        body.preview .block.selected { outline: 2px solid #4659a8; background: #eef1fb; }
+        body.preview .block.dragging { opacity: .35; }
+        body.preview .block.drop-before { box-shadow: 0 -3px 0 #4659a8; }
+        body.preview .block.drop-after { box-shadow: 0 3px 0 #4659a8; }
+        body.preview [data-label-key] { cursor: text; border-bottom: 1px dotted #4659a8; }
+        body.preview [data-label-key][contenteditable="true"] { outline: 2px solid #4659a8; background: #fff; padding: 0 2px; }
+        body.preview .block:has(> .hidden)::before { content: attr(data-label); display: block; color: #a8a29e; font-style: italic; font-size: 7pt; }
+      }
       @media print { .actions { display: none; } }
     </style>
   </head>

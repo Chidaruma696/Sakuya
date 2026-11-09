@@ -18,6 +18,8 @@ class Setting < ApplicationRecord
     "ticket.show_cashier" => "1",
     "ticket.show_code" => "1",      # the ticket's barcode
     "ticket.width" => "80",              # paper width in mm: 80 or 58
+    "ticket.labels" => "",               # the ticket's fixed words in the business's own, as JSON (see TicketLayout); blank = the translations
+    "ticket.layout" => "",              # order and look of the ticket's blocks, as JSON (see TicketLayout); blank = built-in
     "till.price_floor" => "50",          # % of the catalog price below which nothing sells, not even with permission
     "till.drawer_limit" => "3000",      # money, for new branches
     "till.denominations" => "1000,500,200,100,50,20,10,5,2,1,0.5", # bills and coins for counting the drawer
@@ -66,6 +68,8 @@ class Setting < ApplicationRecord
         raise ArgumentError, I18n.t("errors.setting.mode_folios") if key == "folios.mode" && value.present? && !Folio::MODES.include?(value)
         raise ArgumentError, I18n.t("errors.setting.denominations") if key == "till.denominations" && value.present? && (value = value.delete(" ")) !~ DENOMINATIONS
         raise ArgumentError, I18n.t("errors.setting.logo") if key == "ticket.logo" && value.present? && (value.length > LOGO_MAX || value !~ %r{\Adata:image/(png|jpeg|gif|webp);base64,})
+        value = TicketLayout.normalize!(value) if key == "ticket.layout"
+        value = TicketLayout.normalize_labels!(value) if key == "ticket.labels"
         record = find_or_initialize_by(key: key)
         value.blank? && !NO_PREFIX.include?(key) ? record.destroy : record.update!(value: value)
       end
