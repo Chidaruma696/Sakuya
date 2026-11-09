@@ -914,6 +914,8 @@ en:
         address: Address
         notes: Notes
         credit_limit: Credit limit
+        credit_type: Credit type
+        cutoff_day: Cut-off day
         active: Active
       supplier:
         name: Name
@@ -985,6 +987,12 @@ en:
     credit_limit: Credit limit
     owes: Owes
     limit_help: The credit rule reads it as (limit). Out of the box nobody gets credit; the rule decides whether it is used.
+    credit_type: Credit type
+    no_credit_type: — none —
+    unknown_credit_type: '%{key} (not declared)'
+    credit_type_help: The types are declared in the credit rule. Without a type the customer gets no credit.
+    no_cutoff_day: — none —
+    cutoff_day_help: The credit rule reads it as (cutoff-day).
     inactive: inactive
     no_customers: No customers yet.
     notices:
@@ -1279,6 +1287,8 @@ en:
       saved: Rule saved.
       restored: Went back to the version from %{date}.
     scenario: Test case
+    confirm: Save again to keep it anyway.
+    declares: What it declares
     reads: What it reads (in pesos)
     answers: What it answers
     example: Example
@@ -1396,17 +1406,34 @@ en:
     core: Someone allowed to withdraw can always do it; for them, stopping means review.
   credit_rule:
     title: Credit in Lisp
-    help: When a sale goes on a customer's account, this rule looks at the account (balance, limit, overdue, last payment) and decides whether to give credit, send it to review or stop it. Out of the box nobody gets credit. Test saves nothing.
+    help: When a sale goes on a customer's account, this rule looks at the account (balance, limit, unpaid charges, last payment, cut-off day) and decides whether to give credit, send it to review or stop it. It can declare credit types, each with its own rule, to give each customer one in Customers. Out of the box nobody gets credit and there are no types. Test saves nothing.
     failure: 'The credit rule failed and the built-in one decided: %{error}'
     reasons:
       no_credit: this business does not sell on account
       over_limit: 'this sale takes them over their limit (owes %{balance}, limit %{limit})'
+      cash_only: this customer is cash only
+      open_charge: 'they have an unpaid note (owes %{balance})'
+      cutoff_passed: 'their cut-off day passed and they still owe %{balance}'
+      no_payment: 'they have not made a payment lately (owes %{balance})'
+      no_credit_type: this customer has no credit type
+    errors:
+      declaration: 'a credit type needs a key, a name and a rule, as in (credit-type :key "Name" (allow)): %{form}'
+      repeated: 'the credit type :%{key} is declared twice'
+      weekday: 'days-since takes a weekday (:%{weekdays}), not %{value}'
+    dropped:
+      one: '1 customer has a credit type this rule does not declare — %{types} — and will get no credit until it is fixed.'
+      other: '%{count} customers have a credit type this rule does not declare — %{types} — and will get no credit until it is fixed.'
+    declares: 'a credit type: its key, the name shown in Customers and the rule that decides for those customers. With types declared, a customer without one gets no credit.'
     scenario:
       customer: Customer
       made_up: — a made-up one —
       amount: On account
       balance: Owes
       limit: Limit
+      credit_type: Credit type
+      open_charges: Unpaid charges
+      oldest_days: Oldest one, days ago
+      cutoff_day: Cut-off day
       account: 'Owes %{balance} · limit %{limit}'
       authorized: Charged by someone allowed to force credit
     verdicts:
@@ -1420,6 +1447,10 @@ en:
       limit: their credit limit
       overdue: '(overdue 30): what they owe from more than 30 days ago'
       days_since_payment: days since their last payment (-1 if never)
+      open_charges: how many charges are unpaid, settling the oldest first
+      oldest_charge_days: age in days of the oldest unpaid charge (-1 if nothing is owed)
+      cutoff_day: 'their cut-off day (:monday … :sunday), or nil'
+      days_since: '(days-since :friday): days since the last Friday (0 if today)'
       customer: their name
       authorized: whether the person charging may force credit
     allow: credit is given

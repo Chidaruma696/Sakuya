@@ -113,7 +113,8 @@ module Repl
       return [] unless Features.active?("customers")
       balances = CreditMovement.group(:customer_id).sum(:amount_cents)
       Customer.order(:name).limit(ROWS + 1).map do |c|
-        { name: c.name, balance: money(balances[c.id] || 0), limit: money(c.credit_limit_cents), active: c.active }
+        { name: c.name, balance: money(balances[c.id] || 0), limit: money(c.credit_limit_cents), "credit-type": c.credit_type&.to_sym,
+          "cutoff-day": c.cutoff_keyword, active: c.active }
       end
     end
 

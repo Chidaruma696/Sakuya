@@ -25,6 +25,7 @@ class CreditTest < ActiveSupport::TestCase
 
   test "with the limit rule credit is given up to the limit, the supervisor forces it and the account keeps the balance" do
     Rule.create!(hook: "credit", code: CreditRule::EXAMPLE, user: users(:admin))
+    @lupita.update!(credit_type: "limit")
     sale = on_account(2)
     assert_equal @lupita, sale.customer
     assert_equal 8_400, @lupita.balance_cents

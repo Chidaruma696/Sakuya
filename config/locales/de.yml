@@ -914,6 +914,8 @@ de:
         address: Adresse
         notes: Notizen
         credit_limit: Kreditlimit
+        credit_type: Kreditart
+        cutoff_day: Stichtag
         active: Aktiv
       supplier:
         name: Name
@@ -985,6 +987,12 @@ de:
     credit_limit: Kreditlimit
     owes: Schuldet
     limit_help: Die Kreditregel liest es als (limit). Standardmäßig bekommt niemand Kredit; die Regel entscheidet, ob es genutzt wird.
+    credit_type: Kreditart
+    no_credit_type: — keine —
+    unknown_credit_type: '%{key} (nicht deklariert)'
+    credit_type_help: Die Kreditarten werden in der Kreditregel deklariert. Ohne Kreditart bekommt der Kunde keinen Kredit.
+    no_cutoff_day: — keiner —
+    cutoff_day_help: Die Kreditregel liest ihn als (cutoff-day).
     inactive: inaktiv
     no_customers: Noch keine Kunden.
     notices:
@@ -1279,6 +1287,8 @@ de:
       saved: Regel gespeichert.
       restored: Zur Version vom %{date} zurückgekehrt.
     scenario: Testfall
+    confirm: Noch einmal speichern, um sie trotzdem so zu behalten.
+    declares: Was sie deklariert
     reads: Was sie liest (in Pesos)
     answers: Was sie antwortet
     example: Beispiel
@@ -1396,17 +1406,34 @@ de:
     core: Wer entnehmen darf, kann es immer; für diese Person heißt Stoppen Prüfung.
   credit_rule:
     title: Kredit in Lisp
-    help: Wenn ein Verkauf auf Rechnung eines Kunden geht, prüft diese Regel sein Konto (Saldo, Limit, Rückstände, letzte Zahlung) und entscheidet, ob Kredit gegeben wird, ob es zur Prüfung geht oder ob gestoppt wird. Standardmäßig bekommt niemand Kredit. Testen speichert nichts.
+    help: Wenn ein Verkauf auf Rechnung eines Kunden geht, prüft diese Regel sein Konto (Saldo, Limit, unbezahlte Rechnungen, letzte Zahlung, Stichtag) und entscheidet, ob Kredit gegeben wird, ob es zur Prüfung geht oder ob gestoppt wird. Sie kann Kreditarten deklarieren, jede mit eigener Regel, um jedem Kunden bei Kunden eine zu geben. Standardmäßig bekommt niemand Kredit und es gibt keine Kreditarten. Testen speichert nichts.
     failure: 'Die Kreditregel ist fehlgeschlagen, die Standardregel hat entschieden: %{error}'
     reasons:
       no_credit: dieses Geschäft verkauft nicht auf Rechnung
       over_limit: 'mit diesem Verkauf wird das Limit überschritten (Schuld %{balance}, Limit %{limit})'
+      cash_only: dieser Kunde zahlt nur bar
+      open_charge: 'es gibt eine unbezahlte Rechnung (Schuld %{balance})'
+      cutoff_passed: 'der Stichtag ist vorbei und es sind noch %{balance} offen'
+      no_payment: 'zuletzt wurde nichts abgezahlt (Schuld %{balance})'
+      no_credit_type: dieser Kunde hat keine Kreditart
+    errors:
+      declaration: 'eine Kreditart braucht Schlüssel, Namen und Regel, wie in (credit-type :key "Name" (allow)): %{form}'
+      repeated: 'die Kreditart :%{key} ist zweimal deklariert'
+      weekday: 'days-since erwartet einen Wochentag (:%{weekdays}), nicht %{value}'
+    dropped:
+      one: '1 Kunde hat eine Kreditart, die diese Regel nicht deklariert — %{types} — und bekommt keinen Kredit, bis das behoben ist.'
+      other: '%{count} Kunden haben eine Kreditart, die diese Regel nicht deklariert — %{types} — und bekommen keinen Kredit, bis das behoben ist.'
+    declares: 'eine Kreditart: ihr Schlüssel, der Name, der bei Kunden erscheint, und die Regel, die für diese Kunden entscheidet. Sind Kreditarten deklariert, bekommt ein Kunde ohne Kreditart keinen Kredit.'
     scenario:
       customer: Kunde
       made_up: — ein erfundener —
       amount: Auf Rechnung
       balance: Schuld
       limit: Limit
+      credit_type: Kreditart
+      open_charges: Unbezahlte Rechnungen
+      oldest_days: Die älteste, vor Tagen
+      cutoff_day: Stichtag
       account: 'Schuld %{balance} · Limit %{limit}'
       authorized: Kassiert von jemandem mit Berechtigung, Kredit zu erzwingen
     verdicts:
@@ -1420,6 +1447,10 @@ de:
       limit: sein Kreditlimit
       overdue: '(overdue 30): was er von vor mehr als 30 Tagen schuldet'
       days_since_payment: Tage seit seiner letzten Zahlung (-1 wenn nie)
+      open_charges: wie viele Rechnungen unbezahlt sind, die älteste wird zuerst beglichen
+      oldest_charge_days: Alter der ältesten unbezahlten Rechnung in Tagen (-1 wenn nichts offen ist)
+      cutoff_day: 'sein Stichtag (:monday … :sunday) oder nil'
+      days_since: '(days-since :friday): Tage seit dem letzten Freitag (0 wenn heute)'
       customer: sein Name
       authorized: ob die kassierende Person Kredit erzwingen darf
     allow: Kredit wird gegeben

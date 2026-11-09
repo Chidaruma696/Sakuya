@@ -914,6 +914,8 @@ es:
         address: Dirección
         notes: Notas
         credit_limit: Límite de crédito
+        credit_type: Tipo de crédito
+        cutoff_day: Día de corte
         active: Activo
       supplier:
         name: Nombre
@@ -985,6 +987,12 @@ es:
     credit_limit: Límite de crédito
     owes: Debe
     limit_help: Lo lee la regla de crédito como (limit). De fábrica no se fía a nadie; la regla decide si se usa.
+    credit_type: Tipo de crédito
+    no_credit_type: — ninguno —
+    unknown_credit_type: '%{key} (sin declarar)'
+    credit_type_help: Los tipos se declaran en la regla de crédito. Sin tipo, al cliente no se le fía.
+    no_cutoff_day: — ninguno —
+    cutoff_day_help: Lo lee la regla de crédito como (cutoff-day).
     inactive: inactivo
     no_customers: Todavía no hay clientes.
     notices:
@@ -1279,6 +1287,8 @@ es:
       saved: Regla guardada.
       restored: Se volvió a la versión del %{date}.
     scenario: Caso de prueba
+    confirm: Guarda otra vez para dejarla así de todos modos.
+    declares: Lo que declara
     reads: Lo que lee (en pesos)
     answers: Lo que contesta
     example: Ejemplo
@@ -1396,17 +1406,34 @@ es:
     core: Quien tiene permiso para retirar nunca se queda sin poder hacerlo; para esa persona, frenar es revisar.
   credit_rule:
     title: Crédito en Lisp
-    help: Cuando una venta va a cuenta de un cliente, esta regla mira su cuenta (saldo, límite, atrasos, último abono) y decide si se fía, si queda por revisar o si se frena. De fábrica no se fía a nadie. Probar no guarda nada.
+    help: Cuando una venta va a cuenta de un cliente, esta regla mira su cuenta (saldo, límite, notas sin pagar, último abono, día de corte) y decide si se fía, si queda por revisar o si se frena. Puede declarar tipos de crédito, cada uno con su regla, para darle uno a cada cliente en Clientes. De fábrica no se fía a nadie y no hay tipos. Probar no guarda nada.
     failure: 'La regla de crédito falló y decidió la de fábrica: %{error}'
     reasons:
       no_credit: este negocio no vende a cuenta
       over_limit: 'con esta venta pasa su límite (debe %{balance}, límite %{limit})'
+      cash_only: este cliente es solo de contado
+      open_charge: 'tiene una nota sin pagar (debe %{balance})'
+      cutoff_passed: 'ya pasó su día de corte y sigue debiendo %{balance}'
+      no_payment: 'no ha abonado últimamente (debe %{balance})'
+      no_credit_type: este cliente no tiene tipo de crédito
+    errors:
+      declaration: 'un tipo de crédito lleva clave, nombre y regla, como en (credit-type :clave "Nombre" (allow)): %{form}'
+      repeated: 'el tipo de crédito :%{key} está declarado dos veces'
+      weekday: 'days-since recibe un día de la semana (:%{weekdays}), no %{value}'
+    dropped:
+      one: '1 cliente tiene un tipo de crédito que esta regla no declara — %{types} — y no se le fiará hasta corregirlo.'
+      other: '%{count} clientes tienen un tipo de crédito que esta regla no declara — %{types} — y no se les fiará hasta corregirlo.'
+    declares: 'un tipo de crédito: su clave, el nombre que se ve en Clientes y la regla que decide para esos clientes. Con tipos declarados, a un cliente sin tipo no se le fía.'
     scenario:
       customer: Cliente
       made_up: — uno inventado —
       amount: A cuenta
       balance: Debe
       limit: Límite
+      credit_type: Tipo de crédito
+      open_charges: Notas sin pagar
+      oldest_days: La más vieja, hace días
+      cutoff_day: Día de corte
       account: 'Debe %{balance} · límite %{limit}'
       authorized: Cobra alguien con permiso para forzar el crédito
     verdicts:
@@ -1420,6 +1447,10 @@ es:
       limit: su límite de crédito
       overdue: '(overdue 30): lo que debe de hace más de 30 días'
       days_since_payment: días desde su último abono (-1 si nunca)
+      open_charges: cuántas notas tiene sin pagar, abonando primero a la más vieja
+      oldest_charge_days: días que tiene la nota sin pagar más vieja (-1 si no debe nada)
+      cutoff_day: 'su día de corte (:monday … :sunday), o nil'
+      days_since: '(days-since :friday): días desde el último viernes (0 si es hoy)'
       customer: su nombre
       authorized: si quien cobra tiene permiso para forzar el crédito
     allow: se fía
