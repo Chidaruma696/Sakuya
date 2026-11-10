@@ -42,7 +42,13 @@ module Lisp
     environment = Environment.new(Base.environment)
     functions.each { |name, f| environment.define(name.to_s, f.is_a?(Native) ? f : Base.native(name.to_s, f)) }
     evaluator = Evaluator.new(steps: steps, depth: depth)
-    prelude.each { |form| evaluator.evaluate(form, environment) }
+    # A plugin definition that breaks only takes itself out (whatever calls it will say it does
+    # not know it), and the prelude has its own steps: it cannot spend the program's.
+    prelude.each do |form|
+      Evaluator.new(steps: steps, depth: depth).evaluate(form, environment)
+    rescue Error
+      next
+    end
     forms.reduce(nil) { |_, form| evaluator.evaluate(form, environment) }
   end
 

@@ -33,6 +33,8 @@ module RulesFile
       l[:code] = l[:code].strip
       next errors << I18n.t("rules.file.hook", hook: l[:hook]) unless Rule::HOOKS.include?(l[:hook])
       next errors << I18n.t("rules.file.repeated", hook: l[:hook]) if parsed.count { |o| o[:hook] == l[:hook] } > 1
+      current = Rule.contract(l[:hook])
+      next errors << I18n.t("rules.file.contract", hook: l[:hook], version: l[:version], current: current) if l[:version] > current # an older contract is fine: the editor warns about it
       Lisp::Reader.read(l[:code])
     rescue Lisp::Error => e
       errors << "#{l[:hook]}: #{e.message}"

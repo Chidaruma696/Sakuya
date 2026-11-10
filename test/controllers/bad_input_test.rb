@@ -60,6 +60,9 @@ class BadInputTest < ActionDispatch::IntegrationTest
       assert_response :unprocessable_entity, quantity.inspect
       assert_match "must be greater than zero", response.body, quantity.inspect
     end
+    post movements_inventory_path, params: { product_id: products(:ketchup).id, kind: "waste", quantity: "0.5", reason: "half a bottle" }
+    assert_response :unprocessable_entity
+    assert_match "sold in whole pieces", response.body
     assert_equal [ 0, 0 ], [ Review.count, Movement.count ]
   end
 

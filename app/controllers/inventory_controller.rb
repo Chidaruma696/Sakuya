@@ -40,6 +40,7 @@ class InventoryController < ApplicationController
     return back_with_error(t("errors.writes_reason")) if params[:reason].blank?
     quantity = movement_quantity or return back_with_error(t("errors.inventory.zero_quantity"))
     product = Product.active.find(params[:product_id])
+    return back_with_error(t("errors.till.whole_pieces", product: product.name)) if !product.fractional? && quantity != quantity.floor
     kind = params[:kind].presence_in(MovementRule::KINDS.keys) || "inflow"
     decision = MovementRule.decide(branch: @branch, product: product, kind: kind, quantity: quantity, reason: params[:reason], user: current_user)
     failure = (t("movement_rule.failure", error: decision.error) if decision.error)

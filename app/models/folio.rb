@@ -21,9 +21,23 @@ class Folio < ApplicationRecord
     counter = single? ? "single" : document
     transaction do
       folio = find_or_create_by!(branch: branch, prefix: counter)
-      where(id: folio.id).update_all("last = last + 1")
-      compose(prefix_of(document), folio.reload.last, code: (branch.code if with_branch?))
+      # Changing the numbering mode or a prefix can land on a folio that already exists (B-00001
+      # from the old sequence): those numbers are skipped, never handed out twice.
+      loop do
+        where(id: folio.id).update_all("last = last + 1")
+        text = compose(prefix_of(document), folio.reload.last, code: (branch.code if with_branch?))
+        return text unless taken?(branch, document, text)
+      end
     end
+  end
+
+  # Where each document keeps its folio, and under which branch column.
+  HOLDERS = { "sale" => "Sale", "shift" => "Shift", "refund" => "Refund", "stock_count" => "StockCount", "receipt" => "Receipt",
+              "stock_transfer" => "StockTransfer", "account_payment" => "AccountPayment", "order" => "Order" }.freeze
+
+  def self.taken?(branch, document, text)
+    model = HOLDERS.fetch(document).constantize
+    model.exists?((document == "stock_transfer" ? :origin_branch_id : :branch_id) => branch.id, folio: text)
   end
 
   def self.single? = Setting["folios.mode"] == "single"

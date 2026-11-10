@@ -235,15 +235,20 @@ export default class extends Controller {
       if (queue.length === 0) return
       const t = await request(this.tokenUrlValue, { headers: { Accept: "application/json" } })
       if (!t?.ok) return
-      const { token } = await t.json()
+      // Signed out, the answer is the login page, not a token: nothing is uploaded and nothing is lost.
+      const { token } = await t.json().catch(() => ({}))
+      if (!token) return
       for (const v of queue) {
         const body = new FormData()
         for (const field of ["key", "lines", "payments", "customer_id", "sold_at"]) body.append(field, v[field] || "")
         body.append("authenticity_token", token)
         const r = await request(this.checkoutUrlValue, { method: "POST", body: body, headers: { Accept: "application/json" } })
         if (!r) break
-        if (r.ok) await remove(v.key)
-        else await enqueue({ ...v, error: (await r.json().catch(() => ({}))).error || String(r.status) })
+        const data = await r.json().catch(() => null)
+        // Only the till's own answer, with the folio, takes a sale off the device.
+        if (r.ok && data?.folio) await remove(v.key)
+        else if (r.ok) break
+        else await enqueue({ ...v, error: data?.error || String(r.status) })
       }
     } finally {
       this.uploading = false
@@ -260,6 +265,22 @@ export default class extends Controller {
     if (queue.length) parts.push(queue.length === 1 ? T.pos.to_upload_one : T.pos.to_upload.replace("%{n}", queue.length))
     this.connectionTarget.hidden = parts.length === 0
     this.connectionTarget.querySelector("[data-text]").textContent = parts.join(" · ")
-    this.connectionTarget.querySelector("[data-errors]").textContent = errors.map((v) => `${this.format_money(v.total)}: ${v.error}`).join(" · ")
+    // A sale the server refuses stays with its reason until someone decides to discard it.
+    this.connectionTarget.querySelector("[data-errors]").replaceChildren(...errors.map((v) => {
+      const row = document.createElement("div")
+      const button = document.createElement("button")
+      button.type = "button"
+      button.className = "link ml-2"
+      button.textContent = T.pos.discard
+      button.addEventListener("click", () => this.discard(v))
+      row.append(`${this.format_money(v.total)}: ${v.error}`, button)
+      return row
+    }))
+  }
+
+  async discard(sale) {
+    if (!confirm(T.pos.discard_confirm.replace("%{total}", this.format_money(sale.total)))) return
+    await remove(sale.key)
+    this.renderConnection()
   }
 }
