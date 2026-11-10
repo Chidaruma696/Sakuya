@@ -70,6 +70,7 @@ export default class extends Controller {
 
   confirmPending(event) {
     event?.preventDefault()
+    if (!this.pendingProduct) return // nothing is waiting for a quantity (the scan has not answered yet)
     const quantity = Number(this.pendingQuantityTarget.value)
     if (!(quantity > 0)) { this.notify(T.pos.quantity); return }
     this.add({ ...this.pendingProduct, quantity })

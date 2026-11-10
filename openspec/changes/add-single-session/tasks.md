@@ -15,7 +15,7 @@
 - [x] 3.1 Server: `last_used_at` moves on requests a person causes (not on `X-Background`), written at most once a minute; a session unused for longer than `IDLE_AFTER + COUNTDOWN` is ended; `POST /session/keep`; the 14-day cookie window is removed; tests with `travel`
 - [x] 3.2 The till's upload, token and catalog requests send `X-Background: 1`; test that an abandoned till's session ends while it keeps polling
 - [x] 3.3 `idle_controller.js` and its dialog in the layout: the 15-minute timer restarted by keys, clicks, touches and scans; the countdown; "I'm still here"; sign out at zero; a keep-alive at most every 5 minutes while working; activity shared between tabs; nothing while offline; texts in en, es and de
-- [ ] 3.4 Seen in a real browser: the dialog, the countdown, answering, letting it close, two tabs, and a till left alone
+- [ ] 3.4 (seen in headless Chrome on 10 Nov: the dialog, the countdown, a stray key ignored, answering, letting it close; pending: two tabs and the owner's own look) Seen in a real browser: the dialog, the countdown, answering, letting it close, two tabs, and a till left alone
 
 ## 4. Sessions in the user list
 
@@ -34,7 +34,7 @@
 ## 7. The till without a session
 
 - [x] 7.1 `pos#sync` and `pos#checkout` read the 401: the banner shows "sign in on this device to upload N sales" with a link, the retry timer stops, checkout is refused with the same notice; the queue is not touched; texts in en, es and de
-- [ ] 7.2 Seen in a real browser with the server running: sign in on a second browser, watch the first till get the notice with sales queued, sign in again and watch them upload under the right cashier
+- [x] 7.2 (headless Chrome, 10 Nov) Seen in a real browser with the server running: sign in on a second browser, watch the first till get the notice with sales queued, sign in again and watch them upload under the right cashier
 
 ## 8. Docs and checks
 
