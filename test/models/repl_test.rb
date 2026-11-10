@@ -39,4 +39,12 @@ class ReplTest < ActiveSupport::TestCase
     assert_match "expected a map", assert_raises(Lisp::Error) { ev("(sum-of :total (list 1 2))") }.message
     assert_raises(Lisp::Exhausted) { ev("(define (f n) (f n)) (f 1)") }
   end
+
+  test "tools handed rows they cannot compare or add say so instead of breaking" do
+    [ "(sort-by :folio (list (first (sales)) 5))", "(sum-of :folio (sales))", "(sum-of :total 5)", %((stock 5)), "(days-ago \"a\")", "(take -1 (sales))" ].each do |program|
+      assert_kind_of Lisp::Error, assert_raises(Lisp::Error, program) { ev(program) }
+    end
+    assert_equal 3, ev("(count (sort-by :customer (sales)))"), "rows with nothing in the key sort last, they do not break"
+    assert_equal [ nil ], ev("(pluck :no-such-key (take 1 (sales)))")
+  end
 end
