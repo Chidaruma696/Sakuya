@@ -892,6 +892,11 @@ es:
     several_branches:
       name: Varias sucursales
       what: Lo de una tienda más almacenes y traspasos entre sucursales.
+  # Quantities are written like money everywhere (1,234.50): one way to read a number on every screen.
+  number:
+    format:
+      separator: "."
+      delimiter: ","
   short_units:
     kg: kg
     piece: pz

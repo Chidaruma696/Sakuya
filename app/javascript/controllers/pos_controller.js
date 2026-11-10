@@ -136,7 +136,7 @@ export default class extends Controller {
       this.bodyTarget.innerHTML = this.lines.map((l, i) => `
         <tr class="border-t border-stone-100 ${l.manual && l.price < l.catalog ? "bg-amber-50" : ""}">
           <td class="px-3 py-2">${escapeHtml(l.name)}${l.promo ? ` <span class="rounded bg-emerald-100 px-1 text-xs text-emerald-800">${escapeHtml(l.promo)}</span>` : ""}</td>
-          <td class="px-3 py-2 text-right font-mono"><input type="number" value="${l.quantity}" step="${l.unit === "piece" ? "1" : "0.001"}" min="0" data-action="change->pos#changeQuantity" data-pos-index-param="${i}" class="w-24 rounded border border-stone-300 px-1 text-right font-mono"> ${l.unit}</td>
+          <td class="px-3 py-2 text-right font-mono"><input type="number" value="${l.quantity}" step="${l.unit === "piece" ? "1" : "0.001"}" min="0" data-action="change->pos#changeQuantity" data-pos-index-param="${i}" class="w-24 rounded border border-stone-300 px-1 text-right font-mono"> ${T.units[l.unit] || l.unit}</td>
           <td class="px-3 py-2 text-right font-mono"><input type="number" value="${(l.price / 100).toFixed(2)}" step="0.01" min="0" data-action="change->pos#changePrice" data-pos-index-param="${i}" class="w-24 rounded border border-stone-300 px-1 text-right font-mono"></td>
           <td class="px-3 py-2 text-right font-mono" data-amount="${i}">${this.format_money(this.amount(l))}</td>
           <td class="px-1"><button type="button" data-action="pos#remove" data-pos-index-param="${i}" class="px-2 text-red-700"><i class="bi bi-x-lg"></i></button></td>

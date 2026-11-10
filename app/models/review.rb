@@ -82,6 +82,6 @@ class Review < ApplicationRecord
 
   def quantity_of(record)
     product = record.product
-    "#{ActiveSupport::NumberHelper.number_to_rounded(record.quantity, precision: product.decimals)} #{product.unit} #{product.name}"
+    "#{product.format_quantity(record.quantity)} #{product.short_unit} #{product.name}"
   end
 end

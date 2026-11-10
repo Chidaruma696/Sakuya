@@ -3,7 +3,7 @@
   <div class="fields-4">
     <div class="md:col-span-2">
       <%= f.label :product_id, t("common.product"), class: "field-label" %>
-      <%= f.select :product_id, Product.active.order(:name).map { |p| [ "#{p.name} (#{p.unit})", p.id ] }, { selected: @movement.product_id }, class: "input" %>
+      <%= f.select :product_id, Product.active.order(:name).map { |p| [ "#{p.name} (#{p.short_unit})", p.id ] }, { selected: @movement.product_id }, class: "input" %>
     </div>
     <div>
       <%= f.label :kind, t("common.kind"), class: "field-label" %>

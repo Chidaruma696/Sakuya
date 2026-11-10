@@ -13,7 +13,7 @@ module Inventory
       stock_level = StockLevel.lock.find_or_create_by!(branch: branch, product: product)
       balance = stock_level.quantity + delta
       if balance.negative?
-        raise OutOfStock, I18n.t("errors.inventory.insufficient", product: product.name, branch: branch.name, on_hand: stock_level.quantity.to_s("F"), requested: quantity.to_s("F"))
+        raise OutOfStock, I18n.t("errors.inventory.insufficient", product: product.name, branch: branch.name, on_hand: product.format_quantity(stock_level.quantity), requested: product.format_quantity(quantity))
       end
       stock_level.update!(quantity: balance)
       Movement.create!(branch: branch, product: product, kind: kind, quantity: quantity, balance: balance,

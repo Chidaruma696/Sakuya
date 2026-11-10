@@ -47,7 +47,7 @@ class Promotion < ApplicationRecord
     case kind
     when "price" then I18n.t("promotions.desc.price", price: Money.format_money(price_cents))
     when "percentage" then I18n.t("promotions.desc.percentage", pct: percentage.to_s("F").sub(/\.0+\z/, ""))
-    else I18n.t("promotions.desc.by_quantity", price: Money.format_money(price_cents), from: minimum_quantity.to_s("F"), unit: product.unit)
+    else I18n.t("promotions.desc.by_quantity", price: Money.format_money(price_cents), from: product.format_quantity(minimum_quantity), unit: product.short_unit)
     end
   end
 

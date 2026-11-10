@@ -8,7 +8,7 @@
       <%= f.label :unit, t("common.unit"), class: "field-label" %>
       <%= f.select :unit, Product::UNITS.map { |u| [ Product.unit_name(u), u ] }, {}, class: "input" %>
     </div>
-    <%= render "admin/field", f: f, field: :price, label: t("common.price"), kind: :number_field, options: { step: "0.01", min: 0 } %>
+    <%= render "admin/field", f: f, field: :price, label: t("common.price"), kind: :number_field, options: { step: "0.01", min: 0, value: format("%.2f", @product.price) } %>
   </div>
   <div class="flex flex-wrap items-center gap-4">
     <%= f.submit @product.new_record? ? t("common.create") : t("common.save"), class: "btn btn-primary btn-lg" %>

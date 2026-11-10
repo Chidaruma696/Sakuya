@@ -36,6 +36,9 @@ class Product < ApplicationRecord
   def self.unit_name(unit) = I18n.t("units.#{unit}", default: unit)
   def short_unit = I18n.t("short_units.#{unit}", default: unit)
 
+  # A quantity of this product the way people read it: whole pieces, three decimals by weight.
+  def format_quantity(value) = ActiveSupport::NumberHelper.number_to_rounded(value, precision: decimals)
+
   def price
     BigDecimal(price_cents) / 100
   end

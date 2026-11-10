@@ -17,7 +17,7 @@
     <div class="card">
       <h2 class="mb-2 font-semibold"><%= t("stock_counts.count_by_hand") %></h2>
       <%= form_with url: manual_stock_count_path(c), class: "flex gap-2" do |f| %>
-        <%= f.select :product_id, @products.map { |p| [ "#{p.name} (#{p.unit})", p.id ] }, {}, class: "flex-1 rounded border border-stone-300 px-2 py-2" %>
+        <%= f.select :product_id, @products.map { |p| [ "#{p.name} (#{p.short_unit})", p.id ] }, {}, class: "flex-1 rounded border border-stone-300 px-2 py-2" %>
         <%= f.number_field :quantity, step: "0.001", min: 0, required: true, class: "w-28 rounded border border-stone-300 px-2 py-2 font-mono" %>
         <%= f.submit t("common.save"), class: "btn btn-primary" %>
       <% end %>

@@ -15,7 +15,7 @@
           <td class="px-3 py-2 text-right font-mono text-stone-500"><%= number_with_precision(reserved, precision: e.product.decimals, delimiter: ",") if reserved.positive? %></td>
           <td class="px-3 py-2 text-right font-mono"><%= number_with_precision(e.quantity - reserved, precision: e.product.decimals, delimiter: ",") %></td>
         <% end %>
-        <td class="px-3 py-2"><%= e.product.unit %></td>
+        <td class="px-3 py-2"><%= e.product.short_unit %></td>
         <td class="px-3 py-2 text-right"><%= link_to t("inventory.kardex"), kardex_inventory_path(product_id: e.product_id, branch_id: @branch.id), class: "btn btn-secondary btn-xs" %></td>
       </tr>
     <% end %>

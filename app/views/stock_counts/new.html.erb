@@ -20,7 +20,7 @@
           <%= select_tag :line, options_for_select([ [ "—", "" ] ] + @lines.map { |l| [ l, l ] }), class: "input" %>
         </label>
         <label class="block text-sm"><%= t("stock_counts.or_these_products") %>
-          <%= select_tag :product_ids, options_from_collection_for_select(@products, :id, ->(p) { "#{p.name} (#{p.unit})" }), multiple: true, size: 8, class: "input h-auto" %>
+          <%= select_tag :product_ids, options_from_collection_for_select(@products, :id, ->(p) { "#{p.name} (#{p.short_unit})" }), multiple: true, size: 8, class: "input h-auto" %>
         </label>
         <p class="text-xs text-stone-600 md:col-span-2"><%= t("stock_counts.partial_help") %></p>
       </div>

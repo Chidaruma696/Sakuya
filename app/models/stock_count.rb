@@ -88,7 +88,7 @@ class StockCount < ApplicationRecord
                           quantity: difference.abs, user: user, reference: self, reason: I18n.t("stock_counts.notices.kardex_reason", folio: folio))
         if difference.negative?
           shortage += cents
-          detail << I18n.t("stock_counts.notices.shortage_line", product: l.product.name, quantity: difference.abs.to_s("F"), unit: l.product.unit, amount: Money.format_money(cents))
+          detail << I18n.t("stock_counts.notices.shortage_line", product: l.product.name, quantity: l.product.format_quantity(difference.abs), unit: l.product.short_unit, amount: Money.format_money(cents))
         else
           surplus += cents
         end

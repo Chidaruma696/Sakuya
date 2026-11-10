@@ -892,6 +892,11 @@ de:
     several_branches:
       name: Mehrere Filialen
       what: Alles für einen Laden, dazu Lager und Umbuchungen zwischen Filialen.
+  # Quantities are written like money everywhere (1,234.50): one way to read a number on every screen.
+  number:
+    format:
+      separator: "."
+      delimiter: ","
   short_units:
     kg: kg
     piece: Stk
