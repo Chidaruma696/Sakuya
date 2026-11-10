@@ -13,6 +13,7 @@
     <div class="card">
       <h2 class="mb-2 font-semibold"><%= t("till.safe_drop") %></h2>
       <%= form_with url: till_withdraw_path, class: "space-y-2 text-sm" do |f| %>
+        <%= hidden_field_tag :key, SecureRandom.uuid, id: nil %>
         <%= f.number_field :amount, step: "0.01", min: "0.01", placeholder: t("till.amount"), required: true, class: "w-full rounded border border-stone-300 px-3 py-2 font-mono" %>
         <%= f.text_field :reason, placeholder: t("common.reason"), required: true, class: "w-full rounded border border-stone-300 px-3 py-2" %>
         <% unless can?("till.withdraw") || Rule.current("withdrawal") %><p class="text-xs text-stone-600"><%= t("till.withdrawal_pending_review") %></p><% end %>

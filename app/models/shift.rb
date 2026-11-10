@@ -46,6 +46,8 @@ class Shift < ApplicationRecord
     raise ArgumentError, I18n.t("errors.shift.no_till_in_warehouse", branch: branch.name) unless branch.till?
     raise ArgumentError, I18n.t("errors.shift.already_open", branch: branch.name) if opened_at(branch)
     create!(branch: branch, user: user, float_cents: float_cents, opened_at: Time.current)
+  rescue ActiveRecord::RecordNotUnique # two opening at the same instant: the database lets one through
+    raise ArgumentError, I18n.t("errors.shift.already_open", branch: branch.name)
   end
 
   # Sales whose money came in (paid, or refunded later).
@@ -85,9 +87,13 @@ class Shift < ApplicationRecord
     expected_cash_cents > branch.cash_limit_cents
   end
 
-  def withdraw!(amount_cents:, reason:, user:, authorized_by: nil)
+  # `key` is the form's idempotency key: the same key returns the same withdrawal.
+  def withdraw!(amount_cents:, reason:, user:, authorized_by: nil, key: nil)
+    if key.present? && (previous = Withdrawal.find_by(key: key))
+      return previous
+    end
     check_withdrawal!(amount_cents, reason)
-    withdrawals.create!(amount_cents: amount_cents.to_i, reason: reason, user: user, authorized_by: authorized_by)
+    withdrawals.create!(amount_cents: amount_cents.to_i, reason: reason, user: user, authorized_by: authorized_by, key: key.presence)
   end
 
   # What a withdrawal needs before asking anyone: an open shift, a reason and enough cash.

@@ -29,7 +29,7 @@ class ReservationsTest < ActiveSupport::TestCase
       StockTransfer.register!(origin: @store, destination: branches(:head_office), user: users(:admin), lines: [ { product_id: @ketchup.id, quantity: 1 } ])
     }.message
     sell(3, order: p)
-    p.deliver!(Sale.last)
+    assert_equal [ "delivered", Sale.last ], [ p.reload.status, p.sale ], "checking out delivers the order in the same transaction"
     assert_equal 0, Reservations.reserved_for(@store, @ketchup), "once delivered it no longer holds stock"
   end
 

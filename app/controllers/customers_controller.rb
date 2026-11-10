@@ -27,7 +27,7 @@ class CustomersController < ApplicationController
     authorize!("customers.pay_account")
     customer = Customer.find(params[:id])
     account_payment = AccountPayment.register!(customer: customer, branch: current_branch, user: current_user, amount_cents: Money.cents(params[:amount]),
-                             payment_method: params[:payment_method].presence_in(Payment::PAYMENT_METHODS) || "cash", notes: params[:notes])
+                             payment_method: params[:payment_method].presence_in(Payment::PAYMENT_METHODS) || "cash", notes: params[:notes], key: params[:key])
     redirect_to account_customer_path(customer), notice: t("customers.notices.account_payment", folio: account_payment.folio, amount: Money.format_money(account_payment.amount_cents), balance: Money.format_money(customer.balance_cents))
   rescue ArgumentError, ActiveRecord::RecordInvalid => e
     redirect_to account_customer_path(customer), alert: e.message

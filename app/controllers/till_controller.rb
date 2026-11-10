@@ -55,7 +55,6 @@ class TillController < ApplicationController
     order = Order.still_open.where(branch: current_branch).find_by(id: params[:order_id]) if params[:order_id].present?
     sale = Till.checkout!(branch: current_branch, user: current_user, lines: lines, payments: payments, key: params[:key], authorizer: authorizes,
                          customer: customer, order: order, sold_at: sold_at)
-    order&.deliver!(sale)
     render json: { url: till_ticket_path(sale, print: 1), folio: sale.folio, change: Money.format_money(sale.change_cents) }
   rescue Till::Error, JSON::ParserError, ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid => e
     render json: { error: e.message }, status: :unprocessable_entity
@@ -161,6 +160,10 @@ class TillController < ApplicationController
   # is reported, unless someone with till.withdraw takes it out (then it leaves and is left for review).
   def withdraw
     raise ArgumentError, t("errors.till.no_till_simple") unless @shift
+    # The same form sent twice: the withdrawal is already there, nothing is judged or taken again.
+    if params[:key].present? && (done = Withdrawal.find_by(key: params[:key]))
+      return redirect_to till_shift_path, notice: t("till.notices.withdrawal", amount: Money.format_money(done.amount_cents))
+    end
     amount = Money.cents(params[:amount])
     @shift.check_withdrawal!(amount, params[:reason])
     decision = WithdrawalRule.decide(@shift, amount_cents: amount, reason: params[:reason], user: current_user)
@@ -171,7 +174,7 @@ class TillController < ApplicationController
       raise ArgumentError, t("errors.till.withdrawal_stopped", reason: decision.reason)
     end
     review = decision.allows? && !decision.error ? nil : [ params[:reason], (decision.reason unless decision.allows?), (t("withdrawal_rule.failure", error: decision.error) if decision.error) ].compact.join("\n")
-    withdrawal = @shift.withdraw!(amount_cents: amount, reason: params[:reason], user: current_user, authorized_by: (current_user if with_permission))
+    withdrawal = @shift.withdraw!(amount_cents: amount, reason: params[:reason], user: current_user, authorized_by: (current_user if with_permission), key: params[:key])
     Review.open!(withdrawal, user: current_user, branch: current_branch, reason: review, value_cents: withdrawal.amount_cents) if review
     redirect_to till_shift_path, notice: t("till.notices.withdrawal", amount: Money.format_money(withdrawal.amount_cents)) + (review ? t("till.notices.remains_pending_review") : "")
   rescue ArgumentError, ActiveRecord::RecordInvalid => e
@@ -190,7 +193,7 @@ class TillController < ApplicationController
     authorize!("till.refund")
     sale = Sale.where(branch: current_branch).find(params[:sale_id])
     lines = params.fetch(:lines, {}).to_unsafe_h.map { |id, qty| { sale_line_id: id, quantity: qty } }.reject { |l| l[:quantity].blank? || l[:quantity].to_d <= 0 }
-    refund = Till.refund!(sale: sale, lines: lines, reason: params[:reason].to_s.strip, user: current_user)
+    refund = Till.refund!(sale: sale, lines: lines, reason: params[:reason].to_s.strip, user: current_user, key: params[:key])
     redirect_to till_sales_path, notice: t("till.notices.refund", folio: refund.folio, amount: Money.format_money(refund.total_cents), sale: sale.folio)
   rescue Till::Error, ActiveRecord::RecordInvalid => e
     redirect_to till_refund_path(code: params[:code]), alert: e.message

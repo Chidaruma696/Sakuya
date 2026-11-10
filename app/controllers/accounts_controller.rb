@@ -26,7 +26,7 @@ class AccountsController < ApplicationController
     supplier = Supplier.find(params[:id])
     invoice = supplier.invoices.find_by(id: params[:supplier_invoice_id].presence)
     payment = Purchases.pay!(supplier: supplier, branch: current_branch, user: current_user, amount_cents: Money.cents(params[:amount]),
-                          payment_method: params[:payment_method].to_s, invoice: invoice, reference: params[:reference])
+                          payment_method: params[:payment_method].to_s, invoice: invoice, reference: params[:reference], key: params[:key])
     redirect_to account_path(supplier), notice: t("purchases.notices.paid", amount: Money.format_money(payment.amount_cents), supplier: supplier.name, balance: Money.format_money(supplier.balance_cents))
   rescue ArgumentError, ActiveRecord::RecordInvalid => e
     redirect_to account_path(supplier), alert: e.message

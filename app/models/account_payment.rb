@@ -15,11 +15,15 @@ class AccountPayment < ApplicationRecord
   before_update { raise ActiveRecord::ReadOnlyRecord, "account payments cannot be edited" }
   before_destroy { raise ActiveRecord::ReadOnlyRecord, "account payments cannot be deleted" }
 
-  def self.register!(customer:, branch:, user:, amount_cents:, payment_method:, notes: nil)
+  # `key` is the form's idempotency key: the same key returns the same payment.
+  def self.register!(customer:, branch:, user:, amount_cents:, payment_method:, notes: nil, key: nil)
+    if key.present? && (previous = find_by(key: key))
+      return previous
+    end
     raise ArgumentError, I18n.t("errors.account_payment.greater_than_zero") unless amount_cents.to_i.positive?
     shift = Shift.opened_at(branch) or raise ArgumentError, I18n.t("errors.account_payment.no_till", branch: branch.name)
     transaction do
-      account_payment = create!(customer: customer, branch: branch, shift: shift, user: user, amount_cents: amount_cents.to_i, payment_method: payment_method, notes: notes.presence)
+      account_payment = create!(customer: customer, branch: branch, shift: shift, user: user, amount_cents: amount_cents.to_i, payment_method: payment_method, notes: notes.presence, key: key.presence)
       customer.credit_movements.create!(kind: "account_payment", amount_cents: -account_payment.amount_cents, date: Date.current, reference: account_payment,
                                           branch: branch, user: user, reason: I18n.t("customers.account.account_payment", folio: account_payment.folio, payment_method: I18n.t("payment_methods.#{payment_method}")))
       account_payment

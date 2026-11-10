@@ -36,6 +36,8 @@ class StockCount < ApplicationRecord
       end
       count
     end
+  rescue ActiveRecord::RecordNotUnique # two opening at the same instant: the database lets one through
+    raise ArgumentError, I18n.t("errors.stock_count.already_open", branch: branch.name)
   end
 
   # Is a count due? When the branch counts every N days and the last closed one is older (or there is none).
@@ -65,6 +67,7 @@ class StockCount < ApplicationRecord
     raise ArgumentError, I18n.t("errors.stock_count.closed") unless open?
     quantity = BigDecimal(quantity.to_s).round(3)
     raise ArgumentError, I18n.t("errors.stock_count.invalid_quantity") if quantity.negative?
+    raise ArgumentError, I18n.t("errors.till.whole_pieces", product: product.name) if !product.fractional? && quantity != quantity.floor
     line_of(product).update!(manual: quantity)
   end
 

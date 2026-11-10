@@ -86,7 +86,11 @@ module Purchases
   end
 
   # --- payment: a single path. Cash comes out of the open drawer; linked to an invoice it cannot exceed what is left.
-  def self.pay!(supplier:, branch:, user:, amount_cents:, payment_method: "cash", invoice: nil, reference: nil)
+  # `key` is the form's idempotency key: the same key returns the same payment.
+  def self.pay!(supplier:, branch:, user:, amount_cents:, payment_method: "cash", invoice: nil, reference: nil, key: nil)
+    if key.present? && (previous = SupplierPayment.find_by(key: key))
+      return previous
+    end
     amount = amount_cents.to_i
     raise Error, I18n.t("errors.purchases.zero_amount") unless amount.positive?
     raise Error, I18n.t("errors.till.unknown_payment_method", payment_method: payment_method) unless Payment::PAYMENT_METHODS.include?(payment_method)
@@ -104,7 +108,7 @@ module Purchases
         shift = Shift.opened_at(branch) or raise Error, I18n.t("errors.till.no_till_in", branch: branch.name)
         withdrawal = shift.withdraw!(amount_cents: amount, reason: I18n.t("purchases.notices.withdrawal_payment", supplier: supplier.name, folio: invoice&.folio), user: user, authorized_by: user)
       end
-      payment = supplier.payments.create!(invoice: invoice, branch: branch, shift: shift, withdrawal: withdrawal, user: user, amount_cents: amount, payment_method: payment_method, reference: reference.presence)
+      payment = supplier.payments.create!(invoice: invoice, branch: branch, shift: shift, withdrawal: withdrawal, user: user, amount_cents: amount, payment_method: payment_method, reference: reference.presence, key: key.presence)
       post!(supplier, kind: "payment", amount: amount, delta: -amount, branch: branch, user: user, invoice: invoice, payment: payment,
                concept: I18n.t("purchases.notices.supplier_payment", folio: invoice&.folio || "—", payment_method: I18n.t("payment_methods.#{payment_method}")))
       payment

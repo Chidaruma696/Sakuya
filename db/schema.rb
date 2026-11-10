@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_09_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_10_000001) do
   create_table "account_payments", force: :cascade do |t|
     t.integer "amount_cents", null: false
     t.integer "branch_id", null: false
     t.datetime "created_at", null: false
     t.integer "customer_id", null: false
     t.string "folio", null: false
+    t.string "key"
     t.string "notes"
     t.string "payment_method", null: false
     t.integer "shift_id", null: false
@@ -24,6 +25,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_000001) do
     t.index ["branch_id", "folio"], name: "index_account_payments_on_branch_id_and_folio", unique: true
     t.index ["branch_id"], name: "index_account_payments_on_branch_id"
     t.index ["customer_id"], name: "index_account_payments_on_customer_id"
+    t.index ["key"], name: "index_account_payments_on_key", unique: true, where: "key IS NOT NULL"
     t.index ["shift_id"], name: "index_account_payments_on_shift_id"
     t.index ["user_id"], name: "index_account_payments_on_user_id"
     t.check_constraint "amount_cents > 0", name: "account_payments_amount"
@@ -318,6 +320,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_000001) do
     t.integer "branch_id", null: false
     t.datetime "created_at", null: false
     t.string "folio", null: false
+    t.string "key"
     t.integer "on_account_cents", default: 0, null: false
     t.string "reason", null: false
     t.integer "sale_id", null: false
@@ -327,6 +330,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_000001) do
     t.integer "user_id", null: false
     t.index ["branch_id", "folio"], name: "index_refunds_on_branch_and_folio", unique: true
     t.index ["branch_id"], name: "index_refunds_on_branch_id"
+    t.index ["key"], name: "index_refunds_on_key", unique: true, where: "key IS NOT NULL"
     t.index ["sale_id"], name: "index_refunds_on_sale_id"
     t.index ["shift_id"], name: "index_refunds_on_shift_id"
     t.index ["user_id"], name: "index_refunds_on_user_id"
@@ -456,6 +460,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_000001) do
     t.index ["branch_id", "folio"], name: "index_shifts_on_branch_and_folio", unique: true
     t.index ["branch_id", "status"], name: "index_shifts_on_branch_id_and_status"
     t.index ["branch_id"], name: "index_shifts_on_branch_id"
+    t.index ["branch_id"], name: "index_shifts_one_open_per_branch", unique: true, where: "status = 'open'"
     t.index ["closed_by_id"], name: "index_shifts_on_closed_by_id"
     t.index ["user_id"], name: "index_shifts_on_user_id"
     t.check_constraint "float_cents >= 0", name: "shifts_float"
@@ -493,6 +498,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_000001) do
     t.index ["branch_id", "folio"], name: "index_stock_counts_on_branch_and_folio", unique: true
     t.index ["branch_id", "status"], name: "index_stock_counts_on_branch_id_and_status"
     t.index ["branch_id"], name: "index_stock_counts_on_branch_id"
+    t.index ["branch_id"], name: "index_stock_counts_one_open_per_branch", unique: true, where: "status = 'open'"
     t.index ["responsible_id"], name: "index_stock_counts_on_responsible_id"
     t.index ["user_id"], name: "index_stock_counts_on_user_id"
     t.check_constraint "status IN ('open', 'closed')", name: "stock_counts_status"
@@ -600,6 +606,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_000001) do
     t.integer "amount_cents", null: false
     t.integer "branch_id", null: false
     t.datetime "created_at", null: false
+    t.string "key"
     t.string "payment_method", default: "cash", null: false
     t.string "reference"
     t.integer "shift_id"
@@ -612,6 +619,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_000001) do
     t.integer "voided_by_id"
     t.integer "withdrawal_id"
     t.index ["branch_id"], name: "index_supplier_payments_on_branch_id"
+    t.index ["key"], name: "index_supplier_payments_on_key", unique: true, where: "key IS NOT NULL"
     t.index ["shift_id"], name: "index_supplier_payments_on_shift_id"
     t.index ["supplier_id"], name: "index_supplier_payments_on_supplier_id"
     t.index ["supplier_invoice_id"], name: "index_supplier_payments_on_supplier_invoice_id"
@@ -656,11 +664,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_09_000001) do
     t.integer "amount_cents", null: false
     t.integer "authorized_by_id"
     t.datetime "created_at", null: false
+    t.string "key"
     t.string "reason", null: false
     t.integer "shift_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["authorized_by_id"], name: "index_withdrawals_on_authorized_by_id"
+    t.index ["key"], name: "index_withdrawals_on_key", unique: true, where: "key IS NOT NULL"
     t.index ["shift_id"], name: "index_withdrawals_on_shift_id"
     t.index ["user_id"], name: "index_withdrawals_on_user_id"
     t.check_constraint "amount_cents > 0", name: "withdrawals_amount"

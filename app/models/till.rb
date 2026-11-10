@@ -37,6 +37,12 @@ module Till
     notices = [] # offline: what would have been stopped
 
     Sale.transaction do
+      # Whoever else is charging this order or this customer's account waits for this one to finish.
+      if order
+        order.lock!
+        raise Error, I18n.t("errors.order.not_open", folio: order.folio) unless order.open?
+      end
+      customer&.lock!
       prepared = lines.map { |l| prepare_line(branch, l, authorizer, code, failures, offline) }
       begin
         Reservations.check!(branch, prepared.map { |l| [ l[:product], l[:quantity] ] }, except: order)
@@ -74,8 +80,13 @@ module Till
       end
       # If the business's rule blew up, the built-in one decided; the failure is reported once per shift.
       failures.uniq.each { |text_key, error| Review.open!(shift, user: user, branch: branch, reason: I18n.t(text_key, error: error), no_repeat: true) }
+      # The order is delivered with its sale or not at all.
+      order&.deliver!(sale)
       sale
     end
+  rescue ActiveRecord::RecordNotUnique
+    # The same ticket arrived twice at the same instant and the other one won: that is the sale.
+    Sale.find_by(key: key) || raise
   rescue Inventory::OutOfStock, Reservations::Error => e
     raise Error, I18n.t("errors.till.cannot_sell_without", message: e.message)
   rescue Stopped => e
@@ -85,14 +96,19 @@ module Till
 
   # lines: [{ sale_line_id:, quantity: }]. The money comes out of the open shift's drawer; if the
   # sale was on account, it first lowers what the customer owes on it and only the rest goes out in cash.
-  def self.refund!(sale:, lines:, reason:, user:)
+  # `key` is the form's idempotency key: the same key returns the same refund.
+  def self.refund!(sale:, lines:, reason:, user:, key: nil)
+    if key.present? && (previous = Refund.find_by(key: key))
+      return previous
+    end
     raise Error, I18n.t("errors.reason_required") if reason.blank?
     raise Error, I18n.t("errors.till.already_refunded") unless sale.paid?
     shift = Shift.opened_at(sale.branch) or raise Error, I18n.t("errors.till.no_till_refund")
     raise Error, I18n.t("errors.till.nothing_refunded") if lines.blank?
 
     Sale.transaction do
-      refund = Refund.new(sale: sale, shift: shift, user: user, reason: reason, total_cents: 0)
+      sale.lock! # two refunds of the same ticket go one after the other, each seeing what the other took
+      refund = Refund.new(sale: sale, shift: shift, user: user, reason: reason, total_cents: 0, key: key.presence)
       total = 0
       lines.each do |l|
         sale_line = sale.lines.find(l[:sale_line_id])

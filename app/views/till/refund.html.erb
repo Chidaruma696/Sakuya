@@ -6,6 +6,7 @@
 <% if @sale %>
   <%= form_with url: till_create_refund_path, class: "card" do |f| %>
     <%= f.hidden_field :sale_id, value: @sale.id %>
+    <%= hidden_field_tag :key, SecureRandom.uuid, id: nil %>
     <%= f.hidden_field :code, value: params[:code] %>
     <p class="mb-2 text-sm"><%= t("till.ticket") %> <strong class="font-mono"><%= @sale.folio %></strong> · <%= l @sale.created_at, format: :short %> · <%= format_money(@sale.total_cents) %> · <%= t("statuses.#{@sale.status}") %></p>
     <table class="w-full text-sm">
