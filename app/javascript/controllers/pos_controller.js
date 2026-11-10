@@ -4,6 +4,10 @@ import { saveCatalog, catalog, enqueue, pending, remove, search, newKey, request
 // The on-screen ticket: scans, builds lines, calculates for display and sends everything to the server,
 // which is what really checks out and recalculates. Offline it keeps selling with the catalog saved
 // on the device and queues the sales; when the network comes back they upload by themselves, one by one.
+
+// Names go into the ticket as HTML: escaped, so a name is always just text.
+const escapeHtml = (text) => String(text ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c])
+
 export default class extends Controller {
   static targets = ["code", "body", "total", "cash", "transfer", "deposit", "change", "notice",
                     "pending", "pendingName", "pendingQuantity", "checkoutButton", "customer", "credit", "connection"]
@@ -93,7 +97,8 @@ export default class extends Controller {
     l.promo = null
     for (const p of l.promotions) {
       if (l.quantity < Number(p.minimum_quantity)) continue
-      const price = p.kind === "percentage" ? Math.round(l.catalog * (1 - Number(p.percentage) / 100)) : p.price_cents
+      // In whole numbers, like the server: a float would turn an exact half cent into 0.4999… and round it down.
+      const price = p.kind === "percentage" ? Math.round(l.catalog * (10000 - Math.round(Number(p.percentage) * 100)) / 10000) : p.price_cents
       if (price < best) { best = price; l.promo = p.name }
     }
     return best
@@ -118,7 +123,8 @@ export default class extends Controller {
     this.render()
   }
 
-  amount(l) { return Math.round(l.quantity * l.price) }
+  // Thousandths × cents in whole numbers, so the screen shows the same cents the server will charge.
+  amount(l) { return Math.round(Math.round(l.quantity * 1000) * l.price / 1000) }
   totalCents() { return this.lines.reduce((s, l) => s + this.amount(l), 0) }
   // Same format as Money.format_money on the server: the business symbol, comma thousands, two decimals.
   format_money(c) { const n = Math.abs(c) / 100; return `${c < 0 ? "−" : ""}${window.CURRENCY?.symbol ?? "$"}${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` }
@@ -128,7 +134,7 @@ export default class extends Controller {
     if (rows) {
       this.bodyTarget.innerHTML = this.lines.map((l, i) => `
         <tr class="border-t border-stone-100 ${l.manual && l.price < l.catalog ? "bg-amber-50" : ""}">
-          <td class="px-3 py-2">${l.name}${l.promo ? ` <span class="rounded bg-emerald-100 px-1 text-xs text-emerald-800">${l.promo}</span>` : ""}</td>
+          <td class="px-3 py-2">${escapeHtml(l.name)}${l.promo ? ` <span class="rounded bg-emerald-100 px-1 text-xs text-emerald-800">${escapeHtml(l.promo)}</span>` : ""}</td>
           <td class="px-3 py-2 text-right font-mono"><input type="number" value="${l.quantity}" step="${l.unit === "piece" ? "1" : "0.001"}" min="0" data-action="change->pos#changeQuantity" data-pos-index-param="${i}" class="w-24 rounded border border-stone-300 px-1 text-right font-mono"> ${l.unit}</td>
           <td class="px-3 py-2 text-right font-mono"><input type="number" value="${(l.price / 100).toFixed(2)}" step="0.01" min="0" data-action="change->pos#changePrice" data-pos-index-param="${i}" class="w-24 rounded border border-stone-300 px-1 text-right font-mono"></td>
           <td class="px-3 py-2 text-right font-mono" data-amount="${i}">${this.format_money(this.amount(l))}</td>
