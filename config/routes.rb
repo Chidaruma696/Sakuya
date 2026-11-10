@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   get "login", to: "sessions#new", as: :login
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy", as: :logout
+  post "session/keep", to: "sessions#keep", as: :keep_session
 
   scope "till", controller: "till", as: "till" do
     get "/", action: :index
@@ -117,7 +118,9 @@ Rails.application.routes.draw do
       resources :codes, only: %i[create destroy], controller: "product_barcodes"
     end
     resources :promotions, except: %i[show]
-    resources :users, except: %i[show destroy]
+    resources :users, except: %i[show destroy] do
+      resources :sessions, only: :destroy, controller: "user_sessions"
+    end
     resources :roles, except: %i[show destroy]
     resources :branches, except: %i[show destroy]
   end

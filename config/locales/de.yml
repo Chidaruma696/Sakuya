@@ -294,6 +294,11 @@ de:
     welcome: Hallo, %{name}
     wrong: Benutzer oder Passwort falsch
     too_many: "Zu viele Versuche. Warte ein paar Minuten und versuche es erneut."
+    opened_elsewhere: "Deine Sitzung wurde beendet: Sie wurde auf einem anderen Gerät geöffnet oder von einem Administrator beendet. Melde dich erneut an."
+    closed_idle: "Die Sitzung wurde nach %{minutes} Minuten ohne Nutzung beendet."
+    still_there: "Bist du noch da?"
+    still_there_help: "Dieser Bildschirm wurde eine Weile nicht benutzt. Die Sitzung endet in"
+    still_here: "Ich bin noch da"
     closed: Abgemeldet
     sign_in_to_continue: Zum Fortfahren anmelden
   errors:
@@ -544,6 +549,10 @@ de:
       to_upload: '%{n} Verkäufe zum Hochladen'
       discard: Verwerfen
       discard_confirm: "Diesen Verkauf über %{total} verwerfen? Er wurde nie auf dem Server erfasst und geht verloren."
+      sign_in_to_upload_one: "Melde dich auf diesem Gerät an, um 1 Verkauf hochzuladen"
+      sign_in_to_upload: "Melde dich auf diesem Gerät an, um %{n} Verkäufe hochzuladen"
+      signed_out: "Dieses Gerät ist abgemeldet: melde dich an, um weiter zu verkaufen."
+      sign_in: Anmelden
       to_upload_one: 1 Verkauf zum Hochladen
       shift_pending_other: 'Auf diesem Gerät gibt es %{n} offline gemachte Verkäufe, die noch nicht hochgeladen sind: vor dem Abschluss warten.'
       shift_pending_one: 'Auf diesem Gerät gibt es 1 offline gemachten Verkauf, der noch nicht hochgeladen ist: vor dem Abschluss warten.'
@@ -567,6 +576,7 @@ de:
     escpos_help: Der Bon als Bytes für einen Thermodrucker
     print_thermal: Auf dem Thermodrucker drucken
     upload_now: Jetzt hochladen
+    uploaded_by: "hochgeladen von %{name}"
     printed: Bon gedruckt.
     no_serial: 'Dieser Browser kann nicht mit einem Kabeldrucker sprechen; Chrome oder Edge nutzen oder als ESC/POS herunterladen.'
     choose_printer: 'Den Drucker mit «Auf dem Thermodrucker drucken» wählen; danach wird nicht mehr gefragt.'
@@ -754,6 +764,7 @@ de:
     notices:
       created: "%{what} angelegt"
       saved: "%{what} gespeichert"
+      session_ended: "Die Sitzung von %{name} wurde beendet"
       deleted: "%{what} gelöscht"
       already_used: "%{what} wird bereits verwendet: deaktivieren statt löschen"
       code_added: Code %{code} hinzugefügt
@@ -800,6 +811,11 @@ de:
     user: Benutzername
     user_lowercase: Benutzername (Kleinbuchstaben)
     new_password: Neues Passwort (leer = unverändert)
+    sessions: Sitzungen
+    session_limit: "Gleichzeitige Sitzungen (1 bis 5)"
+    end_session: Beenden
+    session_line: "%{device} · seit %{since} · zuletzt benutzt %{used}"
+    unknown_device: Unbekanntes Gerät
     warehouse: Lager (nur Lagerung, keine Kasse)
     warehouse_short: Lager
   setup:

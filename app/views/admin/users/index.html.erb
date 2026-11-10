@@ -3,12 +3,21 @@
   <%= link_to t("admin.new_user"), new_admin_user_path, class: "btn btn-primary btn-sm" %>
 </div>
 <table class="table">
-  <thead><tr><th class="px-3 py-2"><%= t("common.name") %></th><th class="px-3 py-2"><%= t("admin.user") %></th><th class="px-3 py-2"><%= t("admin.role") %></th><th class="px-3 py-2"><%= t("common.branch") %></th><th class="px-3 py-2"><%= t("common.active") %></th><th></th></tr></thead>
+  <thead><tr><th class="px-3 py-2"><%= t("common.name") %></th><th class="px-3 py-2"><%= t("admin.user") %></th><th class="px-3 py-2"><%= t("admin.role") %></th><th class="px-3 py-2"><%= t("common.branch") %></th><th class="px-3 py-2"><%= t("common.active") %></th><th class="px-3 py-2"><%= t("admin.sessions") %></th><th></th></tr></thead>
   <tbody>
     <% @users.each do |u| %>
       <tr class="border-t border-stone-100 <%= 'text-stone-400' unless u.active %>">
         <td class="px-3 py-2"><%= u.name %></td><td class="px-3 py-2 font-mono"><%= u.user %></td><td class="px-3 py-2"><%= u.role %></td><td class="px-3 py-2"><%= u.branch %></td>
         <td class="px-3 py-2"><%= u.active ? t("common.yes") : t("common.no") %></td>
+        <td class="px-3 py-2 text-xs">
+          <% u.sessions.reject(&:idle?).sort_by(&:started_at).each do |s| %>
+            <div class="flex items-center gap-2">
+              <span><%= t("admin.session_line", device: s.device || t("admin.unknown_device"), since: l(s.started_at, format: :short), used: l(s.last_used_at, format: :short)) %></span>
+              <%= button_to t("admin.end_session"), admin_user_session_path(u, s), method: :delete, class: "link text-red-700" %>
+            </div>
+          <% end %>
+          <% if u.session_limit > 1 %><div class="text-stone-500">≤ <%= u.session_limit %></div><% end %>
+        </td>
         <td class="px-3 py-2 text-right"><%= link_to t("common.edit"), edit_admin_user_path(u), class: "btn btn-secondary btn-xs" %></td>
       </tr>
     <% end %>

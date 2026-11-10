@@ -18,13 +18,20 @@ class User < ApplicationRecord
                       format: { with: /\A[a-z0-9._-]+\z/, message: ->(*) { I18n.t("errors.user.format") } }
 
   has_many :charges, dependent: :restrict_with_error
+  has_many :sessions, class_name: "UserSession", dependent: :delete_all
+
+  # How many devices this user may be signed in on at once; beyond it the oldest session ends.
+  validates :session_limit, numericality: { only_integer: true, in: 1..5 }
+
+  # A new password or a switched-off user ends every session left open anywhere; a lower limit
+  # ends the surplus.
+  after_update { sessions.delete_all if saved_change_to_password_digest? || (saved_change_to_active? && !active) }
+  after_update { UserSession.trim!(self) if saved_change_to_session_limit? }
 
   validate :someone_still_manages_users, on: :update
 
   scope :active, -> { where(active: true) }
 
-  # What a session cookie must match to stay valid: it changes with the password.
-  def session_stamp = Digest::SHA256.hexdigest("#{id}:#{password_digest}")[0, 32]
 
   def can?(key)
     active && role.allows?(key)

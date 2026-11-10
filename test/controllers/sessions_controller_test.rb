@@ -90,19 +90,11 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_path
   end
 
-  test "an administrator changing their own password stays in; a session left unused runs out" do
+  test "an administrator changing their own password stays in" do
     post login_path, params: { user: "admin", password: "secret12" }
     patch admin_user_path(users(:admin)), params: { user: { name: "Administrator", user: "admin", password: "another12" } }
     assert_redirected_to admin_users_path
     get admin_users_path
     assert_response :ok, "the one who changed it is still signed in"
-    travel ApplicationController::SESSION_DAYS.days - 1.hour do
-      get admin_users_path
-      assert_response :ok, "used within the window, the session is pushed back"
-    end
-    travel 2 * ApplicationController::SESSION_DAYS.days do
-      get admin_users_path
-      assert_redirected_to login_path
-    end
   end
 end

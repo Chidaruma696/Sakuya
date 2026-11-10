@@ -294,6 +294,11 @@ en:
     welcome: Hi, %{name}
     wrong: Wrong user or password
     too_many: "Too many attempts. Wait a few minutes and try again."
+    opened_elsewhere: "Your session was closed: it was opened on another device, or an administrator ended it. Sign in again."
+    closed_idle: "The session closed after %{minutes} minutes without use."
+    still_there: "Are you still there?"
+    still_there_help: "Nobody has touched this screen for a while. The session closes in"
+    still_here: "I'm still here"
     closed: Signed out
     sign_in_to_continue: Sign in to continue
   errors:
@@ -544,6 +549,10 @@ en:
       to_upload: '%{n} sales to upload'
       discard: Discard
       discard_confirm: "Discard this sale of %{total}? It was never recorded on the server and will be lost."
+      sign_in_to_upload_one: "Sign in on this device to upload 1 sale"
+      sign_in_to_upload: "Sign in on this device to upload %{n} sales"
+      signed_out: "This device is signed out: sign in to keep selling."
+      sign_in: Sign in
       to_upload_one: 1 sale to upload
       shift_pending_other: 'This device has %{n} sales made offline that have not been uploaded: wait for them before closing the session.'
       shift_pending_one: 'This device has 1 sale made offline that has not been uploaded: wait for it before closing the session.'
@@ -567,6 +576,7 @@ en:
     escpos_help: The receipt as bytes for a thermal printer
     print_thermal: Print on the thermal printer
     upload_now: Upload now
+    uploaded_by: "uploaded by %{name}"
     printed: Receipt printed.
     no_serial: 'This browser cannot talk to a cable printer; use Chrome or Edge, or download it as ESC/POS.'
     choose_printer: 'Choose the printer with «Print on the thermal printer»; after that it is not asked again.'
@@ -754,6 +764,7 @@ en:
     notices:
       created: "%{what} created"
       saved: "%{what} saved"
+      session_ended: "%{name}'s session was ended"
       deleted: "%{what} deleted"
       already_used: "%{what} is already in use: deactivate it instead of deleting it"
       code_added: Code %{code} added
@@ -800,6 +811,11 @@ en:
     user: Username
     user_lowercase: Username (lowercase)
     new_password: New password (empty = unchanged)
+    sessions: Sessions
+    session_limit: "Sessions at once (1 to 5)"
+    end_session: End
+    session_line: "%{device} · since %{since} · last used %{used}"
+    unknown_device: Unknown device
     warehouse: Warehouse (storage only, no till)
     warehouse_short: warehouse
   setup:

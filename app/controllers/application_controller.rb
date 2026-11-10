@@ -71,9 +71,20 @@ class ApplicationController < ActionController::Base
     render "errors/feature_off", status: :not_found, locals: { feature: off }
   end
 
+  # Without a session: to the sign-in screen, saying why if this device had one and lost it.
+  # What the page asks for by itself (JSON) gets a 401 it can read instead of a login page.
   def require_session
-    return redirect_to login_path, alert: t("session.sign_in_to_continue") unless current_user
-    start_session(current_user) if request.get? && !request.xhr? # a session in use does not run out
+    return if current_user
+    message = case @session_ended
+    when :idle then t("session.closed_idle", minutes: UserSession::IDLE_AFTER.in_minutes.to_i)
+    when :elsewhere then t("session.opened_elsewhere")
+    else t("session.sign_in_to_continue")
+    end
+    if request.format.json? || request.headers["Accept"].to_s.include?("application/json")
+      render json: { error: message, signed_out: true }, status: :unauthorized
+    else
+      redirect_to login_path, alert: message
+    end
   end
 
   def can?(key)
@@ -98,22 +109,38 @@ class ApplicationController < ActionController::Base
     Review.open!(record, user: current_user, branch: branch, reason: reason, value_cents: value_cents)
   end
 
-  SESSION_DAYS = 14 # without using the system; every visit pushes it back
-
-  # The cookie carries the user and a stamp of their password: changing the password (or switching
-  # the user off) ends every session they left open anywhere.
+  # Signing in starts a session of this user on this device (see UserSession: beyond the user's
+  # limit, their oldest one ends). The cookie carries the session, its token and the user.
   def start_session(user)
-    cookies.signed[:user_id] = { value: "#{user.id}:#{user.session_stamp}", expires: SESSION_DAYS.days, httponly: true, same_site: :lax }
+    session, token = UserSession.start!(user, user_agent: request.user_agent)
+    cookies.signed[:user_id] = { value: "#{session.id}:#{token}:#{user.id}", expires: 1.day, httponly: true, same_site: :lax }
+    Current.session = session
     Current.user = user
   end
 
+  # Who this device is signed in as, if its session is still alive. A device whose session ended
+  # (left unused, or ended from somewhere else) is remembered for this request, to tell it why.
   def user_from_cookie
-    id, stamp = cookies.signed[:user_id].to_s.split(":", 2)
-    user = User.active.includes(:role, :branch).find_by(id: id) if id.present? && stamp.present?
-    user if user && ActiveSupport::SecurityUtils.secure_compare(user.session_stamp, stamp)
+    session_id, token, user_id = cookies.signed[:user_id].to_s.split(":", 3)
+    return if token.blank?
+    session = UserSession.find_live(session_id, token)
+    user = User.active.includes(:role, :branch).find_by(id: session.user_id) if session && !session.idle?
+    unless user
+      @session_ended = session&.idle? ? :idle : (:elsewhere if user_id.present?)
+      session&.destroy
+      cookies.delete(:user_id)
+      return
+    end
+    # What the page does by itself (the till looking for sales to upload) is not someone using it.
+    session.use! if request.headers["X-Background"].blank?
+    Current.session = session
+    user
   end
 
+  # Ends this device's session for real: the row goes, so no copy of the cookie works afterwards.
   def close_session
+    current_user
+    Current.session&.destroy
     cookies.delete(:user_id)
     Current.reset
   end

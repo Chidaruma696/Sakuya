@@ -1,0 +1,9 @@
+<%# "Are you still there?": after a while without anyone touching the screen, a clock counts down and the session closes by itself (see idle_controller.js and UserSession). %>
+<dialog class="m-auto w-full max-w-sm rounded-xl p-0 shadow-2xl" data-idle-target="dialog">
+  <div class="px-6 py-6 text-center">
+    <div class="text-xl font-bold tracking-tight"><%= t("session.still_there") %></div>
+    <p class="mt-2 text-sm text-stone-600"><%= t("session.still_there_help") %></p>
+    <div class="stat-value my-4 text-5xl" data-idle-target="clock">1:00</div>
+    <button type="button" class="btn btn-primary btn-lg w-full" data-action="idle#stay" autofocus><%= t("session.still_here") %></button>
+  </div>
+</dialog>

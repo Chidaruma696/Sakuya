@@ -4,7 +4,7 @@ module Admin
     before_action :load_record, only: %i[edit update]
 
     def index
-      @users = User.includes(:role, :branch).order(:name)
+      @users = User.includes(:role, :branch, :sessions).order(:name)
     end
 
     def new
@@ -34,7 +34,7 @@ module Admin
 
     # The password only changes if one is typed.
     def allowed
-      p = params.require(:user).permit(:name, :user, :role_id, :branch_id, :active, :password)
+      p = params.require(:user).permit(:name, :user, :role_id, :branch_id, :active, :password, :session_limit)
       p[:user] = p[:user].to_s.strip.downcase
       p.delete(:password) if p[:password].blank?
       p

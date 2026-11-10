@@ -294,6 +294,11 @@ es:
     welcome: Hola, %{name}
     wrong: Usuario o contraseña incorrectos
     too_many: "Demasiados intentos. Espera unos minutos y vuelve a intentar."
+    opened_elsewhere: "Tu sesión se cerró: se abrió en otro equipo o un administrador la terminó. Vuelve a entrar."
+    closed_idle: "La sesión se cerró tras %{minutes} minutos sin uso."
+    still_there: "¿Sigues ahí?"
+    still_there_help: "Hace rato que nadie toca esta pantalla. La sesión se cierra en"
+    still_here: "Aquí sigo"
     closed: Sesión cerrada
     sign_in_to_continue: Inicia sesión para continuar
   errors:
@@ -544,6 +549,10 @@ es:
       to_upload: '%{n} ventas por subir'
       discard: Descartar
       discard_confirm: "¿Descartar esta venta de %{total}? Nunca quedó registrada en el servidor y se perderá."
+      sign_in_to_upload_one: "Entra en este equipo para subir 1 venta"
+      sign_in_to_upload: "Entra en este equipo para subir %{n} ventas"
+      signed_out: "Este equipo no tiene sesión: entra para seguir vendiendo."
+      sign_in: Entrar
       to_upload_one: 1 venta por subir
       shift_pending_other: 'En este equipo hay %{n} ventas hechas sin conexión que no han subido: espera a que suban antes de cerrar el corte.'
       shift_pending_one: 'En este equipo hay 1 venta hecha sin conexión que no ha subido: espera a que suba antes de cerrar el corte.'
@@ -567,6 +576,7 @@ es:
     escpos_help: El ticket en bytes para una impresora térmica
     print_thermal: Imprimir en la térmica
     upload_now: Subir ahora
+    uploaded_by: "subida por %{name}"
     printed: Ticket impreso.
     no_serial: 'Este navegador no puede hablarle a la impresora por cable; usa Chrome o Edge, o bájalo en ESC/POS.'
     choose_printer: 'Elige la impresora con «Imprimir en la térmica»; luego ya no se pregunta.'
@@ -754,6 +764,7 @@ es:
     notices:
       created: "%{what} creado"
       saved: "%{what} guardado"
+      session_ended: "Se cerró la sesión de %{name}"
       deleted: "%{what} borrado"
       already_used: "%{what} ya se usó: desactívalo en vez de borrarlo"
       code_added: Código %{code} agregado
@@ -800,6 +811,11 @@ es:
     user: Usuario
     user_lowercase: Usuario (minúsculas)
     new_password: Nueva contraseña (vacío = igual)
+    sessions: Sesiones
+    session_limit: "Sesiones a la vez (1 a 5)"
+    end_session: Cerrar
+    session_line: "%{device} · desde %{since} · último uso %{used}"
+    unknown_device: Equipo desconocido
     warehouse: 'Almacén (bodega: solo guarda mercancía, sin caja)'
     warehouse_short: almacén
   setup:

@@ -30,8 +30,16 @@ class SessionsController < ApplicationController
     end
   end
 
+  # The screen saying someone is still in front of it ("I'm still here", or working without
+  # loading pages): getting this far already counted as using the session.
+  def keep
+    head :no_content
+  end
+
+  # `idle` comes from the countdown that nobody answered.
   def destroy
     close_session
-    redirect_to login_path, notice: t("session.closed")
+    notice = params[:idle].present? ? t("session.closed_idle", minutes: UserSession::IDLE_AFTER.in_minutes.to_i) : t("session.closed")
+    redirect_to login_path, notice: notice
   end
 end

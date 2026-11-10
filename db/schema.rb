@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_10_000001) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
   create_table "account_payments", force: :cascade do |t|
     t.integer "amount_cents", null: false
     t.integer "branch_id", null: false
@@ -421,6 +421,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000001) do
     t.string "status", default: "paid", null: false
     t.integer "total_cents", null: false
     t.datetime "updated_at", null: false
+    t.integer "uploaded_by_id"
     t.integer "user_id", null: false
     t.index ["branch_id", "folio"], name: "index_sales_on_branch_and_folio", unique: true
     t.index ["branch_id"], name: "index_sales_on_branch_id"
@@ -429,6 +430,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000001) do
     t.index ["key"], name: "index_sales_on_key", unique: true
     t.index ["shift_id", "status"], name: "index_sales_on_shift_id_and_status"
     t.index ["shift_id"], name: "index_sales_on_shift_id"
+    t.index ["uploaded_by_id"], name: "index_sales_on_uploaded_by_id"
     t.index ["user_id"], name: "index_sales_on_user_id"
     t.check_constraint "status IN ('paid', 'refunded')", name: "sales_status"
     t.check_constraint "total_cents >= 0", name: "sales_total"
@@ -642,6 +644,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000001) do
     t.index ["name"], name: "index_suppliers_on_name", unique: true
   end
 
+  create_table "user_sessions", force: :cascade do |t|
+    t.string "device"
+    t.datetime "last_used_at", null: false
+    t.datetime "started_at", null: false
+    t.string "token_digest", null: false
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_user_sessions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.integer "branch_id", null: false
@@ -651,6 +662,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000001) do
     t.string "name", null: false
     t.string "password_digest", null: false
     t.integer "role_id", null: false
+    t.integer "session_limit", default: 1, null: false
     t.string "text_size", default: "normal", null: false
     t.string "theme", default: "light", null: false
     t.datetime "updated_at", null: false
@@ -658,6 +670,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000001) do
     t.index ["branch_id"], name: "index_users_on_branch_id"
     t.index ["role_id"], name: "index_users_on_role_id"
     t.index ["user"], name: "index_users_on_user", unique: true
+    t.check_constraint "session_limit BETWEEN 1 AND 5", name: "users_session_limit"
   end
 
   create_table "withdrawals", force: :cascade do |t|
@@ -733,6 +746,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000001) do
   add_foreign_key "sales", "customers"
   add_foreign_key "sales", "shifts"
   add_foreign_key "sales", "users"
+  add_foreign_key "sales", "users", column: "uploaded_by_id"
   add_foreign_key "shifts", "branches"
   add_foreign_key "shifts", "users"
   add_foreign_key "shifts", "users", column: "closed_by_id"
@@ -765,6 +779,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000001) do
   add_foreign_key "supplier_payments", "users"
   add_foreign_key "supplier_payments", "users", column: "voided_by_id"
   add_foreign_key "supplier_payments", "withdrawals"
+  add_foreign_key "user_sessions", "users"
   add_foreign_key "users", "branches"
   add_foreign_key "users", "roles"
   add_foreign_key "withdrawals", "shifts"
