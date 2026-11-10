@@ -3,6 +3,8 @@ class Sale < ApplicationRecord
   belongs_to :branch
   belongs_to :shift
   belongs_to :user
+  # An offline sale uploaded by someone other than whoever sold it (`user`) keeps both names.
+  belongs_to :uploaded_by, class_name: "User", optional: true
   has_many :lines, class_name: "SaleLine", dependent: :restrict_with_error, inverse_of: :sale
   has_many :payments, dependent: :restrict_with_error
   has_many :refunds, dependent: :restrict_with_error

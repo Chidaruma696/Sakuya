@@ -48,12 +48,13 @@ class TillController < ApplicationController
     lines = JSON.parse(params[:lines].to_s).map { |l| l.symbolize_keys.slice(:product_id, :quantity, :price_cents) }
     payments = JSON.parse(params[:payments].to_s).map(&:symbolize_keys)
     sold_at = sold_offline
-    authorizes = authorizer_or_review("till.lower_price")
+    seller, uploader = seller_and_uploader(sold_at)
+    authorizes = seller.can?("till.lower_price") ? seller : nil
     # Prices are judged by the price rule inside Till: what it stops is not charged, and what
     # asks for review is charged and left for review.
     customer = Customer.active.find_by(id: params[:customer_id]) if params[:customer_id].present? && Features.active?("customers")
     order = Order.still_open.where(branch: current_branch).find_by(id: params[:order_id]) if params[:order_id].present?
-    sale = Till.checkout!(branch: current_branch, user: current_user, lines: lines, payments: payments, key: params[:key], authorizer: authorizes,
+    sale = Till.checkout!(branch: current_branch, user: seller, uploaded_by: uploader, lines: lines, payments: payments, key: params[:key], authorizer: authorizes,
                          customer: customer, order: order, sold_at: sold_at)
     render json: { url: till_ticket_path(sale, print: 1), folio: sale.folio, change: Money.format_money(sale.change_cents) }
   rescue Till::Error, JSON::ParserError, ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid => e
@@ -62,7 +63,7 @@ class TillController < ApplicationController
 
   def sales
     authorize!("till.sell")
-    @sales = Sale.where(branch: current_branch).includes(:user, :payments, lines: :product).recent.limit(100)
+    @sales = Sale.where(branch: current_branch).includes(:user, :uploaded_by, :payments, lines: :product).recent.limit(100)
   end
 
   def ticket
@@ -209,6 +210,14 @@ class TillController < ApplicationController
     time
   rescue ArgumentError
     raise Till::Error, t("errors.till.sold_at_odd")
+  end
+
+  # A sale made offline belongs to whoever was signed in on the device when it was made, even if
+  # someone else is signed in when it uploads: the device says who (`sold_by`), and it can only
+  # name a user of this same branch. Returns [seller, uploader or nil].
+  def seller_and_uploader(sold_at)
+    seller = User.find_by(id: params[:sold_by], branch_id: current_branch.id) if sold_at && params[:sold_by].present?
+    seller && seller.id != current_user.id ? [ seller, current_user ] : [ current_user, nil ]
   end
 
   def shift_for_summary

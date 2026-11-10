@@ -79,9 +79,9 @@ module Repl
     end
 
     def sales(from = nil, to = nil)
-      sales_for(from, to).includes(:branch, :user, :customer).map do |s|
+      sales_for(from, to).includes(:branch, :user, :customer, :uploaded_by).map do |s|
         { folio: s.folio, date: s.business_date.iso8601, branch: s.branch.name, cashier: s.user.name, customer: s.customer&.name,
-          total: money(s.total_cents), change: money(s.change_cents), status: s.status }
+          total: money(s.total_cents), change: money(s.change_cents), status: s.status, "uploaded-by": s.uploaded_by&.name }
       end
     end
 

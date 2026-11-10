@@ -11,7 +11,7 @@ const escapeHtml = (text) => String(text ?? "").replace(/[&<>"']/g, (c) => ({ "&
 export default class extends Controller {
   static targets = ["code", "body", "total", "cash", "transfer", "deposit", "change", "notice",
                     "pending", "pendingName", "pendingQuantity", "checkoutButton", "customer", "credit", "connection"]
-  static values = { scanUrl: String, checkoutUrl: String, catalogUrl: String, tokenUrl: String, branch: Number, key: String, order: Object }
+  static values = { scanUrl: String, checkoutUrl: String, catalogUrl: String, tokenUrl: String, loginUrl: String, branch: Number, user: Number, key: String, order: Object }
 
   connect() {
     this.lines = []
@@ -158,6 +158,7 @@ export default class extends Controller {
   }
 
   async checkout() {
+    if (this.signedOut) { this.notify(T.pos.signed_out); return }
     if (this.lines.length === 0) { this.notify(T.pos.ticket_empty); return }
     const total = this.totalCents()
     let cash = this.cents(this.cashTarget)
@@ -181,8 +182,9 @@ export default class extends Controller {
     try {
       const r = await request(this.checkoutUrlValue, { method: "POST", body: body, headers: { Accept: "application/json" } })
       if (!r) { await this.saveOffline(body, total, cash + others - total); return }
-      const data = await r.json()
-      if (!r.ok) { this.notify(data.error); return }
+      const data = await r.json().catch(() => ({}))
+      if (r.status === 401) { this.lostSession(); this.notify(data.error || T.pos.signed_out); return }
+      if (!r.ok) { this.notify(data.error || String(r.status)); return }
       window.location.assign(data.url)
     } finally {
       this.checkoutButtonTarget.disabled = false
@@ -209,14 +211,14 @@ export default class extends Controller {
 
   async updateCatalog() {
     if (!this.hasCatalogUrlValue) return
-    const r = await request(this.catalogUrlValue, { headers: { Accept: "application/json" } })
+    const r = await request(this.catalogUrlValue, { headers: { Accept: "application/json", "X-Background": "1" } })
     if (r?.ok) await saveCatalog(await r.json())
   }
 
   // The checkout did not reach the server: the sale stays on the device with its key and the time it was made.
   async saveOffline(body, total, change) {
     if (this.onAccount() > 0 || this.orderValue.id) { this.notify(T.pos.needs_connection); return }
-    await enqueue({ key: this.key, lines: body.get("lines"), payments: body.get("payments"), customer_id: body.get("customer_id") || "",
+    await enqueue({ key: this.key, lines: body.get("lines"), payments: body.get("payments"), customer_id: body.get("customer_id") || "", sold_by: this.userValue || "",
                     sold_at: new Date().toISOString(), total })
     const notice = T.pos.saved_offline.replace("%{total}", this.format_money(total)).replace("%{change}", this.format_money(Math.max(change, 0)))
     this.clear()
@@ -233,17 +235,21 @@ export default class extends Controller {
     try {
       const queue = (await pending()).sort((a, b) => a.sold_at.localeCompare(b.sold_at))
       if (queue.length === 0) return
-      const t = await request(this.tokenUrlValue, { headers: { Accept: "application/json" } })
+      // Uploading is the page's own doing, not someone using the till: it does not keep the session alive.
+      const background = { Accept: "application/json", "X-Background": "1" }
+      const t = await request(this.tokenUrlValue, { headers: background })
+      if (t?.status === 401) { this.lostSession(); return }
       if (!t?.ok) return
       // Signed out, the answer is the login page, not a token: nothing is uploaded and nothing is lost.
       const { token } = await t.json().catch(() => ({}))
       if (!token) return
       for (const v of queue) {
         const body = new FormData()
-        for (const field of ["key", "lines", "payments", "customer_id", "sold_at"]) body.append(field, v[field] || "")
+        for (const field of ["key", "lines", "payments", "customer_id", "sold_at", "sold_by"]) body.append(field, v[field] || "")
         body.append("authenticity_token", token)
-        const r = await request(this.checkoutUrlValue, { method: "POST", body: body, headers: { Accept: "application/json" } })
+        const r = await request(this.checkoutUrlValue, { method: "POST", body: body, headers: background })
         if (!r) break
+        if (r.status === 401) { this.lostSession(); break }
         const data = await r.json().catch(() => null)
         // Only the till's own answer, with the folio, takes a sale off the device.
         if (r.ok && data?.folio) await remove(v.key)
@@ -262,9 +268,18 @@ export default class extends Controller {
     const errors = queue.filter((v) => v.error)
     const parts = []
     if (!online) parts.push(T.pos.offline)
-    if (queue.length) parts.push(queue.length === 1 ? T.pos.to_upload_one : T.pos.to_upload.replace("%{n}", queue.length))
+    if (this.signedOut) parts.push(queue.length === 0 ? T.pos.signed_out : queue.length === 1 ? T.pos.sign_in_to_upload_one : T.pos.sign_in_to_upload.replace("%{n}", queue.length))
+    else if (queue.length) parts.push(queue.length === 1 ? T.pos.to_upload_one : T.pos.to_upload.replace("%{n}", queue.length))
     this.connectionTarget.hidden = parts.length === 0
-    this.connectionTarget.querySelector("[data-text]").textContent = parts.join(" · ")
+    const text = this.connectionTarget.querySelector("[data-text]")
+    text.textContent = parts.join(" · ")
+    if (this.signedOut) {
+      const link = document.createElement("a")
+      link.href = this.loginUrlValue
+      link.className = "link ml-2"
+      link.textContent = T.pos.sign_in
+      text.append(link)
+    }
     // A sale the server refuses stays with its reason until someone decides to discard it.
     this.connectionTarget.querySelector("[data-errors]").replaceChildren(...errors.map((v) => {
       const row = document.createElement("div")
@@ -276,6 +291,14 @@ export default class extends Controller {
       row.append(`${this.format_money(v.total)}: ${v.error}`, button)
       return row
     }))
+  }
+
+  // This device's session ended (opened elsewhere, or left unused). What is waiting stays on the
+  // device; nothing is charged or retried until someone signs in here.
+  lostSession() {
+    this.signedOut = true
+    clearInterval(this.clock)
+    this.renderConnection()
   }
 
   async discard(sale) {

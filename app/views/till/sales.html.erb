@@ -6,7 +6,7 @@
       <tr class="border-t border-stone-100">
         <td class="px-3 py-2 font-mono"><%= v.folio %></td>
         <td class="px-3 py-2 whitespace-nowrap"><%= l v.created_at, format: :short %></td>
-        <td class="px-3 py-2"><%= v.user %></td>
+        <td class="px-3 py-2"><%= v.user %><% if v.uploaded_by %> <span class="text-xs text-stone-500">(<%= t("till.uploaded_by", name: v.uploaded_by.name) %>)</span><% end %></td>
         <td class="px-3 py-2 text-stone-600"><%= v.lines.map { |l| "#{l.product.name} #{number_with_precision(l.quantity, precision: l.product.decimals)}" }.join(", ") %></td>
         <td class="px-3 py-2 text-right font-mono"><%= format_money(v.total_cents) %></td>
         <td class="px-3 py-2"><%= v.payments.map { |p| t("payment_methods.#{p.payment_method}").downcase }.uniq.join("+") %></td>

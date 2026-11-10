@@ -63,7 +63,7 @@ class Review < ApplicationRecord
     when Withdrawal then I18n.t("reviews.desc.withdrawal", amount: Money.format_money(reviewable.amount_cents), folio: reviewable.shift.folio)
     when SupplierInvoice then I18n.t("reviews.desc.supplier_invoice", folio: reviewable.folio, supplier: reviewable.supplier.name)
     when Receipt then I18n.t("reviews.desc.receipt", folio: reviewable.folio, supplier: reviewable.supplier.name)
-    when Sale then I18n.t("reviews.desc.sale", folio: reviewable.folio, total: Money.format_money(reviewable.total_cents))
+    when Sale then I18n.t("reviews.desc.sale", folio: reviewable.folio, total: Money.format_money(reviewable.total_cents)) + (reviewable.uploaded_by ? " (#{I18n.t("till.uploaded_by", name: reviewable.uploaded_by.name)})" : "")
     when Shift
       return I18n.t("reviews.desc.open_shift", folio: reviewable.folio) if reviewable.open?
       I18n.t("reviews.desc.shift", folio: reviewable.folio, difference: Money.format_money(reviewable.difference_cents))

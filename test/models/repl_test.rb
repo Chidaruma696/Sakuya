@@ -18,7 +18,7 @@ class ReplTest < ActiveSupport::TestCase
   test "today's sales as a list of maps, and the tools to add them up, count them and sort them" do
     sales = ev("(sales)")
     assert_equal 3, sales.size
-    assert_equal %i[folio date branch cashier customer total change status], sales.first.keys
+    assert_equal %i[folio date branch cashier customer total change status uploaded-by], sales.first.keys
     assert_equal BigDecimal("319.50"), ev("(sum-of :total (sales))"), "84 + 193.50 + 42"
     assert_equal({ "Cashier" => 2, "Supervisor" => 1 }, ev("(count-by :cashier (sales))"))
     assert_equal BigDecimal("193.50"), ev("(get (first (sort-by-desc :total (sales))) :total)")

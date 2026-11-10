@@ -49,6 +49,39 @@ class OfflineTest < ActionDispatch::IntegrationTest
     assert_match "does not add up", response.parsed_body["error"]
   end
 
+  test "an offline sale is recorded under whoever sold it, whoever uploads it; the uploader is kept when it is someone else" do
+    Inventory.move!(branch: @store, product: products(:ketchup), kind: "inflow", quantity: 10, user: users(:admin))
+    ketchup = [ { product_id: products(:ketchup).id, quantity: 1 } ]
+    seller = ->(key) { Sale.find_by!(key: key).then { |s| [ s.user, s.uploaded_by ] } }
+    post till_checkout_path, params: { key: "own", lines: ketchup.to_json, payments: [ { payment_method: "cash", amount_cents: 4_200 } ].to_json, sold_at: 5.minutes.ago.iso8601, sold_by: users(:cashier).id }
+    assert_equal [ users(:cashier), nil ], seller.("own"), "uploaded by the same cashier: nothing else to say"
+
+    delete logout_path
+    post login_path, params: { user: "supervisor", password: "secret12" } # the supervisor signs in on that till
+    upload = ->(key, sold_by, **extra) { post till_checkout_path, params: { key: key, lines: [ { product_id: products(:ketchup).id, quantity: 1, **extra } ].to_json, payments: [ { payment_method: "cash", amount_cents: 4_200 } ].to_json, sold_at: 5.minutes.ago.iso8601, sold_by: sold_by } }
+    upload.("theirs", users(:cashier).id, price_cents: 3_000)
+    assert_response :ok
+    assert_equal [ users(:cashier), users(:supervisor) ], seller.("theirs")
+    review = Review.last
+    assert_equal users(:cashier), review.user, "what it leaves in Review is under the seller's name"
+    assert_match "would otherwise have been stopped", review.reason, "and it is judged with the seller's permissions, not the uploader's"
+    get till_sales_path
+    assert_select "td", /Cashier\s+\(uploaded by Supervisor\)/
+    assert_equal "Supervisor", Repl.evaluate('(get (first (where :folio "' + Sale.find_by!(key: "theirs").folio + '" (sales))) :uploaded-by)', branches: [ @store ])
+
+    users(:cashier).update!(active: false)
+    upload.("gone", users(:cashier).id)
+    assert_equal [ users(:cashier), users(:supervisor) ], seller.("gone"), "a cashier switched off since then still sold it"
+    upload.("far", users(:admin).id)
+    assert_equal [ users(:supervisor), nil ], seller.("far"), "a seller from another branch is not believed"
+    upload.("nobody", "")
+    assert_equal [ users(:supervisor), nil ], seller.("nobody"), "a sale queued before this existed belongs to whoever uploads it"
+    upload.("unknown", "999999")
+    assert_equal [ users(:supervisor), nil ], seller.("unknown")
+    post till_checkout_path, params: { key: "online", lines: ketchup.to_json, payments: [ { payment_method: "cash", amount_cents: 4_200 } ].to_json, sold_by: users(:cashier).id }
+    assert_equal [ users(:supervisor), nil ], seller.("online"), "online, the sale is always of whoever is signed in"
+  end
+
   test "online the rule keeps stopping as always" do
     upload("on-1", [ { product_id: products(:ketchup).id, quantity: 1, price_cents: 3_000 } ], sold_at: nil)
     assert_response :unprocessable_entity
