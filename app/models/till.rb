@@ -96,12 +96,16 @@ module Till
       total = 0
       lines.each do |l|
         sale_line = sale.lines.find(l[:sale_line_id])
-        quantity = BigDecimal(l[:quantity].to_s).round(3)
-        raise Error, I18n.t("errors.till.max_refund", product: sale_line.product.name, max: sale_line.pending_quantity.to_s("F")) if quantity <= 0 || quantity > sale_line.pending_quantity
-        amount = Money.amount(quantity, sale_line.price_cents)
+        product = sale_line.product
+        quantity = quantity!(l[:quantity], product)
+        raise Error, I18n.t("errors.till.max_refund", product: product.name, max: sale_line.pending_quantity.to_s("F")) if quantity > sale_line.pending_quantity
+        # Whatever closes the line takes what is left of it, cent for cent: refunding a line in
+        # parts never adds up to more (or less) than what was charged for it.
+        left = sale_line.amount_cents - sale_line.refund_lines.sum(:amount_cents)
+        amount = quantity == sale_line.pending_quantity ? left : [ Money.amount(quantity, sale_line.price_cents), left ].min
         total += amount
         refund.lines.build(sale_line: sale_line, quantity: quantity, amount_cents: amount)
-        Inventory.move!(branch: sale.branch, product: sale_line.product, kind: "customer_return", quantity: quantity,
+        Inventory.move!(branch: sale.branch, product: product, kind: "customer_return", quantity: quantity,
                           user: user, reference: refund, reason: "#{sale.folio}: #{reason}")
       end
       refund.total_cents = total
@@ -118,9 +122,7 @@ module Till
 
   def self.prepare_line(branch, l, authorizer, code, failures, offline = false)
     product = Product.active.find(l[:product_id])
-    quantity = BigDecimal(l[:quantity].to_s).round(3)
-    raise Error, I18n.t("errors.till.invalid_quantity", product: product.name) unless quantity.positive?
-    raise Error, I18n.t("errors.till.whole_pieces", product: product.name) if !product.fractional? && quantity != quantity.floor
+    quantity = quantity!(l[:quantity], product)
     catalog = product.price_cents_for(branch)
     # A new product reaches the store without a price: it can be received, but not sold until it has one.
     raise Error, I18n.t("errors.till.no_price", product: product.name, branch: branch.name) unless catalog.positive?
@@ -128,8 +130,9 @@ module Till
     regular = promo_price || catalog
     price = l[:price_cents].present? ? l[:price_cents].to_i : regular
     if price < regular
-      floor = Setting.integer("till.price_floor") / 100.0 # never below the floor, not with permission nor with a rule
-      raise Error, I18n.t("errors.till.price_floor", product: product.name, floor: Setting.integer("till.price_floor"), amount: Money.format_money((catalog * floor).ceil)) if price < catalog * floor
+      floor = Setting.integer("till.price_floor") # never below the floor, not with permission nor with a rule
+      lowest = Rational(catalog * floor, 100).ceil # in whole cents, no floats: the floor itself can always be charged
+      raise Error, I18n.t("errors.till.price_floor", product: product.name, floor: floor, amount: Money.format_money(lowest)) if price < lowest
     end
     # The price rule decides the rest. If it stops and whoever authorizes has till.lower_price, it
     # goes through under their name but stays pending review: nobody is left unable to sell.
@@ -150,6 +153,23 @@ module Till
       value_review: value }
   end
   private_class_method :prepare_line
+
+  # A quantity as it comes from the screen: a positive number the kardex can hold (three decimals),
+  # whole if the product is sold by the piece. Anything else is refused by name, not with a crash.
+  MAX_QUANTITY = 999_999_999
+
+  def self.quantity!(value, product)
+    quantity = begin
+      BigDecimal(value.to_s)
+    rescue ArgumentError
+      nil
+    end
+    raise Error, I18n.t("errors.till.invalid_quantity", product: product.name) unless quantity&.finite? && quantity.round(3).positive? && quantity <= MAX_QUANTITY
+    quantity = quantity.round(3)
+    raise Error, I18n.t("errors.till.whole_pieces", product: product.name) if !product.fractional? && quantity != quantity.floor
+    quantity
+  end
+  private_class_method :quantity!
 
   # The whole sale, before checking it out, through the sales rule. If it stops and whoever checks
   # out does not have till.force_sale, it is not checked out and gets reported; otherwise returns

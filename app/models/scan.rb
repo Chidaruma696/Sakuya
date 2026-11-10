@@ -9,7 +9,7 @@ module Scan
     text = text.to_s.strip
     return nil if text.empty?
 
-    if (code = ProductBarcode.includes(:product).find_by(code: Barcode.variants(text)))
+    if (code = ProductBarcode.joins(:product).merge(Product.active).includes(:product).find_by(code: Barcode.variants(text)))
       return Result.new(kind: :product, product: code.product)
     end
     digits = Barcode.digits(text)
