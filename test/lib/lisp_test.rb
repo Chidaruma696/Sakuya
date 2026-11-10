@@ -69,6 +69,36 @@ class LispTest < ActiveSupport::TestCase
     assert_equal 100, ev("(define (h n) (if (= n 0) 0 (+ 1 (h (- n 1))))) (h 100)", depth: 150)
   end
 
+  test "a native handed the wrong thing fails as a Lisp error, never as a Ruby one" do
+    [ %((round 3.14159 "a")), "(round 1.5 99999999999999999999)", "(take -1 '(1 2 3))", "(nth '(1 2) 99999999999999999999999999)" ].each do |program|
+      assert_match "cannot work with what it was given", assert_raises(Lisp::Error, program) { ev(program) }.message
+    end
+    assert_match "cannot work with what it was given", assert_raises(Lisp::Error) { ev("(f 1 2 3)", functions: { "f" => ->(a, b = 0) { a + b } }) }.message
+    assert_match "cannot work with what it was given", assert_raises(Lisp::Error) { ev("(f)", functions: { "f" => -> { nil.upcase } }) }.message
+  end
+
+  test "define with something that is not a name is a syntax error" do
+    [ "(define (1 x) 2)", "(define () 2)", %((define ("f" x) 2)), "(define 5 2)" ].each do |program|
+      assert_match "define goes like this", assert_raises(Lisp::Error, program) { ev(program) }.message
+    end
+  end
+
+  test "a list, a text or a number that keeps doubling is cut off before it eats the memory" do
+    growing = [
+      [ "append", "(define (d l n) (if (= n 0) (count l) (d (append l l) (- n 1)))) (d '(1) 40)" ],
+      [ "str", %((define (d s n) (if (= n 0) (count s) (d (str s s) (- n 1)))) (d "a" 40)) ],
+      [ "*", "(define (d x n) (if (= n 0) 0 (d (* x x) (- n 1)))) (d 2 40)" ],
+      [ "*", "(define (d x n) (if (= n 0) 0 (d (* x x) (- n 1)))) (d 1.5 40)" ]
+    ]
+    growing.each do |name, program|
+      error = assert_raises(Lisp::Exhausted, name) { ev(program, steps: 1_000_000) }
+      assert_match "#{name} made something too big", error.message
+    end
+    # What a real rule builds stays far below the limits.
+    assert_equal 10_000, ev("(count (list-of))", functions: { "list-of" => -> { Array.new(10_000, 1) } })
+    assert_equal BigDecimal("123456789123.46"), ev("(round (* 1234567.89 100000.0001) 2)")
+  end
+
   test "define does not touch the base functions of other programs" do
     ev("(define (+ a b) 0)")
     assert_equal 3, ev("(+ 1 2)")

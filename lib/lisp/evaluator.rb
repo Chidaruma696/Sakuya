@@ -34,7 +34,7 @@ module Lisp
         unless function.arity.cover?(arguments.size)
           raise Error, I18n.t("lisp.errors.arity", name: function.name, expected: describe(function.arity), given: arguments.size)
         end
-        function.with_evaluator ? function.block.call(self, *arguments) : function.block.call(*arguments)
+        bounded(call_native(function, arguments), function.name)
       when Procedure
         if function.parameters.size != arguments.size
           raise Error, I18n.t("lisp.errors.arity", name: function.name || I18n.t("lisp.errors.the_function"), expected: function.parameters.size, given: arguments.size)
@@ -49,6 +49,28 @@ module Lisp
     end
 
     private
+
+    # A native that chokes on what the program handed it (a string where a count goes, a negative
+    # size…) is the program's mistake, not a crash: it comes out as a Lisp error like any other.
+    def call_native(function, arguments)
+      function.with_evaluator ? function.block.call(self, *arguments) : function.block.call(*arguments)
+    rescue TypeError, ArgumentError, RangeError, NoMethodError, FloatDomainError
+      raise Error, I18n.t("lisp.errors.bad_arguments", name: function.name)
+    end
+
+    # Steps and depth do not stop a program that doubles a list, a string or a number on every
+    # turn: nothing a native returns may grow past these sizes.
+    def bounded(value, name)
+      too_big = case value
+      when Array, Hash then value.size > MAX_ITEMS
+      when String then value.length > MAX_LENGTH
+      when Integer then value.bit_length > MAX_BITS
+      when BigDecimal then value.finite? && (value.exponent.abs > MAX_DIGITS || value.n_significant_digits > MAX_DIGITS)
+      else false
+      end
+      raise Exhausted, I18n.t("lisp.errors.too_big", name: name) if too_big
+      value
+    end
 
     def special_form(name, args, environment)
       case name
@@ -86,6 +108,7 @@ module Lisp
         destination = args.first
         if destination.is_a?(Array)
           name_fn, *parameters = destination
+          raise Error, I18n.t("lisp.errors.define_syntax") unless name_fn.is_a?(Sym)
           environment.define(name_fn.name, procedure(parameters, args.drop(1), environment, name_fn.name))
         elsif destination.is_a?(Sym)
           require(name, args, 2..2)

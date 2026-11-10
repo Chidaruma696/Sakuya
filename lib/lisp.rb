@@ -15,6 +15,11 @@ module Lisp
   class Exhausted < Error; end
 
   MAX_LENGTH = 20_000
+  # The largest values a program may build: items in a list or map, and the size of a number
+  # (bits of an integer, digits of a decimal). Strings share MAX_LENGTH.
+  MAX_ITEMS = 10_000
+  MAX_BITS = 4_096
+  MAX_DIGITS = 1_000
 
   # A symbol in the program (a name), distinct from a string and from a keyword (:x).
   Sym = Data.define(:name) do

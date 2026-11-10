@@ -1638,6 +1638,8 @@ en:
       parameter_names: parameters must be names
       too_many_steps: the program ran out of steps (an endless loop?)
       too_deep: the program went too deep (an endless recursion?)
+      too_big: "%{name} made something too big (a list, a text or a number that keeps growing?)"
+      bad_arguments: "%{name} cannot work with what it was given"
       too_long: the program is longer than %{max} characters
       unreadable: I can’t make sense of what follows on line %{line}
       too_nested: too many nested parentheses on line %{line}

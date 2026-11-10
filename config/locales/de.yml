@@ -1638,6 +1638,8 @@ de:
       parameter_names: Parameter müssen Namen sein
       too_many_steps: das Programm hat zu viele Schritte gebraucht (eine Endlosschleife?)
       too_deep: das Programm ist zu tief verschachtelt (eine Endlosrekursion?)
+      too_big: "%{name} hat etwas zu Großes gebaut (eine Liste, ein Text oder eine Zahl, die immer weiter wächst?)"
+      bad_arguments: "%{name} kann mit dem, was es bekommen hat, nicht arbeiten"
       too_long: das Programm ist länger als %{max} Zeichen
       unreadable: ich verstehe nicht, was in Zeile %{line} folgt
       too_nested: zu viele verschachtelte Klammern in Zeile %{line}

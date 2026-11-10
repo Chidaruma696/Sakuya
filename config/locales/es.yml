@@ -1638,6 +1638,8 @@ es:
       parameter_names: los parámetros van como nombres
       too_many_steps: el programa se pasó de pasos (¿un ciclo sin fin?)
       too_deep: el programa se metió demasiado hondo (¿una recursión sin fin?)
+      too_big: "%{name} armó algo demasiado grande (¿una lista, un texto o un número que no deja de crecer?)"
+      bad_arguments: "%{name} no puede trabajar con lo que le diste"
       too_long: el programa pasa de %{max} caracteres
       unreadable: no entiendo lo que sigue en la línea %{line}
       too_nested: demasiados paréntesis anidados en la línea %{line}
