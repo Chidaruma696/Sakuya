@@ -293,9 +293,11 @@ es:
     login: Entrar
     welcome: Hola, %{name}
     wrong: Usuario o contraseña incorrectos
+    too_many: "Demasiados intentos. Espera unos minutos y vuelve a intentar."
     closed: Sesión cerrada
     sign_in_to_continue: Inicia sesión para continuar
   errors:
+    duplicate: "Eso ya se registró hace un momento (desde aquí o desde otra pantalla): revisa antes de repetirlo."
     money:
       invalid: "“%{value}” no es una cantidad: usa números y punto decimal, como 1250.50"
     reserved:
@@ -540,6 +542,8 @@ es:
       saved_offline: 'Venta guardada sin conexión (%{total}, cambio %{change}). Se sube sola al volver la red; el ticket se imprime desde Ventas cuando suba.'
       offline: 'Sin conexión: vendiendo con el catálogo guardado'
       to_upload: '%{n} ventas por subir'
+      discard: Descartar
+      discard_confirm: "¿Descartar esta venta de %{total}? Nunca quedó registrada en el servidor y se perderá."
       to_upload_one: 1 venta por subir
       shift_pending_other: 'En este equipo hay %{n} ventas hechas sin conexión que no han subido: espera a que suban antes de cerrar el corte.'
       shift_pending_one: 'En este equipo hay 1 venta hecha sin conexión que no ha subido: espera a que suba antes de cerrar el corte.'
@@ -1296,6 +1300,7 @@ es:
       empty: el archivo no trae ninguna regla (cada una va debajo de ";;; hook:")
       hook: 'no conozco el gancho %{hook}'
       repeated: 'el gancho %{hook} viene dos veces'
+      contract: 'el gancho %{hook} dice contrato %{version}, y esta Sakuya conoce hasta el %{current}'
       not_imported: 'No se importó nada: %{error}'
       imported: 'Importadas: %{hooks}.'
       no_changes: El archivo trae las mismas reglas que ya están; no cambió nada.

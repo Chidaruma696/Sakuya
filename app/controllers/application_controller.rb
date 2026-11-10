@@ -21,6 +21,15 @@ class ApplicationController < ActionController::Base
     redirect_back_or_to root_path, alert: e.message
   end
 
+  # The database refused a duplicate: the same form sent twice at the same instant, or the same
+  # thing done from two screens. Nothing was recorded twice; say so.
+  rescue_from ActiveRecord::RecordNotUnique do
+    respond_to do |format|
+      format.json { render json: { error: t("errors.duplicate") }, status: :conflict }
+      format.any { redirect_back_or_to root_path, alert: t("errors.duplicate") }
+    end
+  end
+
   rescue_from NotAllowed do |e|
     render "errors/not_allowed", status: :forbidden, locals: { key: e.message }
   end
@@ -43,7 +52,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    Current.user ||= User.active.includes(:role, :branch).find_by(id: cookies.signed[:user_id])
+    Current.user ||= user_from_cookie
   end
 
   def current_branch
@@ -63,7 +72,8 @@ class ApplicationController < ActionController::Base
   end
 
   def require_session
-    redirect_to login_path, alert: t("session.sign_in_to_continue") unless current_user
+    return redirect_to login_path, alert: t("session.sign_in_to_continue") unless current_user
+    start_session(current_user) if request.get? && !request.xhr? # a session in use does not run out
   end
 
   def can?(key)
@@ -88,9 +98,19 @@ class ApplicationController < ActionController::Base
     Review.open!(record, user: current_user, branch: branch, reason: reason, value_cents: value_cents)
   end
 
+  SESSION_DAYS = 14 # without using the system; every visit pushes it back
+
+  # The cookie carries the user and a stamp of their password: changing the password (or switching
+  # the user off) ends every session they left open anywhere.
   def start_session(user)
-    cookies.signed.permanent[:user_id] = { value: user.id, httponly: true, same_site: :lax }
+    cookies.signed[:user_id] = { value: "#{user.id}:#{user.session_stamp}", expires: SESSION_DAYS.days, httponly: true, same_site: :lax }
     Current.user = user
+  end
+
+  def user_from_cookie
+    id, stamp = cookies.signed[:user_id].to_s.split(":", 2)
+    user = User.active.includes(:role, :branch).find_by(id: id) if id.present? && stamp.present?
+    user if user && ActiveSupport::SecurityUtils.secure_compare(user.session_stamp, stamp)
   end
 
   def close_session

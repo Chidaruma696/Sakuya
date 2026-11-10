@@ -23,6 +23,9 @@ class User < ApplicationRecord
 
   scope :active, -> { where(active: true) }
 
+  # What a session cookie must match to stay valid: it changes with the password.
+  def session_stamp = Digest::SHA256.hexdigest("#{id}:#{password_digest}")[0, 32]
+
   def can?(key)
     active && role.allows?(key)
   end

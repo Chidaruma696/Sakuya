@@ -293,9 +293,11 @@ en:
     login: Sign in
     welcome: Hi, %{name}
     wrong: Wrong user or password
+    too_many: "Too many attempts. Wait a few minutes and try again."
     closed: Signed out
     sign_in_to_continue: Sign in to continue
   errors:
+    duplicate: "That was already recorded a moment ago (from here or from another screen): check before doing it again."
     money:
       invalid: "“%{value}” is not an amount: use digits and a decimal point, like 1250.50"
     reserved:
@@ -540,6 +542,8 @@ en:
       saved_offline: 'Sale saved offline (%{total}, change %{change}). It uploads by itself when the network is back; print the receipt from Sales once it is up.'
       offline: 'Offline: selling with the saved catalogue'
       to_upload: '%{n} sales to upload'
+      discard: Discard
+      discard_confirm: "Discard this sale of %{total}? It was never recorded on the server and will be lost."
       to_upload_one: 1 sale to upload
       shift_pending_other: 'This device has %{n} sales made offline that have not been uploaded: wait for them before closing the session.'
       shift_pending_one: 'This device has 1 sale made offline that has not been uploaded: wait for it before closing the session.'
@@ -1296,6 +1300,7 @@ en:
       empty: the file has no rules (each one goes under ";;; hook:")
       hook: 'unknown hook %{hook}'
       repeated: 'the hook %{hook} comes twice'
+      contract: 'the hook %{hook} says contract %{version}, and this Sakuya knows up to %{current}'
       not_imported: 'Nothing was imported: %{error}'
       imported: 'Imported: %{hooks}.'
       no_changes: The file has the same rules already in place; nothing changed.

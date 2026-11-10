@@ -22,6 +22,8 @@ module Admin
     def update
       @user.assign_attributes(allowed)
       save(@user, admin_users_path, t("admin.notices.saved", what: t("admin.models.user")))
+      # Changing your own password ends your other sessions, not the one you are in.
+      start_session(@user) if @user.id == current_user.id && @user.errors.empty? && @user.active
     end
 
     private
