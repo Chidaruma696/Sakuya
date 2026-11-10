@@ -2,6 +2,16 @@
 
 Why Sakuya is the way it is. Newest first.
 
+## One person at one screen (10 Nov 2026)
+
+A user name in Review has to mean a person. So a user holds as many sessions as their **limit**, one unless whoever manages users raises it (up to five) in the user form; signing in beyond it ends that user's oldest session, and the device left behind is told why. It is a number and not a permission because a permission can only say yes or no, and "any number of sessions" is exactly what this takes away. The sign-in is never refused: a device that is switched off or broken would lock its user out, so the person in front of a screen with the right password always gets in.
+
+Sessions are rows (`UserSession`) holding the digest of a token, never the token. A screen nobody touches for 15 minutes asks "are you still there?" with a clock counting down a minute, and closes; the server holds the same limit on its side (plus a margin, because the screen only tells it about activity once a minute), so the dialog is the courtesy of asking first, not the lock. What the page does by itself, like the till looking for sales to upload, is marked as background and does not count as someone using it. Offline nothing closes: a till without a network could not sign back in.
+
+None of this touches the **shift**: it closes when someone counts the drawer, never because a session ended, and each branch has its own.
+
+A sale made offline belongs to whoever sold it: the device remembers the seller and sends it along, the server believes it only for offline uploads and only for a user of the uploader's own branch, and keeps who uploaded it next to it. Signing each queued sale on the device would need a secret the device holds offline, which protects nothing.
+
 ## The ticket is arranged with the mouse, as a stack of blocks (9 Nov 2026)
 
 In Settings › Business and ticket the preview is now the designer: each part of the ticket (logo, name, tagline, address, what was sold, totals, barcode, footer…) is a block that is dragged up or down on the paper, and a click lets it be aligned, enlarged, set in bold, underlined or hidden. A double click on a fixed word (Product, Quantity, TOTAL…) retypes it in the business's own. It is not a free canvas on purpose: a thermal printer prints line by line, so anything placed freely would look right on screen and come out different on paper. The same layout drives the ticket on screen and the ESC/POS one. Out of the box the ticket is the one it always was, and only what differs from it is stored. Not done yet: two blocks sharing a line, and italics (not every thermal printer has them). The dragging has not been tried on a touch screen.

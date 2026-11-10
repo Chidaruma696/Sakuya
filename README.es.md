@@ -134,6 +134,7 @@ bin/dev          # http://localhost:3000
 Las semillas solo crean los roles base; lo demás sale del primer arranque. Tests (199 hoy): `bin/rails test`.
 
 - **PostgreSQL:** con `DATABASE_URL=postgres://usuario:clave@servidor/sakuya` corre igual; la CI prueba las dos bases. Para mudar una instalación con datos: carga el esquema en el PostgreSQL vacío y `bin/rails "sakuya:copy_database[postgres://…]"`.
+- **Sesiones:** cada usuario está en un solo equipo a la vez; entrar en otro cierra la sesión anterior. Quien administra usuarios puede subirlo por usuario, hasta cinco. Una pantalla que nadie toca en 15 minutos pregunta si sigues ahí y luego se cierra sola. Quienes compartan un usuario se van a sacar entre sí: cada persona con el suyo.
 - **Impresora:** cada sucursal elige en Admin › Sucursales si imprime con el navegador, en una térmica de red (dirección:puerto, casi siempre el 9100) o en una por cable desde Chrome. El ticket también se baja en ESC/POS.
 - **Sin conexión:** la caja guarda su página y el catálogo en el equipo y encola las ventas; para recargarla sin red hace falta servirla por HTTPS (o en localhost).
 

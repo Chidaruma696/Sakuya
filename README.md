@@ -134,6 +134,7 @@ bin/dev          # http://localhost:3000
 The seeds only create the base roles; the rest comes from the first run. Tests (199 today): `bin/rails test`.
 
 - **PostgreSQL:** with `DATABASE_URL=postgres://user:password@server/sakuya` it runs the same; CI tests both databases. To move an installation that has data: load the schema into the empty PostgreSQL and run `bin/rails "sakuya:copy_database[postgres://…]"`.
+- **Sessions:** each user is signed in on one device at a time; signing in elsewhere ends the previous session. Whoever manages users can raise that per user, up to five. A screen left alone for 15 minutes asks whether you are still there and then signs out by itself. People who share one user will sign each other out: give each person their own.
 - **Printer:** each branch chooses in Admin › Branches whether it prints with the browser, on a network thermal printer (address:port, almost always 9100) or on a cable one from Chrome. The receipt can also be downloaded as ESC/POS.
 - **Offline:** the till keeps its page and the catalogue on the device and queues the sales; reloading it with no network needs it served over HTTPS (or on localhost).
 
