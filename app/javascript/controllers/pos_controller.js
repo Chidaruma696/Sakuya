@@ -274,13 +274,11 @@ export default class extends Controller {
     this.connectionTarget.hidden = parts.length === 0
     const text = this.connectionTarget.querySelector("[data-text]")
     text.textContent = parts.join(" · ")
-    if (this.signedOut) {
-      const link = document.createElement("a")
-      link.href = this.loginUrlValue
-      link.className = "link ml-2"
-      link.textContent = T.pos.sign_in
-      text.append(link)
-    }
+    const signIn = this.connectionTarget.querySelector("[data-sign-in]")
+    signIn.textContent = T.pos.sign_in
+    signIn.hidden = !this.signedOut
+    // Uploading by hand only makes sense with something to upload and a session to upload it with.
+    this.connectionTarget.querySelector("[data-upload]").hidden = this.signedOut || queue.length === 0
     // A sale the server refuses stays with its reason until someone decides to discard it.
     this.connectionTarget.querySelector("[data-errors]").replaceChildren(...errors.map((v) => {
       const row = document.createElement("div")

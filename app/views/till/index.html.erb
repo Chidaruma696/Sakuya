@@ -14,7 +14,8 @@
       <% end %>
       <div id="connection" data-pos-target="connection" hidden class="mb-2 rounded border-l-4 border-amber-500 bg-amber-50 px-3 py-2 text-sm text-amber-900">
         <i class="bi bi-wifi-off"></i> <span data-text></span>
-        <button type="button" class="link ml-2" data-action="pos#sync"><%= t("till.upload_now") %></button>
+        <a href="<%= login_path %>" class="link ml-3" data-sign-in hidden></a>
+        <button type="button" class="link ml-3" data-upload data-action="pos#sync" hidden><%= t("till.upload_now") %></button>
         <div class="text-xs text-red-800" data-errors></div>
       </div>
       <div id="notice" data-pos-target="notice" class="mb-2 empty:hidden rounded bg-red-50 px-3 py-2 text-sm text-red-800"></div>

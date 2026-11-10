@@ -2,12 +2,12 @@
 module Sakuya
   VERSION = "0.1.0"
   COMMIT = begin
-    `git -C #{Rails.root} rev-parse --short HEAD 2>/dev/null`.strip.presence || "?"
+    IO.popen([ "git", "-C", Rails.root.to_s, "rev-parse", "--short", "HEAD" ], err: File::NULL, &:read).strip.presence || "?"
   rescue StandardError
     "?"
   end
   COMMIT_DATE = begin
-    `git -C #{Rails.root} log -1 --format=%cs 2>/dev/null`.strip.presence
+    IO.popen([ "git", "-C", Rails.root.to_s, "log", "-1", "--format=%cs" ], err: File::NULL, &:read).strip.presence
   rescue StandardError
     nil
   end

@@ -12,8 +12,9 @@ class ApplicationController < ActionController::Base
   class_attribute :required_features, default: []
   def self.feature(*keys) = self.required_features = keys.map(&:to_s)
 
-  before_action :require_setup, :require_session, :require_feature
+  # The language goes first: what the checks below say ("sign in to continue") is already translated.
   around_action :with_language
+  before_action :require_setup, :require_session, :require_feature
   helper_method :current_user, :current_branch, :can?
 
   # An amount nobody can read ("abc", "12,50") typed anywhere: back to where it came from, with the reason.
