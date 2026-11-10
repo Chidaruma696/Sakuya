@@ -45,7 +45,8 @@ class ReceiptsController < ApplicationController
 
   def cancel
     authorize!("purchases.receive")
-    receipt = Receipt.find(params[:id])
+    # Cancelling takes the goods back out of stock: only the branch that received them, or the head office.
+    receipt = (current_branch.head_office? ? Receipt.all : Receipt.where(branch: current_branch)).find(params[:id])
     Purchases.cancel_receipt!(receipt, reason: params[:reason].to_s.strip, user: current_user)
     redirect_to receipt_path(receipt), notice: t("purchases.notices.receipt_cancelled", folio: receipt.folio)
   rescue ArgumentError, ActiveRecord::RecordInvalid => e

@@ -37,14 +37,22 @@ class StockTransfersController < ApplicationController
   end
 
   def show
-    @stock_transfer = StockTransfer.includes(:origin_branch, :destination_branch, :user, lines: :product).find(params[:id])
+    @stock_transfer = visible.includes(:origin_branch, :destination_branch, :user, lines: :product).find(params[:id])
   end
 
   def cancel
-    stock_transfer = StockTransfer.find(params[:id])
+    stock_transfer = visible.find(params[:id])
     stock_transfer.cancel!(reason: params[:reason].to_s.strip, user: current_user)
     redirect_to stock_transfer_path(stock_transfer), notice: t("stock_transfers.notices.cancelled", folio: stock_transfer.folio)
   rescue ArgumentError, ActiveRecord::RecordInvalid, Inventory::OutOfStock => e
     redirect_to stock_transfer_path(stock_transfer), alert: e.message
+  end
+
+  private
+
+  # The head office sees every transfer; a branch, only the ones it sends or receives.
+  def visible
+    return StockTransfer.all if current_branch.head_office?
+    StockTransfer.where("origin_branch_id = :b OR destination_branch_id = :b", b: current_branch.id)
   end
 end

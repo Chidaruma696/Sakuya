@@ -19,6 +19,8 @@ class User < ApplicationRecord
 
   has_many :charges, dependent: :restrict_with_error
 
+  validate :someone_still_manages_users, on: :update
+
   scope :active, -> { where(active: true) }
 
   def can?(key)
@@ -28,5 +30,18 @@ class User < ApplicationRecord
 
   def to_s
     name
+  end
+
+  private
+
+  # Nobody locks the business out: the last active user who can manage users cannot be switched
+  # off or moved to a role without that permission. (With no active user at all, the first-run
+  # setup would open again for whoever got there first.)
+  def someone_still_manages_users
+    return unless active_changed? || role_id_changed?
+    return if active && role&.allows?("admin.users")
+    return unless active_was && Role.find_by(id: role_id_was)&.allows?("admin.users")
+    others = User.active.where.not(id: id).includes(:role).any? { |u| u.role.allows?("admin.users") }
+    errors.add(:base, I18n.t("errors.user.last_admin")) unless others
   end
 end
