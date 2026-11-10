@@ -5,7 +5,7 @@ module Admin
 
     def index
       @products = Product.order(:name).includes(:product_barcodes)
-      @products = @products.where("name LIKE :q OR key LIKE :q", q: "%#{params[:q]}%") if params[:q].present?
+      @products = @products.matching(params[:q]) if params[:q].present?
     end
 
     def new

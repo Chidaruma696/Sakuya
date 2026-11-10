@@ -296,6 +296,8 @@ es:
     closed: Sesión cerrada
     sign_in_to_continue: Inicia sesión para continuar
   errors:
+    money:
+      invalid: "“%{value}” no es una cantidad: usa números y punto decimal, como 1250.50"
     reserved:
       not_enough: '%{product}: hay %{on_hand}, pero %{reserved} está apartado para pedidos; disponible %{available}'
     printer:
@@ -390,6 +392,7 @@ es:
       unknown_kind: 'tipo de movimiento desconocido: %{kind}'
     user:
       format: solo minúsculas, números, punto y guion
+      last_admin: "es el último usuario activo que puede administrar usuarios: primero dale eso a alguien más"
     feature_off:
       title: El módulo %{feature} está apagado
       text: Este negocio no lo usa. Quien administra usuarios puede encenderlo en Ajustes › Sistema.

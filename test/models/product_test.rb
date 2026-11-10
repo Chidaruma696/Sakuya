@@ -43,4 +43,22 @@ class UnitsTest < ActiveSupport::TestCase
                          payments: [ { payment_method: "cash", amount_cents: 3_300 } ])
     assert_equal BigDecimal("1.5"), sale.lines.first.quantity
   end
+
+  test "matching finds by name or key whatever the case, accents and ñ included" do
+    Product.create!(key: "JAL", name: "JALAPEÑO EN RAJAS", unit: "piece", price: 20)
+    Product.create!(key: "PINA", name: "Piña miel", unit: "kg", price: 30)
+    assert_equal %w[JAL], Product.matching("jalapeño").map(&:key)
+    assert_equal %w[JAL], Product.matching("JALAPEÑO").map(&:key)
+    assert_equal %w[PINA], Product.matching(" PIÑA ").map(&:key)
+    assert_equal %w[CHKN], Product.matching("chicken").map(&:key)
+    assert_equal %w[KETC], Product.matching("ketc").map(&:key), "by key too"
+    assert_equal [], Product.matching("100%_").map(&:key), "wildcards are just text"
+    assert_equal 4, Product.matching("").size
+    products(:chicken).update!(active: false)
+    assert_equal [], Product.active.matching("chicken")
+  end
+
+  test "a price that is not an amount is refused, not stored as zero" do
+    assert_raises(Money::Invalid) { Product.new(key: "X", name: "X", unit: "kg").price = "12,50" }
+  end
 end

@@ -296,6 +296,8 @@ en:
     closed: Signed out
     sign_in_to_continue: Sign in to continue
   errors:
+    money:
+      invalid: "“%{value}” is not an amount: use digits and a decimal point, like 1250.50"
     reserved:
       not_enough: '%{product}: there are %{on_hand}, but %{reserved} is held for orders; available %{available}'
     printer:
@@ -390,6 +392,7 @@ en:
       unknown_kind: 'unknown movement type: %{kind}'
     user:
       format: only lowercase letters, digits, dot and dash
+      last_admin: "this is the last active user who can manage users: give that to someone else first"
     feature_off:
       title: The %{feature} module is off
       text: This business does not use it. Whoever manages users can turn it on in Settings › System.

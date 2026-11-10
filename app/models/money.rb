@@ -1,9 +1,20 @@
 # Money in whole cents; conversions and formatting live here. The business sets the currency
 # symbol in Settings (business.symbol).
 module Money
+  # What was typed is not an amount ("abc", "12,50"). The message is already in the user's language.
+  class Invalid < ArgumentError; end
+
+  LARGEST = 10**12 # in currency units; anything bigger is a slip of the keyboard
+
   def self.cents(amount)
     return 0 if amount.blank?
-    (BigDecimal(amount.to_s) * 100).round.to_i
+    value = begin
+      BigDecimal(amount.to_s.strip)
+    rescue ArgumentError
+      nil
+    end
+    raise Invalid, I18n.t("errors.money.invalid", value: amount.to_s.strip.truncate(20)) unless value&.finite? && value.abs < LARGEST
+    (value * 100).round.to_i
   end
 
   def self.format_money(cents)

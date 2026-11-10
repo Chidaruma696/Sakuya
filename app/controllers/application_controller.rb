@@ -16,6 +16,11 @@ class ApplicationController < ActionController::Base
   around_action :with_language
   helper_method :current_user, :current_branch, :can?
 
+  # An amount nobody can read ("abc", "12,50") typed anywhere: back to where it came from, with the reason.
+  rescue_from Money::Invalid do |e|
+    redirect_back_or_to root_path, alert: e.message
+  end
+
   rescue_from NotAllowed do |e|
     render "errors/not_allowed", status: :forbidden, locals: { key: e.message }
   end

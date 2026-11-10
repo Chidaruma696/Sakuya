@@ -18,6 +18,13 @@ class Product < ApplicationRecord
 
   scope :active, -> { where(active: true) }
 
+  # Products whose name or key contains the text, whatever its case. Compared here and not in SQL:
+  # SQLite only lowercases ASCII (PIÑA would never match piña) and PostgreSQL's LIKE tells cases apart.
+  def self.matching(text)
+    wanted = text.to_s.strip.downcase
+    all.select { |p| p.name.downcase.include?(wanted) || p.key.downcase.include?(wanted) }
+  end
+
   def kg?
     unit == "kg"
   end
@@ -34,7 +41,7 @@ class Product < ApplicationRecord
   end
 
   def price=(amount)
-    self.price_cents = (BigDecimal(amount.to_s) * 100).round.to_i
+    self.price_cents = Money.cents(amount)
   end
 
   # The price in force at a branch: its own if it has one, otherwise the general one.

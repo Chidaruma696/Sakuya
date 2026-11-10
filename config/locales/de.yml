@@ -296,6 +296,8 @@ de:
     closed: Abgemeldet
     sign_in_to_continue: Zum Fortfahren anmelden
   errors:
+    money:
+      invalid: "„%{value}“ ist kein Betrag: nur Ziffern und Dezimalpunkt, zum Beispiel 1250.50"
     reserved:
       not_enough: '%{product}: es gibt %{on_hand}, aber %{reserved} ist für Bestellungen reserviert; verfügbar %{available}'
     printer:
@@ -390,6 +392,7 @@ de:
       unknown_kind: 'unbekannte Bewegungsart: %{kind}'
     user:
       format: nur Kleinbuchstaben, Ziffern, Punkt und Bindestrich
+      last_admin: "das ist der letzte aktive Benutzer, der Benutzer verwalten darf: gib das zuerst jemand anderem"
     feature_off:
       title: Das Modul %{feature} ist aus
       text: Dieser Betrieb nutzt es nicht. Wer Benutzer verwaltet, kann es unter Einstellungen › System einschalten.
