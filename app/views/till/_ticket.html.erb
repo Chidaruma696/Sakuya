@@ -30,7 +30,7 @@
         <table>
           <tr>
             <td><%= label.("date") %>: <%= l sale.created_at, format: :short %><br><span class="bold"><%= label.("folio") %>: <%= sale.folio %></span></td>
-            <td class="right <%= 'hidden' if settings["ticket.show_cashier"] != "1" %>" data-ticket="ticket.show_cashier"><%= label.("served_by") %><br><span class="bold"><%= sale.user&.name %></span></td>
+            <td class="right <%= 'hidden' if settings["ticket.show_cashier"] != "1" %>" data-ticket="ticket.show_cashier"><%= label.("served_by") %><br><span class="bold"><%= sale.user&.name %></span><% if sale.uploaded_by %><br>(<%= t("till.uploaded_by", name: sale.uploaded_by.name) %>)<% end %></td>
           </tr>
         </table>
       <% when "lines" %>

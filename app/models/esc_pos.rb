@@ -184,6 +184,7 @@ module EscPos
         d.row("#{labels["date"]}: #{I18n.l(sale.created_at, format: :short)}", "")
         d.bold.text("#{labels["folio"]}: #{sale.folio}").bold(false)
         d.text("#{labels["served_by"]}: #{sale.user&.name}") if a["ticket.show_cashier"] == "1"
+        d.text("(#{I18n.t("till.uploaded_by", name: sale.uploaded_by.name)})") if a["ticket.show_cashier"] == "1" && sale.uploaded_by
         d.text("#{I18n.t("till.customer")}: #{sale.customer.name}") if sale.customer
       when "lines"
         d.left.line

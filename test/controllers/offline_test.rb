@@ -67,6 +67,12 @@ class OfflineTest < ActionDispatch::IntegrationTest
     assert_match "would otherwise have been stopped", review.reason, "and it is judged with the seller's permissions, not the uploader's"
     get till_sales_path
     assert_select "td", /Cashier\s+\(uploaded by Supervisor\)/
+    theirs = Sale.find_by!(key: "theirs")
+    get till_ticket_path(theirs)
+    assert_select "[data-ticket='ticket.show_cashier']", /Cashier\s*\(uploaded by Supervisor\)/
+    assert_includes EscPos.ticket(theirs), "(uploaded by Supervisor)"
+    get till_ticket_path(Sale.find_by!(key: "own"))
+    assert_select "[data-ticket='ticket.show_cashier']", text: /uploaded by/, count: 0
     assert_equal "Supervisor", Repl.evaluate('(get (first (where :folio "' + Sale.find_by!(key: "theirs").folio + '" (sales))) :uploaded-by)', branches: [ @store ])
 
     users(:cashier).update!(active: false)

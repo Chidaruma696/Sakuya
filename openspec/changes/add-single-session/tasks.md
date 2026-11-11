@@ -28,7 +28,7 @@
 ## 6. Offline sales keep their seller
 
 - [x] 6.1 `Till.checkout!` takes `uploaded_by:`; the controller resolves `sold_by` (offline only, same branch, active or not); reviews and rule permissions go by the seller; tests for every scenario in the spec
-- [ ] 6.2 (done: sales list, Review and REPL; pending: the printed ticket and ESC/POS) The ticket, the sales list and Review show "uploaded by" when it differs from the seller; the REPL's `(sales)` gets `:uploaded-by`; tests
+- [x] 6.2 The ticket, the sales list and Review show "uploaded by" when it differs from the seller; the REPL's `(sales)` gets `:uploaded-by`; tests
 - [x] 6.3 `offline.js` / `pos_controller.js`: the queued sale stores the signed-in user's id and sends it as `sold_by`
 
 ## 7. The till without a session
@@ -38,5 +38,5 @@
 
 ## 8. Docs and checks
 
-- [ ] 8.1 (done: decisions and both READMEs; pending: architecture) `docs/decisions.md` (limit per user and why a number, oldest session ends, the idle rule and why background requests do not count, why the seller id is trusted), `docs/architecture.md`, both READMEs
-- [ ] 8.2 (done: SQLite, rubocop, brakeman; pending: PostgreSQL, which CI runs on push) Full suite on SQLite and PostgreSQL, rubocop and brakeman clean
+- [x] 8.1 `docs/decisions.md` (limit per user and why a number, oldest session ends, the idle rule and why background requests do not count, why the seller id is trusted), `docs/architecture.md`, both READMEs
+- [x] 8.2 (PostgreSQL through CI, green on 10 Nov) Full suite on SQLite and PostgreSQL, rubocop and brakeman clean

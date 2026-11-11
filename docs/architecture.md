@@ -8,7 +8,7 @@ Sakuya is a single system and a single database, split into **features**. A feat
 |---|---|---|---|---|
 | **Till** | Selling, receipt (browser or ESC/POS thermal printer over the network or a cable, per branch), drawer, shifts, withdrawals, refunds; offline it sells with the device's catalog and queues (`offline.js`, service worker). | sales, sale_lines, payments, shifts, withdrawals, refunds, refund_lines | `till.*` | Till |
 | **Inventory** | Stock per branch and product, kardex, manual inflows and adjustments. It is the only door to move stock (`Inventory.move!`). | stock_levels, movements | `inventory.*` | Inventory |
-| **Administration** | Catalogs and people: products, barcodes, promotions, branch prices, users, roles, branches. | products, product_barcodes, promotions, branch_prices, users, roles, branches | `admin.*` | Admin |
+| **Administration** | Catalogs and people: products, barcodes, promotions, branch prices, users, roles, branches. | products, product_barcodes, promotions, branch_prices, users, user_sessions, roles, branches | `admin.*` | Admin |
 | **Settings** | Each person's preferences (language, theme, density, text size) and the business's (receipt, currency, folios, till, purchases, features). Admin creates, Settings configures. Its advanced options hold everything programmed in Lisp. | settings | `admin.users` for the system part; `rules.edit` for the advanced part | Home › Settings |
 | **Review** | What a rule stopped (the attempt, marked as stopped) and what went through with a permission but needs a look; the supervisor approves or flags it and can charge it to someone. | reviews, charges | `reviews.*` | Home |
 
@@ -28,6 +28,7 @@ Sakuya is a single system and a single database, split into **features**. A feat
 - **Folios per branch** with a prefix per document (B sale, C shift, D refund, RC receipt, TG stock transfer, K stock count, AB account payment, P order), unique per branch.
 - **Idempotency** for what the browser captures and might resend (sale, receipt, stock transfer): a key, and the same key returns the same document.
 - **Stop and report**: at every sensitive point a rule decides; by default what is irregular doesn't go through and the attempt stays in Review under the name of whoever made it. Someone with the permission is never stuck: for that person, stopping means going through and being left for review.
+- **Sessions are rows** (`UserSession`): each user has a limit of live sessions (1 by default, up to 5, set in the user form); signing in beyond it ends the oldest one, and that device is told why. A session nobody uses is asked "are you still there?" and ends by itself, in the browser and on the server; what the till does on its own (`X-Background`) does not count as use. A session never closes a shift: a shift ends when someone counts it. An offline sale stays under whoever sold it, and `sales.uploaded_by` keeps who sent it when it was someone else.
 - **Reserved stock**: an open order reserves stock; selling and transferring respect it (`Reservations.check!`), waste and adjustments don't.
 - **Two databases**: SQLite by default, PostgreSQL with `DATABASE_URL`; no SQL specific to just one, and CI tests both.
 - **Branch kinds**: head office (where everything comes from), store (sells), warehouse (storage only). Rules derive from the kind, never from a separate flag.
