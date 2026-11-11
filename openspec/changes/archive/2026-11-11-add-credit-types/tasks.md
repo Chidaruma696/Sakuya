@@ -37,4 +37,4 @@
 
 - [x] 7.1 REPL `(customers)` includes the credit type and cut-off day
 - [x] 7.2 `docs/decisions.md` (new entry), `docs/architecture.md` (hook table and the Customers row), `README.md` and `README.es.md`
-- [ ] 7.3 Full suite on SQLite and on PostgreSQL, `bin/rubocop`, `bin/brakeman` — done on SQLite (211 of 212; the one failure is `DatabaseCopyTest` on a checkout path with a space, unrelated), rubocop and brakeman clean; PostgreSQL not run locally, left to CI
+- [x] 7.3 Full suite on SQLite and on PostgreSQL, `bin/rubocop`, `bin/brakeman` — SQLite locally, rubocop and brakeman clean; PostgreSQL ran in CI (`test_postgres`), green
