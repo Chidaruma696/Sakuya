@@ -55,6 +55,15 @@
           <tr><td><%= label.("change") %></td><td class="right mono"><%= format_money(sale.change_cents) %></td></tr>
         </table>
         <% if sale.status == "refunded" %><div class="cancelled"><%= t("sale_statuses.refunded").upcase %></div><% end %>
+        <% returnables = Returnables.ticket_rows(sale) %>
+        <% if returnables.any? %>
+          <div class="line-dotted"></div>
+          <table data-ticket="returnables">
+            <% returnables.each do |name, out, back, after| %>
+              <tr><td><%= name %></td><td class="right"><%= t("returnables.ticket.moved", out: out, back: back) %></td><td class="right bold"><%= after.negative? ? t("returnables.ticket.in_favor", pieces: -after) : t("returnables.ticket.owes", pieces: after) %></td></tr>
+            <% end %>
+          </table>
+        <% end %>
       <% when "returns_legend" %>
         <div class="line-dotted"></div>
         <div data-ticket="ticket.returns_legend" data-empty="<%= t("till.refunds_only_with_ticket") %>"><%= settings["ticket.returns_legend"].presence || t("till.refunds_only_with_ticket") %></div>

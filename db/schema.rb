@@ -10,18 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_11_000001) do
   create_table "account_payments", force: :cascade do |t|
     t.integer "amount_cents", null: false
     t.integer "branch_id", null: false
     t.datetime "created_at", null: false
     t.integer "customer_id", null: false
     t.string "folio", null: false
-    t.string "key"
     t.string "notes"
     t.string "payment_method", null: false
     t.integer "shift_id", null: false
     t.integer "user_id", null: false
+    t.string "key"
     t.index ["branch_id", "folio"], name: "index_account_payments_on_branch_id_and_folio", unique: true
     t.index ["branch_id"], name: "index_account_payments_on_branch_id"
     t.index ["customer_id"], name: "index_account_payments_on_customer_id"
@@ -104,7 +104,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
     t.index ["customer_id"], name: "index_credit_movements_on_customer_id"
     t.index ["reference_type", "reference_id"], name: "index_credit_movements_on_reference"
     t.index ["user_id"], name: "index_credit_movements_on_user_id"
-    t.check_constraint "kind IN ('charge', 'account_payment', 'refund')", name: "credit_movements_kind"
+    t.check_constraint "kind IN ('charge', 'account_payment', 'refund', 'returnable')", name: "credit_movements_kind"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -112,13 +112,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
     t.string "address"
     t.datetime "created_at", null: false
     t.integer "credit_limit_cents", default: 0, null: false
-    t.string "credit_type"
-    t.integer "cutoff_day"
     t.string "name", null: false
     t.string "notes"
     t.string "phone"
     t.string "tax_id"
     t.datetime "updated_at", null: false
+    t.string "credit_type"
+    t.integer "cutoff_day"
     t.index ["name"], name: "index_customers_on_name"
   end
 
@@ -234,6 +234,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
     t.index ["product_id"], name: "index_product_barcodes_on_product_id"
   end
 
+  create_table "product_returnables", force: :cascade do |t|
+    t.integer "product_id", null: false
+    t.string "kind", null: false
+    t.decimal "from_quantity", precision: 12, scale: 3, null: false
+    t.decimal "per_quantity", precision: 12, scale: 3
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id", "kind"], name: "index_product_returnables_on_product_id_and_kind", unique: true
+    t.check_constraint "from_quantity > 0", name: "product_returnables_from"
+    t.check_constraint "per_quantity IS NULL OR per_quantity > 0", name: "product_returnables_per"
+  end
+
   create_table "products", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
@@ -244,6 +256,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
     t.integer "price_cents", default: 0, null: false
     t.string "unit", default: "kg", null: false
     t.datetime "updated_at", null: false
+    t.boolean "returnable", default: false, null: false
     t.index ["key"], name: "index_products_on_key", unique: true
     t.index ["plu"], name: "index_products_on_plu", unique: true
     t.check_constraint "plu BETWEEN 1 AND 99999", name: "products_plu_range"
@@ -320,7 +333,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
     t.integer "branch_id", null: false
     t.datetime "created_at", null: false
     t.string "folio", null: false
-    t.string "key"
     t.integer "on_account_cents", default: 0, null: false
     t.string "reason", null: false
     t.integer "sale_id", null: false
@@ -328,6 +340,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
     t.integer "total_cents", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.string "key"
     t.index ["branch_id", "folio"], name: "index_refunds_on_branch_and_folio", unique: true
     t.index ["branch_id"], name: "index_refunds_on_branch_id"
     t.index ["key"], name: "index_refunds_on_key", unique: true, where: "key IS NOT NULL"
@@ -345,6 +358,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
     t.index ["branch_id"], name: "index_repl_queries_on_branch_id"
     t.index ["created_at"], name: "index_repl_queries_on_created_at"
     t.index ["user_id"], name: "index_repl_queries_on_user_id"
+  end
+
+  create_table "returnable_movements", force: :cascade do |t|
+    t.integer "customer_id", null: false
+    t.string "kind", null: false
+    t.integer "quantity", null: false
+    t.string "reason", null: false
+    t.string "note"
+    t.date "date", null: false
+    t.integer "branch_id", null: false
+    t.integer "user_id", null: false
+    t.integer "reference_id"
+    t.string "reference_type"
+    t.string "key"
+    t.datetime "created_at", null: false
+    t.index ["customer_id", "kind", "date", "id"], name: "index_returnable_movements_on_customer_kind_date"
+    t.index ["key"], name: "index_returnable_movements_on_key", unique: true, where: "key IS NOT NULL"
+    t.index ["reference_type", "reference_id"], name: "index_returnable_movements_on_reference"
+    t.check_constraint "quantity <> 0", name: "returnable_movements_quantity"
+    t.check_constraint "reason IN ('out', 'back', 'write_off', 'entry')", name: "returnable_movements_reason"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -421,8 +454,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
     t.string "status", default: "paid", null: false
     t.integer "total_cents", null: false
     t.datetime "updated_at", null: false
-    t.integer "uploaded_by_id"
     t.integer "user_id", null: false
+    t.integer "uploaded_by_id"
     t.index ["branch_id", "folio"], name: "index_sales_on_branch_and_folio", unique: true
     t.index ["branch_id"], name: "index_sales_on_branch_id"
     t.index ["code"], name: "index_sales_on_code", unique: true
@@ -608,7 +641,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
     t.integer "amount_cents", null: false
     t.integer "branch_id", null: false
     t.datetime "created_at", null: false
-    t.string "key"
     t.string "payment_method", default: "cash", null: false
     t.string "reference"
     t.integer "shift_id"
@@ -620,6 +652,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
     t.string "void_reason"
     t.integer "voided_by_id"
     t.integer "withdrawal_id"
+    t.string "key"
     t.index ["branch_id"], name: "index_supplier_payments_on_branch_id"
     t.index ["key"], name: "index_supplier_payments_on_key", unique: true, where: "key IS NOT NULL"
     t.index ["shift_id"], name: "index_supplier_payments_on_shift_id"
@@ -645,11 +678,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
   end
 
   create_table "user_sessions", force: :cascade do |t|
-    t.string "device"
-    t.datetime "last_used_at", null: false
-    t.datetime "started_at", null: false
-    t.string "token_digest", null: false
     t.integer "user_id", null: false
+    t.string "token_digest", null: false
+    t.datetime "started_at", null: false
+    t.datetime "last_used_at", null: false
+    t.string "device"
     t.index ["user_id"], name: "index_user_sessions_on_user_id"
   end
 
@@ -662,11 +695,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
     t.string "name", null: false
     t.string "password_digest", null: false
     t.integer "role_id", null: false
-    t.integer "session_limit", default: 1, null: false
     t.string "text_size", default: "normal", null: false
     t.string "theme", default: "light", null: false
     t.datetime "updated_at", null: false
     t.string "user", null: false
+    t.integer "session_limit", default: 1, null: false
     t.index ["branch_id"], name: "index_users_on_branch_id"
     t.index ["role_id"], name: "index_users_on_role_id"
     t.index ["user"], name: "index_users_on_user", unique: true
@@ -677,11 +710,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_000002) do
     t.integer "amount_cents", null: false
     t.integer "authorized_by_id"
     t.datetime "created_at", null: false
-    t.string "key"
     t.string "reason", null: false
     t.integer "shift_id", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.string "key"
     t.index ["authorized_by_id"], name: "index_withdrawals_on_authorized_by_id"
     t.index ["key"], name: "index_withdrawals_on_key", unique: true, where: "key IS NOT NULL"
     t.index ["shift_id"], name: "index_withdrawals_on_shift_id"

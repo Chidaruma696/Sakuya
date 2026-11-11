@@ -57,6 +57,7 @@ Un sistema, una base de datos y **módulos que se encienden o se apagan según e
 | **Almacenes** *(módulo)* | Sucursales que solo guardan, traspasos entre sucursales y reabasto por mínimos y máximos. | Un almacén no tiene caja. Un traspaso sale y entra en una sola transacción. |
 | **Conteos** *(módulo)* | Conteos totales o parciales, escaneando piezas por su código; lo que va por kilo, litro o metro se teclea. | El conteo manda, y el faltante se carga al responsable. |
 | **Clientes** *(módulo, apagado de fábrica)* | Clientes, venta a cuenta, abonos en la caja, estado de cuenta y pedidos que apartan existencias y se cobran en la caja. | De fábrica no se fía a nadie: el crédito lo decide una regla en Lisp, que puede declarar tipos de crédito (nota por nota, límite, semanal…) para darle a cada cliente sus condiciones. |
+| **Retornables** *(módulo, apagado de fábrica)* | Canastillas, botellas, cilindros: lo que sale con la mercancía y tiene que volver, contado por cliente. Cada producto dice qué suelta y la caja lo cuenta. | No existe ningún tipo hasta que una regla en Lisp lo declara, con la regla que decide cuándo pueden salir más. Devolver de más, las entradas sueltas y las bajas llevan cada una su permiso. |
 
 Roles de fábrica: administrador, cajero (vender, abrir caja, retiros, ver inventario; con el módulo de clientes, también abonos y pedidos), almacenista y supervisor. La interfaz habla inglés, español y alemán, y un plugin le puede enseñar otro idioma.
 
@@ -91,7 +92,7 @@ Se edita en **Ajustes › Opciones avanzadas › Tablero en Lisp**, con una vist
 
 ## ⚖️ Las reglas que deciden
 
-Cada punto delicado le pregunta a una regla antes de hacer nada: el precio de cada renglón, la venta entera antes de cobrarla, el cierre del corte, los retiros, las entradas, ajustes y mermas, lo que llega del proveedor y su factura. La regla contesta `(allow)`, `(to-review "motivo")` o `(reject "motivo")`:
+Cada punto delicado le pregunta a una regla antes de hacer nada: el precio de cada renglón, la venta entera antes de cobrarla, el cierre del corte, los retiros, las entradas, ajustes y mermas, lo que llega del proveedor y su factura, lo que se va a la cuenta de un cliente y los envases retornables que salen con él. La regla contesta `(allow)`, `(to-review "motivo")` o `(reject "motivo")`:
 
 ```lisp
 ; Precio: rebajas chicas pasan, medianas se revisan, la cátsup nunca baja

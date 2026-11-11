@@ -10,7 +10,8 @@ const escapeHtml = (text) => String(text ?? "").replace(/[&<>"']/g, (c) => ({ "&
 
 export default class extends Controller {
   static targets = ["code", "body", "total", "cash", "transfer", "deposit", "change", "notice",
-                    "pending", "pendingName", "pendingQuantity", "checkoutButton", "customer", "credit", "connection"]
+                    "pending", "pendingName", "pendingQuantity", "checkoutButton", "customer", "credit", "connection",
+                    "returnables", "overDialog", "overList", "overHelp", "overAccept"]
   static values = { scanUrl: String, checkoutUrl: String, catalogUrl: String, tokenUrl: String, loginUrl: String, branch: Number, user: Number, key: String, order: Object }
 
   connect() {
@@ -29,12 +30,18 @@ export default class extends Controller {
       this.orderValue.lines.forEach(l => this.add(l))
       if (this.hasCustomerTarget) this.customerTarget.value = this.orderValue.customer_id
     }
+    // The returnables counters only make sense with a customer to count them against.
+    if (this.hasCustomerTarget) {
+      this.onCustomerChange = () => this.renderReturnables()
+      this.customerTarget.addEventListener("change", this.onCustomerChange)
+    }
     this.render()
   }
 
   disconnect() {
     window.removeEventListener("online", this.onNetworkChange)
     window.removeEventListener("offline", this.onNetworkChange)
+    if (this.onCustomerChange) this.customerTarget.removeEventListener("change", this.onCustomerChange)
     clearInterval(this.clock)
   }
 
@@ -85,7 +92,7 @@ export default class extends Controller {
 
   add(data) {
     const l = { product_id: data.product_id, name: data.name, unit: data.unit, decimals: data.decimals,
-                quantity: data.quantity, catalog: data.price_cents, promotions: data.promotions || [], manual: false }
+                quantity: data.quantity, catalog: data.price_cents, promotions: data.promotions || [], returnables: data.returnables || [], manual: false }
     l.price = this.currentPrice(l)
     this.lines.push(l)
     this.render()
@@ -146,6 +153,74 @@ export default class extends Controller {
     }
     this.totalTarget.textContent = this.format_money(this.totalCents())
     this.recalculate()
+    this.renderReturnables()
+  }
+
+  // ---- returnable containers
+
+  // What the ticket releases, { kind: pieces }, each line counted on its own, like the server:
+  // nothing below the line's "from"; then one piece per line, or one per every "per" units.
+  releasedPieces() {
+    const all = {}
+    for (const l of this.lines) {
+      for (const r of l.returnables) {
+        if (l.quantity < r.from) continue
+        // In thousandths, so 0.3 kg per piece divides like the server's decimals.
+        const pieces = r.per ? Math.floor(Math.round(l.quantity * 1000) / Math.round(r.per * 1000)) : 1
+        if (pieces > 0) all[r.kind] = (all[r.kind] || 0) + pieces
+      }
+    }
+    return all
+  }
+
+  returnableRows() { return this.hasReturnablesTarget ? [...this.returnablesTarget.querySelectorAll("tr[data-kind]")] : [] }
+
+  // The "leaving" counter follows the ticket until someone types over it.
+  renderReturnables() {
+    if (!this.hasReturnablesTarget) return
+    this.returnablesTarget.hidden = !(this.hasCustomerTarget && this.customerTarget.value)
+    const released = this.releasedPieces()
+    for (const row of this.returnableRows()) {
+      const out = row.querySelector("[data-role=out]")
+      if (!out.dataset.typed) out.value = released[row.dataset.kind] || ""
+    }
+  }
+
+  typedReturnable(event) { event.target.dataset.typed = "1" }
+
+  // What goes to the server: per kind, the pieces leaving and coming back. Without a customer the
+  // counters are hidden and the server counts by itself what the ticket releases.
+  returnablePieces() {
+    if (!this.hasReturnablesTarget || this.returnablesTarget.hidden) return null
+    return this.returnableRows().map((row) => ({ kind: row.dataset.kind, out: Math.max(Math.trunc(Number(row.querySelector("[data-role=out]").value || 0)), 0),
+                                                 back: Math.max(Math.trunc(Number(row.querySelector("[data-role=back]").value || 0)), 0) }))
+  }
+
+  resetReturnables() {
+    for (const row of this.returnableRows()) {
+      for (const input of row.querySelectorAll("input")) { input.value = ""; delete input.dataset.typed }
+    }
+  }
+
+  // The server stopped the checkout: more pieces are coming back than the customer owes.
+  showOver(data) {
+    const line = this.overDialogTarget.dataset.line
+    this.overListTarget.replaceChildren(...data.more_than_owed.map((o) => {
+      const li = document.createElement("li")
+      li.textContent = line.replace("%{kind}", o.name).replace("%{owed}", o.owed).replace("%{back}", o.back)
+      return li
+    }))
+    this.overHelpTarget.textContent = data.can_accept ? this.overHelpTarget.dataset.accept : this.overHelpTarget.dataset.plain
+    this.overAcceptTarget.hidden = !data.can_accept
+    if (!this.overDialogTarget.open) this.overDialogTarget.showModal()
+  }
+
+  closeOver() { this.overDialogTarget.close() }
+
+  // Whoever is allowed takes the surplus in the customer's favor: the same ticket goes again, saying so.
+  acceptInFavor() {
+    this.closeOver()
+    this.checkout({ acceptInFavor: true })
   }
 
   // With the customers feature, what goes on account counts as paid (the server decides whether to extend credit).
@@ -158,7 +233,7 @@ export default class extends Controller {
     this.changeTarget.classList.toggle("text-red-700", change < 0)
   }
 
-  async checkout() {
+  async checkout(options = {}) {
     if (this.signedOut) { this.notify(T.pos.signed_out); return }
     if (this.lines.length === 0) { this.notify(T.pos.ticket_empty); return }
     const total = this.totalCents()
@@ -177,6 +252,9 @@ export default class extends Controller {
     body.append("key", this.key)
     if (this.hasCustomerTarget) body.append("customer_id", this.customerTarget.value)
     if (this.orderValue.id) body.append("order_id", this.orderValue.id)
+    const pieces = this.returnablePieces()
+    if (pieces) body.append("returnables", JSON.stringify(pieces))
+    if (options.acceptInFavor === true) body.append("accept_in_favor", "1")
     const token = document.querySelector("meta[name=csrf-token]")?.content
     if (token) body.append("authenticity_token", token)
     this.checkoutButtonTarget.disabled = true
@@ -185,6 +263,7 @@ export default class extends Controller {
       if (!r) { await this.saveOffline(body, total, cash + others - total); return }
       const data = await r.json().catch(() => ({}))
       if (r.status === 401) { this.lostSession(); this.notify(data.error || T.pos.signed_out); return }
+      if (!r.ok && data.more_than_owed && this.hasOverDialogTarget) { this.notify(""); this.showOver(data); return }
       if (!r.ok) { this.notify(data.error || String(r.status)); return }
       window.location.assign(data.url)
     } finally {
@@ -197,6 +276,7 @@ export default class extends Controller {
     this.cashTarget.value = this.transferTarget.value = this.depositTarget.value = ""
     if (this.hasCreditTarget) this.creditTarget.value = ""
     if (this.hasCustomerTarget) this.customerTarget.value = ""
+    this.resetReturnables()
     this.render()
     this.codeTarget.focus()
   }

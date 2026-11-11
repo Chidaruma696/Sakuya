@@ -54,9 +54,15 @@ class TillController < ApplicationController
     # asks for review is charged and left for review.
     customer = Customer.active.find_by(id: params[:customer_id]) if params[:customer_id].present? && Features.active?("customers")
     order = Order.still_open.where(branch: current_branch).find_by(id: params[:order_id]) if params[:order_id].present?
+    # The returnable containers the till counted: what leaves and what comes back, per kind.
+    returnables = JSON.parse(params[:returnables].presence || "[]").then { |list| list.is_a?(Array) ? list : [] }
+                      .select { |r| r.is_a?(Hash) }.map { |r| r.symbolize_keys.slice(:kind, :out, :back) }
     sale = Till.checkout!(branch: current_branch, user: seller, uploaded_by: uploader, lines: lines, payments: payments, key: params[:key], authorizer: authorizes,
-                         customer: customer, order: order, sold_at: sold_at)
+                         customer: customer, order: order, sold_at: sold_at, returnables: returnables, accept_in_favor: params[:accept_in_favor] == "1")
     render json: { url: till_ticket_path(sale, print: 1), folio: sale.folio, change: Money.format_money(sale.change_cents) }
+  rescue Till::MoreThanOwed => e
+    # Not an error to read and dismiss: the till shows it in a dialog, with the way through if there is one.
+    render json: { error: e.message, more_than_owed: e.over, can_accept: e.can_accept }, status: :unprocessable_entity
   rescue Till::Error, JSON::ParserError, ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid => e
     render json: { error: e.message }, status: :unprocessable_entity
   end
@@ -239,8 +245,19 @@ class TillController < ApplicationController
     promos = Promotion.applicable_to(p, current_branch).select(&:current?).map do |pr|
       { kind: pr.kind, minimum_quantity: pr.minimum_quantity, price_cents: pr.price_cents, percentage: pr.percentage, name: pr.name }
     end
-    { product_id: p.id, name: p.name, unit: p.unit, decimals: p.decimals, price_cents: catalog, promotions: promos }
+    { product_id: p.id, name: p.name, unit: p.unit, decimals: p.decimals, price_cents: catalog, promotions: promos, returnables: releases(p) }
   end
+
+  # The returnable containers a product releases, for the till to count them: only kinds the rule declares.
+  def releases(p)
+    return [] unless p.returnable? && returnable_kinds.any?
+    p.returnables.select { |r| returnable_kinds.key?(r.kind) }.map { |r| { kind: r.kind, from: r.from_quantity.to_f, per: r.per_quantity&.to_f } }
+  end
+
+  def returnable_kinds
+    @returnable_kinds ||= Features.active?("returnables") ? ReturnableRule.kinds : {}
+  end
+  helper_method :returnable_kinds
 
   # A stopped closing is not lost: it goes to Review under the name of whoever counted.
   def report_closing_stopped(counted, difference, decision)

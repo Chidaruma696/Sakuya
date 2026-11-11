@@ -6,8 +6,9 @@
   <%= search_field_tag :q, params[:q], placeholder: t("customers.search"), class: "input max-w-sm" %>
 <% end %>
 <% show_types = @credit_types.any? || @customers.any?(&:credit_type) %>
+<% show_returnables = @returnable_counts.present? %>
 <table class="table">
-  <thead><tr><th><%= t("common.name") %></th><th><%= t("customers.phone") %></th><th><%= t("customers.tax_id") %></th><% if show_types %><th><%= t("customers.credit_type") %></th><% end %><th class="text-right"><%= t("customers.credit_limit") %></th><th class="text-right"><%= t("customers.owes") %></th><th></th></tr></thead>
+  <thead><tr><th><%= t("common.name") %></th><th><%= t("customers.phone") %></th><th><%= t("customers.tax_id") %></th><% if show_types %><th><%= t("customers.credit_type") %></th><% end %><th class="text-right"><%= t("customers.credit_limit") %></th><th class="text-right"><%= t("customers.owes") %></th><% if show_returnables %><th><%= t("returnables.title") %></th><% end %><th></th></tr></thead>
   <tbody>
     <% @customers.each do |c| %>
       <tr class="<%= 'text-stone-400' unless c.active %>">
@@ -16,12 +17,22 @@
         <% if show_types %><td class="px-3 py-2"><%= render "credit_type", customer: c, types: @credit_types %></td><% end %>
         <td class="px-3 py-2 text-right font-mono"><%= format_money(c.credit_limit_cents) %></td>
         <td class="px-3 py-2 text-right font-mono"><%= format_money(@balances[c.id] || 0) %></td>
+        <% if show_returnables %>
+          <td class="px-3 py-2 text-xs" data-returnables>
+            <% counts = @returnable_counts[c.id] || {} %>
+            <%# In the order the rule declares them; what it no longer declares goes last. %>
+            <% ((@returnable_names.keys & counts.keys) + (counts.keys - @returnable_names.keys)).each do |kind| %>
+              <% count = counts[kind] %>
+              <span class="mr-2 whitespace-nowrap <%= 'returnable-undeclared font-medium text-red-700' unless @returnable_names.key?(kind) %>"><%= @returnable_names[kind] || t("returnables.undeclared", key: kind) %>: <%= count.positive? ? count : t("returnables.count_in_favor", pieces: -count) %></span>
+            <% end %>
+          </td>
+        <% end %>
         <td class="px-3 py-2 text-right whitespace-nowrap">
           <%= link_to icon("wallet2", t("customers.account.title_short")), account_customer_path(c), class: "btn btn-secondary btn-xs" %>
           <%= link_to icon("pencil", t("common.edit")), edit_customer_path(c), class: "btn btn-ghost btn-xs" if can?("customers.edit") %>
         </td>
       </tr>
     <% end %>
-    <% if @customers.empty? %><tr><td colspan="<%= show_types ? 7 : 6 %>" class="px-3 py-6 text-center text-stone-500"><%= t("customers.no_customers") %></td></tr><% end %>
+    <% if @customers.empty? %><tr><td colspan="<%= 6 + (show_types ? 1 : 0) + (show_returnables ? 1 : 0) %>" class="px-3 py-6 text-center text-stone-500"><%= t("customers.no_customers") %></td></tr><% end %>
   </tbody>
 </table>

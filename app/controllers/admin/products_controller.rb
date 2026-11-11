@@ -35,7 +35,10 @@ module Admin
     end
 
     def allowed
-      p = params.require(:product).permit(:key, :name, :line, :unit, :price, :plu, :active)
+      fields = %i[key name line unit price plu active]
+      # What it releases in returnable containers travels with the product, only with the feature on.
+      fields += [ :returnable, { returnables_attributes: %i[id kind from_quantity per_quantity _destroy] } ] if Features.active?("returnables")
+      p = params.require(:product).permit(*fields)
       p[:key] = p[:key].to_s.strip.upcase if p.key?(:key)
       p[:plu] = nil if p.key?(:plu) && p[:plu].blank?
       p

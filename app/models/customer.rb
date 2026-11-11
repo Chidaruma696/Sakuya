@@ -5,6 +5,7 @@ class Customer < ApplicationRecord
   has_many :sales, dependent: :restrict_with_error
   has_many :account_payments, dependent: :restrict_with_error
   has_many :orders, dependent: :restrict_with_error
+  has_many :returnable_movements, dependent: :restrict_with_error
 
   validates :name, presence: true
   validates :credit_limit_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
@@ -28,6 +29,7 @@ class Customer < ApplicationRecord
 
   def account = CustomerAccount.new(self)
   def balance_cents = credit_movements.sum(:amount_cents)
+  def returnable_account = ReturnableAccount.new(self)
 
   def to_s = name
 

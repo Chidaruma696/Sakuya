@@ -46,7 +46,7 @@
   <aside class="card space-y-4 text-sm">
     <h2 class="font-semibold"><%= t("dashboard.reference.title") %></h2>
     <div>
-      <h3 class="stat-label mb-1"><%= t("rules.reads") %></h3>
+      <h3 class="stat-label mb-1"><%= t("#{texts}.reads", default: t("rules.reads")) %></h3>
       <ul class="space-y-0.5">
         <% @rule_module::FUNCTIONS.each do |name| %>
           <li><code class="code text-brand-800">(<%= name %>)</code> <span class="text-stone-500"><%= t("#{texts}.functions.#{name.underscore}") %></span></li>

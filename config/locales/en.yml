@@ -120,6 +120,7 @@ en:
       price_rule: Price in Lisp
       sale_rule: Sales in Lisp
       credit_rule: Credit in Lisp
+      returnable_rule: Returnables in Lisp
       withdrawal_rule: Withdrawals in Lisp
       movement_rule: Stock in Lisp
       receipt_rule: Receipts in Lisp
@@ -359,6 +360,8 @@ en:
       sale_stopped: '%{reason}. It cannot be charged like this: have someone with permission charge it. It has been reported.'
       credit_stopped: '%{reason}. No credit like this: have someone with permission authorise it, or pay another way. It has been reported.'
       on_account_no_customer: to sell on account you must choose the customer
+      returnables_no_customer: 'this sale moves returnable containers: choose the customer they are counted against'
+      returnable_stopped: '%{kind}: %{reason}. They cannot leave like this: have someone with permission charge it, or take the containers back first. It has been reported.'
       on_account_offline: selling on account needs a connection
       sold_at_odd: the time of the offline sale does not add up (more than 7 days or in the future)
       missing_money: 'not enough money: the ticket is %{total} and %{payment} is being paid'
@@ -487,6 +490,9 @@ en:
       sale: 'Sale %{folio} of %{total}'
       receipt: 'Receipt %{folio} from %{supplier}'
       open_shift: Session %{folio}, open
+      returnable_back: '%{pieces} × %{kind} from %{customer}, more than they owed'
+      returnable_write_off: '%{pieces} × %{kind} written off for %{customer}'
+      returnable_entry: 'Loose entry of %{pieces} × %{kind} for %{customer}'
   statuses:
     pending: pending
     approved: approved
@@ -535,6 +541,12 @@ en:
     customers.orders: Take and cancel customer orders
     customers.pay_account: Take customer payments at the till
     customers.force_credit: Sell on account even if the credit rule stops it (it goes to review)
+    returnables.view: See the returnable containers each customer holds
+    returnables.receive: Receive returnable containers a customer brings back
+    returnables.write_off: Write off returnable containers that will not come back (it goes to review)
+    returnables.force: Release returnable containers the returnables rule stops (it goes to review)
+    returnables.in_favor: Accept more returnable containers than a customer owes, in their favour (it goes to review)
+    returnables.adjust: Enter returnable containers out or in a customer's favour without a sale (it goes to review)
     purchases.force_receipt: Receive goods the receipts rule stops (it goes to review)
     purchases.pay: Pay suppliers from the till
     purchases.exceed: Record an invoice with more than received (with a reason, it goes to review)
@@ -612,6 +624,8 @@ en:
     no_customer: — no customer —
     account_payments: Customer payments
     credit_stopped: 'On account for %{customer}, %{amount}, stopped: %{reason}'
+    returnable_line: '%{pieces} × %{kind} leaving with %{customer}'
+    returnable_fewer: '%{kind}: %{pieces} left where the products call for %{expected}'
     offline_notice: 'Sale made offline that would otherwise have been stopped: %{notice}'
     offline_exceeds_limit: the drawer was already over the cash limit
     reason_difference: Reason for the difference
@@ -882,6 +896,9 @@ en:
     customers:
       name: Customers
       what: Customers, their credit account and payments, and orders.
+    returnables:
+      name: Returnables
+      what: Containers that leave with the goods and must come back (crates, bottles, cylinders), counted per customer. The kinds and their rule are written in Lisp.
   business_types:
     all:
       name: Everything on
@@ -947,6 +964,14 @@ en:
       role:
         name: Name
         permissions: Permissions
+      product_returnable:
+        kind: Kind
+        from_quantity: From
+        per_quantity: One per every
+      product/returnables:
+        kind: Returnable kind
+        from_quantity: Returnable from
+        per_quantity: Returnable one per every
       product_barcode:
         code: Code
       stock_count:
@@ -1250,6 +1275,7 @@ en:
       products: the catalogue
       stock: stock per branch, of everything or one product
       customers: customers and what they owe
+      returnables: the returnable containers each customer holds, per kind
       cash_counts: till sessions with their difference
       reviews: what is pending review
       rules: the custom rules and their contract
@@ -1674,3 +1700,124 @@ en:
         one: missing 1 closing parenthesis
         other: missing %{count} closing parentheses
       quote_at_end: nothing to quote at the end
+  returnable_rule:
+    title: Returnables in Lisp
+    help: Goods often leave in something that has to come back. Here the business declares its kinds of container, each with the rule that decides whether more pieces may leave with a customer, reading what they already hold. Out of the box no kind exists and the till asks for nothing. Test saves nothing.
+    failure: 'The returnables rule failed and the built-in one decided: %{error}'
+    reads: What it reads (in pieces)
+    reasons:
+      too_many_out: '%{customer} already holds too many (%{owed} × %{kind})'
+      not_returned: '%{customer} has not brought back what they hold (%{owed} × %{kind})'
+      no_returnables: this business has not declared that returnable
+    errors:
+      declaration: 'a returnable needs a key, a name and a rule, as in (returnable :key "Name" (allow)): %{form}'
+      option: 'the returnable :%{key} carries the option :%{option}, and the ones I know are :%{options}'
+      repeated: 'the returnable :%{key} is declared twice'
+      value: 'the :value of the returnable :%{key} is what one piece is worth, a number from 0 up, not %{value}'
+    dropped:
+      out:
+        one: '1 customer still has a count of kinds this rule does not declare — %{kinds}, %{pieces} pieces in all. They can come back or be written off, but not leave.'
+        other: '%{count} customers still have a count of kinds this rule does not declare — %{kinds}, %{pieces} pieces in all. They can come back or be written off, but not leave.'
+      products:
+        one: 1 product releases a kind this rule does not declare and will release nothing of it.
+        other: '%{count} products release a kind this rule does not declare and will release nothing of it.'
+    declares: 'a kind of container: its key, the name shown at the till, optionally what one piece is worth (charged when it is written off) and the rule that decides when pieces of it leave.'
+    scenario:
+      customer: Customer
+      made_up: — a made-up one —
+      kind: Kind
+      leaving: Leaving
+      returning: Coming back
+      owed: Owes
+      oldest_days: Oldest one, days ago
+      owes_nothing: Holds nothing
+      authorized: Charged by someone allowed to force returnables
+    verdicts:
+      allow: They leave
+      review: They leave and it goes to review
+      reject: It is stopped
+    functions:
+      owed: pieces of this kind they owe before this sale
+      in_favor: pieces of this kind they have in their favour
+      leaving: pieces of this kind leaving with this sale
+      returning: pieces of this kind coming back with this sale
+      owed_after: what they will owe of this kind after this sale
+      oldest_days: age in days of the oldest piece still out (-1 if none)
+      owed_all: pieces of every kind they owe
+      credit_type: 'their credit type (:cash, :weekly…), or nil'
+      customer: their name
+      authorized: whether the person charging may force returnables
+    allow: the pieces leave
+    to_review: the pieces leave and the sale goes to review
+    reject: nothing is sold and the attempt is reported
+    core: Someone allowed to force returnables can always charge; for them, stopping means review. Pieces coming back are never judged.
+  returnables:
+    title: Returnables
+    kind: Kind
+    pieces: Pieces
+    owes: Owes
+    in_favor: In favour
+    undeclared: '%{key} (not declared)'
+    count_in_favor: '%{pieces} in favour'
+    errors:
+      more_than_owed: '%{kind}: they owe %{owed} and %{back} are coming back'
+      pieces: 'pieces are whole numbers, not “%{value}”'
+      write_off_over: '%{kind}: only what they owe can be written off (%{owed})'
+      note: a loose entry needs a note saying why
+      direction: say whether the pieces are out or in the customer's favour
+      undeclared: 'the returnables rule does not declare :%{kind}'
+      no_release: 'a returnable product must say what it releases: a kind and from what quantity'
+    review:
+      in_favor: '%{customer} brought back %{pieces} × %{kind} more than they owed; kept in their favour'
+      write_off_charged: 'Written off: %{reason}. %{amount} charged to their account.'
+      write_off_free: 'Written off: %{reason}. Nothing was charged: the kind declares no value.'
+      entry_out: 'Entered as already out with %{customer}: %{note}'
+      entry_in_favor: 'Entered in favour of %{customer}: %{note}'
+    account:
+      charge: '%{pieces} × %{kind} written off'
+      none: This customer holds no returnable containers.
+      oldest: Oldest out
+      days:
+        one: 1 day
+        other: '%{count} days'
+      receive: They bring some back
+      receive_button: Receive
+      write_off: They will not come back
+      write_off_button: Write off
+      write_off_help: Broken or lost. They leave the count, the kind's value is charged to the account and it goes to review.
+      entry: Loose entry
+      entry_button: Enter
+      entry_help: For a count with no sale behind it, such as the crates a customer already held when you started. It goes to review.
+      direction: They are
+      entry_out: out with the customer
+      entry_in_favor: in the customer's favour
+      history: Movements
+    reasons:
+      out: Left
+      back: Came back
+      write_off: Written off
+      entry: Loose entry
+    notices:
+      received: 'Received %{pieces} × %{kind}.'
+      written_off: 'Wrote off %{pieces} × %{kind}'
+      entered: 'Entered %{pieces} × %{kind}'
+    ticket:
+      moved: '%{out} out, %{back} back'
+      owes: 'owes %{pieces}'
+      in_favor: '%{pieces} in favour'
+    till:
+      out: Leaving
+      back: Coming back
+      over_title: More than they owe
+      over_line: '%{kind}: they owe %{owed} and %{back} are coming back.'
+      over_help: Correct the count. Only someone with permission can take the extra pieces in the customer's favour.
+      over_help_accept: Correct the count, or accept the extra pieces in the customer's favour; it goes to review.
+      correct: Correct it
+      accept_in_favor: Accept in their favour
+    product:
+      returnable: It leaves in returnable containers
+      help: 'Say which kind it releases and from what quantity on a ticket line. Leave "one per every" empty for one piece per line that reaches the quantity (a crate per weighing), or fill it for one piece per every so many (a case per 8 bottles).'
+      no_kinds: No kinds are declared yet. Declare them in Settings › Returnables in Lisp.
+      from: From (quantity)
+      per: One per every
+      per_line: per line

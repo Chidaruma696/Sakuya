@@ -12,12 +12,12 @@ module Repl
   ROWS = 500
   STEPS = 200_000
 
-  QUERIES = %w[today days-ago sales sale-lines products stock customers cash-counts reviews rules].freeze
+  QUERIES = %w[today days-ago sales sale-lines products stock customers returnables cash-counts reviews rules].freeze
   TOOLS = %w[where sort-by sort-by-desc group-by count-by sum-of pluck take].freeze
   # How they are called, for the REPL reference.
   SIGNATURES = {
     "today" => "(today)", "days-ago" => "(days-ago 7)", "sales" => "(sales [from] [to])", "sale-lines" => "(sale-lines [from] [to])",
-    "products" => "(products)", "stock" => "(stock [\"CODE\"])", "customers" => "(customers)", "cash-counts" => "(cash-counts [from] [to])",
+    "products" => "(products)", "stock" => "(stock [\"CODE\"])", "customers" => "(customers)", "returnables" => "(returnables)", "cash-counts" => "(cash-counts [from] [to])",
     "reviews" => "(reviews)", "rules" => "(rules)", "where" => "(where :key value list)", "sort-by" => "(sort-by :key list)",
     "sort-by-desc" => "(sort-by-desc :key list)", "group-by" => "(group-by :key list)", "count-by" => "(count-by :key list)",
     "sum-of" => "(sum-of :key list)", "pluck" => "(pluck :key list)", "take" => "(take n list)"
@@ -48,6 +48,7 @@ module Repl
       "products" => -> { q.products },
       "stock" => ->(*key) { q.stock_levels(*key) },
       "customers" => -> { q.customers },
+      "returnables" => -> { q.returnables },
       "cash-counts" => ->(*range) { q.shifts(*range) },
       "reviews" => -> { q.reviews },
       "rules" => -> { q.rules }
@@ -115,6 +116,17 @@ module Repl
       Customer.order(:name).limit(ROWS + 1).map do |c|
         { name: c.name, balance: money(balances[c.id] || 0), limit: money(c.credit_limit_cents), "credit-type": c.credit_type&.to_sym,
           "cutoff-day": c.cutoff_keyword, active: c.active }
+      end
+    end
+
+    # The returnable containers each customer holds: a row per customer and kind with a count.
+    def returnables
+      return [] unless Features.active?("returnables")
+      names = ReturnableRule.names
+      Customer.where(id: ReturnableMovement.select(:customer_id)).order(:name).limit(ROWS + 1).flat_map do |c|
+        c.returnable_account.counts.reject { |n| n.owed.zero? && n.in_favor.zero? }.map do |n|
+          { customer: c.name, kind: n.kind.to_sym, name: names[n.kind] || n.kind, owed: n.owed, "in-favor": n.in_favor, "oldest-days": n.oldest_days }
+        end
       end
     end
 

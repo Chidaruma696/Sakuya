@@ -3,9 +3,13 @@
 # if the rule decides something with the test scenario; restoring records an old one again. Each
 # hook provides its test scenario (see `scenario` and `dry_run` in its module).
 class RulesController < ApplicationController
-  HOOKS = { "shift" => ShiftRule, "price" => PriceRule, "withdrawal" => WithdrawalRule, "movement" => MovementRule, "invoice" => InvoiceRule, "receipt" => ReceiptRule, "sale" => SaleRule, "credit" => CreditRule }.freeze
+  HOOKS = { "shift" => ShiftRule, "price" => PriceRule, "withdrawal" => WithdrawalRule, "movement" => MovementRule, "invoice" => InvoiceRule, "receipt" => ReceiptRule, "sale" => SaleRule, "credit" => CreditRule,
+            "returnable" => ReturnableRule }.freeze
+  # A hook that belongs to an optional feature has no editor while the feature is off.
+  FEATURES = { "returnable" => "returnables" }.freeze
 
   before_action { authorize!("rules.edit") }
+  before_action { render "errors/feature_off", status: :not_found, locals: { feature: FEATURES[params[:hook]] } if FEATURES.key?(params[:hook]) && !Features.active?(FEATURES[params[:hook]]) }
   before_action :load_record
 
   def edit

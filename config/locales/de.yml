@@ -120,6 +120,7 @@ de:
       price_rule: Preis in Lisp
       sale_rule: Verkäufe in Lisp
       credit_rule: Kredit in Lisp
+      returnable_rule: Leergut in Lisp
       withdrawal_rule: Entnahmen in Lisp
       movement_rule: Bestand in Lisp
       receipt_rule: Wareneingänge in Lisp
@@ -359,6 +360,8 @@ de:
       sale_stopped: '%{reason}. So kann nicht kassiert werden: jemand mit Berechtigung muss kassieren. Es wurde gemeldet.'
       credit_stopped: '%{reason}. So gibt es keinen Kredit: jemand mit Berechtigung muss es freigeben, oder anders bezahlen. Es wurde gemeldet.'
       on_account_no_customer: für einen Verkauf auf Rechnung muss der Kunde gewählt werden
+      returnables_no_customer: 'dieser Verkauf bewegt Leergut: den Kunden wählen, dem es angerechnet wird'
+      returnable_stopped: '%{kind}: %{reason}. So darf es nicht hinaus: jemand mit Berechtigung kassiert, oder erst das Leergut zurücknehmen. Es wurde gemeldet.'
       on_account_offline: Verkauf auf Rechnung braucht eine Verbindung
       sold_at_odd: die Zeit des Offline-Verkaufs passt nicht (mehr als 7 Tage oder in der Zukunft)
       missing_money: 'Geld fehlt: das Ticket ist %{total} und gezahlt werden %{payment}'
@@ -487,6 +490,9 @@ de:
       sale: 'Verkauf %{folio} über %{total}'
       receipt: 'Wareneingang %{folio} von %{supplier}'
       open_shift: Kassenabschnitt %{folio}, offen
+      returnable_back: '%{pieces} × %{kind} von %{customer}, mehr als geschuldet'
+      returnable_write_off: '%{pieces} × %{kind} ausgebucht für %{customer}'
+      returnable_entry: 'Freier Eintrag von %{pieces} × %{kind} für %{customer}'
   statuses:
     pending: offen
     approved: freigegeben
@@ -535,6 +541,12 @@ de:
     customers.orders: Kundenbestellungen aufnehmen und stornieren
     customers.pay_account: Kundenzahlungen an der Kasse annehmen
     customers.force_credit: Auf Rechnung verkaufen, auch wenn die Kreditregel stoppt (geht zur Prüfung)
+    returnables.view: Das Leergut sehen, das jeder Kunde hat
+    returnables.receive: Leergut annehmen, das ein Kunde zurückbringt
+    returnables.write_off: Leergut ausbuchen, das nicht mehr zurückkommt (geht zur Prüfung)
+    returnables.force: Leergut herausgeben, auch wenn die Leergut-Regel es stoppt (geht zur Prüfung)
+    returnables.in_favor: Mehr Leergut annehmen, als ein Kunde schuldet, zu seinen Gunsten (geht zur Prüfung)
+    returnables.adjust: Leergut ohne Verkauf als draußen oder zugunsten eines Kunden eintragen (geht zur Prüfung)
     purchases.force_receipt: Ware annehmen, die die Eingangsregel stoppt (geht zur Prüfung)
     purchases.pay: Lieferanten aus der Kasse bezahlen
     purchases.exceed: Eine Rechnung mit mehr als erhalten erfassen (mit Grund, geht zur Prüfung)
@@ -612,6 +624,8 @@ de:
     no_customer: — ohne Kunde —
     account_payments: Kundenzahlungen
     credit_stopped: 'Auf Rechnung für %{customer}, %{amount}, gestoppt: %{reason}'
+    returnable_line: '%{pieces} × %{kind} gehen mit %{customer} hinaus'
+    returnable_fewer: '%{kind}: %{pieces} gingen hinaus, die Produkte verlangen %{expected}'
     offline_notice: 'Offline-Verkauf, der sonst gestoppt worden wäre: %{notice}'
     offline_exceeds_limit: die Lade war schon über der Bargeldgrenze
     reason_difference: Grund der Differenz
@@ -882,6 +896,9 @@ de:
     customers:
       name: Kunden
       what: Kunden, ihr Kreditkonto und Zahlungen, und Bestellungen.
+    returnables:
+      name: Leergut
+      what: Behälter, die mit der Ware hinausgehen und zurückkommen müssen (Kisten, Flaschen, Gasflaschen), pro Kunde gezählt. Die Arten und ihre Regel werden in Lisp geschrieben.
   business_types:
     all:
       name: Alles an
@@ -952,6 +969,14 @@ de:
       role:
         name: Name
         permissions: Berechtigungen
+      product_returnable:
+        kind: Art
+        from_quantity: Ab
+        per_quantity: Eins je
+      product/returnables:
+        kind: Leergut-Art
+        from_quantity: Leergut ab
+        per_quantity: Leergut eins je
       product_barcode:
         code: Code
       stock_count:
@@ -1255,6 +1280,7 @@ de:
       products: der Katalog
       stock: Bestand je Filiale, von allem oder einem Produkt
       customers: Kunden und was sie schulden
+      returnables: das Leergut, das jeder Kunde hat, pro Art
       cash_counts: Kassenabschnitte mit ihrer Differenz
       reviews: was zur Prüfung ansteht
       rules: die eigenen Regeln und ihr Vertrag
@@ -1679,3 +1705,124 @@ de:
         one: es fehlt 1 schließende Klammer
         other: es fehlen %{count} schließende Klammern
       quote_at_end: am Ende fehlt, was zitiert werden soll
+  returnable_rule:
+    title: Leergut in Lisp
+    help: Ware geht oft in etwas hinaus, das zurückkommen muss. Hier erklärt das Geschäft seine Behälterarten, jede mit der Regel, die entscheidet, ob weitere Stücke mit einem Kunden hinausgehen dürfen, und dabei liest, was er schon hat. Ab Werk gibt es keine Art und die Kasse fragt nichts. Testen speichert nichts.
+    failure: 'Die Leergut-Regel ist fehlgeschlagen und die eingebaute hat entschieden: %{error}'
+    reads: Was sie liest (in Stück)
+    reasons:
+      too_many_out: '%{customer} hat schon zu viele (%{owed} × %{kind})'
+      not_returned: '%{customer} hat nicht zurückgebracht, was er hat (%{owed} × %{kind})'
+      no_returnables: dieses Geschäft hat dieses Leergut nicht erklärt
+    errors:
+      declaration: 'ein Leergut braucht einen Schlüssel, einen Namen und eine Regel, wie in (returnable :key "Name" (allow)): %{form}'
+      option: 'das Leergut :%{key} trägt die Option :%{option}, und ich kenne nur :%{options}'
+      repeated: 'das Leergut :%{key} ist zweimal erklärt'
+      value: 'der :value des Leerguts :%{key} ist der Wert eines Stücks, eine Zahl ab 0, nicht %{value}'
+    dropped:
+      out:
+        one: '1 Kunde hat noch einen Stand in Arten, die diese Regel nicht erklärt — %{kinds}, insgesamt %{pieces} Stück. Sie können zurückkommen oder ausgebucht werden, aber nicht hinausgehen.'
+        other: '%{count} Kunden haben noch einen Stand in Arten, die diese Regel nicht erklärt — %{kinds}, insgesamt %{pieces} Stück. Sie können zurückkommen oder ausgebucht werden, aber nicht hinausgehen.'
+      products:
+        one: 1 Produkt gibt eine Art heraus, die diese Regel nicht erklärt, und wird davon nichts herausgeben.
+        other: '%{count} Produkte geben eine Art heraus, die diese Regel nicht erklärt, und werden davon nichts herausgeben.'
+    declares: 'eine Behälterart: ihr Schlüssel, der Name an der Kasse, wahlweise der Wert eines Stücks (wird beim Ausbuchen berechnet) und die Regel, die entscheidet, wenn Stücke davon hinausgehen.'
+    scenario:
+      customer: Kunde
+      made_up: — ein erfundener —
+      kind: Art
+      leaving: Gehen hinaus
+      returning: Kommen zurück
+      owed: Schuldet
+      oldest_days: Das älteste, vor Tagen
+      owes_nothing: Hat nichts
+      authorized: Kassiert jemand, der Leergut erzwingen darf
+    verdicts:
+      allow: Sie gehen hinaus
+      review: Sie gehen hinaus und es geht zur Prüfung
+      reject: Es wird gestoppt
+    functions:
+      owed: Stücke dieser Art, die er vor diesem Verkauf schuldet
+      in_favor: Stücke dieser Art, die er zu seinen Gunsten hat
+      leaving: Stücke dieser Art, die mit diesem Verkauf hinausgehen
+      returning: Stücke dieser Art, die mit diesem Verkauf zurückkommen
+      owed_after: was er von dieser Art nach diesem Verkauf schuldet
+      oldest_days: Alter in Tagen des ältesten Stücks draußen (-1, wenn keins)
+      owed_all: Stücke aller Arten, die er schuldet
+      credit_type: 'seine Kreditart (:cash, :weekly…) oder nil'
+      customer: sein Name
+      authorized: ob die kassierende Person Leergut erzwingen darf
+    allow: die Stücke gehen hinaus
+    to_review: die Stücke gehen hinaus und der Verkauf geht zur Prüfung
+    reject: nichts wird verkauft und der Versuch wird gemeldet
+    core: Wer Leergut erzwingen darf, kann immer kassieren; für diese Person heißt Stoppen Prüfung. Stücke, die zurückkommen, werden nie beurteilt.
+  returnables:
+    title: Leergut
+    kind: Art
+    pieces: Stück
+    owes: Schuldet
+    in_favor: Guthaben
+    undeclared: '%{key} (nicht erklärt)'
+    count_in_favor: '%{pieces} Guthaben'
+    errors:
+      more_than_owed: '%{kind}: er schuldet %{owed} und %{back} kommen zurück'
+      pieces: 'Stücke sind ganze Zahlen, nicht „%{value}“'
+      write_off_over: '%{kind}: ausgebucht werden kann nur, was er schuldet (%{owed})'
+      note: ein freier Eintrag braucht eine Notiz mit dem Grund
+      direction: angeben, ob die Stücke draußen sind oder dem Kunden gutgeschrieben werden
+      undeclared: 'die Leergut-Regel erklärt :%{kind} nicht'
+      no_release: 'ein Leergut-Produkt muss sagen, was es herausgibt: eine Art und ab welcher Menge'
+    review:
+      in_favor: '%{customer} brachte %{pieces} × %{kind} mehr zurück als geschuldet; als Guthaben behalten'
+      write_off_charged: 'Ausgebucht: %{reason}. %{amount} wurden seinem Konto belastet.'
+      write_off_free: 'Ausgebucht: %{reason}. Nichts wurde berechnet: die Art erklärt keinen Wert.'
+      entry_out: 'Als schon draußen bei %{customer} eingetragen: %{note}'
+      entry_in_favor: 'Als Guthaben für %{customer} eingetragen: %{note}'
+    account:
+      charge: '%{pieces} × %{kind} ausgebucht'
+      none: Dieser Kunde hat kein Leergut.
+      oldest: Ältestes draußen
+      days:
+        one: 1 Tag
+        other: '%{count} Tage'
+      receive: Er bringt welche zurück
+      receive_button: Annehmen
+      write_off: Sie kommen nicht mehr zurück
+      write_off_button: Ausbuchen
+      write_off_help: Kaputt oder verloren. Sie verlassen den Stand, der Wert der Art wird dem Konto belastet und es geht zur Prüfung.
+      entry: Freier Eintrag
+      entry_button: Eintragen
+      entry_help: Für einen Stand ohne Verkauf dahinter, etwa die Kisten, die ein Kunde schon hatte, als du angefangen hast. Geht zur Prüfung.
+      direction: Sie sind
+      entry_out: draußen beim Kunden
+      entry_in_favor: Guthaben des Kunden
+      history: Bewegungen
+    reasons:
+      out: Hinausgegangen
+      back: Zurückgekommen
+      write_off: Ausgebucht
+      entry: Freier Eintrag
+    notices:
+      received: '%{pieces} × %{kind} angenommen.'
+      written_off: '%{pieces} × %{kind} ausgebucht'
+      entered: '%{pieces} × %{kind} eingetragen'
+    ticket:
+      moved: '%{out} raus, %{back} zurück'
+      owes: 'schuldet %{pieces}'
+      in_favor: '%{pieces} Guthaben'
+    till:
+      out: Gehen hinaus
+      back: Kommen zurück
+      over_title: Mehr als geschuldet
+      over_line: '%{kind}: er schuldet %{owed} und %{back} kommen zurück.'
+      over_help: Die Zahl korrigieren. Nur jemand mit Berechtigung kann die zusätzlichen Stücke dem Kunden gutschreiben.
+      over_help_accept: Die Zahl korrigieren oder die zusätzlichen Stücke dem Kunden gutschreiben; es geht zur Prüfung.
+      correct: Korrigieren
+      accept_in_favor: Gutschreiben
+    product:
+      returnable: Geht in Leergut hinaus
+      help: 'Angeben, welche Art es herausgibt und ab welcher Menge in einer Bonzeile. „Eins je“ leer lassen für ein Stück pro Zeile, die die Menge erreicht (eine Kiste pro Wiegung), oder ausfüllen für ein Stück je so viele (ein Kasten je 8 Flaschen).'
+      no_kinds: Es sind noch keine Arten erklärt. Erkläre sie in Einstellungen › Leergut in Lisp.
+      from: Ab (Menge)
+      per: Eins je
+      per_line: pro Zeile

@@ -67,6 +67,8 @@ class Review < ApplicationRecord
     when Shift
       return I18n.t("reviews.desc.open_shift", folio: reviewable.folio) if reviewable.open?
       I18n.t("reviews.desc.shift", folio: reviewable.folio, difference: Money.format_money(reviewable.difference_cents))
+    when ReturnableMovement
+      I18n.t("reviews.desc.returnable_#{reviewable.reason}", pieces: reviewable.quantity.abs, kind: Returnables.name(reviewable.kind), customer: reviewable.customer.name)
     when SaleLine
       I18n.t("reviews.desc.sale_line", folio: reviewable.sale.folio, product: reviewable.product.name, price: Money.format_money(reviewable.price_cents), catalog: Money.format_money(reviewable.catalog_cents))
     else "#{reviewable_type} #{reviewable_id}"

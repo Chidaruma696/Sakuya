@@ -30,6 +30,8 @@
   </div>
 <% end %>
 
+<%= render "returnables" if @returnables %>
+
 <table class="table">
   <thead><tr><th><%= t("common.date") %></th><th><%= t("customers.account.concept") %></th><th class="text-right"><%= t("customers.account.charge") %></th><th class="text-right"><%= t("customers.account.account_payment_col") %></th><th class="text-right"><%= t("customers.owes") %></th><th><%= t("common.who") %></th></tr></thead>
   <tbody>

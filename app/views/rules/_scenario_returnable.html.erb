@@ -1,0 +1,21 @@
+<% kinds = ReturnableRule.names(@code) %>
+<% customer = scenario[:customer] %>
+<div><label for="customer_id" class="field-label"><%= t("#{texts}.scenario.customer") %></label>
+  <%= select_tag :customer_id, options_for_select([ [ t("#{texts}.scenario.made_up"), "" ] ] + Customer.active.order(:name).limit(300).map { |c| [ c.name, c.id ] }, customer&.id), id: "customer_id" %></div>
+<% if kinds.any? %>
+  <div><label for="kind" class="field-label"><%= t("#{texts}.scenario.kind") %></label>
+    <%= select_tag :kind, options_for_select(kinds.map { |key, name| [ name, key ] }, scenario[:kind]), id: "kind" %></div>
+<% end %>
+<div><label for="leaving" class="field-label"><%= t("#{texts}.scenario.leaving") %></label>
+  <%= number_field_tag :leaving, scenario[:leaving], step: 1, min: 0, id: "leaving", class: "w-24 font-mono" %></div>
+<div><label for="returning" class="field-label"><%= t("#{texts}.scenario.returning") %></label>
+  <%= number_field_tag :returning, scenario[:returning], step: 1, min: 0, id: "returning", class: "w-24 font-mono" %></div>
+<% unless customer %>
+  <div><label for="owed" class="field-label"><%= t("#{texts}.scenario.owed") %></label>
+    <%= number_field_tag :owed, scenario[:owed], step: 1, min: 0, id: "owed", class: "w-24 font-mono" %></div>
+  <div><label for="oldest_days" class="field-label"><%= t("#{texts}.scenario.oldest_days") %></label>
+    <%= number_field_tag :oldest_days, scenario[:oldest_days], step: 1, min: 0, id: "oldest_days", class: "w-24 font-mono" %></div>
+<% else %>
+  <% counts = customer.returnable_account.counts.select { |c| c.owed.positive? || c.in_favor.positive? } %>
+  <p class="pb-2 text-stone-600"><%= counts.any? ? counts.map { |c| "#{kinds[c.kind] || c.kind}: #{c.owed.positive? ? c.owed : t("returnables.count_in_favor", pieces: c.in_favor)}" }.join(" · ") : t("#{texts}.scenario.owes_nothing") %></p>
+<% end %>

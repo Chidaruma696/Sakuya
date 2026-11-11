@@ -11,6 +11,10 @@ class CustomersController < ApplicationController
     @customers = @customers.select { |c| c.name.downcase.include?(params[:q].to_s.downcase.strip) } if params[:q].present?
     @balances = CreditMovement.group(:customer_id).sum(:amount_cents)
     @credit_types = CreditRule.types
+    if returnables?
+      @returnable_names = ReturnableRule.names
+      @returnable_counts = ReturnableAccount.all_counts
+    end
   end
 
   # Account statement: what they owe, since when, every movement with its running balance, and taking an account payment.
@@ -21,6 +25,14 @@ class CustomersController < ApplicationController
     balance = 0
     @movements = @account.movements.map { |m| [ m, balance += m.amount_cents ] }.reverse.first(200)
     @shift = Shift.opened_at(current_branch)
+    return unless returnables?
+    @returnable_kinds = ReturnableRule.kinds
+    @returnables = @customer.returnable_account
+    @returnable_movements = @customer.returnable_movements.includes(:user, :reference).order(id: :desc).limit(100)
+    # Sent back here by "Receive": more pieces than the customer owes of that kind.
+    if params[:over_kind].present? && params[:over_quantity].to_i > @returnables.owed(params[:over_kind])
+      @over = { kind: params[:over_kind].to_s, quantity: params[:over_quantity].to_i, owed: @returnables.owed(params[:over_kind]) }
+    end
   end
 
   def pay_account
@@ -60,6 +72,9 @@ class CustomersController < ApplicationController
   end
 
   private
+
+  # The returnable containers show to whoever may see them, with the feature on.
+  def returnables? = Features.active?("returnables") && can?("returnables.view")
 
   def data
     params.require(:customer).permit(:name, :phone, :tax_id, :address, :notes, :credit_limit, :credit_type, :cutoff_day, :active)

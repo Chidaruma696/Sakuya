@@ -1,0 +1,114 @@
+<%# The returnable containers a customer holds: the count per kind, and what can be done outside a
+    sale, each with its own permission (receive, write off, loose entry). %>
+<% counts = @returnables.counts %>
+<% declared = @returnable_kinds.transform_values(&:name) %>
+<% kind_name = ->(key) { declared[key] || t("returnables.undeclared", key: key) } %>
+<% owing = counts.select { |c| c.owed.positive? } %>
+<div class="card mb-6" id="returnables">
+  <h2 class="mb-2 font-semibold"><%= t("returnables.title") %></h2>
+  <% if counts.empty? %>
+    <p class="text-sm text-stone-600"><%= t("returnables.account.none") %></p>
+  <% else %>
+    <table class="table mb-3" id="returnable_counts">
+      <thead><tr><th><%= t("returnables.kind") %></th><th class="text-right"><%= t("returnables.owes") %></th><th class="text-right"><%= t("returnables.in_favor") %></th><th class="text-right"><%= t("returnables.account.oldest") %></th></tr></thead>
+      <tbody>
+        <% counts.each do |c| %>
+          <tr data-kind="<%= c.kind %>">
+            <td class="px-3 py-2"><% if declared.key?(c.kind) %><%= declared[c.kind] %><% else %><span class="returnable-undeclared font-medium text-red-700"><i class="bi bi-exclamation-triangle-fill"></i> <%= kind_name.(c.kind) %></span><% end %></td>
+            <td class="px-3 py-2 text-right font-mono"><%= c.owed %></td>
+            <td class="px-3 py-2 text-right font-mono"><%= c.in_favor if c.in_favor.positive? %></td>
+            <td class="px-3 py-2 text-right"><%= t("returnables.account.days", count: c.oldest_days) if c.oldest_days >= 0 %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <div class="grid gap-4 text-sm lg:grid-cols-3">
+    <%# What can come back: the kinds they owe; whoever may accept pieces in favor can receive any declared kind. %>
+    <% receivable = can?("returnables.in_favor") ? (owing.map(&:kind) | declared.keys) : owing.map(&:kind) %>
+    <% if can?("returnables.receive") && receivable.any? %>
+      <%= form_with url: customer_returnables_receive_path(@customer), id: "form_receive", class: "space-y-2" do |f| %>
+        <h3 class="font-medium"><%= t("returnables.account.receive") %></h3>
+        <%= hidden_field_tag :key, SecureRandom.uuid, id: nil %>
+        <div class="flex flex-wrap items-end gap-2">
+          <div><%= f.label :kind, t("returnables.kind"), for: "receive_kind", class: "field-label" %><%= f.select :kind, receivable.map { |k| [ kind_name.(k), k ] }, {}, id: "receive_kind", class: "input" %></div>
+          <div><%= f.label :quantity, t("returnables.pieces"), for: "receive_quantity", class: "field-label" %><%= f.number_field :quantity, step: 1, min: 1, required: true, id: "receive_quantity", class: "input w-24 font-mono" %></div>
+          <%= f.submit t("returnables.account.receive_button"), class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    <% end %>
+    <% if can?("returnables.write_off") && owing.any? %>
+      <%= form_with url: customer_returnables_write_off_path(@customer), id: "form_write_off", class: "space-y-2" do |f| %>
+        <h3 class="font-medium"><%= t("returnables.account.write_off") %></h3>
+        <%= hidden_field_tag :key, SecureRandom.uuid, id: nil %>
+        <div class="flex flex-wrap items-end gap-2">
+          <div><%= f.label :kind, t("returnables.kind"), for: "write_off_kind", class: "field-label" %><%= f.select :kind, owing.map { |c| [ kind_name.(c.kind), c.kind ] }, {}, id: "write_off_kind", class: "input" %></div>
+          <div><%= f.label :quantity, t("returnables.pieces"), for: "write_off_quantity", class: "field-label" %><%= f.number_field :quantity, step: 1, min: 1, required: true, id: "write_off_quantity", class: "input w-24 font-mono" %></div>
+          <div class="grow"><%= f.label :reason, t("common.reason"), for: "write_off_reason", class: "field-label" %><%= f.text_field :reason, required: true, id: "write_off_reason", class: "input" %></div>
+          <%= f.submit t("returnables.account.write_off_button"), class: "btn btn-secondary" %>
+        </div>
+        <p class="text-xs text-stone-500"><%= t("returnables.account.write_off_help") %></p>
+      <% end %>
+    <% end %>
+    <% if can?("returnables.adjust") && declared.any? %>
+      <%= form_with url: customer_returnables_entry_path(@customer), id: "form_entry", class: "space-y-2" do |f| %>
+        <h3 class="font-medium"><%= t("returnables.account.entry") %></h3>
+        <%= hidden_field_tag :key, SecureRandom.uuid, id: nil %>
+        <div class="flex flex-wrap items-end gap-2">
+          <div><%= f.label :kind, t("returnables.kind"), for: "entry_kind", class: "field-label" %><%= f.select :kind, declared.map { |k, name| [ name, k ] }, {}, id: "entry_kind", class: "input" %></div>
+          <div><%= f.label :direction, t("returnables.account.direction"), for: "entry_direction", class: "field-label" %><%= f.select :direction, [ [ t("returnables.account.entry_out"), "out" ], [ t("returnables.account.entry_in_favor"), "in_favor" ] ], {}, id: "entry_direction", class: "input" %></div>
+          <div><%= f.label :quantity, t("returnables.pieces"), for: "entry_quantity", class: "field-label" %><%= f.number_field :quantity, step: 1, min: 1, required: true, id: "entry_quantity", class: "input w-24 font-mono" %></div>
+          <div class="grow"><%= f.label :note, t("common.notes"), for: "entry_note", class: "field-label" %><%= f.text_field :note, required: true, id: "entry_note", class: "input" %></div>
+          <%= f.submit t("returnables.account.entry_button"), class: "btn btn-secondary" %>
+        </div>
+        <p class="text-xs text-stone-500"><%= t("returnables.account.entry_help") %></p>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% if @returnable_movements.any? %>
+    <details class="mt-4 text-sm">
+      <summary class="cursor-pointer font-medium"><%= t("returnables.account.history") %></summary>
+      <table class="table mt-2" id="returnable_history">
+        <thead><tr><th><%= t("common.date") %></th><th><%= t("returnables.kind") %></th><th><%= t("customers.account.concept") %></th><th class="text-right"><%= t("returnables.pieces") %></th><th><%= t("common.who") %></th></tr></thead>
+        <tbody>
+          <% @returnable_movements.each do |m| %>
+            <tr>
+              <td class="px-3 py-2"><%= l m.date %></td>
+              <td class="px-3 py-2"><%= kind_name.(m.kind) %></td>
+              <td class="px-3 py-2"><%= t("returnables.reasons.#{m.reason}") %><% if m.reference.is_a?(Sale) %> · <%= link_to m.reference.folio, till_ticket_path(m.reference), class: "link" %><% end %><% if m.note.present? %> · <%= m.note %><% end %></td>
+              <td class="px-3 py-2 text-right font-mono"><%= m.quantity.positive? ? "+#{m.quantity}" : "−#{m.quantity.abs}" %></td>
+              <td class="px-3 py-2"><%= m.user %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </details>
+  <% end %>
+
+  <% if @over %>
+    <%# "Receive" was asked for more pieces than the customer owes: it stops here. Only someone with returnables.in_favor gets the way through. %>
+    <div data-controller="dialog" data-dialog-open-value="true">
+      <dialog id="more_than_owed" data-dialog-target="dialog" class="w-[min(28rem,92vw)] rounded-xl p-0 shadow-xl backdrop:bg-stone-900/40">
+        <div class="space-y-3 p-5 text-sm">
+          <h2 class="text-lg font-semibold"><%= t("returnables.till.over_title") %></h2>
+          <p><%= t("returnables.till.over_line", kind: kind_name.(@over[:kind]), owed: @over[:owed], back: @over[:quantity]) %></p>
+          <p class="text-stone-600"><%= can?("returnables.in_favor") ? t("returnables.till.over_help_accept") : t("returnables.till.over_help") %></p>
+          <div class="flex flex-wrap justify-end gap-2">
+            <button type="button" class="btn btn-secondary" data-action="dialog#close"><%= t("returnables.till.correct") %></button>
+            <% if can?("returnables.in_favor") %>
+              <%= form_with url: customer_returnables_receive_path(@customer), id: "form_accept_in_favor" do %>
+                <%= hidden_field_tag :key, SecureRandom.uuid, id: nil %>
+                <%= hidden_field_tag :kind, @over[:kind], id: nil %>
+                <%= hidden_field_tag :quantity, @over[:quantity], id: nil %>
+                <%= hidden_field_tag :accept_in_favor, "1", id: nil %>
+                <%= submit_tag t("returnables.till.accept_in_favor"), class: "btn btn-primary" %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </dialog>
+    </div>
+  <% end %>
+</div>

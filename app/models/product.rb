@@ -7,6 +7,10 @@ class Product < ApplicationRecord
   has_many :stock_levels, dependent: :restrict_with_error
   has_many :branch_prices, class_name: "BranchPrice", dependent: :destroy
   has_many :promotions, dependent: :destroy
+  # What it releases when it leaves in returnable containers (see ProductReturnable).
+  has_many :returnables, class_name: "ProductReturnable", dependent: :destroy, inverse_of: :product
+  accepts_nested_attributes_for :returnables, allow_destroy: true,
+                                reject_if: ->(line) { line[:id].blank? && line[:kind].blank? && line[:from_quantity].blank? && line[:per_quantity].blank? }
 
   before_validation :assign_plu, on: :create
 
@@ -15,6 +19,8 @@ class Product < ApplicationRecord
   validates :unit, inclusion: { in: UNITS }
   validates :price_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :plu, numericality: { only_integer: true, in: 1..99_999 }, uniqueness: true
+  # A product marked as returnable has to say what it releases: at least one kind and from what quantity.
+  validate { errors.add(:base, I18n.t("returnables.errors.no_release")) if returnable? && returnables.reject(&:marked_for_destruction?).empty? }
 
   scope :active, -> { where(active: true) }
 

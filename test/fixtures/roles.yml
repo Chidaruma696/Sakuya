@@ -8,5 +8,5 @@ cashier:
 
 supervisor:
   name: supervisor
-  permissions: ["till.*", "inventory.*", "stock_counts.*", "customers.*", "reports.view", "reviews.resolve"]
+  permissions: ["till.*", "inventory.*", "stock_counts.*", "customers.*", "reports.view", "reviews.resolve", "returnables.view", "returnables.receive", "returnables.write_off", "returnables.force"]
 

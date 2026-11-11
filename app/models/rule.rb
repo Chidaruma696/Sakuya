@@ -4,7 +4,8 @@ class Rule < ApplicationRecord
   self.table_name = "rules"
   # Each hook and the module that holds its contract (its VERSION).
   CONTRACTS = { "dashboard" => "Dashboard", "shift" => "ShiftRule", "price" => "PriceRule", "withdrawal" => "WithdrawalRule",
-                "movement" => "MovementRule", "invoice" => "InvoiceRule", "receipt" => "ReceiptRule", "sale" => "SaleRule", "credit" => "CreditRule" }.freeze
+                "movement" => "MovementRule", "invoice" => "InvoiceRule", "receipt" => "ReceiptRule", "sale" => "SaleRule", "credit" => "CreditRule",
+                "returnable" => "ReturnableRule" }.freeze
   HOOKS = CONTRACTS.keys.freeze
 
   belongs_to :user

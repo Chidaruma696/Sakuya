@@ -6,9 +6,12 @@ class Role < ApplicationRecord
   # supervisor or the warehouse, not the till.
   BASE = {
     "administrator" => [ "*" ],
-    "cashier" => [ "till.sell", "till.open", "till.withdraw", "inventory.view", "customers.view", "customers.pay_account", "customers.orders" ],
+    "cashier" => [ "till.sell", "till.open", "till.withdraw", "inventory.view", "customers.view", "customers.pay_account", "customers.orders",
+                   "returnables.view", "returnables.receive" ],
     "warehouse_keeper" => [ "inventory.view", "purchases.receive", "warehouses.transfer_stock", "stock_counts.make" ],
-    "supervisor" => [ "till.*", "inventory.*", "purchases.*", "warehouses.*", "stock_counts.*", "customers.*", "reports.view", "reviews.resolve" ]
+    # Returnables one by one: accepting pieces in a customer's favor and loose entries stay with the administrator.
+    "supervisor" => [ "till.*", "inventory.*", "purchases.*", "warehouses.*", "stock_counts.*", "customers.*", "reports.view", "reviews.resolve",
+                      "returnables.view", "returnables.receive", "returnables.write_off", "returnables.force" ]
   }.freeze
 
   validates :name, presence: true, uniqueness: true

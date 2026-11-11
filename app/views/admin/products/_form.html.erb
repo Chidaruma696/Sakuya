@@ -10,6 +10,32 @@
     </div>
     <%= render "admin/field", f: f, field: :price, label: t("common.price"), kind: :number_field, options: { step: "0.01", min: 0, value: format("%.2f", @product.price) } %>
   </div>
+  <% if Features.active?("returnables") %>
+    <%# Returnable containers: a product that leaves in them must say which kind and from what quantity. %>
+    <% kinds = ReturnableRule.names %>
+    <% lines = @product.returnables.to_a + Array.new(2) { ProductReturnable.new } %>
+    <fieldset class="rounded-lg border border-stone-200 px-4 py-3" id="product_returnables">
+      <legend class="px-1 text-sm font-semibold"><%= t("returnables.title") %></legend>
+      <label class="flex items-center gap-2 text-sm"><%= f.check_box :returnable %> <%= t("returnables.product.returnable") %></label>
+      <p class="mt-1 mb-2 text-xs text-stone-500"><%= kinds.any? ? t("returnables.product.help") : t("returnables.product.no_kinds") %></p>
+      <% if kinds.any? || @product.returnables.any? %>
+        <table class="w-full text-sm">
+          <thead><tr class="text-left text-xs text-stone-500"><th class="font-normal"><%= t("returnables.kind") %></th><th class="font-normal"><%= t("returnables.product.from") %></th><th class="font-normal"><%= t("returnables.product.per") %></th><th></th></tr></thead>
+          <tbody>
+            <%= f.fields_for :returnables, lines do |r| %>
+              <% line = r.object %>
+              <tr class="border-t border-stone-100">
+                <td class="py-1 pr-2"><%= r.select :kind, kinds.map { |key, name| [ name, key ] } + (line.kind.present? && !kinds.key?(line.kind) ? [ [ t("returnables.undeclared", key: line.kind), line.kind ] ] : []), { include_blank: true }, class: "input" %></td>
+                <td class="py-1 pr-2"><%= r.number_field :from_quantity, step: "0.001", min: "0.001", value: (line.from_quantity && @product.format_quantity(line.from_quantity)), class: "input w-28 font-mono" %></td>
+                <td class="py-1 pr-2"><%= r.number_field :per_quantity, step: "0.001", min: "0.001", value: (line.per_quantity && @product.format_quantity(line.per_quantity)), placeholder: t("returnables.product.per_line"), class: "input w-28 font-mono" %></td>
+                <td class="py-1 text-right text-xs"><% if line.persisted? %><label class="inline-flex items-center gap-1"><%= r.check_box :_destroy %> <%= t("common.remove") %></label><% end %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </fieldset>
+  <% end %>
   <div class="flex flex-wrap items-center gap-4">
     <%= f.submit @product.new_record? ? t("common.create") : t("common.save"), class: "btn btn-primary btn-lg" %>
     <label class="flex items-center gap-2 text-sm"><%= f.check_box :active %> <%= t("common.active") %></label>

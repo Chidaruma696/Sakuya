@@ -10,6 +10,7 @@ module ReviewsHelper
     when Receipt then receipt_path(r)
     when Product then kardex_inventory_path(product_id: r.id, branch_id: review.branch_id)
     when Supplier then invoices_path(supplier_id: r.id)
+    when ReturnableMovement then account_customer_path(r.customer_id)
     else reviews_path
     end
   end

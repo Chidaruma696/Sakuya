@@ -65,7 +65,7 @@ class CustomersTest < ActionDispatch::IntegrationTest
   end
 
   test "with the feature off nobody gets in, and neither does the cashier without permission" do
-    Features.store!(Features::OPTIONAL - %w[customers], check: false)
+    Features.store!(Features::OPTIONAL - %w[customers returnables], check: false)
     get customers_path
     assert_response :not_found
     assert_match "Customers", response.body

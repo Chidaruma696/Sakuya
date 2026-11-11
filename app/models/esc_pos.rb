@@ -201,6 +201,12 @@ module EscPos
         sale.payments.each { |p| d.row(I18n.t("payment_methods.#{p.payment_method}"), Money.format_money(p.amount_cents)) }
         d.row(labels["change"], Money.format_money(sale.change_cents))
         d.center.bold.text(I18n.t("sale_statuses.refunded").upcase).bold(false) if sale.status == "refunded"
+        returnables = Returnables.ticket_rows(sale)
+        d.left.line(".") if returnables.any?
+        returnables.each do |name, out, back, after|
+          d.row("#{name}: #{I18n.t("returnables.ticket.moved", out: out, back: back)}",
+                after.negative? ? I18n.t("returnables.ticket.in_favor", pieces: -after) : I18n.t("returnables.ticket.owes", pieces: after))
+        end
       when "returns_legend"
         d.left.line(".")
         words.(block, a["ticket.returns_legend"].presence || I18n.t("till.refunds_only_with_ticket"))

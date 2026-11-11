@@ -8,6 +8,7 @@
                    [ "withdrawal_rule", "safe", rule_edit_path("withdrawal") ], [ "movement_rule", "box-seam", rule_edit_path("movement") ] ] %>
   <% advanced += [ [ "receipt_rule", "truck", rule_edit_path("receipt") ], [ "invoice_rule", "receipt-cutoff", rule_edit_path("invoice") ] ] if Features.active?("purchases") %>
   <% advanced << [ "credit_rule", "person-vcard", rule_edit_path("credit") ] if Features.active?("customers") %>
+  <% advanced << [ "returnable_rule", "box2", rule_edit_path("returnable") ] if Features.active?("returnables") %>
   <% advanced << [ "repl", "terminal", repl_path ] %>
   <% advanced << [ "plugins", "puzzle", plugins_path ] %>
   <% advanced << [ "rules_file", "file-earmark-code", rules_file_path ] %>

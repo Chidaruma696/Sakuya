@@ -57,6 +57,7 @@ One system, one database, and **modules that turn on or off per business**. The 
 | **Warehouses** *(module)* | Storage-only branches, transfers between branches and restocking by minimums and maximums. | A warehouse has no till. A transfer goes out and in within one transaction. |
 | **Stock counts** *(module)* | Full or partial counts, scanning pieces by their code; what goes by kilo, litre or metre is typed. | The count rules, and the shortfall is charged to whoever is responsible. |
 | **Customers** *(module, off by default)* | Customers, selling on account, payments at the till, account statements and orders that hold stock and are charged at the till. | Out of the box nobody gets credit: a rule in Lisp decides, and it can declare credit types (note by note, limit, weekly…) to give each customer their own terms. |
+| **Returnables** *(module, off by default)* | Crates, bottles, cylinders: what leaves with the goods and has to come back, counted per customer. Each product says what it releases and the till counts it. | No kind exists until a rule in Lisp declares it, with the rule that decides when more may leave. Bringing back more than owed, loose entries and write-offs each need their own permission. |
 
 Factory roles: administrator, cashier (sell, open the till, cash drops, see stock; with the customers module, also payments and orders), warehouse keeper and supervisor. The interface speaks English, Spanish and German, and a plugin can teach it another language.
 
@@ -91,7 +92,7 @@ It is edited in **Settings › Advanced options › Dashboard in Lisp**, with a 
 
 ## ⚖️ Rules that decide
 
-Every sensitive spot asks a rule before doing anything: the price of each line, the whole sale before charging it, closing the session, withdrawals, loose entries, adjustments and waste, what arrives from the supplier and its invoice. The rule answers `(allow)`, `(to-review "reason")` or `(reject "reason")`:
+Every sensitive spot asks a rule before doing anything: the price of each line, the whole sale before charging it, closing the session, withdrawals, loose entries, adjustments and waste, what arrives from the supplier and its invoice, what goes on a customer's account and the returnable containers that leave with them. The rule answers `(allow)`, `(to-review "reason")` or `(reject "reason")`:
 
 ```lisp
 ; Price: small discounts pass, medium ones go to review, ketchup never goes down

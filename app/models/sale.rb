@@ -8,6 +8,7 @@ class Sale < ApplicationRecord
   has_many :lines, class_name: "SaleLine", dependent: :restrict_with_error, inverse_of: :sale
   has_many :payments, dependent: :restrict_with_error
   has_many :refunds, dependent: :restrict_with_error
+  has_many :returnable_movements, as: :reference, dependent: :restrict_with_error
 
   validates :folio, presence: true, uniqueness: { scope: :branch_id }
   validates :code, :key, presence: true, uniqueness: true

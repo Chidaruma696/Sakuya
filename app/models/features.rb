@@ -1,14 +1,17 @@
 # Features switched on or off per business (the full map is in docs/arquitectura.md). Till,
 # inventory, admin and settings are always on; the rest depends on the business type chosen at
 # setup and can be changed later in Settings. Each feature is a separate set: its tables, its
-# permissions, its tab. DEPENDS and ANY are ready for when one feature hangs off another.
+# permissions, its tab. DEPENDS says which feature hangs off another; ANY is ready for when one of
+# several is enough.
 module Features
-  OPTIONAL = %w[purchases warehouses stock_counts customers].freeze
-  DEPENDS = {}.freeze
+  OPTIONAL = %w[purchases warehouses stock_counts customers returnables].freeze
+  # Returnable containers are counted per customer.
+  DEPENDS = { "returnables" => %w[customers] }.freeze
   # Needs at least one from the list switched on.
   ANY = {}.freeze
   # Permission prefixes that hang off each feature (the other permissions are always there).
-  PERMISSIONS = { "purchases" => %w[purchases], "warehouses" => %w[warehouses], "stock_counts" => %w[stock_counts], "customers" => %w[customers] }.freeze
+  PERMISSIONS = { "purchases" => %w[purchases], "warehouses" => %w[warehouses], "stock_counts" => %w[stock_counts], "customers" => %w[customers],
+                  "returnables" => %w[returnables] }.freeze
   # Preset per business type.
   BUSINESS_TYPES = {
     "store" => %w[purchases stock_counts],

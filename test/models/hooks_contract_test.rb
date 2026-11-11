@@ -81,7 +81,8 @@ class HooksContractTest < ActiveSupport::TestCase
       SaleRule => ->(code) { SaleRule.decide(SaleRule.data([], [], total: 0, change: 0, authorized: false), code: code) },
       ReceiptRule => ->(code) { ReceiptRule.decide(ReceiptRule.data(branch: @branch, supplier: Supplier.new(name: "S"), lines: [], delivery_note: "", invoiced: false, authorized: false), code: code) },
       InvoiceRule => ->(code) { InvoiceRule.decide(InvoiceRule::Input.new(excess_items: 0, excess_value: 0, total: 100, receipts: 0, supplier: "S", lock: true, authorized: false, detail: ""), code: code) },
-      CreditRule => ->(code) { CreditRule.decide(CreditRule.data(Customer.create!(name: "Ana"), amount: 100, total: 100, authorized: false), code: code) }
+      CreditRule => ->(code) { CreditRule.decide(CreditRule.data(Customer.create!(name: "Ana"), amount: 100, total: 100, authorized: false), code: code) },
+      ReturnableRule => ->(code) { ReturnableRule.decide(ReturnableRule.data(Customer.create!(name: "Eva"), kind: "crate", leaving: 1, returning: 0, authorized: false), code: code) }
     }
     assert_equal HOOKS.values.sort_by(&:name), samples.keys.sort_by(&:name), "a new hook needs its sample here"
     samples.each do |mod, decide|

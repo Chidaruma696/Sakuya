@@ -53,7 +53,7 @@ class ReservationsTest < ActiveSupport::TestCase
 
   test "with the customers feature off there is no held stock" do
     order(3)
-    Features.store!(Features::OPTIONAL - %w[customers], check: false)
+    Features.store!(Features::OPTIONAL - %w[customers returnables], check: false)
     assert_equal({}, Reservations.by_product(@store))
   end
 

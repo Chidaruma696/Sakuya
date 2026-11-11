@@ -32,7 +32,8 @@ class Setting < ApplicationRecord
     "features.purchases" => "1",           # optional features: "1" on, "0" off (see Features)
     "features.warehouses" => "1",
     "features.stock_counts" => "1",
-    "features.customers" => "0"           # off by default: switched on in Settings › Features
+    "features.customers" => "0",          # off by default: switched on in Settings › Features
+    "features.returnables" => "0"
   }.freeze
   INTEGERS = %w[till.price_floor till.drawer_limit till.difference_cap ticket.width].freeze
   DENOMINATIONS = /\A\d+(\.\d{1,2})?(,\d+(\.\d{1,2})?)*\z/

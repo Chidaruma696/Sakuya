@@ -120,6 +120,7 @@ es:
       price_rule: Precio en Lisp
       sale_rule: Ventas en Lisp
       credit_rule: Crédito en Lisp
+      returnable_rule: Retornables en Lisp
       withdrawal_rule: Retiros en Lisp
       movement_rule: Inventario en Lisp
       receipt_rule: Recepciones en Lisp
@@ -359,6 +360,8 @@ es:
       sale_stopped: '%{reason}. Así no se cobra: que la cobre alguien con permiso. Queda reportado.'
       credit_stopped: '%{reason}. Así no se fía: que lo autorice alguien con permiso, o que pague de otra forma. Queda reportado.'
       on_account_no_customer: para vender a cuenta hay que elegir el cliente
+      returnables_no_customer: 'esta venta mueve envases retornables: elige el cliente al que se le cuentan'
+      returnable_stopped: '%{kind}: %{reason}. Así no pueden salir: que la cobre alguien con permiso, o recibe antes los envases. Quedó reportado.'
       on_account_offline: vender a cuenta necesita conexión
       sold_at_odd: la hora de la venta sin conexión no cuadra (más de 7 días o en el futuro)
       missing_money: 'falta dinero: el ticket es %{total} y se pagan %{payment}'
@@ -487,6 +490,9 @@ es:
       sale: 'Venta %{folio} de %{total}'
       receipt: 'Recepción %{folio} de %{supplier}'
       open_shift: Corte %{folio}, abierto
+      returnable_back: '%{pieces} × %{kind} de %{customer}, más de lo que debía'
+      returnable_write_off: 'Baja de %{pieces} × %{kind} de %{customer}'
+      returnable_entry: 'Entrada suelta de %{pieces} × %{kind} de %{customer}'
   statuses:
     pending: pendiente
     approved: aprobada
@@ -535,6 +541,12 @@ es:
     customers.orders: Tomar y cancelar pedidos de clientes
     customers.pay_account: Recibir abonos de clientes en la caja
     customers.force_credit: Vender a cuenta aunque la regla de crédito lo frene (queda por revisar)
+    returnables.view: Ver los envases retornables que tiene cada cliente
+    returnables.receive: Recibir envases retornables que devuelve un cliente
+    returnables.write_off: Dar de baja envases retornables que ya no van a volver (queda por revisar)
+    returnables.force: Dejar salir envases retornables aunque la regla de retornables lo frene (queda por revisar)
+    returnables.in_favor: Aceptar más envases retornables de los que debe un cliente, a su favor (queda por revisar)
+    returnables.adjust: Apuntar envases retornables fuera o a favor de un cliente sin una venta (queda por revisar)
     purchases.force_receipt: Recibir mercancía que la regla de recepciones frena (queda por revisar)
     purchases.pay: Pagar a proveedores desde la caja
     purchases.exceed: Registrar una factura con más de lo recibido (con motivo, queda por revisar)
@@ -612,6 +624,8 @@ es:
     no_customer: — sin cliente —
     account_payments: Abonos
     credit_stopped: 'A cuenta de %{customer} por %{amount} frenado: %{reason}'
+    returnable_line: '%{pieces} × %{kind} que salen con %{customer}'
+    returnable_fewer: '%{kind}: salieron %{pieces} y los productos piden %{expected}'
     offline_notice: 'Venta sin conexión que de otra forma se habría frenado: %{notice}'
     offline_exceeds_limit: la gaveta ya pasaba del tope de efectivo
     reason_difference: Motivo de la diferencia
@@ -882,6 +896,9 @@ es:
     customers:
       name: Clientes
       what: Clientes, su cuenta de crédito y abonos, y pedidos.
+    returnables:
+      name: Retornables
+      what: Envases que salen con la mercancía y tienen que volver (canastillas, botellas, cilindros), contados por cliente. Los tipos y su regla se escriben en Lisp.
   business_types:
     all:
       name: Todo encendido
@@ -952,6 +969,14 @@ es:
       role:
         name: Nombre
         permissions: Permisos
+      product_returnable:
+        kind: Tipo
+        from_quantity: Desde
+        per_quantity: Uno por cada
+      product/returnables:
+        kind: Tipo de retornable
+        from_quantity: Retornable desde
+        per_quantity: Retornable uno por cada
       product_barcode:
         code: Código
       stock_count:
@@ -1255,6 +1280,7 @@ es:
       products: el catálogo
       stock: existencias por sucursal, de todo o de un producto
       customers: clientes con lo que deben
+      returnables: los envases retornables que tiene cada cliente, por tipo
       cash_counts: cortes de caja con su diferencia
       reviews: lo pendiente de revisar
       rules: las reglas propias y su contrato
@@ -1677,3 +1703,124 @@ es:
       unclosed_string: una cadena sin cerrar en la línea %{line}
       unclosed_parens: falta cerrar %{count} paréntesis
       quote_at_end: falta qué citar al final
+  returnable_rule:
+    title: Retornables en Lisp
+    help: La mercancía muchas veces sale en algo que tiene que volver. Aquí el negocio declara sus tipos de envase, cada uno con la regla que decide si pueden salir más piezas con un cliente, leyendo lo que ya tiene. De fábrica no existe ningún tipo y la caja no pregunta nada. Probar no guarda nada.
+    failure: 'La regla de retornables falló y decidió la de fábrica: %{error}'
+    reads: Qué lee (en piezas)
+    reasons:
+      too_many_out: '%{customer} ya tiene demasiados (%{owed} × %{kind})'
+      not_returned: '%{customer} no ha devuelto lo que tiene (%{owed} × %{kind})'
+      no_returnables: este negocio no ha declarado ese retornable
+    errors:
+      declaration: 'un retornable lleva una clave, un nombre y una regla, como en (returnable :clave "Nombre" (allow)): %{form}'
+      option: 'el retornable :%{key} trae la opción :%{option}, y las que conozco son :%{options}'
+      repeated: 'el retornable :%{key} está declarado dos veces'
+      value: 'el :value del retornable :%{key} es lo que vale una pieza, un número de 0 en adelante, no %{value}'
+    dropped:
+      out:
+        one: '1 cliente todavía tiene cuenta de tipos que esta regla no declara — %{kinds}, %{pieces} piezas en total. Pueden volver o darse de baja, pero no salir.'
+        other: '%{count} clientes todavía tienen cuenta de tipos que esta regla no declara — %{kinds}, %{pieces} piezas en total. Pueden volver o darse de baja, pero no salir.'
+      products:
+        one: 1 producto suelta un tipo que esta regla no declara y no soltará nada de él.
+        other: '%{count} productos sueltan un tipo que esta regla no declara y no soltarán nada de él.'
+    declares: 'un tipo de envase: su clave, el nombre que se ve en la caja, si se quiere lo que vale una pieza (se cobra al darla de baja) y la regla que decide cuando salen piezas de ese tipo.'
+    scenario:
+      customer: Cliente
+      made_up: — uno inventado —
+      kind: Tipo
+      leaving: Salen
+      returning: Regresan
+      owed: Debe
+      oldest_days: El más viejo, hace días
+      owes_nothing: No tiene nada
+      authorized: Cobra alguien con permiso para forzar retornables
+    verdicts:
+      allow: Salen
+      review: Salen y queda por revisar
+      reject: Se frena
+    functions:
+      owed: piezas de este tipo que debe antes de esta venta
+      in_favor: piezas de este tipo que tiene a su favor
+      leaving: piezas de este tipo que salen con esta venta
+      returning: piezas de este tipo que regresan con esta venta
+      owed_after: lo que deberá de este tipo después de esta venta
+      oldest_days: días que lleva fuera la pieza más vieja (-1 si no hay)
+      owed_all: piezas de todos los tipos que debe
+      credit_type: 'su tipo de crédito (:cash, :weekly…), o nil'
+      customer: su nombre
+      authorized: si quien cobra puede forzar retornables
+    allow: las piezas salen
+    to_review: las piezas salen y la venta queda por revisar
+    reject: no se vende nada y el intento se reporta
+    core: Quien puede forzar retornables siempre puede cobrar; para esa persona, frenar es dejar por revisar. Las piezas que regresan nunca se juzgan.
+  returnables:
+    title: Retornables
+    kind: Tipo
+    pieces: Piezas
+    owes: Debe
+    in_favor: A favor
+    undeclared: '%{key} (sin declarar)'
+    count_in_favor: '%{pieces} a favor'
+    errors:
+      more_than_owed: '%{kind}: debe %{owed} y regresan %{back}'
+      pieces: 'las piezas son números enteros, no «%{value}»'
+      write_off_over: '%{kind}: solo se puede dar de baja lo que debe (%{owed})'
+      note: una entrada suelta lleva una nota que diga por qué
+      direction: di si las piezas están fuera o a favor del cliente
+      undeclared: 'la regla de retornables no declara :%{kind}'
+      no_release: 'un producto retornable tiene que decir qué suelta: un tipo y desde qué cantidad'
+    review:
+      in_favor: '%{customer} devolvió %{pieces} × %{kind} de más; quedaron a su favor'
+      write_off_charged: 'Baja: %{reason}. Se cargaron %{amount} a su cuenta.'
+      write_off_free: 'Baja: %{reason}. No se cobró nada: el tipo no declara valor.'
+      entry_out: 'Apuntado como ya fuera con %{customer}: %{note}'
+      entry_in_favor: 'Apuntado a favor de %{customer}: %{note}'
+    account:
+      charge: 'Baja de %{pieces} × %{kind}'
+      none: Este cliente no tiene envases retornables.
+      oldest: El más viejo fuera
+      days:
+        one: 1 día
+        other: '%{count} días'
+      receive: Devuelve algunos
+      receive_button: Recibir
+      write_off: Ya no van a volver
+      write_off_button: Dar de baja
+      write_off_help: Rotos o perdidos. Salen de la cuenta, el valor del tipo se carga a su cuenta y queda por revisar.
+      entry: Entrada suelta
+      entry_button: Apuntar
+      entry_help: Para una cuenta que no viene de una venta, como las canastillas que un cliente ya tenía cuando empezaste. Queda por revisar.
+      direction: Están
+      entry_out: fuera, con el cliente
+      entry_in_favor: a favor del cliente
+      history: Movimientos
+    reasons:
+      out: Salieron
+      back: Regresaron
+      write_off: Baja
+      entry: Entrada suelta
+    notices:
+      received: 'Recibidos %{pieces} × %{kind}.'
+      written_off: 'Baja de %{pieces} × %{kind}'
+      entered: 'Apuntados %{pieces} × %{kind}'
+    ticket:
+      moved: 'salen %{out}, regresan %{back}'
+      owes: 'debe %{pieces}'
+      in_favor: '%{pieces} a favor'
+    till:
+      out: Salen
+      back: Regresan
+      over_title: Más de lo que debe
+      over_line: '%{kind}: debe %{owed} y regresan %{back}.'
+      over_help: Corrige la cuenta. Solo alguien con permiso puede dejar las piezas de más a favor del cliente.
+      over_help_accept: Corrige la cuenta, o acepta las piezas de más a favor del cliente; queda por revisar.
+      correct: Corregir
+      accept_in_favor: Aceptar a su favor
+    product:
+      returnable: Sale en envases retornables
+      help: 'Di qué tipo suelta y desde qué cantidad en un renglón del ticket. Deja «uno por cada» vacío para una pieza por renglón que llegue a la cantidad (una canastilla por pesada), o llénalo para una pieza por cada tantas (un cajón por cada 8 botellas).'
+      no_kinds: Todavía no hay tipos declarados. Decláralos en Ajustes › Retornables en Lisp.
+      from: Desde (cantidad)
+      per: Uno por cada
+      per_line: por renglón

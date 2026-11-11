@@ -20,11 +20,12 @@ Sakuya is a single system and a single database, split into **features**. A feat
 | **Warehouses** | *Warehouse* branches (storage only: no till and no counts), stock transfers between branches and restocking by minimums and maximums (it builds the transfer). | stock_transfers, stock_transfer_lines, minimums (and the `warehouse` kind in branches) | `warehouses.*` | Warehouses |
 | **Stock counts** | Physical counts: pieces are scanned and fractional quantities are typed; the shortage is charged to the person responsible. | stock_counts, stock_count_lines | `stock_counts.*` | Stock counts |
 | **Customers** (off by default) | Customers with a credit type (declared in the credit rule) and a weekly cut-off day, selling on account (the "On account" payment method), customer account with ageing, account payments into the till, orders that reserve stock and are charged at the till. | customers, credit_movements, account_payments, orders, order_lines | `customers.*` | Customers |
+| **Returnables** (off by default, needs Customers) | Containers that leave with the goods and must come back: the kinds are declared in the returnables rule, each returnable product says what it releases, the till counts what leaves and what comes back per customer, and from the customer's account pieces are received, written off (charged at the declared value) or entered loose. | returnable_movements, product_returnables | `returnables.*` | none of its own: Till, Customers and the product form |
 
 ## Cross-cutting rules
 
 - **A single door to the inventory**: everything goes through `Inventory.move!`, which writes the movement and the stock level in the same transaction. No feature touches `stock_levels` directly.
-- **Insert-only ledgers** for money and debt (supplier debt, customer accounts, account payments, kardex) and for whatever leaves a trail (rules and their versions, the REPL log): the balance is the sum; nothing is edited or deleted; correcting means recording.
+- **Insert-only ledgers** for money and debt (supplier debt, customer accounts, account payments, kardex, the returnable containers each customer holds) and for whatever leaves a trail (rules and their versions, the REPL log): the balance is the sum; nothing is edited or deleted; correcting means recording.
 - **Folios per branch** with a prefix per document (B sale, C shift, D refund, RC receipt, TG stock transfer, K stock count, AB account payment, P order), unique per branch.
 - **Idempotency** for what the browser captures and might resend (sale, receipt, stock transfer): a key, and the same key returns the same document.
 - **Stop and report**: at every sensitive point a rule decides; by default what is irregular doesn't go through and the attempt stays in Review under the name of whoever made it. Someone with the permission is never stuck: for that person, stopping means going through and being left for review.
@@ -45,6 +46,7 @@ The core asks at fixed points (**hooks**) and a rule written in Sakuya's Lisp (`
 | price | `PriceRule` | every line being charged | below what applies, stops |
 | sale | `SaleRule` | the whole sale before checkout | lets it through |
 | credit | `CreditRule` | what goes on a customer's account; it can declare credit types and then the customer's own decides | stops (no credit, no types) |
+| returnable | `ReturnableRule` | the containers of a kind leaving with a customer; it declares the kinds, and each kind's own rule decides | no kinds: nothing to count, nothing leaves |
 | shift | `ShiftRule` | the difference when closing | over the cap, stops |
 | withdrawal | `WithdrawalRule` | taking cash out of the drawer | without permission, stops |
 | movement | `MovementRule` | loose inflows, adjustments and waste | without permission, stops |
@@ -58,6 +60,6 @@ What the deciding hooks share lives in `Hook`; each one carries its contract `VE
 1. A key in `Features::OPTIONAL` (and in `DEPENDS` if it hangs from another one, in `ANY` if one of several is enough, in `BUSINESS_TYPES` where it starts switched on, in `check_switchable!` if it can have open work).
 2. Its permissions with their own prefix in `Permission` and the prefix in `Features::PERMISSIONS`; the supervisor role usually gets `prefix.*`.
 3. `Setting::DEFAULTS["features.<key>"] = "1"` (or `"0"` if it starts switched off, like customers).
-4. Its controllers with `tab :<key>` and `feature :<key>`; its tab in `RibbonHelper::TABS`.
+4. Its controllers with `tab :<key>` and `feature :<key>`; its tab in `RibbonHelper::TABS` (a feature that lives inside other screens, like returnables, has no tab and checks `Features.active?` where it shows).
 5. Texts `features.<key>.{name,what}`, `ribbon.tabs.<key>`, permissions, in es/en/de.
 6. Tests: the flow, and that once switched off it disappears from the ribbon and its screens answer 404.

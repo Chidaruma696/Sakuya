@@ -30,7 +30,7 @@ Rails.application.routes.draw do
     post "import", action: :import, as: :import_rules
   end
   # The rules that decide (closing the till, the price…), with a shared editor.
-  scope "settings/advanced/rules/:hook", controller: "rules", as: "rule", constraints: { hook: /shift|price|sale|credit|withdrawal|movement|receipt|invoice/ } do
+  scope "settings/advanced/rules/:hook", controller: "rules", as: "rule", constraints: { hook: /shift|price|sale|credit|returnable|withdrawal|movement|receipt|invoice/ } do
     get "edit", action: :edit, as: :edit
     post "/", action: :save, as: :save
     post "versions/:id/restore", action: :restore, as: :restore
@@ -85,6 +85,12 @@ Rails.application.routes.draw do
       get :account
       post :pay_account
     end
+  end
+  # Returnable containers outside a sale, from the customer's account
+  scope "customers/:customer_id/returnables", controller: "returnables", as: "customer_returnables" do
+    post "receive", action: :receive, as: :receive
+    post "write_off", action: :write_off, as: :write_off
+    post "entry", action: :entry, as: :entry
   end
   resources :orders, only: %i[index new create show] do
     member { post :cancel }
