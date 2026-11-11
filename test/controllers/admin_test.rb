@@ -23,7 +23,7 @@ class AdminTest < ActionDispatch::IntegrationTest
     assert_equal 8_000, p.reload.price_cents_for(branches(:store))
     assert_equal 7_550, p.price_cents_for(branches(:head_office))
     get edit_admin_product_path(p)
-    assert_select "input[name='prices[#{branches(:store).id}]'][value='80.0']"
+    assert_select "input[name='prices[#{branches(:store).id}]'][value='80.00']"
   end
 
   test "users and roles: create, change role, wildcard permissions" do

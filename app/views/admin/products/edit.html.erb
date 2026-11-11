@@ -9,7 +9,7 @@
       <% Branch.active.order(:name).each do |s| %>
         <% fixed = @product.branch_prices.find { |ps| ps.branch_id == s.id } %>
         <tr class="border-t border-stone-100"><td class="py-1"><%= s.name %></td>
-          <td class="py-1 text-right"><input type="number" step="0.01" min="0" name="prices[<%= s.id %>]" form="form_product" value="<%= fixed ? (fixed.price_cents / 100.0) : '' %>" placeholder="<%= t("admin.general") %>" class="w-32 rounded border border-stone-300 px-2 py-1 text-right font-mono"></td></tr>
+          <td class="py-1 text-right"><input type="number" step="0.01" min="0" name="prices[<%= s.id %>]" form="form_product" value="<%= fixed ? format("%.2f", fixed.price_cents / 100.0) : '' %>" placeholder="<%= t("admin.general") %>" class="w-32 rounded border border-stone-300 px-2 py-1 text-right font-mono"></td></tr>
       <% end %>
     </table>
   </div>
